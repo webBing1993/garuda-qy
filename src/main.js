@@ -9,19 +9,16 @@ Vue.config.productionTip = false
 import 'normalize.css'
 import './assets/main.less'
 
-// fastclick
 import FastClick from 'fastclick'
 FastClick.attach(document.body)
 
-// moment
 import moment from 'moment'
 moment.locale('zh-cn');
 
-// router
 import router from './router'
-
-// store
 import store from './store';
+import {sync} from 'vuex-router-sync'
+sync(store, router)
 
 /* eslint-disable no-new */
 new Vue({
