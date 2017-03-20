@@ -13,6 +13,10 @@ import './assets/main.less'
 import FastClick from 'fastclick'
 FastClick.attach(document.body)
 
+// moment
+import moment from 'moment'
+moment.locale('zh-cn');
+
 // router
 import router from './router'
 
