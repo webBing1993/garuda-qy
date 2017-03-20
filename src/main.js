@@ -20,8 +20,12 @@ moment.locale('zh-cn');
 // router
 import router from './router'
 
+// store
+import store from './store';
+
 /* eslint-disable no-new */
 new Vue({
+  store,
   router,
   el: '#app',
   template: '<App/>',
