@@ -5,9 +5,13 @@ import App from './App'
 
 Vue.config.productionTip = false
 
+// router
+import router from './router'
+
 /* eslint-disable no-new */
 new Vue({
+  router,
   el: '#app',
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
