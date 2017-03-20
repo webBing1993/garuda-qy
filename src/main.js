@@ -9,6 +9,10 @@ Vue.config.productionTip = false
 import 'normalize.css'
 import './assets/main.less'
 
+// fastclick
+import FastClick from 'fastclick'
+FastClick.attach(document.body)
+
 // router
 import router from './router'
 
