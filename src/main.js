@@ -24,7 +24,19 @@ sync(store, router)
 // components
 const Vux = require('vux')
 Vue.component('Group', Vux.Group)
-Vue.component('Cell', Vux.Cell)
+// Vue.component('CellBox', Vux.Cell)
+// Vue.component('Cell', Vux.Cell)
+Vue.component('Tab', Vux.Tab)
+Vue.component('TabItem', Vux.TabItem)
+Vue.component('Flexbox', Vux.Flexbox)
+Vue.component('FlexboxItem', Vux.FlexboxItem)
+Vue.component('Checker', Vux.Checker)
+Vue.component('CheckerItem', Vux.CheckerItem)
+
+Vue.component('cell', require('./components/cell'))
+Vue.component('cellbox', require('./components/cellbox'))
+Vue.component('btn', require('./components/button'))
+
 
 /* eslint-disable no-new */
 new Vue({

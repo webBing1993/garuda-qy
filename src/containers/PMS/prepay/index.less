@@ -1,0 +1,56 @@
+article {
+  padding-top: 66px;
+  padding-bottom: 100px;
+  header {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    .toolbar {
+      line-height: 44px;
+    }
+  }
+
+  .tobeconfirmed {
+    .vux-checker-item {
+      display: block;
+    }
+    &.checklist {
+      padding-top: 44px;
+      .item {
+        display: flex;
+        align-items: center;
+        &:before {
+          content: " ";
+          display: block;
+          width: 30px;
+          height: 30px;
+          border:solid 1px #000;
+        }
+        .group {
+          flex-grow: 1;
+        }
+
+        &.selected{
+          &:before {
+            background-color: red;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+  }
+}
