@@ -1,6 +1,4 @@
 article {
-  padding-top: 66px;
-  padding-bottom: 100px;
   header {
     position: fixed;
     z-index: 1;
@@ -14,7 +12,9 @@ article {
   }
 
   .tobeconfirmed {
-    .vux-checker-item {
+    //overflow: hidden;
+    padding-top: 44px;
+    .item {
       display: block;
     }
     &.checklist {
@@ -27,13 +27,13 @@ article {
           display: block;
           width: 30px;
           height: 30px;
-          border:solid 1px #000;
+          border: solid 1px #000;
         }
         .group {
           flex-grow: 1;
         }
 
-        &.selected{
+        &.selected {
           &:before {
             background-color: red;
           }

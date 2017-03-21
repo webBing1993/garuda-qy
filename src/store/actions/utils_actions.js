@@ -2,7 +2,12 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
+import router from '../../router'
+
 module.exports = {
+  goto: (ctx, param) => {
+    typeof param == 'number' ? router.go(param) : router.push(param)
+  },
   resource: (ctx, param) => {
     Vue.http({
       url: param.url,
@@ -37,7 +42,7 @@ module.exports = {
   token(ctx, param){
     ctx.dispatch('resource', {
       url: "/login",
-      onSuccess: (body) => ctx.commit('TOKEN',body.data.session),
+      onSuccess: (body) => ctx.commit('TOKEN', body.data.session),
       onFail: () => null
     })
   }

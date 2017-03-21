@@ -9,11 +9,15 @@ export default new VueRouter({
   }, {
     path: '/pms',
     component: {
-      template: `<router-view/>`,
+      name:"pms",
+      template: `<keep-alive><router-view/></keep-alive>`,
     },
     children: [{
       path: 'prepay',
-      component: require('../containers/PMS/prepay')
+      component: require('../containers/PMS/prepay/list')
+    }, {
+      path: 'prepay/:id',
+      component: require('../containers/PMS/prepay/detail')
     }]
   }]
 })
