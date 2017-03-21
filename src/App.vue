@@ -7,17 +7,18 @@
 
   export default {
     name: 'app',
+    computed: {
+      ...mapState([
+        'app'
+      ])
+    },
     methods: {
       ...mapActions([
-        'resource'
+        'token'
       ])
     },
     mounted(){
-      this.resource({
-        url: "/login",
-        onSuccess: () => null,
-        onFail: () => null
-      })
+      this.token()
     }
   }
 </script>

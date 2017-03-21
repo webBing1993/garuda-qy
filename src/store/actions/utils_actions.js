@@ -30,8 +30,15 @@ module.exports = {
     ).finally(
       final => {
         //FinalCallback
-        // console.log("request done!")
+        console.log("request done!")
       }
     )
+  },
+  token(ctx, param){
+    ctx.dispatch('resource', {
+      url: "/login",
+      onSuccess: (body) => ctx.commit('TOKEN',body.data.session),
+      onFail: () => null
+    })
   }
 }
