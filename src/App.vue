@@ -3,8 +3,22 @@
 </template>
 
 <script>
+  import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+
   export default {
-    name: 'app'
+    name: 'app',
+    methods: {
+      ...mapActions([
+        'resource'
+      ])
+    },
+    mounted(){
+      this.resource({
+        url: "/login",
+        onSuccess: () => null,
+        onFail: () => null
+      })
+    }
   }
 </script>
 
