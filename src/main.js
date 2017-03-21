@@ -5,9 +5,8 @@ import App from './App'
 
 Vue.config.productionTip = false
 
-// normalize.css & main.less
+// normalize.css
 import 'normalize.css'
-import './assets/main.less'
 
 import FastClick from 'fastclick'
 FastClick.attach(document.body)
@@ -19,6 +18,11 @@ import router from './router'
 import store from './store';
 import {sync} from 'vuex-router-sync'
 sync(store, router)
+
+// 组件全局引入和注册
+const Vux = require('vux')
+Vue.component('Group', Vux.Group)
+Vue.component('Cell', Vux.Cell)
 
 /* eslint-disable no-new */
 new Vue({

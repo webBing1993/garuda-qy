@@ -1,6 +1,9 @@
 <template>
   <div>
     <p>home page</p>
+    <group>
+      <cell title="123"></cell>
+    </group>
   </div>
 </template>
 
