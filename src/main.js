@@ -24,6 +24,9 @@ const Vux = require('vux')
 Vue.component('Group', Vux.Group)
 Vue.component('Cell', Vux.Cell)
 
+// Mockdata
+import './mock'
+
 /* eslint-disable no-new */
 new Vue({
   store,
