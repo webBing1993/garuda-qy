@@ -6,5 +6,14 @@ export default new VueRouter({
   routes: [{
     path: '/',
     component: require('../containers/home')
+  }, {
+    path: '/pms',
+    component: {
+      template: `<router-view/>`,
+    },
+    children: [{
+      path: 'prepay',
+      component: require('../containers/PMS/prepay')
+    }]
   }]
 })
