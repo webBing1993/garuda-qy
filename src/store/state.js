@@ -1,5 +1,9 @@
 module.exports = {
   app: {
-    token:""
+    token: ""
+  },
+  orderlist: {
+    tobeconfirmed: [],
+    confirmed: []
   }
 }

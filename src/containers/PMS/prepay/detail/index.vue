@@ -28,14 +28,9 @@
     },
     methods: {
       ap(){
-        if (this.checklist.length == this.list.length) {
-          this.checklist = []
-        } else {
-          this.checklist = []
-          this.list.forEach(item => {
-            this.checklist.push(item)
-          })
-        }
+        this.checklist.length !== this.list.length
+          ? (this.checklist = [], this.list.forEach(item => this.checklist.push(item)))
+          : this.checklist = []
       }
     }
   }
