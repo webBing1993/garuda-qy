@@ -33,6 +33,7 @@ Vue.component('FlexboxItem', Vux.FlexboxItem)
 Vue.component('Checker', Vux.Checker)
 Vue.component('CheckerItem', Vux.CheckerItem)
 Vue.component('Scroller', Vux.Scroller)
+Vue.component('Icon', Vux.Icon)
 
 Vue.component('cell', require('./components/cell'))
 Vue.component('cellbox', require('./components/cellbox'))
