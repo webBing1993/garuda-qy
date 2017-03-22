@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('./utils_mutations')
+  ...require('./utils'),
+  ...require('./order')
 }
