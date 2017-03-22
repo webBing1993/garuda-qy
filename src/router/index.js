@@ -9,7 +9,7 @@ export default new VueRouter({
   }, {
     path: '/pms',
     component: {
-      name:"pms",
+      name: "pms",
       template: `<keep-alive><router-view/></keep-alive>`,
     },
     children: [{
@@ -18,6 +18,9 @@ export default new VueRouter({
     }, {
       path: 'prepay/:id',
       component: require('../containers/PMS/prepay/detail')
+    }, {
+      path: 'message',
+      component: require('../containers/PMS/message/index')
     }]
   }]
 })
