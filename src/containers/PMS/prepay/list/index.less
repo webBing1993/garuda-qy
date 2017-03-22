@@ -10,19 +10,20 @@ article {
       line-height: 44px;
     }
   }
-
   section {
-    //overflow: hidden;
     padding-top: 44px;
     padding-bottom: 100px;
     .item {
-      display: block;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      & > div {
+        flex-grow: 1;
+      }
     }
-    &.checklist {
+    &.batch {
       padding-top: 88px;
       .item {
-        display: flex;
-        align-items: center;
         &:before {
           content: " ";
           display: block;
@@ -30,10 +31,6 @@ article {
           height: 30px;
           border: solid 1px #000;
         }
-        .group {
-          flex-grow: 1;
-        }
-
         &.selected {
           &:before {
             background-color: red;
@@ -42,7 +39,6 @@ article {
       }
     }
   }
-
   footer {
     position: fixed;
     z-index: 1;
