@@ -4,16 +4,30 @@
     font-size: 17px;
     margin-left: 10px;
   }
+  .weui-icon-circle {
+    font-size: 17px;
+    margin-left: 10px;
+  }
   .toolbar {
     line-height: 44px;
     background-color: #fff;
-
   }
   .order-list {
     margin-top: 15px;
     .item {
       display: block;
       font-size: 14px;
+      .weui-icon-success {
+        display: none;
+      }
+      &.selected {
+        .weui-icon-success {
+          display: block;
+        }
+        .weui-icon-circle {
+          display: none;
+        }
+      }
       .list-item {
         background-color: #fff;
         margin-top: 10px;
