@@ -2,11 +2,11 @@
   .weui-icon-success {
     color: #000;
     font-size: 17px;
-    margin-left: 10px;
+    margin:0  10px;
   }
   .weui-icon-circle {
     font-size: 17px;
-    margin-left: 10px;
+    margin: 0 10px;
   }
   .toolbar {
     line-height: 44px;
@@ -14,12 +14,22 @@
   }
   .order-list {
     margin-top: 15px;
+    .weui-icon-success {
+      display: none;
+    }
+    ul {
+      border-left: 1px solid #E6E6E6;
+    }
+    &.noneChecked {
+      .weui-icon-success, .weui-icon-circle {
+        display: none;
+      }
+    }
     .item {
       display: block;
       font-size: 14px;
-      .weui-icon-success {
-        display: none;
-      }
+
+
       &.selected {
         .weui-icon-success {
           display: block;
@@ -27,6 +37,7 @@
         .weui-icon-circle {
           display: none;
         }
+
       }
       .list-item {
         background-color: #fff;
@@ -44,8 +55,8 @@
         //}
         ul {
           flex-grow: 1;
-          border-left: 1px solid #E6E6E6;
-          margin: 10px 0 10px 10px;
+
+          margin: 10px 0 10px 0px;
           li {
             line-height: 25px;
             span {
@@ -61,5 +72,16 @@
       }
 
     }
+  }
+  footer {
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
   }
 }
