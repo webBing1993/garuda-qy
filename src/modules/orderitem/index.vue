@@ -1,5 +1,5 @@
 <template>
-  <div class="orderitem" v-if="item">
+  <div class="orderitem" v-if="item" @click="$emit('onClick')">
     <div class="hd" v-if="item.orderId || item.status || item.date">
       <p class="hdl">
         <span class="key">订单号：</span>

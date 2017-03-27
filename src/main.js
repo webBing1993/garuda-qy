@@ -39,6 +39,7 @@ Vue.component('Confirm', Vux.Confirm)
 Vue.component('cell', require('./components/cell'))
 Vue.component('cellbox', require('./components/cellbox'))
 Vue.component('xbutton', require('./components/button'))
+Vue.component('calendar', require('./components/calendar'))
 
 //modules
 Vue.component('orderitem', require('./modules/orderitem'))

@@ -5,8 +5,7 @@
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/pms/prepay/'+index)">{{item}}
-        </TabItem>
+                 @click.native="goto('/pms/prepay/'+index)">{{item}}</TabItem>
       </Tab>
       <div class="toolbar" v-if="batch">
         <span @click="allPick"
@@ -30,9 +29,8 @@
                  selected-item-class="selected">
           <checker-item v-for="(item,index) in orderlist.tobeconfirmed"
                         :key="index"
-                        :value="item.orderId"
-                        @on-item-click="orderClick(item.orderId)">
-            <orderitem :item="item" :arrow="!batch"/>
+                        :value="item.orderId">
+            <orderitem :item="item" :arrow="!batch" @onClick="orderClick(item.orderId)"/>
           </checker-item>
         </checker>
       </section>
@@ -40,7 +38,11 @@
 
     <scroller v-show="route.params.tab == 1" ref="confirmed" lock-x>
       <section>
-        <orderitem v-for="(item,index) in orderlist.confirmed" key="'confirmed'+index" :item="item" arrow/>
+        <orderitem v-for="(item,index) in orderlist.confirmed"
+                   key="'confirmed'+index"
+                   :item="item"
+                   @onClick="orderClick(item.orderId)"
+                   arrow/>
       </section>
     </scroller>
 
@@ -77,7 +79,7 @@
         'confirmed'
       ]),
       donePullDown: function (ref) {
-        console.log(ref)
+        //刷新
         this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
       },
       reset: function (ref, param) {
