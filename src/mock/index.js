@@ -86,7 +86,8 @@ Mock.mock(
         roomCount: 2,
         fee: 80000,
         prepay: 0,
-        remark: ''
+        remark: '',
+        status: '未付款'
       }
     ]
   }

@@ -4,10 +4,8 @@
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
-                 @click.native="goto('/pms/prepay/'+index)"
-                 :selected="route.params.tab == index">
-          {{item}}
-        </TabItem>
+                 :selected="route.params.tab == index"
+                 @click.native="goto('/pms/prepay/'+index)">{{item}}</TabItem>
       </Tab>
       <div class="toolbar" v-if="batch">
         <span @click="allPick">全选</span>
@@ -15,10 +13,14 @@
       </div>
     </header>
 
-    <scroller ref="tbcscroller"
+    <scroller :pulldown-config="app.scroller.config"
+              height="-44"
+              @on-pulldown-loading="donePullDown('tbc')"
+              ref="tbc"
               v-show="route.params.tab == 0"
+              use-pulldown
               lock-x>
-      <section :class="{'batch':batch}">
+      <section :class="{batch}">
         <checker v-model="batchlist"
                  type="checkbox"
                  default-item-class="item"
@@ -27,22 +29,7 @@
                         :key="index"
                         :value="item.orderId"
                         @on-item-click="orderClick(item.orderId)">
-            <Group>
-              <cell>
-                <span>订单号：</span>
-                <span>{{item.orderId}}</span>
-              </cell>
-              <cellbox>
-                <ul>
-                  <li><span>预订人：</span><span>{{item.booker}}</span><span>{{item.phoneNum}}</span></li>
-                  <li><span>房型：</span><span>{{item.roomType}}x{{item.roomCount}}</span></li>
-                  <li><span>房费：{{item.fee}}</span><span>已付：{{item.prepay}}</span></li>
-                </ul>
-              </cellbox>
-              <cell v-if="item.remark">
-                <span>备注：</span><span>{{item.remark}}</span>
-              </cell>
-            </Group>
+            <orderitem :item="item" arrow/>
           </checker-item>
         </checker>
       </section>
@@ -52,36 +39,16 @@
               v-show="route.params.tab == 1"
               lock-x>
       <section class="confirmed">
-        <Group v-for="(item,index) in orderlist.confirmed"
-               :key="index">
-          <cell>
-            <span>订单号：</span>
-            <span>{{item.orderId}}</span>
-          </cell>
-          <cellbox>
-            <ul>
-              <li><span>预订人：</span><span>{{item.booker}}</span><span>{{item.phoneNum}}</span></li>
-              <li><span>房型：</span><span>{{item.roomType}}x{{item.roomCount}}</span></li>
-              <li><span>房费：{{item.fee}}</span><span>已付：{{item.prepay}}</span></li>
-            </ul>
-          </cellbox>
-          <cell v-if="item.remark">
-            <span>备注：</span><span>{{item.remark}}</span>
-          </cell>
-        </Group>
+        <orderitem v-for="(item,index) in orderlist.confirmed"
+                   key="'confirmed'+index"
+                   :item="item"
+                   arrow/>
       </section>
     </scroller>
 
     <footer v-show="route.params.tab == 0">
-      <btn v-if="batch" red>未支付</btn>
-      <flexbox v-else>
-        <flexbox-item>
-          <btn>拉取新订单</btn>
-        </flexbox-item>
-        <flexbox-item>
-          <btn reverse @onClick="goPick">无信息批量处理</btn>
-        </flexbox-item>
-      </flexbox>
+      <xbutton v-if="batch" red>未支付</xbutton>
+      <xbutton v-else @onClick="goPick">未支付批量处理</xbutton>
     </footer>
   </article>
 </template>
@@ -100,8 +67,9 @@
     },
     computed: {
       ...mapState([
+        'app',
         'route',
-        'orderlist'
+        'orderlist',
       ])
     },
     methods: {
@@ -110,13 +78,17 @@
         'tobeconfirmed',
         'confirmed'
       ]),
+      donePullDown: function (ref) {
+        console.log(ref)
+        this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
+      },
       reset: function (ref, param) {
         //重置scroller高度
         this.$nextTick(() => this.$refs[ref].reset(param))
       },
       allPick(){
         //全选和取消全选
-        if (this.batchlist.length == this.orderlist.tobeconfirmed.length) {
+        if (this.batchlist.length === this.orderlist.tobeconfirmed.length) {
           this.batchlist = []
         } else {
           this.batchlist = []
@@ -146,7 +118,7 @@
       'route.params.tab': function (val) {
         //切换标签卡时
         if (val == 0) {
-          this.reset('tbcscroller')
+          this.reset('tbc')
         } else {
           this.cancelPick()
           this.reset('confirmedscroller')
@@ -154,11 +126,11 @@
       },
       'batch': function (val, oldval) {
         //切换批量选择模式时
-        this.reset('tbcscroller')
+        this.reset('tbc')
       },
       'orderlist.tobeconfirmed': function () {
         //tobeconfirmed列表变化时
-        this.reset('tbcscroller')
+        this.reset('tbc')
       },
       'orderlist.confirmed': function () {
         //confirmed列表变化时
