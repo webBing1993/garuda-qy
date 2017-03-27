@@ -1,3 +1,27 @@
-div{
+.calendar{
   height: 30px;
+  width: 100%;
+  .select-bar {
+    display: flex;
+    background-color: #fff;
+    height: 55px;
+    line-height: 55px;
+    border-bottom: 1px solid #c3c3c3;
+    span {
+      width: 33%;
+      text-align: center;
+    }
+  }
+  .day-list{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    background-color: #fff;
+    .day-item {
+      width: 14.2857%;
+      padding: 10px 15px;
+      box-sizing: border-box;
+    }
+  }
+
 }
