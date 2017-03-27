@@ -30,7 +30,7 @@
       </p>
     </div>
 
-    <div class="ft">
+    <div class="ft" v-if="item.remark">
       <p>
         <span class="key">备注：</span>
         <span>{{item.remark}}</span>
