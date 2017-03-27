@@ -1,15 +1,25 @@
 <template>
   <div class="calendar">
     <p>{{current}}</p>
-    <p>{{starttime}}</p>
-    <p>{{endtime}}</p>
+    <p>Start:{{starttime}}</p>
+    <p>End:{{endtime}}</p>
+
+    <div class="tools-bar">
+      <span class="clear" @click="(starttime=null,endtime=null)">清除筛选</span>
+      <span class="cancel">取消</span>
+    </div>
+
     <div class="select-bar">
-      <span>左</span>
-      <span>{{year}}年{{month+1}}月</span>
+      <span @click="nextMonth(-1)">左</span>
+      <span>{{year}}年{{month + 1}}月</span>
       <span @click="nextMonth(1)">右</span>
     </div>
     <div class="day-list">
-      <span v-for="item in daylist" @click="dateclick(item)" class="day-item">{{item.day}}</span>
+      <span v-for="item in renderdays"
+            @click="dateclick(item)"
+            class="day-item"
+            :class="{checked:item.checked}"
+      >{{item.day}}</span>
     </div>
 
   </div>
@@ -23,20 +33,23 @@
     name: 'calendar',
     data(){
       return {
-        current: moment(new Date()),
+        current: Date.parse(new Date()),
         starttime: null,
         endtime: null,
       }
     },
     computed: {
       year(){
-        return this.current.year()
+        return moment(this.current).year()
       },
       month(){
-        return this.current.month()
+        return moment(this.current).month()
+      },
+      date(){
+        return moment(this.current).date()
       },
       days(){
-        return moment().daysInMonth(this.month);
+        return moment(moment(this.current).format('YYYY-MM'), "YYYY-MM").daysInMonth();
       },
       daylist(){
         let arr = []
@@ -46,39 +59,55 @@
             month: this.month,
             day: i
           })
-
           arr.push({
-            date: dd,
+            date: Date.parse(dd),
             day: i,
             disabled: false,
-            checked: Date.parse(dd) >= Date.parse(this.starttime) && Date.parse(dd) <= Date.parse(this.endtime)
+            checked: (Date.parse(dd) >= this.starttime && Date.parse(dd) <= this.endtime)
+            || Date.parse(dd) === this.starttime
+            || Date.parse(dd) === this.endtime
           })
         }
         return arr
+      },
+      renderdays(){
+        let day = moment(this.current).date(1).day()
+        let a = [].concat([...this.daylist])
+        if (day != 7) {
+          for (let i = 0; i < day; i++) {
+            a.unshift({
+              date: null,
+              day: null,
+              disabled: true,
+              checked: false
+            })
+          }
+        }
+        return a
       }
     },
     methods: {
       dateclick(item){
         if (this.starttime === null && this.endtime === null) {
-          console.log("======0")
           this.starttime = item.date
         } else if (this.starttime !== null && this.endtime === null) {
-          console.log("======1")
-          this.endtime = item.date
+          if (item.date >= this.starttime) {
+            this.endtime = item.date
+          } else {
+            let mm = this.starttime
+            this.starttime = item.date
+            this.endtime = mm
+          }
         } else {
-          this.starttime = null
+          this.starttime = item.date
           this.endtime = null
         }
       },
       nextMonth(val) {
-        console.log('0')
         if (val > 0) {
-//          console.log(this.current)
-//          let a = Object.assign(this.current)
-//          a.add(1, 'months')
-//          console.log(a.toLocaleString())
-//          this.current = a
-//          this.current = this.current.add(val, 'months');
+          this.current = Date.parse(moment(this.current).add(1, 'months'))
+        } else {
+          this.current = Date.parse(moment(this.current).subtract(1, 'months'))
         }
       }
     }
