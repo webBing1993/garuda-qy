@@ -37,8 +37,10 @@ Vue.component('Icon', Vux.Icon)
 
 Vue.component('cell', require('./components/cell'))
 Vue.component('cellbox', require('./components/cellbox'))
-Vue.component('btn', require('./components/button'))
+Vue.component('xbutton', require('./components/button'))
 
+//modules
+Vue.component('orderitem', require('./modules/orderitem'))
 
 /* eslint-disable no-new */
 new Vue({
