@@ -5,7 +5,14 @@
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/pms/prepay/'+index)">{{item}}</TabItem>
+                 @click.native="goto('/pms/prepay/'+index)">{{item}}
+
+
+
+
+
+
+        </TabItem>
       </Tab>
       <div class="toolbar" v-if="batch">
         <span @click="allPick"
@@ -30,7 +37,18 @@
           <checker-item v-for="(item,index) in orderlist.tobeconfirmed"
                         :key="index"
                         :value="item.orderId">
-            <orderitem :item="item" :arrow="!batch" @onClick="orderClick(item.orderId)"/>
+            <orderitem :orderId="item.orderId"
+                       :status="item.status"
+                       :date="item.date"
+                       :booker="item.booker"
+                       :phoneNum="item.phoneNum"
+                       :roomType="item.roomType"
+                       :roomCount="item.roomCount"
+                       :fee="item.fee"
+                       :prepay="item.prepay"
+                       :remark="item.remark"
+                       :arrow="!batch"
+                       @onClick="orderClick(item.orderId)"/>
           </checker-item>
         </checker>
       </section>
@@ -40,9 +58,18 @@
       <section>
         <orderitem v-for="(item,index) in orderlist.confirmed"
                    key="'confirmed'+index"
-                   :item="item"
-                   @onClick="orderClick(item.orderId)"
-                   arrow/>
+                   :orderId="item.orderId"
+                   :status="item.status"
+                   :date="item.date"
+                   :booker="item.booker"
+                   :phoneNum="item.phoneNum"
+                   :roomType="item.roomType"
+                   :roomCount="item.roomCount"
+                   :fee="item.fee"
+                   :prepay="item.prepay"
+                   :remark="item.remark"
+                   :arrow="!batch"
+                   @onClick="orderClick(item.orderId)"/>
       </section>
     </scroller>
 

@@ -1,39 +1,39 @@
 <template>
-  <div class="orderitem" v-if="item" @click="$emit('onClick')">
-    <div class="hd" v-if="item.orderId || item.status || item.date">
+  <div class="orderitem" @click="$emit('onClick')">
+    <div class="hd" v-if="orderId || status || date">
       <p class="hdl">
         <span class="key">订单号：</span>
-        <span>{{item.orderId}}</span>
+        <span>{{orderId}}</span>
       </p>
       <p class="hdr">
-        <span>{{item.status}}</span>
-        <span>{{item.date}}</span>
+        <span>{{status}}</span>
+        <span>{{date}}</span>
       </p>
     </div>
 
     <div class="bd">
-      <p v-if="item.booker || item.phoneNum">
+      <p v-if="booker || phoneNum">
         <span class="key">预订人：</span>
-        <span>{{item.booker}}</span>
-        <span>{{item.phoneNum}}</span>
+        <span>{{booker}}</span>
+        <span>{{phoneNum}}</span>
       </p>
 
-      <p v-if="item.roomType || item.roomCount">
+      <p v-if="roomType || roomCount">
         <span class="key">房型：</span>
-        <span>{{item.roomType}}x{{item.roomCount}}</span>
+        <span>{{roomType}}x{{roomCount}}</span>
       </p>
 
-      <p v-if="item.fee || item.prepay">
+      <p v-if="fee || prepay">
         <span class="key">房费：</span>
-        <span>{{item.fee | CNY}}</span>
-        <span class="paid"><span class="key">已付：</span>{{item.prepay | CNY}}</span>
+        <span>{{fee | CNY}}</span>
+        <span class="paid"><span class="key">已付：</span>{{prepay | CNY}}</span>
       </p>
     </div>
 
-    <div class="ft" v-if="item.remark">
+    <div class="ft" v-if="remark">
       <p>
         <span class="key">备注：</span>
-        <span>{{item.remark}}</span>
+        <span>{{remark}}</span>
       </p>
     </div>
 
@@ -57,18 +57,30 @@
   export default{
     name: 'orderitem',
     props: {
-      item: {
-        type: Object
-      },
+      orderId: null,
+      status: null,
+      date: null,
+
+      booker: null,
+      phoneNum: null,
+
+      roomType: null,
+      roomCount: null,
+
+      fee: null,
+      prepay: null,
+
+      remark: null,
+
       arrow: {
         type: Boolean
       }
     },
     filters: {
       CNY(val){
-          return '¥' + (val / 100)
+        return '¥' + (val / 100)
       }
-  }
+    }
   }
 </script>
 
