@@ -6,7 +6,7 @@ const pmsRouter = [{
   path: '/',
   // component: require('../containers/home')
   // component: require('../containers/PMS/prepay/list')
-  component: require('../containers/PMS/predeal/list')
+  component: require('../containers/DEAL/predeal/list')
 }, {
   path: '/pms',
   component: {
@@ -33,10 +33,10 @@ const preorderRouter = [{
   },
   children: [{
     path: ':tab',
-    component: require('../containers/PMS/predeal/list')
+    component: require('../containers/DEAL/predeal/list')
   }, {
     path: 'predetail/:id',
-    component: require('../containers/PMS/predeal/detail')
+    component: require('../containers/DEAL/predeal/detail')
   }]
 }];
 
