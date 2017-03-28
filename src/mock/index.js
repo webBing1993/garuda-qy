@@ -86,9 +86,142 @@ Mock.mock(
         roomCount: 2,
         fee: 80000,
         prepay: 0,
-        remark: '',
         status: '未付款'
       }
     ]
+  }
+)
+
+/* 历史预登记订单列表 */
+Mock.mock(
+  '/preorderlist/0',
+  {
+    code: 200,
+    msg: "ok",
+    data: [{
+      order_id: "130420402402404",
+      order_status: {
+        iscancelled: true,
+      },
+      precheckin_time: '03/31 08:20',
+      owner: "张三",
+      owner_tel: "+8618500059035",
+      warning: '待退款',
+      room_type: "大床房",
+      room_count: 4
+    }, {
+      order_id: "240420402402404",
+      order_status: {
+        iscancelled: true,
+      },
+      precheckin_time: '03/31 08:20',
+      owner: "张三",
+      owner_tel: "+8618500059035",
+      warning: '待退款',
+      rooms: [{
+        room_type: "大床房",
+        room_count: 6
+      }]
+    }]
+  }
+);
+
+Mock.mock(
+  '/preorderlist/1',
+  {
+    code: 200,
+    msg: "ok",
+    data: [{
+      order_id: "130420402402404",
+      order_status: {
+        iscancelled: true,
+      },
+      precheckin_time: '03/31 08:20',
+      owner: "张三",
+      owner_tel: "18500059035",
+      room_type: "大床房",
+      room_count: 2
+    }]
+  }
+);
+
+/* 历史预登记订单详情 */
+Mock.mock(
+  '/order/precheckin/today',
+  {
+    code: 200,
+    msg: "ok",
+    data: {
+      order_id: "120420402402405",
+      order_status: {
+        iscancelled: true,
+      },
+      in_time: '2017/4/4',
+      out_time: '2017/4/6',
+      owner: "张三",
+      owner_tel: "+8618500059035",
+      remark: "",
+      pay_status: 'NEED_PAY',
+      precheckin_time: '',
+      timestamp: '',
+      warning: '入账失败',
+      room_type: "大床房",
+      room_count: 2,
+      payinfo: {
+        fees: [{
+          room_type: '房型名称',
+          amount: '房间数量',
+          date_price: [{
+            date: '03/31 08:20',
+            price: '3000',
+          }]
+        }],
+        deposit: '押金',
+        total_fee: '总费用=总房费+押金',
+        prepay: '已付金额款',
+        need_pay: '应付金额=总费用-已付金额'
+      },
+      paymark: {
+        pay_status: '0未付，1已付，2其他',
+        prepay: 0,
+      },
+      suborders: [{
+        suborder_id: "",
+        room_type_id: "房型代码",
+        room_type_name: "大床房",
+        room_number: "203",
+        guests: [{
+          name: "刘斌",
+          idcard: '400800999333222',
+        }, {
+          name: "刘斌",
+          idcard: '400800999333222',
+        }]
+      }],
+      invoice: {
+        type: "PERSONAL/GENERAL/VAT",
+        media: "PAPER/EINVOICE",
+        category: "住宿费",
+        title: "抬头",
+        tax_registry_no: "统一社会信用代码",
+        address: "地址",
+        phone_number: "",
+        bank_name: "",
+        bank_account: ""
+      },
+      logs: [{
+        date: '03/31 08:20',
+        action: '操作“确认退款”转退款流程',
+        operator: '刘斌'
+      }, {
+        date: '03/31 09:20',
+        action: '房间302变更为301',
+        operator: '刘斌'
+      }, {
+        date: '03/31 10:20',
+        action: '检测到订单需退款¥400',
+        operator: '系统'
+      }]
+    }
   }
 )

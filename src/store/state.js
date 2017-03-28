@@ -2,7 +2,7 @@ module.exports = {
   app: {
     token: "",
     scroller: {
-      config:{
+      config: {
         content: '下拉刷新列表',
         height: 60,
         autoRefresh: false,
@@ -16,5 +16,7 @@ module.exports = {
   orderlist: {
     tobeconfirmed: [],
     confirmed: []
-  }
+  },
+  preorderlist: [],
+  predetail: {},
 }
