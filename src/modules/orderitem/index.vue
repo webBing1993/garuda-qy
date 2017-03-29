@@ -1,13 +1,14 @@
 <template>
   <div class="orderitem" @click="$emit('onClick')">
-    <div class="hd" v-if="orderId || status || date">
+    <div class="hd" v-if="orderId || status || date || need_refund">
       <p class="hdl">
         <span class="key">订单号：</span>
         <span>{{orderId}}</span>
       </p>
       <p class="hdr">
+        <span v-if="need_refund" class="warning">需退款</span>
         <span>{{status}}</span>
-        <span>{{date}}</span>
+        <!--<span>{{date}}</span>-->
       </p>
     </div>
 
@@ -18,9 +19,10 @@
         <span>{{phoneNum}}</span>
       </p>
 
-      <p v-if="roomType || roomCount">
+      <p v-if="roomType || roomCount || date">
         <span class="key">房型：</span>
         <span>{{roomType}}x{{roomCount}}</span>
+        <span class="data">{{date | getDate}}</span>
       </p>
 
       <p v-if="fee || prepay">
@@ -72,6 +74,10 @@
 
       remark: null,
 
+      need_refund:{
+          type: Boolean
+      },
+
       arrow: {
         type: Boolean
       }
@@ -79,7 +85,12 @@
     filters: {
       CNY(val){
         return '¥' + (val / 100)
-      }
+      },
+      getDate(timestampunix){
+        const timestamp = parseInt(timestampunix);
+        const timeobj = new Date(timestamp);
+        return timeobj.toLocaleString(timeobj,{hour12: true})
+      },
     }
   }
 </script>

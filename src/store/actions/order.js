@@ -35,6 +35,13 @@ module.exports = {
       onSuccess: (body) => (console.log(body), ctx.commit('PREDETAIL', body.data)),
       onFail: () => null
     })
+  },
+  history(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/precheckin/history',
+      onSuccess: (body) => (console.log(body), ctx.commit('HISTORY', body.data)),
+      onFail: () => null
+    })
   }
 
 }

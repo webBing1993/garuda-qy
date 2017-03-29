@@ -225,3 +225,90 @@ Mock.mock(
     }
   }
 )
+
+Mock.mock(
+  '/order/precheckin/history',
+  {
+    code: 200,
+    msg: "ok",
+    data: [{
+      order_id: "532654768744",
+      in_time: "532654768744",
+      out_time: "532654768744",
+      owner: "张三",//预订人
+      owner_tel: "+8618500059035",//预订人手机
+      remark: "",//备注
+      rooms: [{
+        room_type: "大床房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 0, //总房费
+        pms_pay: 0, //PMS中的已付金额,
+        staff_pay: 0,//营业员确认的付款金额,
+        user_pay: 0, //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false, //是否营业已确认
+        need_refund: false, //是否需要退款
+        pmsaccount_result: false,// PMS入账是否成功
+        is_cancelled:false, //是否已取消,
+      },
+      timeline:{ //状态变化时间
+       precheckin_done: null, //预登记完成时间, null未发生
+      }
+    },{
+      order_id: "532654768744",
+      in_time: "532654768744",
+      out_time: "532654768744",
+      owner: "张三",//预订人
+      owner_tel: "+8618500059035",//预订人手机
+      remark: "",//备注
+      rooms: [{
+        room_type: "大床房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 0, //总房费
+        pms_pay: 0, //PMS中的已付金额,
+        staff_pay: 0,//营业员确认的付款金额,
+        user_pay: 0, //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false, //是否营业已确认
+        need_refund: false, //是否需要退款
+        pmsaccount_result: false,// PMS入账是否成功
+        is_cancelled:false, //是否已取消,
+      },
+      timeline:{ //状态变化时间
+        precheckin_done: null, //预登记完成时间, null未发生
+      }
+    },{
+      order_id: "532654768744",
+      in_time: "532654768744",
+      out_time: "532654768744",
+      owner: "张三",//预订人
+      owner_tel: "+8618500059035",//预订人手机
+      remark: "",//备注
+      rooms: [{
+        room_type: "大床房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 0, //总房费
+        pms_pay: 0, //PMS中的已付金额,
+        staff_pay: 0,//营业员确认的付款金额,
+        user_pay: 0, //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false, //是否营业已确认
+        need_refund: true, //是否需要退款
+        pmsaccount_result: false,// PMS入账是否成功
+        is_cancelled:false, //是否已取消,
+      },
+      timeline:{ //状态变化时间
+        precheckin_done: null, //预登记完成时间, null未发生
+      }
+    }]
+  }
+);

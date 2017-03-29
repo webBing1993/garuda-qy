@@ -19,4 +19,5 @@ module.exports = {
   },
   preorderlist: [],
   predetail: {},
+  historyList: {}
 }

@@ -13,5 +13,8 @@ module.exports = {
   },
   PREDETAIL(state, payload){
     state.predetaildata = {...payload}
+  },
+  HISTORY(state, payload){
+    state.historyList = {...payload}
   }
 }
