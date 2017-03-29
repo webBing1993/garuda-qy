@@ -6,7 +6,8 @@ const pmsRouter = [{
   path: '/',
   // component: require('../containers/home')
   // component: require('../containers/PMS/prepay/list')
-  component: require('../containers/DEAL/predeal/list')
+  component: require('../containers/preOrder/historyOrder/list')
+
 }, {
   path: '/pms',
   component: {
@@ -26,17 +27,23 @@ const pmsRouter = [{
 }];
 
 const preorderRouter = [{
-  path: '/predeal',
+  path: '/preOrder',
   component: {
-    name: "predeal",
+    name: "preOrder",
     template: `<router-view/>`,
   },
   children: [{
-    path: ':tab',
-    component: require('../containers/DEAL/predeal/list')
+    path: 'todayOrder/:tab',
+    component: require('../containers/preOrder/todayOrder/list')
   }, {
-    path: 'predetail/:id',
-    component: require('../containers/DEAL/predeal/detail')
+    path: 'todayOrder/predetail/:id',
+    component: require('../containers/preOrder/todayOrder/detail')
+  },{
+    path: 'historyOrder/:tab',
+    component: require('../containers/preOrder/historyOrder/list')
+  }, {
+    path: 'historyOrder/predetail/:id',
+    component: require('../containers/preOrder/historyOrder/detail')
   }]
 }];
 

@@ -92,7 +92,7 @@ Mock.mock(
   }
 )
 
-/* 历史预登记订单列表 */
+/* 当日预登记订单列表 */
 Mock.mock(
   '/preorderlist/0',
   {
@@ -145,7 +145,7 @@ Mock.mock(
   }
 );
 
-/* 历史预登记订单详情 */
+/* 当日预登记订单详情 */
 Mock.mock(
   '/order/precheckin/today',
   {

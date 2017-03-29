@@ -43,18 +43,17 @@
       <div class="cell-body">已付</div>
       <div class="cell-footer">¥400</div>
     </div>
+
     <!-- 选房信息 -->
     <div class="cell-title">选房信息</div>
     <div class="predetail-cell marginBot">
-      <div class="cell-box" v-for="item in predetail.suborders">
+      <div class="cell-box" v-for="item in predetaildata.suborders">
         <div class="box-title">{{item.room_type_name}}{{item.room_number}}</div>
-        <div v-for="item in predetail.suborders.guests">
-          <div class="box-text">{{item.name}} {{item.idcard}}</div>
+        <div v-for="item in predetaildata.suborders.guests">
           <div class="box-text">{{item.name}} {{item.idcard}}</div>
         </div>
       </div>
     </div>
-
 
 
     <!--<div class="predetail-cell">-->
@@ -139,7 +138,7 @@
       }
     },
     mounted() {
-      console.log('2222222222');
+      console.log('predetail  2222222222');
       this.predetail();
     }
   }

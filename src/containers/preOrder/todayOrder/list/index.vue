@@ -25,8 +25,31 @@
       </section>
     </scroller>
 
-    <div class="preBtn" @click="_sorkTime">时间正序</div>
+    <div class="preBtn" @click="_showSortBox">时间正序</div>
+    <popup v-model="popupShow"
+           :maskShow="true"
+           :bottom="true"
+           :top="false"
+           :atCenter="false"
+           :fromBottom="true">
+      <!--<calendar @onCancel="popupShow= false"></calendar>-->
+      <div class="mask-container">
+        <div class="sort-box">
+          <div class="sotr-text">预登记时间从早到晚</div>
+          <div class="sotr-text">预登记时间从早到晚</div>
+        </div>
+        <div class="mask"></div>
+      </div>
+    </popup>
 
+
+    <!--<div class="mask-container" v-show="true">-->
+    <!--<div class="sort-box">-->
+    <!--<div class="sotr-text">预登记时间从早到晚</div>-->
+    <!--<div class="sotr-text">预登记时间从早到晚</div>-->
+    <!--</div>-->
+    <!--<div class="mask"></div>-->
+    <!--</div>-->
   </article>
 </template>
 <script>
@@ -39,7 +62,13 @@
       return {
         iscancelled: ["待入住", "已取消"],
         dataTime: [],
-        batch: false
+        batch: false,
+        showSort: false,
+        sortMenus: {
+          menu1: '预登记时间从早到晚',
+          menu2: '预登记时间从晚到早'
+        },
+        popupShow: false
       }
     },
     computed: {
@@ -47,7 +76,10 @@
         'route',
         'preorderlist0',
         'preorderlist1',
-      ])
+      ]),
+      isShowSort(){
+        return showSort
+      }
     },
     methods: {
       ...mapActions([
@@ -63,14 +95,18 @@
         console.log('_orderClick =======>');
         this.goto('/predeal/predetail/' + orderId);
       },
-      _sorkTime(){
+      _showSortBox(){
 //        this.dataTime = preorderlist.dataTime;
         console.log('时间排序..');
-        console.log(this.dataTime);
+        this.popupShow = true;
 //        this.dataTime.sort((a, b) => {
 //          return a.dataTime > b.dataTime;
 //        })
-      }
+      },
+
+      _sortClick(key) {
+        console.log(key)
+      },
     },
     watch: {
       'route.params.tab': function (val) {
