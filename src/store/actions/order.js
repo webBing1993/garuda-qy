@@ -32,7 +32,13 @@ module.exports = {
   predetail(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
-      onSuccess: (body) => (console.log(body), ctx.commit('PREDETAIL', body.data)),
+      onSuccess: (body) => {
+        let data = body.data;
+        let phone = data.owner_tel;
+        phone.substr(3, 11);
+        console.log(phone);
+        ctx.commit('PREDETAIL', data)
+      },
       onFail: () => null
     })
   },

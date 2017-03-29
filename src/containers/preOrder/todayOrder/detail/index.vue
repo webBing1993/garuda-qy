@@ -1,6 +1,6 @@
 <template>
   <div class="predetail-container">
-    <div class="predetail-title">
+    <div class="warning-title">
       <div class="title-body">❗️{{predetaildata.warning}}</div>
       <div class="title-footer"><input type="button" value="已手工入账"></div>
     </div>
@@ -46,41 +46,32 @@
 
     <!-- 选房信息 -->
     <div class="cell-title">选房信息</div>
-    <div class="predetail-cell marginBot">
-      <div class="cell-box" v-for="item in predetaildata.suborders">
+    <div class="predetail-cell select-roomCell" v-for="item in predetaildata.suborders">
+      <div class="cell-box">
         <div class="box-title">{{item.room_type_name}}{{item.room_number}}</div>
-        <div v-for="item in predetaildata.suborders.guests">
-          <div class="box-text">{{item.name}} {{item.idcard}}</div>
+        <div v-for="itm in item.guests">
+          <div class="box-text">{{itm.name}} {{itm.idcard}}</div>
         </div>
       </div>
     </div>
-
-
-    <!--<div class="predetail-cell">-->
-      <!--<div class="cell-box">-->
-        <!--<div class="box-title">大床房204</div>-->
-        <!--<div class="box-text">张三 13163556666</div>-->
-        <!--<div class="box-text">李四 13163556666</div>-->
-      <!--</div>-->
-    <!--</div>-->
 
     <!-- 发票信息 -->
     <div class="cell-title">发票信息</div>
     <div class="predetail-cell">
       <div class="cell-body">发票抬头</div>
-      <div class="cell-footer">上海复创****公司</div>
+      <div class="cell-footer">{{predetaildata.invoice.title}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">开票类型</div>
-      <div class="cell-footer">公司·增值税专用发票</div>
+      <div class="cell-footer">{{predetaildata.invoice.type}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">领取方式</div>
-      <div class="cell-footer">电子发票</div>
+      <div class="cell-footer">{{predetaildata.invoice.media}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">开票内容</div>
-      <div class="cell-footer">住宿费</div>
+      <div class="cell-footer">{{predetaildata.invoice.category}}</div>
     </div>
     <div class="predetail-btn" @click="_logbtn">
       <div class="log-btn">操作日志</div>
@@ -89,11 +80,11 @@
     <!-- log 弹窗 -->
     <div class="log-container" v-show="logShowHind">
       <div class="log-mask" @click="_logHide"></div>
-      <div class="log-box">
+      <div class="log-box animationTop">
         <span class="log-title">操作日志</span>
         <div class="log-cell">
           <div class="log-header">日期</div>
-          <div class="log-body textAlign">内容头</div>
+          <div class="log-body textAlign">内容</div>
           <div class="log-footer">操作人</div>
         </div>
         <div class="log-cell" v-for="item in predetaildata.logs">

@@ -5,51 +5,34 @@
         <TabItem v-for="(item,index) in iscancelled"
                  :key="index"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/predeal/'+index)">{{item}}
+                 @click.native="goto('/preOrder/todayOrder/'+index)">{{item}}
         </TabItem>
       </Tab>
     </header>
 
-    <scroller v-show="route.params.tab == 0" ref="tableft" lock-x>
+    <scroller height="-44" v-show="route.params.tab == 0" ref="tableft" lock-x>
       <section>
         <preorderitem v-for="(item,index) in preorderlist0"
                       :key="index"
-                      :value="item.orderId"
-                      @onClick="_orderClick(item.orderId)" :item="item" :arrow="!batch"/>
+                      :value="item.order_id"
+                      @onClick="_gotodetail(item.order_id)" :item="item" :arrow="!batch"/>
       </section>
     </scroller>
 
-    <scroller v-show="route.params.tab == 1" ref="tabright" lock-x>
+    <scroller height="-44" v-show="route.params.tab == 1" ref="tabright" lock-x>
       <section>
         <preorderitem v-for="(item,index) in preorderlist1" key="index" :item="item" arrow/>
       </section>
     </scroller>
 
+    <!-- 弹出层 -->
     <div class="preBtn" @click="_showSortBox">时间正序</div>
-    <popup v-model="popupShow"
-           :maskShow="true"
-           :bottom="true"
-           :top="false"
-           :atCenter="false"
-           :fromBottom="true">
-      <!--<calendar @onCancel="popupShow= false"></calendar>-->
-      <div class="mask-container">
-        <div class="sort-box">
-          <div class="sotr-text">预登记时间从早到晚</div>
-          <div class="sotr-text">预登记时间从早到晚</div>
-        </div>
-        <div class="mask"></div>
+    <div class="sortContainer" v-show="showSort">
+      <div class="sortMask" @click="_hidSortBox"></div>
+      <div class="sortContent animationTopBottom">
+        <div class="sortText" v-for="item in sortMenus" v-model="sortMenus" @click="_sortClick(item)">{{item}}</div>
       </div>
-    </popup>
-
-
-    <!--<div class="mask-container" v-show="true">-->
-    <!--<div class="sort-box">-->
-    <!--<div class="sotr-text">预登记时间从早到晚</div>-->
-    <!--<div class="sotr-text">预登记时间从早到晚</div>-->
-    <!--</div>-->
-    <!--<div class="mask"></div>-->
-    <!--</div>-->
+    </div>
   </article>
 </template>
 <script>
@@ -57,18 +40,14 @@
   import './index.less';
 
   module.exports = {
-    name: 'predeal',
+    name: 'todayOrder',
     data(){
       return {
         iscancelled: ["待入住", "已取消"],
         dataTime: [],
         batch: false,
         showSort: false,
-        sortMenus: {
-          menu1: '预登记时间从早到晚',
-          menu2: '预登记时间从晚到早'
-        },
-        popupShow: false
+        sortMenus: ['预登记时间从早到晚', '预登记时间从晚到早']
       }
     },
     computed: {
@@ -76,10 +55,7 @@
         'route',
         'preorderlist0',
         'preorderlist1',
-      ]),
-      isShowSort(){
-        return showSort
-      }
+      ])
     },
     methods: {
       ...mapActions([
@@ -91,21 +67,28 @@
         //重置scroller高度
         this.$nextTick(() => this.$refs[ref].reset(param))
       },
-      _orderClick(orderId) {
-        console.log('_orderClick =======>');
-        this.goto('/predeal/predetail/' + orderId);
+      _gotodetail(orderId) {
+        this.goto('/preOrder/todayOrder/predetail/' + orderId);
+        console.log('goto predetail ===> 1111111')
       },
       _showSortBox(){
-//        this.dataTime = preorderlist.dataTime;
-        console.log('时间排序..');
-        this.popupShow = true;
-//        this.dataTime.sort((a, b) => {
-//          return a.dataTime > b.dataTime;
-//        })
+        this.showSort = true;
+      },
+      _hidSortBox(){
+        this.showSort = false;
       },
 
       _sortClick(key) {
-        console.log(key)
+        this._hidSortBox();
+//        this.dataTime = preorderlist.dataTime;
+//        this.dataTime.sort((a, b) => {
+//          return a.dataTime > b.dataTime;
+//        })
+        if (key == '预登记时间从早到晚') {
+          console.log(key + '0');
+        } else {
+          console.log(key + "1");
+        }
       },
     },
     watch: {

@@ -18,6 +18,6 @@ module.exports = {
     confirmed: []
   },
   preorderlist: [],
-  predetail: {},
+  predetaildata: {},
   historyList: {}
 }

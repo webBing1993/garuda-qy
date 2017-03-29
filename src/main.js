@@ -8,6 +8,7 @@ Vue.config.productionTip = false;
 
 // normalize.css
 import 'normalize.css';
+import './assets/varible.less';
 
 // utils
 import FastClick from 'fastclick';

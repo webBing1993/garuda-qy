@@ -194,17 +194,29 @@ Mock.mock(
           name: "刘斌",
           idcard: '400800999333222',
         }, {
-          name: "刘斌",
+          name: "流川枫",
+          idcard: '400800999333222',
+        }]
+      }, {
+        suborder_id: "",
+        room_type_id: "房型代码",
+        room_type_name: "总统套房",
+        room_number: "204",
+        guests: [{
+          name: "三通",
+          idcard: '400800999333222',
+        }, {
+          name: "三条",
           idcard: '400800999333222',
         }]
       }],
       invoice: {
-        type: "PERSONAL/GENERAL/VAT",
-        media: "PAPER/EINVOICE",
+        type: "公司·增值税专用发票",
+        media: "电子发票",
         category: "住宿费",
-        title: "抬头",
+        title: "上海复创****公司",
         tax_registry_no: "统一社会信用代码",
-        address: "地址",
+        address: "凤凰大厦9999",
         phone_number: "",
         bank_name: "",
         bank_account: ""
@@ -252,12 +264,12 @@ Mock.mock(
         is_staff_confirm: false, //是否营业已确认
         need_refund: false, //是否需要退款
         pmsaccount_result: false,// PMS入账是否成功
-        is_cancelled:false, //是否已取消,
+        is_cancelled: false, //是否已取消,
       },
-      timeline:{ //状态变化时间
-       precheckin_done: null, //预登记完成时间, null未发生
+      timeline: { //状态变化时间
+        precheckin_done: null, //预登记完成时间, null未发生
       }
-    },{
+    }, {
       order_id: "532654768744",
       in_time: "532654768744",
       out_time: "532654768744",
@@ -278,12 +290,12 @@ Mock.mock(
         is_staff_confirm: false, //是否营业已确认
         need_refund: false, //是否需要退款
         pmsaccount_result: false,// PMS入账是否成功
-        is_cancelled:false, //是否已取消,
+        is_cancelled: false, //是否已取消,
       },
-      timeline:{ //状态变化时间
+      timeline: { //状态变化时间
         precheckin_done: null, //预登记完成时间, null未发生
       }
-    },{
+    }, {
       order_id: "532654768744",
       in_time: "532654768744",
       out_time: "532654768744",
@@ -304,9 +316,9 @@ Mock.mock(
         is_staff_confirm: false, //是否营业已确认
         need_refund: true, //是否需要退款
         pmsaccount_result: false,// PMS入账是否成功
-        is_cancelled:false, //是否已取消,
+        is_cancelled: false, //是否已取消,
       },
-      timeline:{ //状态变化时间
+      timeline: { //状态变化时间
         precheckin_done: null, //预登记完成时间, null未发生
       }
     }]

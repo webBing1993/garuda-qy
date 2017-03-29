@@ -1,4 +1,46 @@
+/* 动画效果显示 */
+.animationTop {
+  animation: Top 0.5s ease-in-out;
+}
+
+@keyframes Top {
+  from {
+    top: -50%;
+  }
+  to {
+    top: 0;
+  }
+}
+
+.animationTopBottom {
+  animation: Bottom 0.5s ease-in-out;
+}
+
+@keyframes Bottom {
+  from {
+    bottom: -50%;
+  }
+  to {
+    bottom: 0;
+  }
+}
+
+/* 阴影效果 */
+.boxShadow {
+  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.15);
+}
+
+.boxShadow_in {
+  box-shadow: 0 10px 30px #EBEBEB inset;
+}
+
+.select-shadow {
+  box-shadow: 0 8px 40px 0 rgba(42, 42, 42, 0.26);
+}
+
+/*  字体 颜色尺寸 背景色 */
 @font1: 11px; //说明文本，如版权信息等不需要用户关注的信息
+@fon2: 12px; //说明文本，如版权信息等不需要用户关注的信息
 @font2: 13px; //页面辅助信息，弱化的内容如链接、小按钮
 @font3: 14px; //页面次要的描述信息，服务于首要信息并与之关联，如列表摘要
 @font4: 17px; //页面首要层级信息，基准的，可以是连续的，如列表标题、消息气泡
@@ -23,23 +65,25 @@
 @buttonheight2: 35px;
 @buttonheight3: 30px;
 
-@buttoncolor:#08b49c;
+@buttoncolor: #08b49c;
 
 //字体颜色
-@black1: #000000; //主内容black
-@black2: #353535; //大段的说明内容且属于主要内容
-@black3: #888888; //次内容
-@black4: #b2b2b2; //时间戳与表单缺省值灰色
-@black5: #dfdfdf; //按钮边框
-@black6: #e5e5e5; //边
-@black7: #f4f4f4;
-@black8: #f8f8f8; //背景
-@black9: #ffffff;
+@font-black1: #000000; //主内容black
+@font-black2: #353535; //大段的说明内容且属于主要内容
+@font-black3: #888888; //次内容
+@font-black4: #b2b2b2; //时间戳与表单缺省值灰色
+@font-black5: #dfdfdf; //按钮边框
+@font-black6: #e5e5e5; //边
+@font-black7: #f4f4f4;
+@font-black8: #f8f8f8;
+@font-black9: #8A8A8A;
+@font-black10: #4A4A4A;
 
-@blue1: #576b95; //链接颜色
+@link-blue1: #576b95; //链接颜色
 
-@red1: #e64340; //出错用色
-@red2: #F76260;
+@error-red1: #e64340; //出错用色
+@error-red2: #F76260;
+@error-red3: #F45656;
 
 @green1: #179E16;
 @green2: #1AAE18;
