@@ -18,10 +18,10 @@
         <span>{{item.owner_tel | filterNum}}</span>
       </p>
 
-      <p v-if="item.rooms || item.precheckin_time">
+      <p v-if="item.rooms || item.precheckin_time" v-for="itm in item.rooms">
         <span class="key">房型：</span>
-        <span>{{item.room_type}}x{{item.room_count}}</span>
-        <span class="paid">{{item.precheckin_time}}</span>
+        <span>{{itm.room_type}}x{{itm.room_count}}</span>
+        <span class="paid">{{item.timeline.precheckin_done}}</span>
       </p>
 
     </div>

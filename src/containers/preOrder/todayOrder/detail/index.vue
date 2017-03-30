@@ -1,7 +1,7 @@
 <template>
   <div class="predetail-container">
     <div class="warning-title">
-      <div class="title-body">❗️{{predetaildata.warning}}</div>
+      <div class="title-body">❗️{{todaydetail.warning}}</div>
       <div class="title-footer"><input type="button" value="已手工入账"></div>
     </div>
 
@@ -9,44 +9,44 @@
     <div class="cell-title">预订信息</div>
     <div class="predetail-cell">
       <div class="cell-body">订单号</div>
-      <div class="cell-footer">{{predetaildata.order_id}}</div>
+      <div class="cell-footer">{{todaydetail.order_id}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">预订人</div>
-      <div class="cell-footer">{{predetaildata.owner}}</div>
+      <div class="cell-footer">{{todaydetail.owner}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">手机号</div>
-      <div class="cell-footer">{{predetaildata.owner_tel}}</div>
+      <div class="cell-footer">{{todaydetail.owner_tel}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">入离时间</div>
-      <div class="cell-footer">{{predetaildata.in_time}}-{{predetaildata.out_time}}</div>
+      <div class="cell-footer">{{todaydetail.in_time}}-{{todaydetail.out_time}}</div>
     </div>
 
     <!-- PMS支付信息 -->
     <div class="cell-title">PMS支付信息</div>
     <div class="predetail-cell">
       <div class="cell-body">应付房费</div>
-      <div class="cell-footer">¥400（¥200x2)</div>
+      <div class="cell-footer">¥{{todaydetail.payinfo.total_roomfee}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">已付</div>
-      <div class="cell-footer">¥200</div>
+      <div class="cell-footer">¥{{todaydetail.payinfo.pms_pay}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">备注</div>
-      <div class="cell-footer">无</div>
+      <div class="cell-footer">{{(todaydetail.remark || '无')}}</div>
     </div>
     <div class="cell-title">支付信息</div>
     <div class="predetail-cell">
       <div class="cell-body">已付</div>
-      <div class="cell-footer">¥400</div>
+      <div class="cell-footer">{{todaydetail.payinfo.user_pay}}</div>
     </div>
 
     <!-- 选房信息 -->
     <div class="cell-title">选房信息</div>
-    <div class="predetail-cell select-roomCell" v-for="item in predetaildata.suborders">
+    <div class="predetail-cell select-roomCell" v-for="item in todaydetail.suborders">
       <div class="cell-box">
         <div class="box-title">{{item.room_type_name}}{{item.room_number}}</div>
         <div v-for="itm in item.guests">
@@ -59,19 +59,19 @@
     <div class="cell-title">发票信息</div>
     <div class="predetail-cell">
       <div class="cell-body">发票抬头</div>
-      <div class="cell-footer">{{predetaildata.invoice.title}}</div>
+      <div class="cell-footer">{{todaydetail.invoice.title}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">开票类型</div>
-      <div class="cell-footer">{{predetaildata.invoice.type}}</div>
+      <div class="cell-footer">{{todaydetail.invoice.type}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">领取方式</div>
-      <div class="cell-footer">{{predetaildata.invoice.media}}</div>
+      <div class="cell-footer">{{todaydetail.invoice.media}}</div>
     </div>
     <div class="predetail-cell">
       <div class="cell-body">开票内容</div>
-      <div class="cell-footer">{{predetaildata.invoice.category}}</div>
+      <div class="cell-footer">{{todaydetail.invoice.category}}</div>
     </div>
     <div class="predetail-btn" @click="_logbtn">
       <div class="log-btn">操作日志</div>
@@ -87,7 +87,7 @@
           <div class="log-body textAlign">内容</div>
           <div class="log-footer">操作人</div>
         </div>
-        <div class="log-cell" v-for="item in predetaildata.logs">
+        <div class="log-cell" v-for="item in todaydetail.logs">
           <div class="log-header">{{item.date}}</div>
           <div class="log-body">{{item.action}}</div>
           <div class="log-footer">{{item.operator}}</div>
@@ -112,13 +112,13 @@
     computed: {
       ...mapState([
         'route',
-        'predetaildata',
+        'todaydetail',
       ])
     },
     methods: {
       ...mapActions([
         'goto',
-        'predetail'
+        'todayorderdetail'
       ]),
       _logbtn(){
         this.logShowHind = true;
@@ -130,7 +130,7 @@
     },
     mounted() {
       console.log('predetail  2222222222');
-      this.predetail();
+      this.todayorderdetail();
     }
   }
 </script>

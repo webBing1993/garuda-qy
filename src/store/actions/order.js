@@ -13,31 +13,34 @@ module.exports = {
       onFail: () => null
     })
   },
-  preorder0(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/preorderlist/0',
-      // url: '/order/precheckin/today',
-      onSuccess: (body) => (console.log(body), ctx.commit('PREORDER0', body.data)),
-      onFail: () => null
-    })
-  },
-  preorder1(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/preorderlist/1',
-      // url: '/order/precheckin/today',
-      onSuccess: (body) => (console.log(body), ctx.commit('PREORDER1', body.data)),
-      onFail: () => null
-    })
-  },
-  predetail(ctx, param){
+  //当日预登记订单列表
+  precheckintoday(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
+      method: "POST",
+      onSuccess: (body) => (console.log(body), ctx.commit('PRECHECKINTODAY', body.data)),
+      onFail: () => null
+    })
+  },
+  checkincancel(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/precheckin/today/checkincancel',
+      // url: '/order/precheckin/today',
+      onSuccess: (body) => (console.log(body), ctx.commit('CHECKINCANCEL', body.data)),
+      onFail: () => null
+    })
+  },
+
+  //当日预登记订单详情
+  todayorderdetail(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/precheckin/today/order_id',
       onSuccess: (body) => {
         let data = body.data;
         let phone = data.owner_tel;
         phone.substr(3, 11);
         console.log(phone);
-        ctx.commit('PREDETAIL', data)
+        ctx.commit('TODAYDETAIL', data)
       },
       onFail: () => null
     })

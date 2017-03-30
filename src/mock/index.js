@@ -94,96 +94,135 @@ Mock.mock(
 
 /* 当日预登记订单列表 */
 Mock.mock(
-  '/preorderlist/0',
+  '/order/precheckin/today',
   {
     code: 200,
     msg: "ok",
     data: [{
-      order_id: "130420402402404",
-      order_status: {
-        iscancelled: true,
-      },
-      precheckin_time: '03/31 08:20',
-      owner: "张三",
-      owner_tel: "+8618500059035",
-      warning: '待退款',
-      room_type: "大床房",
-      room_count: 4
-    }, {
-      order_id: "240420402402404",
-      order_status: {
-        iscancelled: true,
-      },
-      precheckin_time: '03/31 08:20',
-      owner: "张三",
-      owner_tel: "+8618500059035",
-      warning: '待退款',
+      warning: '入账失败',  //测试添加
+      order_id: "130420402402404",  //订单号
+      in_time: '',
+      out_time: '',
+      owner: "马云", //预订人
+      owner_tel: "+8618500059035", //预订人手机
+      remark: "", //备注
       rooms: [{
-        room_type: "大床房",
-        room_count: 6
-      }]
+        room_type: "总统套房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 0,   //总房费
+        pms_pay: 0,   // PMS中的已付金额,
+        staff_pay: null,  // null 0 营业员确认的付款金额,
+        user_pay: 0,   //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false,  //是否营业已确认
+        need_refund: false,   //是否需要退款(Orders.pms_syn_state==3, 返回true)
+        pmsaccount_result: false,   //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
+        is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
+      },
+      timeline: {   //状态变化时间
+        precheckin_done: '03/21 08:20',  // 预登记完成时间, null未发生
+      }
+    }, {
+      warning: '入账失败',  //测试添加
+      order_id: "130420402402404",  //订单号
+      in_time: '',
+      out_time: '',
+      owner: "马云", //预订人
+      owner_tel: "+8618500059035", //预订人手机
+      remark: "", //备注
+      rooms: [{
+        room_type: "情侣房",
+        room_count: 4
+      }],
+      payinfo: {
+        total_roomfee: 0,   //总房费
+        pms_pay: 0,   // PMS中的已付金额,
+        staff_pay: null,  // null 0 营业员确认的付款金额,
+        user_pay: 0,   //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false,  //是否营业已确认
+        need_refund: false,   //是否需要退款(Orders.pms_syn_state==3, 返回true)
+        pmsaccount_result: false,   //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
+        is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
+      },
+      timeline: {   //状态变化时间
+        precheckin_done: '03/25 10:20',  // 预登记完成时间, null未发生
+      }
     }]
   }
 );
 
 Mock.mock(
-  '/preorderlist/1',
+  '/order/precheckin/today/checkincancel',
   {
     code: 200,
     msg: "ok",
     data: [{
-      order_id: "130420402402404",
-      order_status: {
-        iscancelled: true,
+      order_id: "130420402402404",  //订单号
+      in_time: '',
+      out_time: '',
+      owner: "马云", //预订人
+      owner_tel: "+8618500059035", //预订人手机
+      remark: "", //备注
+      rooms: [{
+        room_type: "总统套房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 0,   //总房费
+        pms_pay: 0,   // PMS中的已付金额,
+        staff_pay: null,  // null 0 营业员确认的付款金额,
+        user_pay: 0,   //小程序已付金额
       },
-      precheckin_time: '03/31 08:20',
-      owner: "张三",
-      owner_tel: "18500059035",
-      room_type: "大床房",
-      room_count: 2
+      status: {
+        is_staff_confirm: false,  //是否营业已确认
+        need_refund: false,   //是否需要退款(Orders.pms_syn_state==3, 返回true)
+        pmsaccount_result: false,   //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
+        is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
+      },
+      timeline: {   //状态变化时间
+        precheckin_done: '03/21 08:20',  // 预登记完成时间, null未发生
+      }
     }]
   }
 );
 
 /* 当日预登记订单详情 */
 Mock.mock(
-  '/order/precheckin/today',
+  '/order/precheckin/today/order_id',
   {
     code: 200,
     msg: "ok",
     data: {
-      order_id: "120420402402405",
-      order_status: {
-        iscancelled: true,
-      },
+      warning: '入账失败',  //测试添加
+      order_id: "120420402402405", //订单号
       in_time: '2017/4/4',
       out_time: '2017/4/6',
-      owner: "张三",
-      owner_tel: "+8618500059035",
-      remark: "",
-      pay_status: 'NEED_PAY',
-      precheckin_time: '',
-      timestamp: '',
-      warning: '入账失败',
-      room_type: "大床房",
-      room_count: 2,
+      owner: "古龙详情",  //预订人
+      owner_tel: "+8618500059035", //预订人手机
+      remark: "", //备注
+      rooms: [{
+        room_type: "大床房",
+        room_count: 2
+      }],
       payinfo: {
-        fees: [{
-          room_type: '房型名称',
-          amount: '房间数量',
-          date_price: [{
-            date: '03/31 08:20',
-            price: '3000',
-          }]
-        }],
-        deposit: '押金',
-        total_fee: '总费用=总房费+押金',
-        prepay: '已付金额款',
-        need_pay: '应付金额=总费用-已付金额'
+        total_roomfee: 400,  //总房费
+        pms_pay: 200,  //PMS中的已付金额,
+        staff_pay: null, //null 0,营业员确认的付款金额,
+        user_pay: 0,  //小程序已付金额
       },
-      paymark: {
-        pay_status: '0未付，1已付，2其他',
-        prepay: 0,
+      status: {
+        is_staff_confirm: false, // 是否营业已确认
+        need_refund: false, // 是否需要退款
+        pmsaccount_result: false, // PMS入账是否成功
+        is_cancelled: false, // 是否已取消
+      },
+      timeline: { //状态变化时间
+        precheckin_done: '', //timestamp, 预登记完成时间, null未发生
       },
       suborders: [{
         suborder_id: "",
@@ -214,7 +253,7 @@ Mock.mock(
         type: "公司·增值税专用发票",
         media: "电子发票",
         category: "住宿费",
-        title: "上海复创****公司",
+        title: "上海复创",
         tax_registry_no: "统一社会信用代码",
         address: "凤凰大厦9999",
         phone_number: "",
@@ -271,7 +310,7 @@ Mock.mock(
         timeline: { //状态变化时间
           precheckin_done: null, //预登记完成时间, null未发生
         }
-      },{
+      }, {
         order_id: "532654768744",
         in_time: "532654768744",
         out_time: "532654768744",
@@ -298,7 +337,7 @@ Mock.mock(
           precheckin_done: null, //预登记完成时间, null未发生
         }
       }]
-    },{
+    }, {
       order_date: "532654768744",
       order_info: [{
         order_id: "532654768744",
@@ -326,7 +365,7 @@ Mock.mock(
         timeline: { //状态变化时间
           precheckin_done: null, //预登记完成时间, null未发生
         }
-      },{
+      }, {
         order_id: "532654768744",
         in_time: "532654768744",
         out_time: "532654768744",
