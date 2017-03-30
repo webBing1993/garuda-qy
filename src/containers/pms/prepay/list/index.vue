@@ -5,13 +5,8 @@
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/pms/prepay/'+index)">{{item}}
-
-
-
-
-
-
+                 @click.native="goto('/pms/prepay/'+index)">
+          <span>{{item}}</span>
         </TabItem>
       </Tab>
       <div class="toolbar" v-if="batch">
@@ -22,11 +17,10 @@
       </div>
     </header>
 
-    <scroller :pulldown-config="app.scroller.config"
+    <scroller v-show="route.params.tab == 0"
+              :pulldown-config="app.scroller.config"
+              :depend="[orderlist.tobeconfirmed,batch]"
               height="-44"
-              @on-pulldown-loading="donePullDown('tbc')"
-              ref="tbc"
-              v-show="route.params.tab == 0"
               use-pulldown
               lock-x>
       <section :class="{batch}">
@@ -54,7 +48,9 @@
       </section>
     </scroller>
 
-    <scroller v-show="route.params.tab == 1" ref="confirmed" lock-x>
+    <scroller v-show="route.params.tab == 1"
+              height="-44"
+              lock-x>
       <section>
         <orderitem v-for="(item,index) in orderlist.confirmed"
                    key="'confirmed'+index"
@@ -74,8 +70,8 @@
     </scroller>
 
     <footer v-show="route.params.tab == 0">
-      <xbutton v-if="batch" red>未支付</xbutton>
-      <xbutton v-else @onClick="goPick">未支付批量处理</xbutton>
+      <x-button v-if="batch" value="未支付" warn/>
+      <x-button v-else @onClick="goPick" value="未支付批量处理"/>
     </footer>
   </article>
 </template>
@@ -109,10 +105,6 @@
         //刷新
         this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
       },
-      reset: function (ref, param) {
-        //重置scroller高度
-        this.$nextTick(() => this.$refs[ref].reset(param))
-      },
       allPick(){
         //全选和取消全选
         if (this.batchlist.length === this.orderlist.tobeconfirmed.length) {
@@ -143,29 +135,10 @@
     },
     watch: {
       'route.params.tab': function (val) {
-        //切换标签卡时
-        if (val == 0) {
-          this.reset('tbc')
-        } else {
-          this.cancelPick()
-          this.reset('confirmed')
-        }
-      },
-      'batch': function (val, oldval) {
-        //切换批量选择模式时
-        this.reset('tbc')
-      },
-      'orderlist.tobeconfirmed': function () {
-        //tobeconfirmed列表变化时
-        this.reset('tbc')
-      },
-      'orderlist.confirmed': function () {
-        //confirmed列表变化时
-        this.reset('confirmed')
+        val ? this.cancelPick() : null
       }
     },
     mounted(){
-      //获取tobeconfirmed&confirmed列表
       this.tobeconfirmed()
       this.confirmed()
     }

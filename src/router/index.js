@@ -15,10 +15,10 @@ const pmsRouter = [{
   },
   children: [{
     path: 'prepay/:tab',
-    component: require('../containers/PMS/prepay/list')
+    component: require('../containers/pms/prepay/list')
   }, {
     path: 'prepay/detail/:id',
-    component: require('../containers/PMS/prepay/detail')
+    component: require('../containers/pms/prepay/detail')
   }]
 }];
 

@@ -25,19 +25,10 @@ sync(store, router);
 
 // components
 const Vux = require('vux');
-Vue.component('Group', Vux.Group);
 Vue.component('Tab', Vux.Tab);
 Vue.component('TabItem', Vux.TabItem);
-Vue.component('Flexbox', Vux.Flexbox);
-Vue.component('FlexboxItem', Vux.FlexboxItem);
 Vue.component('Checker', Vux.Checker);
 Vue.component('CheckerItem', Vux.CheckerItem);
-Vue.component('Scroller', Vux.Scroller);
-Vue.component('Icon', Vux.Icon);
-Vue.component('Confirm', Vux.Confirm);
-
-Vue.component('calendar', require('./components/calendar'));
-Vue.component('popup', require('./components/popup'));
 
 // Forms
 import XInput from './components/Forms/x-input.vue'
@@ -58,6 +49,8 @@ import Dialog from './components/Layers/dialog.vue'
 Vue.component('Dialog', Dialog)
 import Toast from './components/Layers/toast.vue'
 Vue.component('Toast', Toast)
+import popup from './components/Layers/popup'
+Vue.component('popup', popup)
 
 // List
 import Group from './components/List/group.vue'
@@ -72,11 +65,16 @@ import Grids from './components/Layouts/grids/girds.vue'
 import Grid from './components/Layouts/grids/grid.vue'
 Vue.component('Grids', Grids)
 Vue.component('Grid', Grid)
+import Scroller from './components/Layouts/scroller.vue'
+Vue.component('Scroller', Scroller)
 
 // Display
 import XButton from './components/Displays/button.vue'
 Vue.component('XButton', XButton)
 
+// Functional
+import calendar from './components/Functional/calendar'
+Vue.component('calendar', calendar)
 
 //modules
 Vue.component('orderitem', require('./modules/orderitem'));
