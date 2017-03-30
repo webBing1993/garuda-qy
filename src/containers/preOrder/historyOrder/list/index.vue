@@ -9,26 +9,29 @@
         </TabItem>
       </Tab>
     </header>
-    <scroller :pulldown-config="app.scroller.config"
-              ref="NO-SHOW"
-              v-show="route.params.tab == 0"
+    <scroller v-show="route.params.tab == 0"
+              :pulldown-config="app.scroller.config"
               @on-pulldown-loading="donePullDown('NO-SHOW')"
               lock-x
-              use-pulldown>
-      <section v-for="(list,index) in historyList" :key="index">
-        <p class="list-date">{{list.order_date | getDate}}</p>
-        <orderitem v-for="(item,index) in list.order_info"
-                   :key="index"
-                   :orderId="item.order_id"
-                   :need_refund="true"
-                   :date="item.in_time"
-                   :booker="item.owner"
-                   :phoneNum="item.owner_tel"
-                   :roomType="item.rooms[0].room_type"
-                   :roomCount="item.rooms[0].room_count"
-                   :arrow=true>
-        </orderitem>
-      </section>
+              ref="NO-SHOW"
+              use-pulldown
+              height="-44">
+      <div>
+        <section v-for="(list,index) in historyList" :key="index">
+          <p class="list-date">{{list.order_date | getDate}}</p>
+          <orderitem v-for="(item,index) in list.order_info"
+                     :key="index"
+                     :orderId="item.order_id"
+                     :need_refund="true"
+                     :date="item.in_time"
+                     :booker="item.owner"
+                     :phoneNum="item.owner_tel"
+                     :roomType="item.rooms[0].room_type"
+                     :roomCount="item.rooms[0].room_count"
+                     :arrow=true>
+          </orderitem>
+        </section>
+      </div>
     </scroller>
 
     <scroller v-show="route.params.tab == 1"
@@ -38,8 +41,31 @@
         已取消
       </section>
     </scroller>
-
-    <div class="select">筛选 | 时间排序</div>
+    <footer>
+      <div class="select" v-if="!popupShowCalendar">
+        <span @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
+        <span @click="popupShowSort = !popupShowSort">时间排序</span>
+      </div>
+    </footer>
+    <popup v-model="popupShowCalendar"
+           :maskShow="true"
+           :bottom="true"
+           :top="false"
+           :center="false"
+           :Animation="true">
+      <calendar @onCancel="popupShowCalendar= false"></calendar>
+    </popup>
+    <popup v-model="popupShowSort"
+           :maskShow="true"
+           :bottom="true"
+           :Animation="true">
+      <div class="sort">
+        <div v-for="(item,index) in sort" class="sortText" :key="index">
+        <span :class="{selected:sortSelected === item}"
+              @click="sortSelected = item">{{item}}</span>
+        </div>
+      </div>
+    </popup>
   </article>
 </template>
 <script>
@@ -48,6 +74,10 @@
     data() {
       return {
         tabmenu: ["NO-SHOW", "已取消"],
+        popupShowCalendar: false,
+        popupShowSort: false,
+        sort: ['预登记时间从早到晚', '预登记时间从晚到早'],
+        sortSelected: '预登记时间从早到晚'
       }
     },
     computed: {
