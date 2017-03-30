@@ -5,15 +5,18 @@ module.exports = {
   CONFIRMED(state, payload){
     state.orderlist.confirmed = [...payload]
   },
-  PREORDER0(state, payload){
-    state.preorderlist0 = [...payload]
+  //当日预登记订单列表
+  PRECHECKINTODAY(state, payload){
+    state.todayorderlist.checkintoday = [...payload]
   },
-  PREORDER1(state, payload){
-    state.preorderlist1 = [...payload]
+  CHECKINCANCEL(state, payload){
+    state.todayorderlist.checkincancel = [...payload]
   },
-  PREDETAIL(state, payload){
-    state.predetaildata = {...payload}
+  //当日预登记订单详情
+  TODAYDETAIL(state, payload){
+    state.todaydetail = {...payload}
   },
+  //历史预登记订单列表
   HISTORY(state, payload){
     state.historyList = {...payload}
   }

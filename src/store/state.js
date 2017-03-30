@@ -17,7 +17,10 @@ module.exports = {
     tobeconfirmed: [],
     confirmed: []
   },
-  preorderlist: [],
-  predetaildata: {},
+  todayorderlist:{
+    checkintoday:[],
+    checkincancel:[],
+  },
+  todaydetail: {},
   historyList: {}
 }

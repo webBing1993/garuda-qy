@@ -12,7 +12,7 @@
 
     <scroller height="-44" v-show="route.params.tab == 0" ref="tableft" lock-x>
       <section>
-        <preorderitem v-for="(item,index) in preorderlist0"
+        <preorderitem v-for="(item,index) in todayorderlist.checkintoday"
                       :key="index"
                       :value="item.order_id"
                       @onClick="_gotodetail(item.order_id)" :item="item" :arrow="!batch"/>
@@ -21,7 +21,7 @@
 
     <scroller height="-44" v-show="route.params.tab == 1" ref="tabright" lock-x>
       <section>
-        <preorderitem v-for="(item,index) in preorderlist1" key="index" :item="item" arrow/>
+        <preorderitem v-for="(item,index) in todayorderlist.checkincancel" key="index" :item="item" arrow/>
       </section>
     </scroller>
 
@@ -44,7 +44,7 @@
     data(){
       return {
         iscancelled: ["待入住", "已取消"],
-        dataTime: [],
+        timestamp: [],
         batch: false,
         showSort: false,
         sortMenus: ['预登记时间从早到晚', '预登记时间从晚到早']
@@ -53,15 +53,14 @@
     computed: {
       ...mapState([
         'route',
-        'preorderlist0',
-        'preorderlist1',
+        'todayorderlist'
       ])
     },
     methods: {
       ...mapActions([
         'goto',
-        'preorder0',
-        'preorder1'
+        'precheckintoday',
+        'checkincancel'
       ]),
       reset: function (ref, param) {
         //重置scroller高度
@@ -80,15 +79,23 @@
 
       _sortClick(key) {
         this._hidSortBox();
-//        this.dataTime = preorderlist.dataTime;
-//        this.dataTime.sort((a, b) => {
-//          return a.dataTime > b.dataTime;
-//        })
+        let timestamp = this.timestamp;
+        timestamp = [];
+        this.todayorderlist.checkintoday.forEach(item => {
+          timestamp.push(item.timeline.precheckin_done);
+        });
         if (key == '预登记时间从早到晚') {
-          console.log(key + '0');
+          console.log(key);
+          timestamp.sort((a, b) => {
+            return a > b;
+          })
         } else {
-          console.log(key + "1");
+          console.log(key);
+          timestamp.sort((a, b) => {
+            return a < b;
+          })
         }
+        console.log(timestamp);
       },
     },
     watch: {
@@ -96,25 +103,22 @@
         //切换标签卡时
         if (val == 0) {
           this.reset('tableft');
-          console.log('tableft 0');
         } else {
           this.reset('tabright');
-          console.log('tabright 1');
         }
       },
-      'preorderlist0': function () {
-        //preorderlist0 列表变化时
-        this.reset('tableft')
+      'todayorderlist.checkintoday': function () {
+        //checkintoday 列表变化时
+        this.reset('tableft');
       },
-      'preorderlist1': function () {
-        //preorderlist1列表变化时
-        this.reset('tabright')
+      'todayorderlist.checkincancel': function () {
+        //checkincancel 列表变化时
+        this.reset('tabright');
       }
     },
-
     mounted(){
-      this.preorder0();
-      this.preorder1();
+      this.precheckintoday();
+      this.checkincancel();
     }
   }
 </script>
