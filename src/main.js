@@ -39,22 +39,44 @@ Vue.component('Confirm', Vux.Confirm);
 Vue.component('calendar', require('./components/calendar'));
 Vue.component('popup', require('./components/popup'));
 
-// layout
-Vue.component('Group', require('./components/group/group.vue'));
-Vue.component('Cell', require('./components/group/cell.vue'));
-Vue.component('Link', require('./components/group/link.vue'));
-// form
-Vue.component('XSwitch', require('./components/form/switch.vue'));
-Vue.component('XInput', require('./components/form/input.vue'));
-Vue.component('XTextarea', require('./components/form/textarea.vue'));
-Vue.component('XRadio', require('./components/form/radiolist.vue'));
-Vue.component('XCheckbox', require('./components/form/checklist.vue'));
-// popover
-Vue.component('Toast', require('./components/toast.vue'));
-Vue.component('Actionsheet', require('./components/actionsheet.vue'));
-Vue.component('Dialog', require('./components/dialog.vue'));
-// functional
-Vue.component('XButton', require('./components/button.vue'));
+// Forms
+import XInput from './components/Forms/x-input.vue'
+Vue.component('XInput', XInput)
+import XTextarea from './components/Forms/x-textarea.vue'
+Vue.component('XTextarea', XTextarea)
+import XSwitch from './components/Forms/x-switch.vue'
+Vue.component('XSwitch', XSwitch)
+import XRadio from './components/Forms/x-radio.vue'
+Vue.component('XRadio', XRadio)
+import XCheckbox from './components/Forms/x-checkbox.vue'
+Vue.component('XCheckbox', XCheckbox)
+
+// Layers
+import Actionsheet from './components/Layers/actionsheet.vue'
+Vue.component('Actionsheet', Actionsheet)
+import Dialog from './components/Layers/dialog.vue'
+Vue.component('Dialog', Dialog)
+import Toast from './components/Layers/toast.vue'
+Vue.component('Toast', Toast)
+
+// List
+import Group from './components/List/group.vue'
+Vue.component('Group', Group)
+import Cell from './components/List/cell.vue'
+Vue.component('Cell', Cell)
+import Link from './components/List/link.vue'
+Vue.component('Link', Link)
+
+// Layouts
+import Grids from './components/Layouts/grids/girds.vue'
+import Grid from './components/Layouts/grids/grid.vue'
+Vue.component('Grids', Grids)
+Vue.component('Grid', Grid)
+
+// Display
+import XButton from './components/Displays/button.vue'
+Vue.component('XButton', XButton)
+
 
 //modules
 Vue.component('orderitem', require('./modules/orderitem'));
