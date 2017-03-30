@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div class="home">
+    <p @click="popupShow = !popupShow">popup</p>
     <popup v-model="popupShow"
            :maskShow="true"
-           :bottom="true"
+           :bottom="false"
            :top="false"
-           :atCenter="false"
-           :fromBottom="true">
+           :center="true"
+           :Animation="true">
       <calendar @onCancel="popupShow= false"></calendar>
     </popup>
   </div>

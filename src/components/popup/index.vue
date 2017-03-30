@@ -1,7 +1,7 @@
 <template>
   <div class="popup" v-if="value">
     <div class="mask" v-if="maskShow" @click="popupHide"></div>
-    <div class="container" :class="{bottom:bottom,top:top,atCenter:atCenter,fromBottom:fromBottom}">
+    <div class="container" :class="{bottom:bottom,top:top,center:center,Animation:Animation}">
       <slot></slot>
     </div>
   </div>
@@ -21,17 +21,17 @@
       top: {
         type: Boolean
       },
-      atCenter: {
+      center: {
         type: Boolean
       },
-      fromBottom: {
+      Animation: {
         type: Boolean
       }
 
     },
     data() {
       return {
-        center: false,
+
       }
     },
     methods: {
