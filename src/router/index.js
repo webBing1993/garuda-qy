@@ -4,9 +4,9 @@ Vue.use(VueRouter)
 
 const pmsRouter = [{
   path: '/',
-  // component: require('../containers/home')
+  component: require('../containers/home')
   // component: require('../containers/PMS/prepay/list')
-  component: require('../containers/preOrder/todayOrder/list')
+  // component: require('../containers/preOrder/todayOrder/list')
 }, {
   path: '/pms',
   component: {

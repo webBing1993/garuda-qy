@@ -24,5 +24,5 @@
 </script>
 
 <style lang="less">
-  @import "./assets/main.less";
+  @import "./assets/styles/index.less";
 </style>
