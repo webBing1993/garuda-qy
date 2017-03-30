@@ -56,6 +56,7 @@
 </template>
 
 <script>
+  import moment from 'moment'
   export default{
     name: 'orderitem',
     props: {
@@ -88,8 +89,8 @@
       },
       getDate(timestampunix){
         const timestamp = parseInt(timestampunix);
-        const timeobj = new Date(timestamp);
-        return timeobj.toLocaleString(timeobj,{hour12: true})
+        const timeobj = moment(timestamp);
+        return (timeobj.month()+1)+'/'+timeobj.date()+' '+timeobj.hours()+':'+timeobj.minute();//  11/25 22:33
       },
     }
   }
