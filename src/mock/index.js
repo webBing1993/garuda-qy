@@ -194,7 +194,7 @@ Mock.mock(
 
 /* 当日预登记订单详情 */
 Mock.mock(
-  '/order/precheckin/today/order_id',
+  prefix +'/order/precheckin/today/order_id',
   {
     code: 200,
     msg: "ok",
@@ -284,7 +284,7 @@ Mock.mock(
     code: 200,
     msg: "ok",
     data: [{
-      order_id: "532654768744",
+      order_id: "120420402402405",
       in_time: "532654768744",
       out_time: "532654768744",
       owner: "张三",//预订人
@@ -310,7 +310,7 @@ Mock.mock(
         precheckin_done: null, //预登记完成时间, null未发生
       }
     }, {
-      order_id: "532654768744",
+      order_id: "120420402402405",
       in_time: "532654768744",
       out_time: "532654768744",
       owner: "张三",//预订人

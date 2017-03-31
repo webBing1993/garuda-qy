@@ -66,6 +66,7 @@
           <Tab>
             <TabItem v-for="item in tabMenu"
                      :value="item"
+                     :key="index"
                      :selected="selectedTab === item"
                      @click.native="selectedTab = item"/>
           </Tab>

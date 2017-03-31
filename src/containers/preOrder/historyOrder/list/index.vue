@@ -26,7 +26,8 @@
                      :phoneNum="item.owner_tel"
                      :roomType="item.rooms[0].room_type"
                      :roomCount="item.rooms[0].room_count"
-                     :arrow=true>
+                     :arrow=true
+                     @onClick="_gotodetail(item.order_id)">
           </orderitem>
         </section>
       </div>
@@ -41,8 +42,8 @@
     </scroller>
     <footer>
       <div class="select" v-if="!popupShowCalendar || !popupShowSort">
-        <span  @click="popupShowCalendar = !popupShowCalendar"> |</span>
-        <span @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
+        <span  v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>
+        <span v-else @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
         <span @click="popupShowSort = !popupShowSort">时间排序</span>
       </div>
     </footer>
@@ -69,6 +70,7 @@
 </template>
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+  import moment from 'moment'
   export default {
     data() {
       return {
@@ -101,6 +103,10 @@
         //刷新
         this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
       },
+      _gotodetail(orderId) {
+        this.goto('/preOrder/todayOrder/predetail/' + orderId);
+        console.log('goto predetail ===> 1111111')
+      },
     },
     watch: {
       'route.params.tab': function (val) {
@@ -121,6 +127,11 @@
         const timeobj = new Date(timestamp);
         return timeobj.toLocaleDateString(timeobj);
       },
+      getMonth(timestampunix){
+        const timestamp = parseInt(timestampunix);
+        const timeobj = moment(timestamp);
+        return (timeobj.month()+1)+'/'+timeobj.date();
+      }
     },
     mounted(){
       this.history();
