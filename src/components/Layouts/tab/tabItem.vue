@@ -1,5 +1,7 @@
 <template>
-  <div class="weui-navbar__item" :class="{'weui-bar__item_on':selected}">
+  <div class="weui-navbar__item"
+       :class="{'weui-bar__item_on':selected}"
+       @click="$emit('onSelected')">
     {{value}}
   </div>
 </template>

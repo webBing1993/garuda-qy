@@ -68,7 +68,7 @@
                      :value="item"
                      :key="index"
                      :selected="selectedTab === item"
-                     @click.native="selectedTab = item"/>
+                     @onSelected="selectedTab = item"/>
           </Tab>
         </Group>
 
