@@ -10,7 +10,7 @@ module.exports = {
   },
   resource: (ctx, param) => {
     Vue.http({
-      url: param.url,
+      url: '/gemini' + param.url,
       body: param.body || null,
       headers: param.headers || null,
       params: param.params || null,

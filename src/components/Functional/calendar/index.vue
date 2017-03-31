@@ -32,6 +32,7 @@
 
   export default{
     name: 'calendar',
+    props: ['value'],
     data(){
       return {
         current: Date.parse(new Date()),
@@ -99,6 +100,8 @@
             this.starttime = item.date
             this.endtime = mm
           }
+          this.$emit('input',this.endtime);
+          this.$emit('onCancel',false);
         } else {
           this.starttime = item.date
           this.endtime = null

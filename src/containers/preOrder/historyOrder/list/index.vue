@@ -4,8 +4,9 @@
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
+                 :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/preOrder/historyOrder/'+index)">{{item}}
+                 @click.native="goto('/preOrder/historyOrder/'+index)">
         </TabItem>
       </Tab>
     </header>
@@ -17,11 +18,8 @@
               use-pulldown
               height="-44">
       <div>
-        <section v-for="(list,index) in historyList" :key="index">
-          <p class="list-date">{{list.order_date | getDate}}</p>
-          <orderitem v-for="(item,index) in list.order_info"
-                     :key="index"
-                     :orderId="item.order_id"
+        <section v-for="(item,index) in historyList" :key="index">
+          <orderitem :orderId="item.order_id"
                      :need_refund="true"
                      :date="item.in_time"
                      :booker="item.owner"
@@ -42,8 +40,9 @@
       </section>
     </scroller>
     <footer>
-      <div class="select" v-if="!popupShowCalendar">
-        <span @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
+      <div class="select" v-if="!popupShowCalendar || !popupShowSort">
+        <span v-if="secondtime" @click="popupShowCalendar = !popupShowCalendar">{{secondtime | getDate}} |</span>
+        <span v-else @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
         <span @click="popupShowSort = !popupShowSort">时间排序</span>
       </div>
     </footer>
@@ -53,7 +52,7 @@
            :top="false"
            :center="false"
            :Animation="true">
-      <calendar @onCancel="popupShowCalendar= false"></calendar>
+      <calendar @onCancel="popupShowCalendar= false" v-model="secondtime"></calendar>
     </popup>
     <popup v-model="popupShowSort"
            :maskShow="true"
@@ -62,7 +61,7 @@
       <div class="sort">
         <div v-for="(item,index) in sort" class="sortText" :key="index">
         <span :class="{selected:sortSelected === item}"
-              @click="sortSelected = item">{{item}}</span>
+              @click="sortSelected = item, popupShowSort = false">{{item}}</span>
         </div>
       </div>
     </popup>
@@ -77,7 +76,8 @@
         popupShowCalendar: false,
         popupShowSort: false,
         sort: ['预登记时间从早到晚', '预登记时间从晚到早'],
-        sortSelected: '预登记时间从早到晚'
+        sortSelected: '预登记时间从早到晚',
+        secondtime:null
       }
     },
     computed: {
