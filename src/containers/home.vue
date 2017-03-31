@@ -55,11 +55,21 @@
         </Group>
 
         <h1>Layouts</h1>
-        <Grids>
-          <Grid value="1" img="123"/>
-          <Grid value="2" img="123"/>
-          <Grid value="3" img="123"/>
-        </Grids>
+        <Group title="grid">
+          <Grids>
+            <Grid value="1" img="123"/>
+            <Grid value="2" img="123"/>
+            <Grid value="3" img="123"/>
+          </Grids>
+        </Group>
+        <Group title="tab">
+          <Tab>
+            <TabItem v-for="item in tabMenu"
+                     :value="item"
+                     :selected="selectedTab === item"
+                     @click.native="selectedTab = item"></TabItem>
+          </Tab>
+        </Group>
 
         <h1>Display</h1>
         <XButton value="Vue2" primary warn/>
@@ -87,7 +97,9 @@
         textareaValue: "hello",
         radioValue: 2,
         checklistValue: [1, 2],
-        popupShow: true
+        popupShow: true,
+        tabMenu: ['待确认', '已确认', 'xxx'],
+        selectedTab: '待确认'
       }
     }
   }

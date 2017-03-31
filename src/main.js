@@ -65,6 +65,10 @@ import Grids from './components/Layouts/grids/girds.vue'
 import Grid from './components/Layouts/grids/grid.vue'
 Vue.component('Grids', Grids)
 Vue.component('Grid', Grid)
+import Tab from './components/Layouts/tab/tab.vue'
+import TabItem from './components/Layouts/tab/tabItem.vue'
+Vue.component('Tab', Tab)
+Vue.component('TabItem', TabItem)
 import Scroller from './components/Layouts/scroller.vue'
 Vue.component('Scroller', Scroller)
 
