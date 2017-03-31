@@ -1,27 +1,27 @@
 <template>
 
   <div class="calendar">
-      <p>{{current}}</p>
-      <p>Start:{{starttime}}</p>
-      <p>End:{{endtime}}</p>
+    <p>{{current}}</p>
+    <p>Start:{{starttime}}</p>
+    <p>End:{{endtime}}</p>
 
-      <div class="tools-bar">
-        <span class="clear" @click="(starttime=null,endtime=null)">清除筛选</span>
-        <span class="cancel" @click="$emit('onCancel',false)">取消</span>
-      </div>
+    <div class="tools-bar">
+      <span class="clear" @click="(starttime=null,endtime=null)">清除筛选</span>
+      <span class="cancel" @click="$emit('onCancel',false)">取消</span>
+    </div>
 
-      <div class="select-bar">
-        <span @click="nextMonth(-1)">左</span>
-        <span>{{year}}年{{month + 1}}月</span>
-        <span @click="nextMonth(1)">右</span>
-      </div>
-      <div class="day-list">
+    <div class="select-bar">
+      <span @click="nextMonth(-1)">左</span>
+      <span>{{year}}年{{month + 1}}月</span>
+      <span @click="nextMonth(1)">右</span>
+    </div>
+    <div class="day-list">
         <span v-for="item in renderdays"
               @click="dateclick(item)"
               class="day-item"
               :class="{checked:item.checked}"
         >{{item.day}}</span>
-      </div>
+    </div>
 
   </div>
 </template>
@@ -36,8 +36,8 @@
     data(){
       return {
         current: Date.parse(new Date()),
-        starttime: null,
-        endtime: null,
+        starttime: this.value[0] || null,
+        endtime: this.value[1] || null,
       }
     },
     computed: {
@@ -100,8 +100,10 @@
             this.starttime = item.date
             this.endtime = mm
           }
-          this.$emit('input',this.endtime);
-          this.$emit('onCancel',false);
+          this.$emit('input', [this.starttime, this.endtime]);
+          setTimeout(()=> {
+            this.$emit('onCancel', false);
+          },300);
         } else {
           this.starttime = item.date
           this.endtime = null

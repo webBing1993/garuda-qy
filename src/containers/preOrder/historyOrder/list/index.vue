@@ -41,8 +41,8 @@
     </scroller>
     <footer>
       <div class="select" v-if="!popupShowCalendar || !popupShowSort">
-        <span v-if="secondtime" @click="popupShowCalendar = !popupShowCalendar">{{secondtime | getDate}} |</span>
-        <span v-else @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
+        <span  @click="popupShowCalendar = !popupShowCalendar"> |</span>
+        <span @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
         <span @click="popupShowSort = !popupShowSort">时间排序</span>
       </div>
     </footer>
@@ -52,7 +52,7 @@
            :top="false"
            :center="false"
            :Animation="true">
-      <calendar @onCancel="popupShowCalendar= false" v-model="secondtime"></calendar>
+      <calendar @onCancel="popupShowCalendar= false" v-model="period"/>
     </popup>
     <popup v-model="popupShowSort"
            :maskShow="true"
@@ -77,8 +77,9 @@
         popupShowSort: false,
         sort: ['预登记时间从早到晚', '预登记时间从晚到早'],
         sortSelected: '预登记时间从早到晚',
-        secondtime:null
+        period: [null, null]
       }
+
     },
     computed: {
       ...mapState([
