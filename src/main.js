@@ -13,8 +13,6 @@ import './assets/varible.less';
 // utils
 import FastClick from 'fastclick';
 FastClick.attach(document.body);
-import moment from 'moment';
-moment.locale('zh-cn');
 
 // router & store
 import router from './router';

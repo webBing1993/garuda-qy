@@ -18,7 +18,7 @@
       ])
     },
     mounted(){
-      this.token()
+//      this.token()
     }
   }
 </script>

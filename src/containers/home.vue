@@ -64,7 +64,7 @@
         </Group>
         <Group title="tab">
           <Tab>
-            <TabItem v-for="item in tabMenu"
+            <TabItem v-for="(item,index) in tabMenu"
                      :value="item"
                      :key="index"
                      :selected="selectedTab === item"
