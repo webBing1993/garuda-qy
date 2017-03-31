@@ -1,5 +1,6 @@
 <template>
-  <div class="predetail-container">
+  <div v-if="isNotEmpty(todaydetail)" class="predetail-container">
+    1232
     <div class="warning-title">
       <div class="title-body">❗️{{todaydetail.warning}}</div>
       <div class="title-footer"><input type="button" value="已手工入账"></div>
@@ -73,14 +74,34 @@
       <div class="cell-body">开票内容</div>
       <div class="cell-footer">{{todaydetail.invoice.category}}</div>
     </div>
-    <div class="predetail-btn" @click="_logbtn">
+    <div class="predetail-btn" @click="popupShow = !popupShow">
       <div class="log-btn">操作日志</div>
     </div>
 
     <!-- log 弹窗 -->
-    <div class="log-container" v-show="logShowHind">
-      <div class="log-mask" @click="_logHide"></div>
-      <div class="log-box animationTop">
+    <!--<div class="log-container" v-show="logShowHind">-->
+    <!--<div class="log-mask" @click="_logHide"></div>-->
+    <!--<div class="log-box animationTop">-->
+    <!--<span class="log-title">操作日志</span>-->
+    <!--<div class="log-cell">-->
+    <!--<div class="log-header">日期</div>-->
+    <!--<div class="log-body textAlign">内容</div>-->
+    <!--<div class="log-footer">操作人</div>-->
+    <!--</div>-->
+    <!--<div class="log-cell" v-for="item in todaydetail.logs">-->
+    <!--<div class="log-header">{{item.date}}</div>-->
+    <!--<div class="log-body">{{item.action}}</div>-->
+    <!--<div class="log-footer">{{item.operator}}</div>-->
+    <!--</div>-->
+    <!--<span class="logBtn" @click="_logHide">确定</span>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <popup v-model="popupShow"
+           :maskShow="true"
+           :top="true"
+           :animationTop="true">
+      <div class="log-box">
         <span class="log-title">操作日志</span>
         <div class="log-cell">
           <div class="log-header">日期</div>
@@ -92,9 +113,9 @@
           <div class="log-body">{{item.action}}</div>
           <div class="log-footer">{{item.operator}}</div>
         </div>
-        <span class="logBtn" @click="_logHide">确定</span>
+        <span class="logBtn" @click="popupShow = false">确定</span>
       </div>
-    </div>
+    </popup>
   </div>
 </template>
 
@@ -106,7 +127,7 @@
     name: 'predetails',
     data(){
       return {
-        logShowHind: false
+        popupShow: false
       }
     },
     computed: {
@@ -118,7 +139,7 @@
     methods: {
       ...mapActions([
         'goto',
-        'todayorderdetail'
+        'todayorderdetail',
       ]),
       _logbtn(){
         this.logShowHind = true;
@@ -126,6 +147,12 @@
       _logHide () {
         console.log('on hide');
         this.logShowHind = false;
+      },
+      isNotEmpty(obj){
+        for (var key in obj) {
+          return true;
+        }
+        return false;
       }
     },
     mounted() {

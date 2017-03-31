@@ -2,7 +2,7 @@ const Mock = require('mockjs')
 const prefix = "/gemini"
 
 Mock.mock(
-  '/login',
+  prefix +'/login',
   {
     code: 200,
     msg: "ok",
@@ -13,7 +13,7 @@ Mock.mock(
 )
 
 Mock.mock(
-  '/order/tobeconfirmed',
+  prefix +'/order/tobeconfirmed',
   {
     code: 200,
     msg: "ok",
@@ -95,7 +95,7 @@ Mock.mock(
 
 /* 当日预登记订单列表 */
 Mock.mock(
-  '/order/precheckin/today',
+  prefix +'/order/precheckin/today',
   {
     code: 200,
     msg: "ok",
@@ -158,7 +158,7 @@ Mock.mock(
 );
 
 Mock.mock(
-  '/order/precheckin/today/checkincancel',
+  prefix +'/order/precheckin/today/checkincancel',
   {
     code: 200,
     msg: "ok",

@@ -1,9 +1,11 @@
+@import "../../../assets/varible";
 .popup {
-  position: absolute;
+  position: fixed;
   top:0;
   left: 0;
   width: 100%;
   height: 100vh;
+  z-index: 333;
   .mask {
     width: 100%;
     height: 100%;
@@ -25,23 +27,12 @@
       bottom: 0;
       left: 0;
       z-index: 333;
-      &.Animation {
-        animation: Bottom 0.5s ease-in-out;
-      }
     }
     &.top {
       position: absolute;
       top: 0;
       left: 0;
       z-index: 333;
-    }
-  }
-  @keyframes Bottom{
-    from{
-      bottom:-50%;
-    }
-    to{
-      bottom: 0;
     }
   }
 }

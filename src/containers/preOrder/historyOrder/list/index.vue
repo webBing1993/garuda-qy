@@ -50,15 +50,13 @@
     <popup v-model="popupShowCalendar"
            :maskShow="true"
            :bottom="true"
-           :top="false"
-           :center="false"
-           :Animation="true">
+           :animationTopBottom="true">
       <calendar @onCancel="popupShowCalendar= false" v-model="period"/>
     </popup>
     <popup v-model="popupShowSort"
            :maskShow="true"
            :bottom="true"
-           :Animation="true">
+           :animationTopBottom="true">
       <div class="sort">
         <div v-for="(item,index) in sort" class="sortText" :key="index">
         <span :class="{selected:sortSelected === item}"
