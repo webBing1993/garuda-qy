@@ -4,7 +4,20 @@
     <p>orderID: {{route.params.id}}</p>
 
     <h2>{{checklist}}</h2>
-    <input v-for="item in list" type="checkbox" :value="item" v-model="checklist">
+
+    <Group>
+      <div>
+        <label class="weui-cell weui-check__label" v-for="(one, index) in list">
+            <input type="checkbox" class="weui-check" v-model="checklist" :value="one">
+            <i class="weui-icon-checked"></i>
+        </label>
+      </div>
+    </Group>
+
+
+    <label v-for="item in list" style="display: block">
+      <p><input type="checkbox" :value="item" v-model="checklist"></p>
+    </label>
 
     <button @click="ap">allpick</button>
   </div>

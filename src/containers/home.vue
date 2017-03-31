@@ -67,7 +67,7 @@
             <TabItem v-for="item in tabMenu"
                      :value="item"
                      :selected="selectedTab === item"
-                     @click.native="selectedTab = item"></TabItem>
+                     @click.native="selectedTab = item"/>
           </Tab>
         </Group>
 

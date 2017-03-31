@@ -4,10 +4,9 @@
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
+                 :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/pms/prepay/'+index)">
-          <span>{{item}}</span>
-        </TabItem>
+                 @click.native="goto('/pms/prepay/'+index)"/>
       </Tab>
       <div class="toolbar" v-if="batch">
         <span @click="allPick"
@@ -115,6 +114,7 @@
             item => this.batchlist.push(item.orderId)
           )
         }
+
       },
       goPick(){
         this.batchlist = []
@@ -123,13 +123,13 @@
       cancelPick(){
         //退出批量选择
         this.batchlist = []
-        this.batch = false
+        this.batch ? this.batch = false : null
       },
       orderClick: function (orderId) {
         //非批量模式下点击订单跳转至详情页面
         if (!this.batch) {
           this.batchlist = []
-          this.goto('/pms/prepay/detail/' + orderId)
+          this.goto('/pms/PREPAY/detail/' + orderId)
         }
       }
     },

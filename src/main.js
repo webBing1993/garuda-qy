@@ -16,19 +16,11 @@ FastClick.attach(document.body);
 import moment from 'moment';
 moment.locale('zh-cn');
 
-
 // router & store
 import router from './router';
 import store from './store';
 import {sync} from 'vuex-router-sync';
 sync(store, router);
-
-// components
-const Vux = require('vux');
-Vue.component('Tab', Vux.Tab);
-Vue.component('TabItem', Vux.TabItem);
-Vue.component('Checker', Vux.Checker);
-Vue.component('CheckerItem', Vux.CheckerItem);
 
 // Forms
 import XInput from './components/Forms/x-input.vue'
@@ -49,7 +41,7 @@ import Dialog from './components/Layers/dialog.vue'
 Vue.component('Dialog', Dialog)
 import Toast from './components/Layers/toast.vue'
 Vue.component('Toast', Toast)
-import popup from './components/Layers/popup'
+import popup from './components/Layers/popup/index.vue'
 Vue.component('popup', popup)
 
 // List
@@ -79,6 +71,10 @@ Vue.component('XButton', XButton)
 // Functional
 import calendar from './components/Functional/calendar'
 Vue.component('calendar', calendar)
+import Checker from './components/Functional/checker/checker.vue'
+import CheckerItem from './components/Functional/checker/checker-item.vue'
+Vue.component('Checker', Checker);
+Vue.component('CheckerItem', CheckerItem);
 
 //modules
 Vue.component('orderitem', require('./modules/orderitem'));

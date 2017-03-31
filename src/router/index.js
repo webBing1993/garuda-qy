@@ -5,8 +5,6 @@ Vue.use(VueRouter)
 const pmsRouter = [{
   path: '/',
   component: require('../containers/home.vue')
-  // component: require('../containers/PMS/prepay/list')
-  // component: require('../containers/preOrder/todayOrder/list')
 }, {
   path: '/pms',
   component: {
@@ -14,11 +12,11 @@ const pmsRouter = [{
     template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: 'prepay/:tab',
-    component: require('../containers/pms/prepay/list')
+    path: 'PREPAY/:tab',
+    component: require('../containers/pms/PREPAY/list')
   }, {
-    path: 'prepay/detail/:id',
-    component: require('../containers/pms/prepay/detail')
+    path: 'PREPAY/detail/:id',
+    component: require('../containers/pms/PREPAY/detail')
   }]
 }];
 

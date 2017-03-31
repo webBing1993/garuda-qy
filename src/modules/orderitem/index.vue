@@ -21,8 +21,8 @@
 
       <p v-if="roomType || roomCount || date">
         <span class="key">房型：</span>
-        <span>{{roomType}}x{{roomCount}}</span>
-        <span class="data">{{date | getDate}}</span>
+        <span v-if="roomType || roomCount">{{roomType}}x{{roomCount}}</span>
+        <span v-if="date" class="data">{{date | getDate}}</span>
       </p>
 
       <p v-if="fee || prepay">
