@@ -1,5 +1,6 @@
 <template>
   <div class="orderitem" @click="$emit('onClick')">
+
     <div class="hd" v-if="orderId || status || date || need_refund">
       <p class="hdl">
         <span class="key">订单号：</span>
@@ -12,23 +13,45 @@
       </p>
     </div>
 
+    <div class="hd" v-if="title">
+      <p class="hdl">{{title}}</p>
+    </div>
+
     <div class="bd">
+      <p v-if="underOrderId">
+        <span class="key">订单号：</span>
+        <span>{{underOrderId}}</span>
+      </p>
       <p v-if="booker || phoneNum">
         <span class="key">预订人：</span>
         <span>{{booker}}</span>
         <span>{{phoneNum}}</span>
       </p>
-
-      <p v-if="roomType || roomCount || date">
+      <p v-if="underPhoneNum">
+        <span class="key">手机号：</span>
+        <span>{{underPhoneNum}}</span>
+      </p>
+      <p v-if="inTime">
+        <span class="key">入离时间：</span>
+        <span>{{inTime}} - {{outTime}}</span>
+      </p>
+      <p v-if="rooms" v-for="room in rooms">
         <span class="key">房型：</span>
-        <span v-if="roomType || roomCount">{{roomType}}x{{roomCount}}</span>
+        <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
         <span v-if="date" class="data">{{date | getDate}}</span>
       </p>
-
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
         <span>{{fee | CNY}}</span>
         <span class="paid"><span class="key">已付：</span>{{prepay | CNY}}</span>
+      </p>
+      <p v-if="payinfo">
+        <span class="key">应付房费：</span>
+        <span>{{payinfo.total_roomfee | CNY}}</span>
+      </p>
+      <p v-if="payinfo">
+        <span class="key">已付房费：</span>
+        <span>{{payinfo.user_pay | CNY}}</span>
       </p>
     </div>
 
@@ -60,23 +83,24 @@
   export default{
     name: 'orderitem',
     props: {
+      title: null,
       orderId: null,
+      underOrderId: null,
       status: null,
       date: null,
-
       booker: null,
       phoneNum: null,
-
-      roomType: null,
-      roomCount: null,
-
+      underPhoneNum: null,
+      rooms: null,
+      inTime: null,
+      outTime: null,
       fee: null,
       prepay: null,
-
+      payinfo: null,
+      alreadyPay: null,
       remark: null,
-
-      need_refund:{
-          type: Boolean
+      need_refund: {
+        type: Boolean
       },
 
       arrow: {
@@ -90,7 +114,7 @@
       getDate(timestampunix){
         const timestamp = parseInt(timestampunix);
         const timeobj = moment(timestamp);
-        return (timeobj.month()+1)+'/'+timeobj.date()+' '+timeobj.hours()+':'+timeobj.minute();//  11/25 22:33
+        return (timeobj.month() + 1) + '/' + timeobj.date() + ' ' + timeobj.hours() + ':' + timeobj.minute();//  11/25 22:33
       },
     }
   }

@@ -1,25 +1,24 @@
 <template>
-  <div>
-    <p>预定信息</p>
-    <p>orderID: {{route.params.id}}</p>
+  <div class="confirmeddetail">
+    <orderitem title="预定信息"
+               :underOrderId="orderlist.confirmeddetail.order_id"
+               :booker="orderlist.confirmeddetail.owner"
+               :underPhoneNum="orderlist.confirmeddetail.owner_tel"
+               :rooms="orderlist.confirmeddetail.rooms"
+               :inTime="orderlist.confirmeddetail.in_time"
+               :outTime="orderlist.confirmeddetail.out_time">
+    </orderitem>
 
-    <h2>{{checklist}}</h2>
+    <orderitem title="PMS支付信息"
+               :payinfo="orderlist.confirmeddetail.payinfo">
+    </orderitem>
 
-    <Group>
-      <div>
-        <label class="weui-cell weui-check__label" v-for="(one, index) in list">
-            <input type="checkbox" class="weui-check" v-model="checklist" :value="one">
-            <i class="weui-icon-checked"></i>
-        </label>
-      </div>
-    </Group>
+    <div class="btn-group">
+      <x-button value="已全额支付 ￥400" primary/>
+      <x-button value="未支付" warn/>
+      <x-button value="已付其他金额"/>
+    </div>
 
-
-    <label v-for="item in list" style="display: block">
-      <p><input type="checkbox" :value="item" v-model="checklist"></p>
-    </label>
-
-    <button @click="ap">allpick</button>
   </div>
 </template>
 
@@ -30,25 +29,32 @@
     name: "prepaydetail",
     data(){
       return {
-        list: [1, 2, 3, 4, 5],
-        checklist: []
+
       }
     },
     computed: {
       ...mapState([
-        'route'
+        'route',
+        'orderlist'
       ])
     },
     methods: {
-      ap(){
-        this.checklist.length !== this.list.length
-          ? (this.checklist = [], this.list.forEach(item => this.checklist.push(item)))
-          : this.checklist = []
+      ...mapActions([
+        'confirmeddetail'
+      ]),
+      isNotEmpty(obj){
+        for (var key in obj) {
+          return true;
+        }
+        return false;
       }
+    },
+    mounted() {
+      this.confirmeddetail(this.route.params.id);
     }
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
   @import "index.less";
 </style>

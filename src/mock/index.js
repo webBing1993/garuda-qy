@@ -2,7 +2,7 @@ const Mock = require('mockjs')
 const prefix = "/gemini"
 
 Mock.mock(
-  prefix +'/login',
+  prefix + '/login',
   {
     code: 200,
     msg: "ok",
@@ -11,70 +11,79 @@ Mock.mock(
     }
   }
 )
-
+//获取确认订单列表 status ='0未确认，1待确认'
 Mock.mock(
-  prefix +'/order/tobeconfirmed',
+  prefix + '/order/precheckin/confirm',
   {
     code: 200,
     msg: "ok",
-    data: [
-      {
-        orderId: 230420402402403,
-        booker: "张三",
-        phoneNum: "15829321022",
-        roomType: "大床房",
-        roomCount: 2,
-        fee: 80000,
-        prepay: 0,
-        remark: ''
-      }, {
-        orderId: 230420402402404,
-        booker: "张三",
-        phoneNum: "15829321022",
-        roomType: "大床房",
-        roomCount: 2,
-        fee: 80000,
-        prepay: 50000,
-        remark: '此订单已在携程支付500元'
-      }, {
-        orderId: 230420402402405,
-        booker: "张三",
-        phoneNum: "15829321022",
-        roomType: "大床房",
-        roomCount: 2,
-        fee: 80000,
-        prepay: 50000,
-      }, {
-        orderId: 230420402402406,
-        booker: "张三",
-        phoneNum: "15829321022",
-        roomType: "大床房",
-        roomCount: 2,
-        fee: 80000,
-        prepay: 50000,
-      }, {
-        orderId: 230420402402407,
-        booker: "张三",
-        phoneNum: "15829321022",
-        roomType: "大床房",
-        roomCount: 2,
-        fee: 80000,
-        prepay: 50000,
-      }, {
-        orderId: 230420402402408,
-        booker: "张三",
-        phoneNum: "15829321022",
-        roomType: "大床房",
-        roomCount: 2,
-        fee: 80000,
-        prepay: 50000,
+    data: [{
+      order_id: "230420402402404",//订单号
+      in_time: '',
+      out_time: '',
+      owner: "张三",//预订人
+      owner_tel: "+8618500059035",//预订人手机
+      remark: "",//备注
+      rooms: [{
+        room_type: "大床房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 1000, //总房费
+        pms_pay: 1000, //PMS中的已付金额,
+        staff_pay: 1000,//营业员确认的付款金额,
+        user_pay: 1000, //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false, //是否营业已确认
+        need_refund: false, //是否需要退款(Orders.pms_syn_state==3, 返回true)
+        pmsaccount_result: false, //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
+        is_cancelled: false, //是否已取消, (Orders.status==2，返回true，其它返回false)
+      },
+      timeline: { //状态变化时间
+        precheckin_done: null, //预登记完成时间, null未发生
       }
-    ]
+    }]
   }
-)
+);
+//获取确认订单详情
+Mock.mock(
+  prefix + '/order/precheckin/confirm/230420402402404',
+  {
+    code: 200,
+    msg: "ok",
+    data: {
+      order_id: "230420402402404",//订单号
+      in_time: '2017/4/4',
+      out_time: '2017/4/5',
+      owner: "张三",//预订人
+      owner_tel: "+8618500059035",//预订人手机
+      remark: "",//备注
+      rooms: [{
+        room_type: "大床房",
+        room_count: 2
+      }],
+      payinfo: {
+        total_roomfee: 1000, //总房费
+        pms_pay: 1000, //PMS中的已付金额,
+        staff_pay: 1000,//营业员确认的付款金额,
+        user_pay: 1000, //小程序已付金额
+      },
+      status: {
+        is_staff_confirm: false, //是否营业已确认
+        need_refund: false, //是否需要退款(Orders.pms_syn_state==3, 返回true)
+        pmsaccount_result: false, //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
+        is_cancelled: false, //是否已取消, (Orders.status==2，返回true，其它返回false)
+      },
+      timeline: { //状态变化时间
+        precheckin_done: null, //预登记完成时间, null未发生
+      }
+    }
+  }
+);
 
 Mock.mock(
-  '/order/confirmed',
+  prefix + '/order/confirmed',
   {
     code: 200,
     msg: "ok",
@@ -95,7 +104,7 @@ Mock.mock(
 
 /* 当日预登记订单列表 */
 Mock.mock(
-  prefix +'/order/precheckin/today',
+  prefix + '/order/precheckin/today',
   {
     code: 200,
     msg: "ok",
@@ -158,7 +167,7 @@ Mock.mock(
 );
 
 Mock.mock(
-  prefix +'/order/precheckin/today/checkincancel',
+  prefix + '/order/precheckin/today/checkincancel',
   {
     code: 200,
     msg: "ok",
@@ -194,7 +203,7 @@ Mock.mock(
 
 /* 当日预登记订单详情 */
 Mock.mock(
-  prefix +'/order/precheckin/today/order_id',
+  prefix + '/order/precheckin/today/order_id',
   {
     code: 200,
     msg: "ok",
