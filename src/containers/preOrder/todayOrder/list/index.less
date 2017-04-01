@@ -1,62 +1,47 @@
-.preBtn {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  margin-left: -55px;
-  z-index: 1;
-  border: solid 1px transparent;
-  background-color: #ffffff;
-  border-radius: 30px;
-  box-shadow: 0 2px 20px #bdbdbd;
-  padding: 10px 30px;
-  color: #4A4A4A;
-  font-size: 12px;
-  text-align: center;
-  &:after {
-    content: "→";
-    position: absolute;
-    top: 19px;
-    left: 22px;
-    height: 1px;
-    color: #4A4A4A;
-    opacity: .5;
-    font-size: 16px;
-    transform: rotate(90deg);
-  }
-}
+@import "../../../../assets/varible";
 
-.sortContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  font-size: 14px;
-  color: #373946;
-  .sortMask {
-    width: 100%;
-    height: 100%;
-    background-color: #4B4B4B;
-    opacity: .7;
-    z-index: 3;
+article {
+  color: #4A4A4A;
+  section {
+    position: relative;
+    .list-date {
+      font-size: 12px;
+      padding: 5px 0 5px 15px;
+    }
   }
-  .sortContent {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    //height: 160px;
-    background-color: #ffffff;
+  .select {
+    display: inline-block;
+    position: fixed;
+    z-index: 1;
+    margin-left: -60px;
+    left: 50%;
+    bottom: 30px;
+    min-width: 120px;
+    padding: 10px;
+    background-color: #fff;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 30px;
+    box-shadow: 0 2px 20px #bdbdbd;
+    font-size: 12px;
+  }
+  .sort {
+    padding-bottom: 10px;
+    background-color: #fff;
     .sortText {
-      position: relative;
+      width: 100%;
+      display: inline-block;
+      text-align: center;
       line-height: 45px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex-wrap: nowrap;
-      border-bottom: solid 1px #8B8B8B;
-      margin: 0 94px;
+      font-size: 14px;
+      color: #8B8B8B;
+      span {
+        padding-bottom: 8px;
+        &.selected {
+          border-bottom: 1px solid #8B8B8B;
+          color: #000;
+        }
+      }
     }
   }
 }

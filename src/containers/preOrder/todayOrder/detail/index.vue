@@ -105,7 +105,6 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
   import './index.less';
-  import _dataUtil from '../../../../store/actions/dataUtil';
 
   module.exports = {
     name: 'predetails',
@@ -132,35 +131,10 @@
           return true;
         }
         return false;
-      },
-      _formatData(){
-        let enterTime = new Date(parseInt(this.inTime));
-        let leaveTime = new Date(parseInt(this.outTime));
-        let year = enterTime.getFullYear();
-        let month = enterTime.getMonth() + 1;
-
-        console.log("============enterTime=============");
-        console.log(enterTime);
-        console.log(year + "年" + month + "月");
       }
     },
-    created(){
-      this.todayorderdetail();
-    },
-    updated(){
-//      this._formatData();
-    },
     mounted() {
-
-//      console.log('mounted predetail  111111');
-//      this.inTime = null ? this.inTime = this.todaydetail.in_time : null;
-//      this.outTime = null ? '空' : '非空';
-//      this.outTime = this.todaydetail.out_time;
-//      console.log(this.inTime);
-//      console.log(this.outTime);
-//      console.log('======222');
-      this.inTime = this.todaydetail.in_time;
-      this.outTime = this.todaydetail.out_time;
+      this.todayorderdetail();
     }
   }
 </script>

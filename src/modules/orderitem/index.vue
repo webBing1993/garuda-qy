@@ -1,13 +1,13 @@
 <template>
   <div class="orderitem" @click="$emit('onClick')">
 
-    <div class="hd" v-if="orderId || status || date || need_refund">
+    <div class="hd" v-if="orderId || status || date || need_hint">
       <p class="hdl">
         <span class="key">订单号：</span>
         <span>{{orderId}}</span>
       </p>
       <p class="hdr">
-        <span v-if="need_refund" class="warning">需退款</span>
+        <span v-if="need_hint" class="warning">{{need_hint}}</span>
         <span>{{status}}</span>
         <!--<span>{{date}}</span>-->
       </p>
@@ -25,7 +25,7 @@
       <p v-if="booker || phoneNum">
         <span class="key">预订人：</span>
         <span>{{booker}}</span>
-        <span>{{phoneNum}}</span>
+        <span>{{phoneNum | filterPhoneNum}}</span>
       </p>
       <p v-if="underPhoneNum">
         <span class="key">手机号：</span>
@@ -39,6 +39,7 @@
         <span class="key">房型：</span>
         <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
         <span v-if="date" class="data">{{date | getDate}}</span>
+        <!--<span v-if="date" class="data">{{item.timeline.precheckin_done.month}}/{{item.timeline.precheckin_done.day}} {{item.timeline.precheckin_done.hour}}:{{item.timeline.precheckin_done.minute}}</span>-->
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
@@ -99,9 +100,7 @@
       payinfo: null,
       alreadyPay: null,
       remark: null,
-      need_refund: {
-        type: Boolean
-      },
+      need_hint: null,
 
       arrow: {
         type: Boolean
@@ -116,6 +115,10 @@
         const timeobj = moment(timestamp);
         return (timeobj.month() + 1) + '/' + timeobj.date() + ' ' + timeobj.hours() + ':' + timeobj.minute();//  11/25 22:33
       },
+      filterPhoneNum(val){
+        let newPhone = val.substring(3, 14);
+        return newPhone
+      }
     }
   }
 </script>

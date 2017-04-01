@@ -2,37 +2,76 @@
   <article>
     <header>
       <Tab active-color="#373946">
-        <TabItem v-for="(item,index) in iscancelled"
+        <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
+                 :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/preOrder/todayOrder/'+index)">{{item}}
+                 @click.native="goto('/preOrder/todayOrder/'+index)">
         </TabItem>
       </Tab>
     </header>
 
-    <scroller height="-44" v-show="route.params.tab == 0" ref="tableft" lock-x>
-      <section>
-        <preorderitem v-for="(item,index) in todayorderlist.checkintoday"
-                      :key="index"
-                      :value="item.order_id"
-                      @onClick="_gotodetail(item.order_id)" :item="item" :arrow="!batch"/>
-      </section>
+
+    <scroller v-show="route.params.tab == 0"
+              :pulldown-config="app.scroller.config"
+              @on-pulldown-loading="donePullDown('tableft')"
+              lock-x
+              ref="tableft"
+              use-pulldown
+              height="-44">
+      <div>
+        <section v-for="(item,index) in todayorderlist.checkintoday" :key="index">
+          <orderitem :orderId="item.order_id"
+                     :need_hint="item.warning"
+                     :date="item.timeline.precheckin_done"
+                     :booker="item.owner"
+                     :phoneNum="item.owner_tel"
+                     :rooms="item.rooms"
+                     :arrow=true
+                     @onClick="_gotodetail(item.order_id)">
+          </orderitem>
+        </section>
+      </div>
     </scroller>
 
-    <scroller height="-44" v-show="route.params.tab == 1" ref="tabright" lock-x>
-      <section>
-        <preorderitem v-for="(item,index) in todayorderlist.checkincancel" key="index" :item="item" arrow/>
-      </section>
+    <scroller v-show="route.params.tab == 1"
+              :pulldown-config="app.scroller.config"
+              @on-pulldown-loading="donePullDown('tabright')"
+              lock-x
+              ref="tabright"
+              use-pulldown
+              height="-44">
+      <div>
+        <section v-for="(item,index) in todayorderlist.checkincancel" :key="index">
+          <orderitem :orderId="item.order_id"
+                     :date="item.timeline.precheckin_done"
+                     :booker="item.owner"
+                     :phoneNum="item.owner_tel"
+                     :rooms="item.rooms"
+                     :arrow=true>
+          </orderitem>
+        </section>
+      </div>
     </scroller>
 
     <!-- 弹出层 -->
-    <div class="preBtn" @click="_showSortBox">时间正序</div>
-    <div class="sortContainer" v-show="showSort">
-      <div class="sortMask" @click="_hidSortBox"></div>
-      <div class="sortContent animationTopBottom">
-        <div class="sortText" v-for="item in sortMenus" v-model="sortMenus" @click="_sortClick(item)">{{item}}</div>
+    <footer>
+      <div class="select">
+        <span @click="popupShowSort = !popupShowSort">时间排序</span>
       </div>
-    </div>
+    </footer>
+
+    <popup v-model="popupShowSort"
+           :maskShow="true"
+           :bottom="true"
+           :animationTopBottom="true">
+      <div class="sort">
+        <div v-for="(item,index) in sortMenus" class="sortText" :key="index">
+        <span :class="{selected:sortSelected === item}"
+              @click="sortSelected = item, popupShowSort = false">{{item}}</span>
+        </div>
+      </div>
+    </popup>
   </article>
 </template>
 <script>
@@ -43,15 +82,18 @@
     name: 'todayOrder',
     data(){
       return {
-        iscancelled: ["待入住", "已取消"],
+        tabmenu: ["待入住", "已取消"],
         timestamp: [],
         batch: false,
         showSort: false,
-        sortMenus: ['预登记时间从早到晚', '预登记时间从晚到早']
+        sortMenus: ['预登记时间从早到晚', '预登记时间从晚到早'],
+        sortSelected: "",
+        popupShowSort: false,
       }
     },
     computed: {
       ...mapState([
+        'app',
         'route',
         'todayorderlist'
       ])
@@ -75,7 +117,6 @@
       _hidSortBox(){
         this.showSort = false;
       },
-
       _sortClick(key) {
         this._hidSortBox();
         let timestamp = this.timestamp;

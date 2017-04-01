@@ -76,7 +76,6 @@ Vue.component('CheckerItem', CheckerItem);
 
 //modules
 Vue.component('orderitem', require('./modules/orderitem'));
-Vue.component('preorderitem', require('./modules/preorderitem'));
 
 /* eslint-disable no-new */
 new Vue({

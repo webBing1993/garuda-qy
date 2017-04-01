@@ -15,8 +15,8 @@ module.exports = {
   //获取确认订单详情
   confirmeddetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm/'+param,
-      onSuccess: (body) => (console.log(body,'confirmeddetail'), ctx.commit('CONFIRMEDDETAIL', body.data)),
+      url: '/order/precheckin/confirm/' + param,
+      onSuccess: (body) => (console.log(body, 'confirmeddetail'), ctx.commit('CONFIRMEDDETAIL', body.data)),
       onFail: () => null
     })
   },
@@ -32,29 +32,13 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
       method: "POST",
-      onSuccess: (body) => {
-        let bodydatas = [...body.data];
-        bodydatas.forEach((item, index) => {
-          // console.log(item.timeline.precheckin_done);
-          item.timeline.precheckin_done = new Date(parseInt(item.timeline.precheckin_done));
-          item.timeline.precheckin_done = {
-            year: item.timeline.precheckin_done.getFullYear(),
-            month: parseInt(item.timeline.precheckin_done.getMonth() + 1) > 10 ? item.timeline.precheckin_done.getMonth() + 1 : '' + item.timeline.precheckin_done.getMonth() + 1,
-            day: parseInt(item.timeline.precheckin_done.getDate()) > 10 ? item.timeline.precheckin_done.getDate() : '0' + item.timeline.precheckin_done.getDate(),
-            hour: item.timeline.precheckin_done.getHours(),
-            minute: item.timeline.precheckin_done.getMinutes()
-          };
-        });
-        // console.log(bodydatas);
-        ctx.commit('PRECHECKINTODAY', bodydatas)
-      },
+      onSuccess: (body) => (console.log(body), ctx.commit('PRECHECKINTODAY', body.data)),
       onFail: () => null
     })
   },
   checkincancel(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today/checkincancel',
-      // url: '/order/precheckin/today',
       onSuccess: (body) => (console.log(body), ctx.commit('CHECKINCANCEL', body.data)),
       onFail: () => null
     })
@@ -70,17 +54,17 @@ module.exports = {
 
         datas.in_time = new Date(parseInt(datas.in_time));
         datas.in_time = {
-          day: parseInt(datas.in_time.getDate()) > 10 ? datas.in_time.getDate() : '0' + datas.in_time.getDate(),
           year: datas.in_time.getFullYear(),
-          month: datas.in_time.getMonth() + 1,
+          month: parseInt(datas.in_time.getMonth() + 1) > 10 ? datas.in_time.getMonth() + 1 : '' + datas.in_time.getMonth() + 1,
+          day: parseInt(datas.in_time.getDate()) > 10 ? datas.in_time.getDate() : '0' + datas.in_time.getDate(),
           hour: datas.in_time.getHours(),
           minute: datas.in_time.getMinutes()
         };
         datas.out_time = new Date(parseInt(datas.out_time));
         datas.out_time = {
-          day: parseInt(datas.out_time.getDate()) > 10 ? datas.out_time.getDate() : '0' + datas.out_time.getDate(),
           year: datas.out_time.getFullYear(),
-          month: datas.out_time.getMonth() + 1,
+          month: parseInt(datas.out_time.getMonth() + 1) > 10 ? datas.out_time.getMonth() + 1 : '' + datas.out_time.getMonth() + 1,
+          day: parseInt(datas.out_time.getDate()) > 10 ? datas.out_time.getDate() : '0' + datas.out_time.getDate(),
           hour: datas.out_time.getHours(),
           minute: datas.out_time.getMinutes()
         };
