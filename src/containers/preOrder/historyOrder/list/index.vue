@@ -20,7 +20,6 @@
       <div>
         <section v-for="(item,index) in orderlist.confirmed" :key="index">
           <orderitem :orderId="item.order_id"
-                     :status="item.status"
                      :inTime="item.in_time"
                      :booker="item.owner"
                      :phoneNum="item.owner_tel"

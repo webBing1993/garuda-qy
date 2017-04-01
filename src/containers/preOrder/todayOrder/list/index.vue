@@ -76,7 +76,6 @@
 </template>
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import './index.less';
 
   module.exports = {
     name: 'todayOrder',
@@ -162,3 +161,7 @@
     }
   }
 </script>
+
+<style scoped lang="less">
+  @import "index.less";
+</style>

@@ -12,6 +12,7 @@
         <span v-if="need_hint" class="warning">{{need_hint}}</span>
         <span>{{status}}</span>
         <!--<span>{{date}}</span>-->
+      </p>
 
       <p class="hdr" v-if=" fee || prepay ">
         <span v-if="prepay === null"></span>
@@ -19,6 +20,7 @@
         <span v-else-if="prepay === fee" class="default">已付全额</span>
         <span v-else-if="prepay < fee" class="other">已付其他</span>
       </p>
+
       <p class="hdr" v-if="status">
         <span v-if="status.need_refund" class="warning">需退款</span>
       </p>
@@ -125,8 +127,7 @@
         return (timeobj.month() + 1) + '/' + timeobj.date() + ' ' + timeobj.hours() + ':' + timeobj.minute();//  11/25 22:33
       },
       filterPhoneNum(val){
-        let newPhone = val.substring(3, 14);
-        return newPhone
+        return val ? val.substring(3, 14) : null
       }
     }
   }
