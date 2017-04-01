@@ -5,7 +5,7 @@
         <h1>Forms</h1>
         <Group title="XInput">
           <XInput title="手机号"/>
-          <XInput type="number" title="手机号" v-model="inputValue" placeholder="请输入您的常用手机号"/>
+          <XInput type="number" title="手机号" v-model="inputValue" placeholder="请输入您的常用手机号" footer="footer"/>
           <XInput fill/>
         </Group>
         <Group title="XTextarea">

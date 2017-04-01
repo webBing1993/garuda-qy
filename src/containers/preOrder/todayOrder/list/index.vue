@@ -68,7 +68,6 @@
       },
       _gotodetail(orderId) {
         this.goto('/preOrder/todayOrder/predetail/' + orderId);
-        console.log('goto predetail ===> 1111111')
       },
       _showSortBox(){
         this.showSort = true;

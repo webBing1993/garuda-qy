@@ -1,7 +1,6 @@
 <template>
   <div v-if="isNotEmpty(todaydetail)" class="predetail-container">
-    1232
-    <div class="warning-title">
+    <div class="warning-title" v-show="todaydetail.warning">
       <div class="title-body">❗️{{todaydetail.warning}}</div>
       <div class="title-footer"><input type="button" value="已手工入账"></div>
     </div>
@@ -22,7 +21,9 @@
     </div>
     <div class="predetail-cell">
       <div class="cell-body">入离时间</div>
-      <div class="cell-footer">{{todaydetail.in_time}}-{{todaydetail.out_time}}</div>
+      <div class="cell-footer">
+        {{todaydetail.in_time.year}}/{{todaydetail.in_time.month}}/{{todaydetail.in_time.day}}-{{todaydetail.out_time.year}}/{{todaydetail.out_time.month}}/{{todaydetail.out_time.day}}
+      </div>
     </div>
 
     <!-- PMS支付信息 -->
@@ -79,24 +80,6 @@
     </div>
 
     <!-- log 弹窗 -->
-    <!--<div class="log-container" v-show="logShowHind">-->
-    <!--<div class="log-mask" @click="_logHide"></div>-->
-    <!--<div class="log-box animationTop">-->
-    <!--<span class="log-title">操作日志</span>-->
-    <!--<div class="log-cell">-->
-    <!--<div class="log-header">日期</div>-->
-    <!--<div class="log-body textAlign">内容</div>-->
-    <!--<div class="log-footer">操作人</div>-->
-    <!--</div>-->
-    <!--<div class="log-cell" v-for="item in todaydetail.logs">-->
-    <!--<div class="log-header">{{item.date}}</div>-->
-    <!--<div class="log-body">{{item.action}}</div>-->
-    <!--<div class="log-footer">{{item.operator}}</div>-->
-    <!--</div>-->
-    <!--<span class="logBtn" @click="_logHide">确定</span>-->
-    <!--</div>-->
-    <!--</div>-->
-
     <popup v-model="popupShow"
            :maskShow="true"
            :top="true"
@@ -122,12 +105,15 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
   import './index.less';
+  import _dataUtil from '../../../../store/actions/dataUtil';
 
   module.exports = {
     name: 'predetails',
     data(){
       return {
-        popupShow: false
+        popupShow: false,
+        inTime: '',
+        outTime: ''
       }
     },
     computed: {
@@ -141,23 +127,40 @@
         'goto',
         'todayorderdetail',
       ]),
-      _logbtn(){
-        this.logShowHind = true;
-      },
-      _logHide () {
-        console.log('on hide');
-        this.logShowHind = false;
-      },
       isNotEmpty(obj){
         for (var key in obj) {
           return true;
         }
         return false;
+      },
+      _formatData(){
+        let enterTime = new Date(parseInt(this.inTime));
+        let leaveTime = new Date(parseInt(this.outTime));
+        let year = enterTime.getFullYear();
+        let month = enterTime.getMonth() + 1;
+
+        console.log("============enterTime=============");
+        console.log(enterTime);
+        console.log(year + "年" + month + "月");
       }
     },
-    mounted() {
-      console.log('predetail  2222222222');
+    created(){
       this.todayorderdetail();
+    },
+    updated(){
+//      this._formatData();
+    },
+    mounted() {
+
+//      console.log('mounted predetail  111111');
+//      this.inTime = null ? this.inTime = this.todaydetail.in_time : null;
+//      this.outTime = null ? '空' : '非空';
+//      this.outTime = this.todaydetail.out_time;
+//      console.log(this.inTime);
+//      console.log(this.outTime);
+//      console.log('======222');
+      this.inTime = this.todaydetail.in_time;
+      this.outTime = this.todaydetail.out_time;
     }
   }
 </script>

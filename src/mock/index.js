@@ -100,11 +100,11 @@ Mock.mock(
     code: 200,
     msg: "ok",
     data: [{
-      warning: '入账失败',  //测试添加
+      warning: '需退款',  //测试添加
       order_id: "130420402402404",  //订单号
       in_time: '',
       out_time: '',
-      owner: "马云", //预订人
+      owner: "马化腾", //预订人
       owner_tel: "+8618500059035", //预订人手机
       remark: "", //备注
       rooms: [{
@@ -124,7 +124,7 @@ Mock.mock(
         is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
       },
       timeline: {   //状态变化时间
-        precheckin_done: '03/21 08:20',  // 预登记完成时间, null未发生
+        precheckin_done: '1491014211',  // 预登记完成时间, null未发生
       }
     }, {
       warning: '入账失败',  //测试添加
@@ -151,7 +151,7 @@ Mock.mock(
         is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
       },
       timeline: {   //状态变化时间
-        precheckin_done: '03/25 10:20',  // 预登记完成时间, null未发生
+        precheckin_done: '1491014211',  // 预登记完成时间, null未发生
       }
     }]
   }
@@ -201,8 +201,8 @@ Mock.mock(
     data: {
       warning: '入账失败',  //测试添加
       order_id: "120420402402405", //订单号
-      in_time: '2017/4/4',
-      out_time: '2017/4/6',
+      in_time: '1440000',
+      out_time: '1491014211',
       owner: "古龙详情",  //预订人
       owner_tel: "+8618500059035", //预订人手机
       remark: "", //备注
