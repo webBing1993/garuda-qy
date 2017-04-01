@@ -105,7 +105,6 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
   import './index.less';
-
   module.exports = {
     name: 'predetails',
     data(){

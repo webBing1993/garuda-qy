@@ -2,14 +2,25 @@
   <div class="orderitem" @click="$emit('onClick')">
 
     <div class="hd" v-if="orderId || status || date || need_hint">
+
       <p class="hdl">
         <span class="key">订单号：</span>
         <span>{{orderId}}</span>
       </p>
+
       <p class="hdr">
         <span v-if="need_hint" class="warning">{{need_hint}}</span>
         <span>{{status}}</span>
         <!--<span>{{date}}</span>-->
+
+      <p class="hdr" v-if=" fee || prepay ">
+        <span v-if="prepay === null"></span>
+        <span v-else-if="prepay === 0" class="warning">未付款</span>
+        <span v-else-if="prepay === fee" class="default">已付全额</span>
+        <span v-else-if="prepay < fee" class="other">已付其他</span>
+      </p>
+      <p class="hdr" v-if="status">
+        <span v-if="status.need_refund" class="warning">需退款</span>
       </p>
     </div>
 
@@ -95,13 +106,11 @@
       rooms: null,
       inTime: null,
       outTime: null,
-      fee: null,
-      prepay: null,
+      fee: null,//总房费
+      prepay: null,//营业员确认的付款金额
       payinfo: null,
-      alreadyPay: null,
       remark: null,
       need_hint: null,
-
       arrow: {
         type: Boolean
       }
