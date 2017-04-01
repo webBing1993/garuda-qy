@@ -24,8 +24,7 @@
                      :date="item.in_time"
                      :booker="item.owner"
                      :phoneNum="item.owner_tel"
-                     :roomType="item.rooms[0].room_type"
-                     :roomCount="item.rooms[0].room_count"
+                     :rooms="item.rooms"
                      :arrow=true
                      @onClick="_gotodetail(item.order_id)">
           </orderitem>

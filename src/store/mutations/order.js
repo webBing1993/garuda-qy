@@ -2,6 +2,9 @@ module.exports = {
   TOBECONFIRMED(state, payload){
     state.orderlist.tobeconfirmed = [...payload]
   },
+  CONFIRMEDDETAIL(state, payload){
+    state.orderlist.confirmeddetail = payload
+  },
   CONFIRMED(state, payload){
     state.orderlist.confirmed = [...payload]
   },

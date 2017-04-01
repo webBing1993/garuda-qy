@@ -1,10 +1,22 @@
 // import * as _dataUtil from './dataUtil';
 
 module.exports = {
+  //获取确认订单列表
   tobeconfirmed(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/tobeconfirmed',
+      url: '/order/precheckin/confirm',
+      // params: {
+      //   status: 0
+      // },
       onSuccess: (body) => (console.log(body), ctx.commit('TOBECONFIRMED', body.data)),
+      onFail: () => null
+    })
+  },
+  //获取确认订单详情
+  confirmeddetail(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/precheckin/confirm/'+param,
+      onSuccess: (body) => (console.log(body,'confirmeddetail'), ctx.commit('CONFIRMEDDETAIL', body.data)),
       onFail: () => null
     })
   },

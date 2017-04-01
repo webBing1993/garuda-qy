@@ -15,11 +15,12 @@ module.exports = {
   },
   orderlist: {
     tobeconfirmed: [],
-    confirmed: []
+    confirmed: [],
+    confirmeddetail: {}
   },
-  todayorderlist:{
-    checkintoday:[],
-    checkincancel:[],
+  todayorderlist: {
+    checkintoday: [],
+    checkincancel: [],
   },
   todaydetail: {},
   historyList: {}

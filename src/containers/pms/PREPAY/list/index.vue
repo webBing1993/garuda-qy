@@ -29,19 +29,16 @@
                  selected-item-class="selected">
           <checker-item v-for="(item,index) in orderlist.tobeconfirmed"
                         :key="index"
-                        :value="item.orderId">
-            <orderitem :orderId="item.orderId"
-                       :status="item.status"
-                       :date="item.date"
-                       :booker="item.booker"
-                       :phoneNum="item.phoneNum"
-                       :roomType="item.roomType"
-                       :roomCount="item.roomCount"
-                       :fee="item.fee"
-                       :prepay="item.prepay"
+                        :value="item.order_id">
+            <orderitem :orderId="item.order_id"
+                       :booker="item.owner"
+                       :phoneNum="item.owner_tel"
+                       :rooms="item.rooms"
+                       :fee="item.payinfo.total_roomfee"
+                       :prepay="item.payinfo.user_pay"
                        :remark="item.remark"
                        :arrow="!batch"
-                       @onClick="orderClick(item.orderId)"/>
+                       @onClick="orderClick(item.order_id)"/>
           </checker-item>
         </checker>
       </section>
