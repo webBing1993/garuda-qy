@@ -4,7 +4,7 @@ module.exports = {
   //获取确认订单列表
   tobeconfirmed(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm',
+      url: '/order/confirmed',
       // params: {
       //   status: 0
       // },
@@ -22,7 +22,7 @@ module.exports = {
   },
   confirmed(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/confirmed',
+      url: '/order/precheckin/confirm',
       onSuccess: (body) => (console.log(body), ctx.commit('CONFIRMED', body.data)),
       onFail: () => null
     })

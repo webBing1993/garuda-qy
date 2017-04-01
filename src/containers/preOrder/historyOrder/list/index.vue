@@ -18,10 +18,10 @@
               use-pulldown
               height="-44">
       <div>
-        <section v-for="(item,index) in historyList" :key="index">
+        <section v-for="(item,index) in orderlist.confirmed" :key="index">
           <orderitem :orderId="item.order_id"
-                     :need_refund="true"
-                     :date="item.in_time"
+                     :status="item.status"
+                     :inTime="item.in_time"
                      :booker="item.owner"
                      :phoneNum="item.owner_tel"
                      :rooms="item.rooms"
@@ -84,13 +84,13 @@
       ...mapState([
         'app',
         'route',
-        'historyList',
+        'orderlist',
       ])
     },
     methods: {
       ...mapActions([
         'goto',
-        'history',
+        'confirmed',
       ]),
       reset: function (ref, param) {
         //重置scroller高度
@@ -131,7 +131,7 @@
       }
     },
     mounted(){
-      this.history();
+      this.confirmed();
     }
   }
 </script>

@@ -14,11 +14,23 @@
     </orderitem>
 
     <div class="btn-group">
-      <x-button value="已全额支付 ￥400" primary/>
+      <x-button value="已全额支付 ￥400" primary @onClick="popupShow = !popupShow, showDialog = !showDialog"/>
       <x-button value="未支付" warn/>
       <x-button value="已付其他金额"/>
     </div>
 
+    <popup v-model="popupShow"
+           :maskShow="true"
+           :center="true">
+      <Dialog v-model="showDialog"
+              confirm
+              @onConfirm="popupShow = false,showDialog= false"
+              @onCancel="popupShow = false,showDialog= false"
+              >
+        <label>输入金额</label>
+        <input class="money" placeholder="￥400">
+      </Dialog>
+    </popup>
   </div>
 </template>
 
@@ -29,7 +41,8 @@
     name: "prepaydetail",
     data(){
       return {
-
+        popupShow: false,
+        showDialog: false
       }
     },
     computed: {
