@@ -51,7 +51,7 @@
       <p v-if="rooms" v-for="room in rooms">
         <span class="key">房型：</span>
         <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
-        <span v-if="date" class="data">{{date | getDate}}</span>
+        <span v-if="inTime" class="intime">{{inTime | getDate}}</span>
         <!--<span v-if="date" class="data">{{item.timeline.precheckin_done.month}}/{{item.timeline.precheckin_done.day}} {{item.timeline.precheckin_done.hour}}:{{item.timeline.precheckin_done.minute}}</span>-->
       </p>
       <p v-if="fee || prepay">
