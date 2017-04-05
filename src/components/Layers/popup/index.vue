@@ -3,7 +3,7 @@
     <div class="mask" v-if="maskShow" @click="popupHide"></div>
     <div class="container"
          :class="{bottom:bottom,center:center,animationTopBottom:animationTopBottom,animationTop:animationTop }"
-         :style="{'position': 'absolute','top': top + 'px','left': 0,'z-index': 333}">
+         :style="top?topClass : null">
       <slot></slot>
     </div>
   </div>
@@ -12,6 +12,16 @@
 <script>
   export default{
     name: 'popup',
+    data() {
+        return {
+            topClass: {
+              'position': 'absolute',
+              'top': (this.top + 'px')||0,
+              'left': 0,
+              'z-index': 333
+            }
+        }
+    },
     props: {
       value: null,
       maskShow: {

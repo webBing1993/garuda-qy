@@ -23,7 +23,6 @@
            :maskShow="true"
            :center="true">
       <Dialog v-model="showDialog"
-              confirm
               @onConfirm="popupShow = false,showDialog= false"
               @onCancel="popupShow = false,showDialog= false"
               >
