@@ -11,6 +11,10 @@ module.exports = {
         loadingContent: '加载中...',
         clsPrefix: 'xs-plugin-pulldown-'
       }
+    },
+    toast: {
+      show: false,
+      title: '操作成功'
     }
   },
   orderlist: {

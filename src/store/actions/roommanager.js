@@ -32,6 +32,7 @@ module.exports = {
         room_status: param.room_status
       },
       onSuccess: body => {
+        ctx.dispatch('showtoast')
         param.onsuccess(body)
       }
     })
@@ -44,6 +45,7 @@ module.exports = {
         enabled: param.enabled
       },
       onSuccess: body => {
+        ctx.dispatch('showtoast')
         param.onsuccess(body)
       }
     })
@@ -56,6 +58,7 @@ module.exports = {
         action: param.action
       },
       onSuccess: body => {
+        ctx.dispatch('showtoast')
         param.onsuccess(body)
       }
     })
@@ -63,6 +66,7 @@ module.exports = {
   cancelsuborder(ctx, param){
     ctx.dispatch('resource', {
       url: '/room/cancel_suborder',
+      method:'POST',
       param: {
         room_id: param.room_id,
       },

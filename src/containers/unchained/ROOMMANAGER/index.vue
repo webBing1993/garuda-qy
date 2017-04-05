@@ -257,7 +257,7 @@
         this.cancelsuborder({
           room_id: this.payloading.room_id,
           onsuccess: () => {
-            this.roomlist.forEach(i => i.room_id == this.payloading.room_id ? i.owner_name = '' : null)
+            this.roomlist.forEach(i => i.room_id == this.payloading.room_id ? (i.owner_name = '', i.guest_name = '') : null)
             this.reset()
           }
         })

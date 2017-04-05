@@ -8,7 +8,7 @@
              :value="value"
              @input="updateValue($event.target.value)"/>
     </div>
-    <div class="weui-cell__ft" v-if="!fill"><label class="weui-label">{{footer}}</label></div>
+    <div class="weui-cell__ft" v-if="!fill && footer"><label class="weui-label">{{footer}}</label></div>
   </div>
 </template>
 

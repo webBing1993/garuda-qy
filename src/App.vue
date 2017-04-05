@@ -1,5 +1,8 @@
 <template>
-  <router-view id="app"></router-view>
+  <div id="app">
+    <router-view ></router-view>
+    <Toast v-model="app.toast.show" :title="app.toast.title"/>
+  </div>
 </template>
 
 <script>

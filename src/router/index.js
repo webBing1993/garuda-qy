@@ -12,10 +12,10 @@ const pmsRouter = [{
     template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: 'PREPAY/:tab',
+    path: 'prepay/:tab',
     component: require('../containers/pms/PREPAY/list')
   }, {
-    path: 'PREPAY/detail/:id',
+    path: 'prepay/detail/:id',
     component: require('../containers/pms/PREPAY/detail')
   }]
 }];
@@ -33,26 +33,31 @@ const unchained = [{
 }]
 
 const preorderRouter = [{
-  path: '/preOrder',
+  path: '/preorder',
   component: {
-    name: "preOrder",
+    name: "preorder",
     template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: 'todayOrder/:tab',
-    component: require('../containers/preOrder/todayOrder/list')
+    path: 'today/:tab',
+    component: require('../containers/preorder/TODAY/list')
   }, {
-    path: 'todayOrder/predetail/:id',
-    component: require('../containers/preOrder/todayOrder/detail')
+    path: 'today/predetail/:id',
+    component: require('../containers/preorder/TODAY/detail')
   }, {
-    path: 'historyOrder/:tab',
-    component: require('../containers/preOrder/historyOrder/list')
+    path: 'history/:tab',
+    component: require('../containers/preorder/HISTORY/list')
   }, {
-    path: 'historyOrder/predetail/:id',
-    component: require('../containers/preOrder/historyOrder/detail')
+    path: 'history/predetail/:id',
+    component: require('../containers/preorder/HISTORY/detail')
   }]
 }];
 
+const final = [{
+  path: '/*',
+  redirect: '/'
+}]
+
 export default new VueRouter({
-  routes: [...pmsRouter, ...unchained, ...preorderRouter]
+  routes: [...pmsRouter, ...unchained, ...preorderRouter, ...final]
 })

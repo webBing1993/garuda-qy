@@ -101,7 +101,7 @@
         this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
       },
       _gotodetail(orderId) {
-        this.goto('/preOrder/todayOrder/predetail/' + orderId);
+        this.goto('/preorder/TODAY/predetail/' + orderId);
         console.log('goto predetail ===> 1111111')
       },
     },

@@ -78,7 +78,7 @@
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 
   module.exports = {
-    name: 'todayOrder',
+    name: 'TODAY',
     data(){
       return {
         tabmenu: ["待入住", "已取消"],
@@ -108,7 +108,7 @@
         this.$nextTick(() => this.$refs[ref].reset(param))
       },
       _gotodetail(orderId) {
-        this.goto('/preOrder/todayOrder/predetail/' + orderId);
+        this.goto('/preorder/TODAY/predetail/' + orderId);
       },
       _showSortBox(){
         this.showSort = true;

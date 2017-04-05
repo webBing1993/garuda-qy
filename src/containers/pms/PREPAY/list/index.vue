@@ -105,7 +105,7 @@
         } else {
           this.batchlist = []
           this.orderlist.tobeconfirmed.forEach(
-            item => this.batchlist.push(item.orderId)
+            item => this.batchlist.push(item.order_id)
           )
         }
 

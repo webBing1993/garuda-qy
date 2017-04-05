@@ -45,5 +45,8 @@ module.exports = {
       onSuccess: (body) => ctx.commit('TOKEN', body.data.session),
       onFail: () => null
     })
+  },
+  showtoast(ctx, param){
+    ctx.commit('TOAST', {show: true})
   }
 }
