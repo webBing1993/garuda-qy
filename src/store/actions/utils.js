@@ -21,7 +21,7 @@ module.exports = {
       emulateJSON: false,
     }).then(
       response => {
-        response.body.code >= 200 && response.body.code < 400
+        response.body.errcode >= 0 && response.body.errcode < 400
           //SuccessCallback
           ? param.onSuccess ? param.onSuccess(response.body) : null
           //FailCallback
@@ -35,7 +35,7 @@ module.exports = {
     ).finally(
       final => {
         //FinalCallback
-        console.log("request done!")
+        // console.log("request done!")
       }
     )
   },

@@ -21,12 +21,13 @@
       </div>
     </header>
 
-    <scroller v-if="tabSelected == '备选房'"
+    <scroller v-show="tabSelected == '备选房'"
+              :depend="[roomlist]"
               :pulldown-config="app.scroller.config"
               height="-86"
               use-pulldown
               lock-x>
-      <section>
+      <section class="rooms-container">
         <checker class="rooms clearfix"
                  :class="{isBatch}"
                  v-model="batchlist"
@@ -50,7 +51,8 @@
       </section>
     </scroller>
 
-    <scroller v-if="tabSelected == '所有房'"
+    <scroller v-show="tabSelected == '所有房'"
+              :depend="[roomlist]"
               :pulldown-config="app.scroller.config"
               height="-86"
               use-pulldown
@@ -73,7 +75,6 @@
                 <p>{{item.guest_name||item.owner_name}}</p>
               </div>
             </div>
-
           </checker-item>
         </checker>
       </section>
@@ -81,24 +82,32 @@
 
     <footer>
       <section v-if="isBatch" class="buttons">
-        <div v-show="tabSelected == '所有房'" class="botton-wrap">
-          <x-button value="设为空净" primary/>
-        </div>
-        <div v-show="tabSelected == '所有房'" class="botton-wrap">
-          <x-button value="设为空脏"/>
+        <div v-show="tabSelected == '备选房'" class="botton-wrap">
+          <x-button value="设为空净" primary @onClick="setMultipleRoomStatus(0)"/>
         </div>
         <div v-show="tabSelected == '备选房'" class="botton-wrap">
-          <x-button value="设为备选" primary/>
+          <x-button value="设为空脏" @onClick="setMultipleRoomStatus(1)"/>
         </div>
-        <div v-show="tabSelected == '备选房'" class="botton-wrap">
-          <x-button value="移除备选"/>
+        <div v-show="tabSelected == '所有房'" class="botton-wrap">
+          <x-button value="设为备选" primary @onClick="setMultiRoomEnabledPick(true)"/>
+        </div>
+        <div v-show="tabSelected == '所有房'" class="botton-wrap">
+          <x-button value="移除备选" @onClick="setMultiRoomEnabledPick(false)"/>
         </div>
       </section>
       <ul v-else>
         <li v-for="(item,index) in statusFilter"
+            v-if="tabSelected == '备选房'"
             :key="'statusFilter'+index"
+            class="pickable"
             :class="{active:item.active}"
             @click="statusFilterCurrent = item.status">
+          <p>{{item.name}}</p><span>{{item.count}}</span>
+        </li>
+        <li v-for="(item,index) in allStatusFilter"
+            v-if="tabSelected == '所有房'"
+            :class="{active:item.active}"
+            @click="allStatusFilterCurrent = item.status">
           <p>{{item.name}}</p><span>{{item.count}}</span>
         </li>
       </ul>
@@ -129,18 +138,18 @@
 
       <section class="button-box">
         <div v-if="tabSelected == '所有房'">
-          <x-button value="设为备选" primary></x-button>
-          <x-button value="移除备选"></x-button>
+          <x-button value="设为备选" primary @onClick="setSingleRoomEnabledPick(true)"/>
+          <x-button value="移除备选" @onClick="setSingleRoomEnabledPick(false)"/>
         </div>
         <div v-else>
           <div v-if="payloading.room_status == 2">
-            <x-button value="退房" alert/>
+            <x-button value="退房" alert @onClick="setRoomInout('OUT')"/>
           </div>
           <div v-else>
-            <x-button value="设为空净" primary/>
-            <x-button value="设为空脏"/>
-            <x-button value="转入住" class="checkin"/>
-            <x-button value="取消订单" class="cancelorder" warn/>
+            <x-button value="设为空净" primary @onClick="setSingleRoomStatus(0)"/>
+            <x-button value="设为空脏" @onClick="setSingleRoomStatus(1)"/>
+            <x-button value="转入住" class="checkin" @onClick="setRoomInout('IN')"/>
+            <x-button v-if="payloading.owner_name" value="取消订单" class="cancelorder" warn @onClick="cancelSuborder()"/>
           </div>
         </div>
       </section>
@@ -157,114 +166,21 @@
       return {
         tabmenu: ["备选房", "所有房"],
         tabSelected: "备选房",
-
-        roomTypeList: [
-          {
-            room_type_id: 'DCF',
-            room_type_name: '大床房'
-          }, {
-            room_type_id: 'SCF',
-            room_type_name: '双床房'
-          }],
-        floorList: [
-          {
-            floor_id: 111,
-            floor_name: '1层'
-          }, {
-            floor_id: 222,
-            floor_name: '2层'
-          }, {
-            floor_id: 333,
-            floor_name: '3层'
-          }, {
-            floor_id: 444,
-            floor_name: '4层'
-          },],
-        roomlist: [
-          {
-            room_id: '111111',//房间id
-            room_number: '103',//房间号
-            room_status: 0, //0:空净 1:空脏 2:在住
-            room_type_id: 'DCF', //房型代码
-            floor_id: 111, //楼层id
-            config: {
-              enabled_pick: true, //是否允许自助选房
-            },
-            owner_name: 'ted',
-            guest_name: ''
-          }, {
-            room_id: '111112',//房间id
-            room_number: '102',//房间号
-            room_status: 0, //0:空净 1:空脏 2:在住
-            room_type_id: 'DCF', //房型代码
-            floor_id: 111, //楼层id
-            config: {
-              enabled_pick: true, //是否允许自助选房
-            },
-            owner_name: 'ted',
-            guest_name: ''
-          }, {
-            room_id: '111113',//房间id
-            room_number: '204',//房间号
-            room_status: 1, //0:空净 1:空脏 2:在住
-            room_type_id: 'SCF', //房型代码
-            floor_id: 222, //楼层id
-            config: {
-              enabled_pick: true, //是否允许自助选房
-            },
-            owner_name: 'ted',
-            guest_name: 'alan'
-          }, {
-            room_id: '111114',//房间id
-            room_number: '304',//房间号
-            room_status: 2, //0:空净 1:空脏 2:在住
-            room_type_id: 'SCF', //房型代码
-            floor_id: 333, //楼层id
-            config: {
-              enabled_pick: false, //是否允许自助选房
-            },
-            owner_name: 'ted',
-            guest_name: 'alan'
-          }, {
-            room_id: '111115',//房间id
-            room_number: '405',//房间号
-            room_status: 2, //0:空净 1:空脏 2:在住
-            room_type_id: 'asd', //房型代码
-            floor_id: 444, //楼层id
-            config: {
-              enabled_pick: false, //是否允许自助选房
-            },
-            owner_name: '',
-            guest_name: ''
-          }, {
-            room_id: '111116',//房间id
-            room_number: '206',//房间号
-            room_status: 0, //0:空净 1:空脏 2:在住
-            room_type_id: 'DCF', //房型代码
-            floor_id: 222, //楼层id
-            config: {
-              enabled_pick: false, //是否允许自助选房
-            },
-            owner_name: '',
-            guest_name: ''
-          },],
-
+        roomTypeList: [],
+        floorList: [],
+        roomlist: [],
         showFloorList: false,
         floorFilterCurrent: null,
-
         showRoomTypeList: false,
         roomTypeFilterCurrent: null,
-
         statusFilterCurrent: null,
-
+        allStatusFilterCurrent: null,
         isBatch: false,
         batchlist: [],
-
         showDialog: false,
         payloading: {}
       }
     },
-    filters: {},
     computed: {
       ...mapState([
         'app',
@@ -276,8 +192,6 @@
           : this.floorList.filter(i => i.floor_id == this.floorFilterCurrent)[0].floor_name
       },
       roomTypeFilter(){
-        console.log(typeof this.roomTypeFilterCurrent)
-
         return this.roomTypeFilterCurrent == null
           ? '全部房型'
           : this.roomTypeList.filter(i => i.room_type_id == this.roomTypeFilterCurrent)[0].room_type_name
@@ -285,38 +199,138 @@
       statusFilter(){
         return [{
           name: '全部备选',
-          count: this.roomlist.length,
+          count: this.roomlist.filter(i => i.config.enabled_pick).length,
           status: null,
           active: this.statusFilterCurrent == null
         }, {
           name: '预定',
           status: 3,
-          count: this.roomlist.filter(i => i.owner_name && i.room_status !== 2).length,
+          count: this.roomlist.filter(i => i.config.enabled_pick && i.owner_name && i.room_status !== 2).length,
           active: this.statusFilterCurrent == 3
         }, {
           name: '空净',
           status: 0,
-          count: this.roomlist.filter(i => i.room_status == 0).length || 0,
+          count: this.roomlist.filter(i => i.config.enabled_pick && i.room_status == 0).length || 0,
           active: this.statusFilterCurrent == 0
         }, {
           name: '空脏',
           status: 1,
-          count: this.roomlist.filter(i => i.room_status == 1).length || 0,
+          count: this.roomlist.filter(i => i.config.enabled_pick && i.room_status == 1).length || 0,
           active: this.statusFilterCurrent == 1
         }, {
           name: '在住',
           status: 2,
-          count: this.roomlist.filter(i => i.room_status == 2).length || 0,
+          count: this.roomlist.filter(i => i.config.enabled_pick && i.room_status == 2).length || 0,
           active: this.statusFilterCurrent == 2
+        }]
+      },
+      allStatusFilter(){
+        return [{
+          name: '全部',
+          count: this.roomlist.length,
+          status: null,
+          active: this.allStatusFilterCurrent == null
+        }, {
+          name: '备选',
+          count: this.roomlist.filter(i => i.config.enabled_pick).length,
+          status: 1,
+          active: this.allStatusFilterCurrent == 1
+        }, {
+          name: '未选',
+          count: this.roomlist.length - this.roomlist.filter(i => i.config.enabled_pick).length,
+          status: 0,
+          active: this.allStatusFilterCurrent == 0
         }]
       }
     },
     methods: {
+      ...mapActions([
+        'getroomtypelist',
+        'getfloorlist',
+        'getroomlist',
+        'setroomstatus',
+        'setroomenabledpick',
+        'setroominout',
+        'cancelsuborder'
+      ]),
+      cancelSuborder(){
+        this.cancelsuborder({
+          room_id: this.payloading.room_id,
+          onsuccess: () => {
+            this.roomlist.forEach(i => i.room_id == this.payloading.room_id ? i.owner_name = '' : null)
+            this.reset()
+          }
+        })
+      },
+      setRoomInout(action){
+        this.setroomstatus({
+          room_id: this.payloading.room_id,
+          action: action,
+          onsuccess: () => {
+            this.roomlist.forEach(i => {
+              i.room_id == this.payloading.room_id ?
+                action == 'IN'
+                  ? i.room_status = 2
+                  : (i.room_status = 1, i.owner_name = '', i.guest_name = '')
+                : null
+            })
+            this.reset()
+          }
+        })
+      },
+      setSingleRoomStatus(status){
+        // 批量设置房间状态
+        this.setroomstatus({
+          room_ids: [this.payloading.room_id],
+          room_status: status,
+          onsuccess: () => {
+            this.roomlist.forEach(i => i.room_id == this.payloading.room_id ? (i.room_status = status) : null)
+            this.reset()
+          }
+        })
+      },
+      setMultipleRoomStatus(status){
+        // 批量设置房间状态
+        this.setroomstatus({
+          room_ids: this.batchlist,
+          room_status: status,
+          onsuccess: () => {
+            this.roomlist.forEach(i => this.batchlist.findIndex(item => item == i.room_id) > -1 ? (i.room_status = status) : null)
+            this.reset()
+          }
+        })
+      },
+      setSingleRoomEnabledPick(enabled){
+        this.setroomenabledpick({
+          room_ids: [this.payloading.room_id],
+          enabled: enabled,
+          onsuccess: () => {
+            this.roomlist.forEach(i => i.room_id == this.payloading.room_id ? (i.config.enabled_pick = enabled) : null)
+            this.reset()
+          }
+        })
+      },
+      setMultiRoomEnabledPick(enabled){
+        // 批量设置房间状态
+        this.setroomenabledpick({
+          room_ids: this.batchlist,
+          enabled: enabled,
+          onsuccess: () => {
+            this.roomlist.forEach(i => this.batchlist.findIndex(item => item == i.room_id) > -1 ? (i.config.enabled_pick = enabled) : null)
+            this.reset()
+          }
+        })
+      },
       isRoomShow(item){
         let floor = this.floorFilterCurrent === null || this.floorFilterCurrent == item.floor_id
         let roomtype = this.roomTypeFilterCurrent === null || this.roomTypeFilterCurrent == item.room_type_id
         let status = this.statusFilterCurrent == 3 ? !!item.owner_name && item.room_status !== 2 : this.statusFilterCurrent === null || this.statusFilterCurrent == item.room_status
-        return status && floor && roomtype
+        let allstatus = this.allStatusFilterCurrent == null ? true
+          : this.allStatusFilterCurrent == 1
+            ? item.config.enabled_pick
+            : !item.config.enabled_pick
+        let type = this.tabSelected == '备选房' ? item.config.enabled_pick : allstatus
+        return status && floor && roomtype && type
       },
       getRoomTypeName(val){
         let list = this.roomTypeList.filter(i => i.room_type_id == val)
@@ -333,19 +347,31 @@
       reset(){
         this.floorFilterCurrent = null
         this.roomTypeFilterCurrent = null
-        this.statusFilterCurrent = null
+//        this.statusFilterCurrent = null
+//        allStatusFilterCurrent = null
         this.isBatch = false
         this.batchlist = []
         this.showFloorList = false
         this.showRoomTypeList = false
         this.showDialog = false
         this.payloading = {}
-      }
+      },
     },
     watch: {
       tabSelected(){
         this.reset()
       }
+    },
+    mounted(){
+      this.getroomtypelist({
+        onsuccess: body => this.roomTypeList = body.data
+      })
+      this.getfloorlist({
+        onsuccess: body => this.floorList = body.data
+      })
+      this.getroomlist({
+        onsuccess: body => this.roomlist = body.data
+      })
     }
   }
 </script>

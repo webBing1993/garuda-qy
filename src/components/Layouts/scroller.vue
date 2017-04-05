@@ -176,7 +176,7 @@
     watch: {
       depend(){
         this.$nextTick(function () {
-          console.log('Depend changed, reset scroller!')
+//          console.log('Depend changed, reset scroller!')
           this.reset()
           this.donePulldown()
         })

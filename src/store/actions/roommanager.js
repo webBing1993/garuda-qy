@@ -1,0 +1,75 @@
+module.exports = {
+  getroomtypelist(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/room_type_list',
+      onSuccess: body => {
+        param.onsuccess(body)
+      },
+    })
+  },
+  getfloorlist(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/floor_list',
+      onSuccess: body => {
+        param.onsuccess(body)
+      },
+      onFail: () => null
+    })
+  },
+  getroomlist(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/list',
+      onSuccess: body => {
+        param.onsuccess(body)
+      }
+    })
+  },
+  setroomstatus(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/status',
+      param: {
+        room_ids: param.room_ids,
+        room_status: param.room_status
+      },
+      onSuccess: body => {
+        param.onsuccess(body)
+      }
+    })
+  },
+  setroomenabledpick(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/enabled_pick',
+      param: {
+        room_ids: param.room_ids,
+        enabled: param.enabled
+      },
+      onSuccess: body => {
+        param.onsuccess(body)
+      }
+    })
+  },
+  setroominout(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/inout',
+      param: {
+        room_id: param.room_id,
+        action: param.action
+      },
+      onSuccess: body => {
+        param.onsuccess(body)
+      }
+    })
+  },
+  cancelsuborder(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/room/cancel_suborder',
+      param: {
+        room_id: param.room_id,
+      },
+      onSuccess: body => {
+        param.onsuccess(body)
+      }
+    })
+  },
+
+}
