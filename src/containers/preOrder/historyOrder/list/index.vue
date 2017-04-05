@@ -21,9 +21,10 @@
         <section v-for="(item,index) in orderlist.confirmed" :key="index">
           <orderitem :orderId="item.order_id"
                      :inTime="item.in_time"
+                     :outTime="item.out_time"
                      :booker="item.owner"
                      :phoneNum="item.owner_tel"
-                     :rooms="item.rooms"
+                     :rooms="item.rooms_plan"
                      :arrow=true
                      @onClick="_gotodetail(item.order_id)">
           </orderitem>
