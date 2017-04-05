@@ -43,13 +43,13 @@ const preorderRouter = [{
     component: require('../containers/preorder/TODAY/list')
   }, {
     path: 'today/predetail/:id',
-    component: require('../containers/preorder/TODAY/detail')
+    component: require('../containers/preorder/detail')
   }, {
     path: 'history/:tab',
     component: require('../containers/preorder/HISTORY/list')
   }, {
     path: 'history/predetail/:id',
-    component: require('../containers/preorder/HISTORY/detail')
+    component: require('../containers/preorder/detail')
   }]
 }];
 

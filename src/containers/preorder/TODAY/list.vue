@@ -6,7 +6,7 @@
                  :key="index"
                  :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/preOrder/todayOrder/'+index)">
+                 @click.native="goto('/preorder/today/'+index)">
         </TabItem>
       </Tab>
     </header>
@@ -108,7 +108,7 @@
         this.$nextTick(() => this.$refs[ref].reset(param))
       },
       _gotodetail(orderId) {
-        this.goto('/preorder/TODAY/predetail/' + orderId);
+        this.goto('/preorder/today/predetail/' + orderId);
       },
       _showSortBox(){
         this.showSort = true;

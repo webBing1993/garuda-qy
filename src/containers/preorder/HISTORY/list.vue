@@ -6,7 +6,7 @@
                  :key="index"
                  :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/preOrder/historyOrder/'+index)">
+                 @click.native="goto('/preorder/history/'+index)">
         </TabItem>
       </Tab>
     </header>
@@ -26,8 +26,7 @@
                      :phoneNum="item.owner_tel"
                      :rooms="item.rooms_plan"
                      :arrow=true
-                     @onClick="_gotodetail(item.order_id)">
-          </orderitem>
+                     @onClick="_gotodetail(item.order_id)"/>
         </section>
       </div>
     </scroller>
@@ -41,7 +40,7 @@
     </scroller>
     <footer>
       <div class="select" v-if="!popupShowCalendar || !popupShowSort">
-        <span  v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>
+        <span v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>
         <span v-else @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
         <span @click="popupShowSort = !popupShowSort">时间排序</span>
       </div>
@@ -68,6 +67,7 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
   import moment from 'moment'
+
   export default {
     data() {
       return {
@@ -101,7 +101,7 @@
         this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
       },
       _gotodetail(orderId) {
-        this.goto('/preorder/TODAY/predetail/' + orderId);
+        this.goto('/preorder/today/predetail/' + orderId);
         console.log('goto predetail ===> 1111111')
       },
     },
@@ -127,7 +127,7 @@
       getMonth(timestampunix){
         const timestamp = parseInt(timestampunix);
         const timeobj = moment(timestamp);
-        return (timeobj.month()+1)+'/'+timeobj.date();
+        return (timeobj.month() + 1) + '/' + timeobj.date();
       }
     },
     mounted(){
@@ -135,7 +135,8 @@
     }
   }
 </script>
+
 <style scoped lang="less">
-  @import "./index.less";
+  @import "index.less";
 </style>
 
