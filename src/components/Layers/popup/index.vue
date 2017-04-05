@@ -1,7 +1,9 @@
 <template>
   <div class="popup" v-if="value">
     <div class="mask" v-if="maskShow" @click="popupHide"></div>
-    <div class="container" :class="{bottom:bottom,top:top,center:center,animationTopBottom:animationTopBottom,animationTop:animationTop }" >
+    <div class="container"
+         :class="{bottom:bottom,center:center,animationTopBottom:animationTopBottom,animationTop:animationTop }"
+         :style="{'position': 'absolute','top': top + 'px','left': 0,'z-index': 333}">
       <slot></slot>
     </div>
   </div>
@@ -18,9 +20,7 @@
       bottom: {
         type: Boolean
       },
-      top: {
-        type: Boolean
-      },
+      top: null,
       center: {
         type: Boolean
       },
