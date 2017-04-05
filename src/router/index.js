@@ -20,6 +20,18 @@ const pmsRouter = [{
   }]
 }];
 
+const unchained = [{
+  path: '/unchained',
+  component: {
+    name: "unchained",
+    template: `<router-view/>`,
+  },
+  children: [{
+    path: 'roommanager',
+    component: require('../containers/unchained/ROOMMANAGER')
+  }]
+}]
+
 const preorderRouter = [{
   path: '/preOrder',
   component: {
@@ -42,5 +54,5 @@ const preorderRouter = [{
 }];
 
 export default new VueRouter({
-  routes: [...pmsRouter, ...preorderRouter]
+  routes: [...pmsRouter, ...unchained, ...preorderRouter]
 })

@@ -8,7 +8,7 @@
       </div>
       <div class="weui-dialog__ft">
         <a v-if="confirm" class="weui-dialog__btn weui-dialog__btn_default" @click="onCancel">否</a>
-        <a class="weui-dialog__btn weui-dialog__btn_primary" @click="onConfirm">是</a>
+        <a v-if="cancel" class="weui-dialog__btn weui-dialog__btn_primary" @click="onConfirm">是</a>
       </div>
     </div>
   </div>
@@ -26,9 +26,13 @@
         type: Boolean,
         default: false
       },
+      cancel: {
+        type: Boolean,
+        default: false
+      },
       title: {
         default: null
-      },
+      }
     },
     methods: {
       onConfirm(){
