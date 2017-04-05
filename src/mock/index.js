@@ -4,8 +4,8 @@ const prefix = "/gemini"
 Mock.mock(
   prefix + '/login',
   {
-    code: 200,
-    msg: "ok",
+    errcode: "0",
+    errmsg: "ok",
     data: {
       session: "asiodhoiawhdoihoi123128uasihci"
     }
@@ -15,8 +15,8 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/confirm',
   {
-    code: 200,
-    msg: "ok",
+    errcode: "0",
+    errmsg: "ok",
     data: [{
       order_id: "230420402402404",//订单号
       order_pmsid: "230420402402404",//订单号
@@ -108,7 +108,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/confirm/230420402402404',
   {
-    code: 200,
+     errcode: "0",
     msg: "ok",
     data: {
       order_id: "230420402402404",//订单号
@@ -145,7 +145,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/confirmed',
   {
-    code: 200,
+     errcode: "0",
     msg: "ok",
     data: [{
       order_id: "230420402402404",//订单号
@@ -239,7 +239,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/today',
   {
-    code: 200,
+     errcode: "0",
     msg: "ok",
     data: [{
       warning: '需退款',  //测试添加
@@ -302,7 +302,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/today/checkincancel',
   {
-    code: 200,
+     errcode: "0",
     msg: "ok",
     data: [{
       order_id: "130420402402404",  //订单号
@@ -338,7 +338,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/today/order_id',
   {
-    code: 200,
+     errcode: "0",
     msg: "ok",
     data: {
       warning: '入账失败',  //测试添加
@@ -423,7 +423,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/history',
   {
-    code: 200,
+     errcode: "0",
     msg: "ok",
     data: [{
       order_id: "120420402402405",
