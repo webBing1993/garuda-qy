@@ -9,10 +9,10 @@
     </div>
     <div class="weui-cell__bd">
       <p>
-        <span style="vertical-align: middle">{{title}}</span>
+        <span style="vertical-align: middle" v-html="title"></span>
         <span v-if="badge && !desc" class="weui-badge" style="margin-left: 5px;">{{badge}}</span>
       </p>
-      <p v-if="desc" style="font-size: 13px;color: #888888;">摘要信息</p>
+      <p v-if="desc" style="font-size: 13px;color: #888888;" v-html="desc"></p>
     </div>
     <div class="weui-cell__ft">
       <span style="vertical-align:middle; font-size: 17px;">{{value}}</span>

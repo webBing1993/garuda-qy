@@ -7,7 +7,7 @@
 </template>
 <script>
   export default {
-    name: 'tab',
+    name: 'tabItem',
     props: {
       value: {
         default: '选项一'
