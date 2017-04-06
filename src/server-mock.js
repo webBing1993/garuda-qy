@@ -1,6 +1,93 @@
 const Mock = require('mockjs')
 const prefix = "/gemini"
 
+const orderlist = [
+  {
+    order_id: "230420402402401",//订单号
+    order_pmsid: "230420402402401",//订单号
+    in_time: '1491384458000',
+    out_time: '1491384458000',
+    owner: "张三",//预订人
+    owner_tel: "+8618500059035",//预订人手机
+    remark: "",//备注
+    rooms_plan: [{
+      room_type: "大床房",
+      room_count: 2
+    }],
+    payinfo: {
+      total_roomfee: 4000, //总房费
+      pms_pay: 1000, //PMS中的已付金额,
+      staff_pay: null,//营业员确认的付款金额,
+      user_pay: 1000, //小程序已付金额
+      deposit: 0, //应付押金
+    },
+    status: {
+      is_cancelled: false,// 是否已取消
+      is_refund_required: false, //是否需要退款
+      is_recording_success: false,// pms入账是否成功
+    },
+    timeline: { //状态变化时间
+      staff_confirm: null, //营业员确认订单的时间
+      precheckin_done: null, //预登记全部完成时间
+    }
+  }, {
+    order_id: "230420402402402",//订单号
+    order_pmsid: "230420402402402",//订单号
+    in_time: '1491384458000',
+    out_time: '1491384458000',
+    owner: "张三",//预订人
+    owner_tel: "+8618500059035",//预订人手机
+    remark: "",//备注
+    rooms_plan: [{
+      room_type: "大床房",
+      room_count: 2
+    }],
+    payinfo: {
+      total_roomfee: 4000, //总房费
+      pms_pay: 1000, //PMS中的已付金额,
+      staff_pay: null,//营业员确认的付款金额,
+      user_pay: 1000, //小程序已付金额
+      deposit: 0, //应付押金
+    },
+    status: {
+      is_cancelled: false,// 是否已取消
+      is_refund_required: false, //是否需要退款
+      is_recording_success: false,// pms入账是否成功
+    },
+    timeline: { //状态变化时间
+      staff_confirm: null, //营业员确认订单的时间
+      precheckin_done: null, //预登记全部完成时间
+    }
+  }, {
+    order_id: "230420402402403",//订单号
+    order_pmsid: "230420402402403",//订单号
+    in_time: '1491384458000',
+    out_time: '1491384458000',
+    owner: "张三",//预订人
+    owner_tel: "+8618500059035",//预订人手机
+    remark: "",//备注
+    rooms_plan: [{
+      room_type: "大床房",
+      room_count: 2
+    }],
+    payinfo: {
+      total_roomfee: 4000, //总房费
+      pms_pay: 1000, //PMS中的已付金额,
+      staff_pay: null,//营业员确认的付款金额,
+      user_pay: 1000, //小程序已付金额
+      deposit: 0, //应付押金
+    },
+    status: {
+      is_cancelled: false,// 是否已取消
+      is_refund_required: false, //是否需要退款
+      is_recording_success: false,// pms入账是否成功
+    },
+    timeline: { //状态变化时间
+      staff_confirm: null, //营业员确认订单的时间
+      precheckin_done: null, //预登记全部完成时间
+    }
+  }]
+
 Mock.mock(
   prefix + '/login',
   {
@@ -18,91 +105,7 @@ Mock.mock(
   {
     errcode: "0",
     errmsg: "ok",
-    data: [{
-      order_id: "230420402402401",//订单号
-      order_pmsid: "230420402402401",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 4000, //总房费
-        pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: null,//营业员确认的付款金额,
-        user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
-      }
-    }, {
-      order_id: "230420402402402",//订单号
-      order_pmsid: "230420402402402",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 4000, //总房费
-        pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: null,//营业员确认的付款金额,
-        user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
-      }
-    }, {
-      order_id: "230420402402403",//订单号
-      order_pmsid: "230420402402403",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 4000, //总房费
-        pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: null,//营业员确认的付款金额,
-        user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
-      }
-    }]
+    data: orderlist
   }
 );
 //已确认
@@ -111,128 +114,109 @@ Mock.mock(
   {
     errcode: "0",
     msg: "ok",
-    data: [{
-      order_id: "230420402402404",//订单号
-      order_pmsid: "230420402402404",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 4000, //总房费
-        pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: 4000,//营业员确认的付款金额,
-        user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
-      }
-    }, {
-      order_id: "230420402402405",//订单号
-      order_pmsid: "230420402402405",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 4000, //总房费
-        pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: 10,//营业员确认的付款金额,
-        user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
-      }
-    }, {
-      order_id: "230420402402406",//订单号
-      order_pmsid: "230420402402406",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 4000, //总房费
-        pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: 0,//营业员确认的付款金额,
-        user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
-      }
-    }]
+    data: [
+      {
+        order_id: "230420402402404",//订单号
+        order_pmsid: "230420402402404",//订单号
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        owner: "张三",//预订人
+        owner_tel: "+8618500059035",//预订人手机
+        remark: "",//备注
+        rooms_plan: [{
+          room_type: "大床房",
+          room_count: 2
+        }],
+        payinfo: {
+          total_roomfee: 4000, //总房费
+          pms_pay: 1000, //PMS中的已付金额,
+          staff_pay: 4000,//营业员确认的付款金额,
+          user_pay: 1000, //小程序已付金额
+          deposit: 0, //应付押金
+        },
+        status: {
+          is_cancelled: false,// 是否已取消
+          is_refund_required: false, //是否需要退款
+          is_recording_success: false,// pms入账是否成功
+        },
+        timeline: { //状态变化时间
+          staff_confirm: null, //营业员确认订单的时间
+          precheckin_done: null, //预登记全部完成时间
+        }
+      }, {
+        order_id: "230420402402405",//订单号
+        order_pmsid: "230420402402405",//订单号
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        owner: "张三",//预订人
+        owner_tel: "+8618500059035",//预订人手机
+        remark: "",//备注
+        rooms_plan: [{
+          room_type: "大床房",
+          room_count: 2
+        }],
+        payinfo: {
+          total_roomfee: 4000, //总房费
+          pms_pay: 1000, //PMS中的已付金额,
+          staff_pay: 10,//营业员确认的付款金额,
+          user_pay: 1000, //小程序已付金额
+          deposit: 0, //应付押金
+        },
+        status: {
+          is_cancelled: false,// 是否已取消
+          is_refund_required: false, //是否需要退款
+          is_recording_success: false,// pms入账是否成功
+        },
+        timeline: { //状态变化时间
+          staff_confirm: null, //营业员确认订单的时间
+          precheckin_done: null, //预登记全部完成时间
+        }
+      }, {
+        order_id: "230420402402406",//订单号
+        order_pmsid: "230420402402406",//订单号
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        owner: "张三",//预订人
+        owner_tel: "+8618500059035",//预订人手机
+        remark: "",//备注
+        rooms_plan: [{
+          room_type: "大床房",
+          room_count: 2
+        }],
+        payinfo: {
+          total_roomfee: 4000, //总房费
+          pms_pay: 1000, //PMS中的已付金额,
+          staff_pay: 0,//营业员确认的付款金额,
+          user_pay: 1000, //小程序已付金额
+          deposit: 0, //应付押金
+        },
+        status: {
+          is_cancelled: false,// 是否已取消
+          is_refund_required: false, //是否需要退款
+          is_recording_success: false,// pms入账是否成功
+        },
+        timeline: { //状态变化时间
+          staff_confirm: null, //营业员确认订单的时间
+          precheckin_done: null, //预登记全部完成时间
+        }
+      }]
   }
 )
 //获取确认订单详情
 Mock.mock(
-  prefix + '/order/precheckin/confirm/order_id',
-  {
-     errcode: "0",
-    msg: "ok",
-    data: {
-      order_id: "230420402402401",//订单号
-      order_pmsid: "230420402402401",//订单号
-      in_time: '2017/4/4',
-      out_time: '2017/4/5',
-      owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
-      remark: "",//备注
-      rooms_plan: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 2000, //总房费
-        pms_pay:0, //PMS中记录的已付金额,
-        staff_pay: null, //营业员确认的付款金额,
-        user_pay:0, //小程序的已付金额
-        deposit:0, //应付押金
-      },
-      status: {
-        is_cancelled:false,// 是否已取消
-        is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
-      },
-      timeline: { //状态变化时间
-        staff_confirm: null, //营业员确认订单的时间
-        precheckin_done: null, //预登记全部完成时间
+  /\/order\/precheckin\/confirm\/\d+$/,
+  function (opts) {
+    // console.log(opts);
+    let id = opts.url.split('/').pop();
+    // console.log(id);
+    let orderdetail = orderlist.filter(item => item.order_id == id)[0];
+    // console.log(orderdetail)
+    return orderdetail ? {
+        errcode: 0,
+        data: orderdetail
+      } : {
+        errcode: 404
       }
-    }
   }
 );
 // 批量确认预订单
@@ -257,7 +241,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/today',
   {
-     errcode: "0",
+    errcode: "0",
     msg: "ok",
     data: [{
       warning: '需退款',  //测试添加
@@ -320,7 +304,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/today/checkincancel',
   {
-     errcode: "0",
+    errcode: "0",
     msg: "ok",
     data: [{
       order_id: "130420402402404",  //订单号
@@ -356,7 +340,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/today/order_id',
   {
-     errcode: "0",
+    errcode: "0",
     msg: "ok",
     data: {
       warning: '入账失败',  //测试添加
@@ -441,7 +425,7 @@ Mock.mock(
 Mock.mock(
   prefix + '/order/precheckin/history',
   {
-     errcode: "0",
+    errcode: "0",
     msg: "ok",
     data: [{
       order_id: "230420402402407",//订单号
@@ -460,10 +444,10 @@ Mock.mock(
         pms_pay: 1000, //PMS中的已付金额,
         staff_pay: 10,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
+        deposit: 0, //应付押金
       },
       status: {
-        is_cancelled:false,// 是否已取消
+        is_cancelled: false,// 是否已取消
         is_refund_required: false, //是否需要退款
         is_recording_success: false,// pms入账是否成功
       },
@@ -488,10 +472,10 @@ Mock.mock(
         pms_pay: 1000, //PMS中的已付金额,
         staff_pay: 10,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
-        deposit:0, //应付押金
+        deposit: 0, //应付押金
       },
       status: {
-        is_cancelled:false,// 是否已取消
+        is_cancelled: false,// 是否已取消
         is_refund_required: false, //是否需要退款
         is_recording_success: false,// pms入账是否成功
       },

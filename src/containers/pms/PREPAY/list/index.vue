@@ -63,7 +63,7 @@
     </scroller>
 
     <footer v-show="route.params.tab == 0">
-      <x-button v-if="batch" value="未支付" warn/>
+      <x-button v-if="batch" value="未支付" @onClick="setMulticonfirm" warn/>
       <x-button v-else @onClick="goPick" value="未支付批量处理"/>
     </footer>
   </article>
@@ -93,7 +93,8 @@
       ...mapActions([
         'goto',
         'gettobeconfirmed',
-        'getconfirmed'
+        'getconfirmed',
+        'multiconfirm'
       ]),
       donePullDown: function (ref) {
         //刷新
@@ -104,12 +105,30 @@
         if (this.batchlist.length === this.tobeconfirmed.length) {
           this.batchlist = []
         } else {
-          this.batchlist = []
+          this.batchlist = [];
           this.tobeconfirmed.forEach(
             item => this.batchlist.push(item.order_id)
           )
         }
-
+      },
+      setMulticonfirm() {
+        if (this.batchlist.length != 0) {
+          this.multiconfirm({
+            order_ids: this.batchlist,
+            onsuccess: () => {
+              this.batchlist.forEach(item => {
+                let tempIndex = this.tobeconfirmed.findIndex(i => i.order_id === item);
+                tempIndex > -1
+                  ? this.tobeconfirmed.splice(tempIndex, 1)
+                  : null
+              });
+              if (this.tobeconfirmed.length === 0) {
+                this.batchlist = [];
+                this.batch = false;
+              }
+            }
+          })
+        }
       },
       goPick(){
         this.batchlist = []

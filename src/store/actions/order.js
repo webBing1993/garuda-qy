@@ -24,7 +24,7 @@ module.exports = {
   //获取确认订单详情
   getorderdetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm/' + param.order_id,
+      url: '/order/precheckin/confirm/'+param.order_id,
       onSuccess: (body) => {
         param.onsuccess(body)
       },
@@ -85,6 +85,33 @@ module.exports = {
         param.onsuccess(body)
       },
       onFail: () => null
+    })
+  },
+  //批量确认预订单
+  multiconfirm(ctx,param){
+    ctx.dispatch('resource', {
+      url: '/order/multiconfirm',
+      param: {
+        order_ids: param.order_ids
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast')
+        param.onsuccess(body)
+      }
+    })
+  },
+  //单个确认预订单
+  singleconfirm(ctx,param){
+    ctx.dispatch('resource', {
+      url: '/order/singleconfirm',
+      param: {
+        order_id: param.order_id,
+        staff_pay: param.staff_pay
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast')
+        param.onsuccess(body)
+      }
     })
   }
 }
