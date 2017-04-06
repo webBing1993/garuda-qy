@@ -22,7 +22,7 @@ const pms = [{
   path: '/pms',
   component: {
     name: "pms",
-    template: `<keep-alive><router-view/></keep-alive>`,
+    template: `<router-view/>`,
   },
   children: [{
     path: 'prepay/:tab',

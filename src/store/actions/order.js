@@ -1,30 +1,36 @@
 // import * as _dataUtil from './dataUtil';
 
 module.exports = {
-  //获取待确认订单列表
-  gettobeconfirmed(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm',
-      onSuccess: (body) => {
-        param.onsuccess(body)
-      },
-      onFail: () => null
-    })
-  },
-  //已确认订单列表
-  getconfirmed(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/confirmed',
-      onSuccess: (body) => {
-        param.onsuccess(body)
-      },
-      onFail: () => null
-    })
+  //获取确认订单列表 0-待确认 1-已确认
+  getconfirmelist(ctx, param){
+    if(param.status == 0) {
+      ctx.dispatch('resource', {
+        url: '/order/precheckin/confirm',
+        param: {
+          status: param.status
+        },
+        onSuccess: (body) => {
+          param.onsuccess(body)
+        },
+        onFail: () => null
+      })
+    }else {
+      ctx.dispatch('resource', {
+        url: '/order/confirmed',
+        param: {
+          status: param.status
+        },
+        onSuccess: (body) => {
+          param.onsuccess(body)
+        },
+        onFail: () => null
+      })
+    }
   },
   //获取确认订单详情
   getorderdetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm/' + param.order_id,
+      url: '/order/precheckin/confirm/'+param.order_id,
       onSuccess: (body) => {
         param.onsuccess(body)
       },
@@ -81,10 +87,44 @@ module.exports = {
   gethistorylist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/history',
+      method:'POST',
+      param: {
+        is_cancelled : param.is_cancelled, //是否取消
+        is_sequence:param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
+        start: param.start, //筛选开始 无则null
+        end: param.end, //筛选结束 无则null
+      },
       onSuccess: (body) => {
         param.onsuccess(body)
       },
       onFail: () => null
+    })
+  },
+  //批量确认预订单
+  multiconfirm(ctx,param){
+    ctx.dispatch('resource', {
+      url: '/order/multiconfirm',
+      param: {
+        order_ids: param.order_ids
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast')
+        param.onsuccess(body)
+      }
+    })
+  },
+  //单个确认预订单
+  singleconfirm(ctx,param){
+    ctx.dispatch('resource', {
+      url: '/order/singleconfirm',
+      param: {
+        order_id: param.order_id,
+        staff_pay: param.staff_pay
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast')
+        param.onsuccess(body)
+      }
     })
   }
 }

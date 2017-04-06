@@ -16,32 +16,36 @@
       <Cell title="已确认" :value="payInfo"></Cell>
     </Group>
     <div class="btn-group">
-      <x-button  v-if='orderdetail.payinfo.staff_pay === null ||orderdetail.payinfo.staff_pay < orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === 0'
+      <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
                 :value="'已全额支付 ￥'+orderdetail.payinfo.total_roomfee"
                 primary
-                @onClick="orderdetail.payinfo.staff_pay = orderdetail.payinfo.total_roomfee,payInfo = '已全额支付￥' + orderdetail.payinfo.staff_pay"/>
-      <x-button v-if='orderdetail.payinfo.staff_pay === null ||(orderdetail.payinfo.staff_pay <= orderdetail.payinfo.total_roomfee) && orderdetail.payinfo.staff_pay != 0'
+                @onClick="staffpayConfirm"/>
+      <x-button v-if='orderdetail.payinfo.staff_pay != 0'
                 value="未支付"
                 warn
-                @onClick="payInfo = '未支付',orderdetail.payinfo.staff_pay = 0"/>
-      <x-button v-if='orderdetail.payinfo.staff_pay === null||orderdetail.payinfo.staff_pay === orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay===0'
-                value="已付其他金额"
-                @onClick="popupShow = !popupShow, showDialog = !showDialog"/>
+                @onClick="staffpayConfirm(1)"/>
+      <x-button
+        v-if='orderdetail.payinfo.staff_pay == 0 || orderdetail.payinfo.staff_pay == orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === null'
+        value="已付其他金额"
+        @onClick="staffpayConfirm(2)"/>
     </div>
 
-    <popup v-model="popupShow"
-           :maskShow="true"
-           :center="true">
-      <Dialog v-model="showDialog"
-              @onConfirm="popupShow = false,showDialog= false,orderdetail.payinfo.staff_pay= inputValue,payInfo = '已付￥' + orderdetail.payinfo.staff_pay"
-              @onCancel="popupShow = false,showDialog= false"
-              confirm
-              cancel>
+    <Dialog v-model="showDialog"
+            @onConfirm="setSingleConfirm"
+            confirm
+            cancel>
+      <div v-if="!dialogStatus">
+        <p>确认已全额支付？</p>
+      </div>
+      <div v-if="dialogStatus == 1">
+        <p>确认未支付？</p>
+      </div>
+      <div v-if="dialogStatus == 2">
         <label>输入金额</label>
-        <input v-model='inputValue'
+        <input v-model.number='inputValue'
                class="money" placeholder="￥400">
-      </Dialog>
-    </popup>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -53,32 +57,71 @@
     data(){
       return {
         orderdetail: {},
-        popupShow: false,
         showDialog: false,
-        payInfo:'',
-        inputValue:''
+        dialogStatus: null,
+        inputValue: null
       }
     },
     computed: {
       ...mapState([
         'route'
-      ])
+      ]),
+      payInfo() {
+        let a = this.orderdetail.payinfo.staff_pay;
+        if (a == null) {
+          return null;
+        } else if (a === this.orderdetail.payinfo.total_roomfee) {
+          return '已全额支付￥' + this.orderdetail.payinfo.total_roomfee
+        } else if (a === 0) {
+          return '未支付'
+        } else {
+          return '已支付' + a
+        }
+      }
     },
     methods: {
       ...mapActions([
-        'getorderdetail'
+        'getorderdetail',
+        'singleconfirm'
       ]),
       isNotEmpty(obj){
         for (var key in obj) {
           return true;
         }
         return false;
+      },
+      staffpayConfirm(paystatus){
+        this.showDialog = true;
+        this.dialogStatus = paystatus ? paystatus : null;
+      },
+      setSingleConfirm () {
+        let staff_pay = this.dialogStatus
+          ? this.inputValue ? this.inputValue : 0
+          : this.orderdetail.payinfo.total_roomfee
+        console.log('staff_pay:' + staff_pay)
+
+        this.singleconfirm({
+          order_id: this.orderdetail.order_pmsid,
+          staff_pay: staff_pay,
+          onsuccess: () => {
+            this.orderdetail.payinfo.staff_pay = staff_pay
+          }
+        })
+      }
+    },
+    watch: {
+      showDialog(val,oldV) {
+          val ? null : (this.dialogStatus = null,this.inputValue = null)
       }
     },
     mounted() {
+      console.log('mounted')
       this.getorderdetail({
-        order_id: this.route.params.id,
-        onsuccess: body => this.orderdetail = body.data
+        order_id: this.$route.params.id,
+        onsuccess: body => {
+          console.log(body)
+          this.orderdetail = body.data
+        }
       })
     }
   }
