@@ -45,7 +45,10 @@
     </scroller>
 
     <scroller v-show="route.params.tab == 1"
+              :pulldown-config="app.scroller.config"
               height="-44"
+              :depend="[confirmed,batch]"
+              use-pulldown
               lock-x>
       <section>
         <orderitem v-for="(item,index) in confirmed"
@@ -92,8 +95,7 @@
     methods: {
       ...mapActions([
         'goto',
-        'gettobeconfirmed',
-        'getconfirmed',
+        'getconfirmelist',
         'multiconfirm'
       ]),
       donePullDown: function (ref) {
@@ -153,10 +155,12 @@
       }
     },
     mounted(){
-      this.gettobeconfirmed({
+      this.getconfirmelist({
+        status: 0,
         onsuccess: body => this.tobeconfirmed = body.data
       })
-      this.getconfirmed({
+      this.getconfirmelist({
+        status: 1 ,
         onsuccess: body => this.confirmed = body.data
       })
     }

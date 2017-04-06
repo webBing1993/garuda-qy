@@ -1,25 +1,31 @@
 // import * as _dataUtil from './dataUtil';
 
 module.exports = {
-  //获取待确认订单列表
-  gettobeconfirmed(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm',
-      onSuccess: (body) => {
-        param.onsuccess(body)
-      },
-      onFail: () => null
-    })
-  },
-  //已确认订单列表
-  getconfirmed(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/confirmed',
-      onSuccess: (body) => {
-        param.onsuccess(body)
-      },
-      onFail: () => null
-    })
+  //获取确认订单列表 0-待确认 1-已确认
+  getconfirmelist(ctx, param){
+    if(param.status == 0) {
+      ctx.dispatch('resource', {
+        url: '/order/precheckin/confirm',
+        param: {
+          status: param.status
+        },
+        onSuccess: (body) => {
+          param.onsuccess(body)
+        },
+        onFail: () => null
+      })
+    }else {
+      ctx.dispatch('resource', {
+        url: '/order/confirmed',
+        param: {
+          status: param.status
+        },
+        onSuccess: (body) => {
+          param.onsuccess(body)
+        },
+        onFail: () => null
+      })
+    }
   },
   //获取确认订单详情
   getorderdetail(ctx, param){
