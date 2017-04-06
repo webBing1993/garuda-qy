@@ -1,30 +1,30 @@
 <template>
-  <div class="confirmeddetail" v-if="isNotEmpty(orderlist.confirmeddetail)">
+  <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
     <orderitem title="预定信息"
-               :underOrderId="orderlist.confirmeddetail.order_id"
-               :booker="orderlist.confirmeddetail.owner"
-               :underPhoneNum="orderlist.confirmeddetail.owner_tel"
-               :rooms="orderlist.confirmeddetail.rooms_plan"
-               :inTime="orderlist.confirmeddetail.in_time"
-               :outTime="orderlist.confirmeddetail.out_time">
+               :underOrderId="orderdetail.order_id"
+               :booker="orderdetail.owner"
+               :underPhoneNum="orderdetail.owner_tel"
+               :rooms="orderdetail.rooms_plan"
+               :inTime="orderdetail.in_time"
+               :outTime="orderdetail.out_time">
     </orderitem>
 
     <orderitem title="PMS支付信息"
-               :payinfo="orderlist.confirmeddetail.payinfo">
+               :payinfo="orderdetail.payinfo">
     </orderitem>
     <Group v-if="payInfo">
       <Cell title="已确认" :value="payInfo"></Cell>
     </Group>
     <div class="btn-group">
-      <x-button  v-if='orderlist.confirmeddetail.payinfo.staff_pay === null ||orderlist.confirmeddetail.payinfo.staff_pay < orderlist.confirmeddetail.payinfo.total_roomfee ||orderlist.confirmeddetail.payinfo.staff_pay === 0'
-                :value="'已全额支付 ￥'+ orderlist.confirmeddetail.payinfo.total_roomfee"
+      <x-button  v-if='orderdetail.payinfo.staff_pay === null ||orderdetail.payinfo.staff_pay < orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === 0'
+                :value="'已全额支付 ￥'+orderdetail.payinfo.total_roomfee"
                 primary
-                @onClick="orderlist.confirmeddetail.payinfo.staff_pay = orderlist.confirmeddetail.payinfo.total_roomfee,payInfo = '已全额支付￥' + orderlist.confirmeddetail.payinfo.staff_pay"/>
-      <x-button v-if='orderlist.confirmeddetail.payinfo.staff_pay === null ||(orderlist.confirmeddetail.payinfo.staff_pay <= orderlist.confirmeddetail.payinfo.total_roomfee) && orderlist.confirmeddetail.payinfo.staff_pay != 0'
+                @onClick="orderdetail.payinfo.staff_pay = orderdetail.payinfo.total_roomfee,payInfo = '已全额支付￥' + orderdetail.payinfo.staff_pay"/>
+      <x-button v-if='orderdetail.payinfo.staff_pay === null ||(orderdetail.payinfo.staff_pay <= orderdetail.payinfo.total_roomfee) && orderdetail.payinfo.staff_pay != 0'
                 value="未支付"
                 warn
-                @onClick="payInfo = '未支付',orderlist.confirmeddetail.payinfo.staff_pay = 0"/>
-      <x-button v-if='orderlist.confirmeddetail.payinfo.staff_pay === null||orderlist.confirmeddetail.payinfo.staff_pay === orderlist.confirmeddetail.payinfo.total_roomfee ||orderlist.confirmeddetail.payinfo.staff_pay===0'
+                @onClick="payInfo = '未支付',orderdetail.payinfo.staff_pay = 0"/>
+      <x-button v-if='orderdetail.payinfo.staff_pay === null||orderdetail.payinfo.staff_pay === orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay===0'
                 value="已付其他金额"
                 @onClick="popupShow = !popupShow, showDialog = !showDialog"/>
     </div>
@@ -33,7 +33,7 @@
            :maskShow="true"
            :center="true">
       <Dialog v-model="showDialog"
-              @onConfirm="popupShow = false,showDialog= false,orderlist.confirmeddetail.payinfo.staff_pay= inputValue,payInfo = '已付￥' + orderlist.confirmeddetail.payinfo.staff_pay"
+              @onConfirm="popupShow = false,showDialog= false,orderdetail.payinfo.staff_pay= inputValue,payInfo = '已付￥' + orderdetail.payinfo.staff_pay"
               @onCancel="popupShow = false,showDialog= false"
               confirm
               cancel>
@@ -52,6 +52,7 @@
     name: "prepaydetail",
     data(){
       return {
+        orderdetail: {},
         popupShow: false,
         showDialog: false,
         payInfo:'',
@@ -60,13 +61,12 @@
     },
     computed: {
       ...mapState([
-        'route',
-        'orderlist'
+        'route'
       ])
     },
     methods: {
       ...mapActions([
-        'confirmeddetail'
+        'getorderdetail'
       ]),
       isNotEmpty(obj){
         for (var key in obj) {
@@ -76,7 +76,10 @@
       }
     },
     mounted() {
-      this.confirmeddetail(this.route.params.id);
+      this.getorderdetail({
+        order_id: this.route.params.id,
+        onsuccess: body => this.orderdetail = body.data
+      })
     }
   }
 </script>

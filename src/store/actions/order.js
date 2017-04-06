@@ -1,30 +1,33 @@
 // import * as _dataUtil from './dataUtil';
 
 module.exports = {
-  //获取确认订单列表
-  tobeconfirmed(ctx, param){
+  //获取待确认订单列表
+  gettobeconfirmed(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/confirm',
-
-      // params: {
-      //   status: 0
-      // },
-      onSuccess: (body) => (console.log(body), ctx.commit('TOBECONFIRMED', body.data)),
+      onSuccess: (body) => {
+        param.onsuccess(body)
+      },
+      onFail: () => null
+    })
+  },
+  //已确认订单列表
+  getconfirmed(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/confirmed',
+      onSuccess: (body) => {
+        param.onsuccess(body)
+      },
       onFail: () => null
     })
   },
   //获取确认订单详情
-  confirmeddetail(ctx, param){
+  getorderdetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm/' + param,
-      onSuccess: (body) => (console.log(body, 'confirmeddetail'), ctx.commit('CONFIRMEDDETAIL', body.data)),
-      onFail: () => null
-    })
-  },
-  confirmed(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/confirmed',
-      onSuccess: (body) => (console.log(body), ctx.commit('CONFIRMED', body.data)),
+      url: '/order/precheckin/confirm/' + param.order_id,
+      onSuccess: (body) => {
+        param.onsuccess(body)
+      },
       onFail: () => null
     })
   },
@@ -75,10 +78,12 @@ module.exports = {
       onFail: () => null
     })
   },
-  history(ctx, param){
+  gethistorylist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/history',
-      onSuccess: (body) => (console.log(body), ctx.commit('HISTORY', body.data)),
+      onSuccess: (body) => {
+        param.onsuccess(body)
+      },
       onFail: () => null
     })
   }

@@ -18,7 +18,7 @@
               use-pulldown
               height="-44">
       <div>
-        <section v-for="(item,index) in orderlist.confirmed" :key="index">
+        <section v-for="(item,index) in historyList" :key="index">
           <orderitem :orderId="item.order_id"
                      :inTime="item.in_time"
                      :outTime="item.out_time"
@@ -71,6 +71,7 @@
   export default {
     data() {
       return {
+        historyList:{},
         tabmenu: ["NO-SHOW", "已取消"],
         popupShowCalendar: false,
         popupShowSort: false,
@@ -83,14 +84,13 @@
     computed: {
       ...mapState([
         'app',
-        'route',
-        'orderlist',
+        'route'
       ])
     },
     methods: {
       ...mapActions([
         'goto',
-        'confirmed',
+        'gethistorylist',
       ]),
       reset: function (ref, param) {
         //重置scroller高度
@@ -131,7 +131,9 @@
       }
     },
     mounted(){
-      this.confirmed();
+      this.gethistorylist({
+        onsuccess: body => this.historyList = body.data
+      })
     }
   }
 </script>

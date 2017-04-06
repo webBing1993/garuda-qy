@@ -11,14 +11,14 @@
       <div class="toolbar" v-if="batch">
         <span @click="allPick"
               class="allpick"
-              :class="{batch:batchlist.length === orderlist.tobeconfirmed.length}">全选</span>
+              :class="{batch:batchlist.length === tobeconfirmed.length}">全选</span>
         <span @click="cancelPick">取消操作</span>
       </div>
     </header>
 
     <scroller v-show="route.params.tab == 0"
               :pulldown-config="app.scroller.config"
-              :depend="[orderlist.tobeconfirmed,batch]"
+              :depend="[tobeconfirmed,batch]"
               height="-44"
               use-pulldown
               lock-x>
@@ -27,7 +27,7 @@
                  type="checkbox"
                  default-item-class="item"
                  selected-item-class="selected">
-          <checker-item v-for="(item,index) in orderlist.tobeconfirmed"
+          <checker-item v-for="(item,index) in tobeconfirmed"
                         :key="index"
                         :value="item.order_id">
             <orderitem :orderId="item.order_pmsid"
@@ -48,7 +48,7 @@
               height="-44"
               lock-x>
       <section>
-        <orderitem v-for="(item,index) in orderlist.confirmed"
+        <orderitem v-for="(item,index) in confirmed"
                    key="'confirmed'+index"
                    :orderId="item.order_pmsid"
                    :booker="item.owner"
@@ -79,20 +79,21 @@
         tabmenu: ["待确认", "已确认"],
         batch: false,
         batchlist: [],
+        tobeconfirmed: [],
+        confirmed: []
       }
     },
     computed: {
       ...mapState([
         'app',
-        'route',
-        'orderlist',
+        'route'
       ])
     },
     methods: {
       ...mapActions([
         'goto',
-        'tobeconfirmed',
-        'confirmed'
+        'gettobeconfirmed',
+        'getconfirmed'
       ]),
       donePullDown: function (ref) {
         //刷新
@@ -100,11 +101,11 @@
       },
       allPick(){
         //全选和取消全选
-        if (this.batchlist.length === this.orderlist.tobeconfirmed.length) {
+        if (this.batchlist.length === this.tobeconfirmed.length) {
           this.batchlist = []
         } else {
           this.batchlist = []
-          this.orderlist.tobeconfirmed.forEach(
+          this.tobeconfirmed.forEach(
             item => this.batchlist.push(item.order_id)
           )
         }
@@ -133,8 +134,12 @@
       }
     },
     mounted(){
-      this.tobeconfirmed()
-      this.confirmed()
+      this.gettobeconfirmed({
+        onsuccess: body => this.tobeconfirmed = body.data
+      })
+      this.getconfirmed({
+        onsuccess: body => this.confirmed = body.data
+      })
     }
   }
 </script>
