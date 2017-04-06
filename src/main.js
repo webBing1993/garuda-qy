@@ -1,5 +1,5 @@
 // Mockdata
-import './mock';
+import './server-mock';
 
 import Vue from 'vue';
 import App from './App';
@@ -15,8 +15,8 @@ import FastClick from 'fastclick';
 FastClick.attach(document.body);
 
 // router & store
-import router from './router';
 import store from './store';
+import router from './router-config';
 import {sync} from 'vuex-router-sync';
 sync(store, router);
 

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
-import router from '../../router'
+import router from '../../router-config.js'
 
 module.exports = {
   goto: (ctx, param) => {
