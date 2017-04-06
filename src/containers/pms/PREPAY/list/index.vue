@@ -150,18 +150,27 @@
       }
     },
     watch: {
-      'route.params.tab': function (val) {
-        val ? this.cancelPick() : null
+      'route.params.tab': function (val, oldval) {
+        val ? this.cancelPick() : null;
+        if (val == 0 && !this.tobeconfirmed.length) {
+          console.log(0)
+          this.getconfirmelist({
+            status: val,
+            onsuccess: body => this.tobeconfirmed = body.data
+          })
+        } else if (val == 1 && !this.confirmed.length) {
+          console.log(1)
+          this.getconfirmelist({
+            status: val,
+            onsuccess: body => this.confirmed = body.data
+          })
+        }
       }
     },
     mounted(){
       this.getconfirmelist({
-        status: 0,
-        onsuccess: body => this.tobeconfirmed = body.data
-      })
-      this.getconfirmelist({
-        status: 1 ,
-        onsuccess: body => this.confirmed = body.data
+        status: this.$route.params.tab,
+        onsuccess: body => this[this.$route.params.tab == 0 ? 'tobeconfirmed' : 'confirmed'] = body.data
       })
     }
   }

@@ -87,6 +87,13 @@ module.exports = {
   gethistorylist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/history',
+      method:'POST',
+      param: {
+        is_cancelled : param.is_cancelled, //是否取消
+        is_sequence:param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
+        start: param.start, //筛选开始 无则null
+        end: param.end, //筛选结束 无则null
+      },
       onSuccess: (body) => {
         param.onsuccess(body)
       },

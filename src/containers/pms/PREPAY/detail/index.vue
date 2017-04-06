@@ -109,6 +109,11 @@
         })
       }
     },
+    watch: {
+      showDialog(val,oldV) {
+          val ? null : (this.dialogStatus = null,this.inputValue = null)
+      }
+    },
     mounted() {
       console.log('mounted')
       this.getorderdetail({

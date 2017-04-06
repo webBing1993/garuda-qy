@@ -71,7 +71,7 @@
   export default {
     data() {
       return {
-        historyList:{},
+        historyList:[],
         tabmenu: ["NO-SHOW", "已取消"],
         popupShowCalendar: false,
         popupShowSort: false,
@@ -79,7 +79,6 @@
         sortSelected: '预登记时间从早到晚',
         period: [null, null]
       }
-
     },
     computed: {
       ...mapState([
@@ -132,6 +131,7 @@
     },
     mounted(){
       this.gethistorylist({
+        is_cancelled: 0,
         onsuccess: body => this.historyList = body.data
       })
     }
