@@ -200,13 +200,13 @@ Mock.mock(
 )
 //获取确认订单详情
 Mock.mock(
-  prefix + '/order/precheckin/confirm/230420402402404',
+  prefix + '/order/precheckin/confirm/order_id',
   {
      errcode: "0",
     msg: "ok",
     data: {
-      order_id: "230420402402404",//订单号
-      order_pmsid: "230420402402404",//订单号
+      order_id: "230420402402401",//订单号
+      order_pmsid: "230420402402401",//订单号
       in_time: '2017/4/4',
       out_time: '2017/4/5',
       owner: "张三",//预订人
