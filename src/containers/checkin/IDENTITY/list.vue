@@ -12,7 +12,7 @@
       <section>
         <group v-for="item in passedIdentities">
           <cell :title="item.room.room_number + item.room.room_type_name"
-                :value="item.created_time|timeparse('12321')"/>
+                :value="item.created_time | datetimeparse"/>
           <cell :title="getGuestItem(item)"></cell>
         </group>
       </section>
@@ -34,41 +34,8 @@
     },
     computed: {
       isToday(){
-        return this.$route.path.indexOf('today') > -1
+        return !!this.$route.path.match(/today/)
       },
-    },
-    filters: {
-      'timeparse'(val, p){
-        let dateobj, timestamp;
-        if (val) {
-          timestamp = val.length == 10 ? val + '000' : val
-          dateobj = new Date()
-//          dateobj = new Date(parseInt(timestamp))
-          console.log(timestamp)
-          console.log(dateobj)
-
-          let YY = dateobj.getFullYear()
-          console.log(YY)
-
-          let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1)
-          console.log(MM)
-
-          let DD = dateobj.getDate() > 9 ? dateobj.getDate() > 9 : '0' + dateobj.getDate()
-          console.log(DD)
-
-          let HH = dateobj.getHours()
-          console.log(HH)
-
-          let mm = dateobj.getHours()
-          console.log(HH)
-
-
-          return 123
-        } else {
-          return '请传入 timestamp'
-        }
-        console.log(val, p)
-      }
     },
     methods: {
       ...mapActions([
