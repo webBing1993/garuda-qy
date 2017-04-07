@@ -8,7 +8,7 @@ module.exports = {
           ? timestamp + '000'
           : null
       : null
-    let dateobj = new Date(newtimestamp ? parseInt(newtimestamp) : null)
+    let dateobj = newtimestamp ? new Date(parseInt(newtimestamp)) : new Date()
     let YYYY = dateobj.getFullYear()
     let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1)
     let DD = dateobj.getDate() > 9 ? dateobj.getDate() > 9 : '0' + dateobj.getDate()
