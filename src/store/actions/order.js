@@ -31,6 +31,12 @@ module.exports = {
   getorderdetail(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/confirm/'+param.order_id,
+      param: {
+        roomfee: param.roomfee,
+        suborder: param.suborder,
+        invoice: param.invoice,
+        log:param.log
+      },
       onSuccess: (body) => {
         param.onsuccess(body)
       },
@@ -38,52 +44,58 @@ module.exports = {
     })
   },
   //当日预登记订单列表
-  precheckintoday(ctx, param){
+  getTodayList(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
-      method: "POST",
-      onSuccess: (body) => (console.log(body), ctx.commit('PRECHECKINTODAY', body.data)),
-      onFail: () => null
-    })
-  },
-  checkincancel(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/precheckin/today/checkincancel',
-      onSuccess: (body) => (console.log(body), ctx.commit('CHECKINCANCEL', body.data)),
-      onFail: () => null
-    })
-  },
-
-  //当日预登记订单详情
-  todayorderdetail(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/precheckin/today/order_id',
+      method:'POST',
+      param: {
+        is_cancelled : param.is_cancelled, //是否取消
+        is_sequence:param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
+      },
       onSuccess: (body) => {
-        let datas = {...body.data};
-        datas.owner_tel = datas.owner_tel.substring(3, 14);
-
-        datas.in_time = new Date(parseInt(datas.in_time));
-        datas.in_time = {
-          year: datas.in_time.getFullYear(),
-          month: parseInt(datas.in_time.getMonth() + 1) > 10 ? datas.in_time.getMonth() + 1 : '' + datas.in_time.getMonth() + 1,
-          day: parseInt(datas.in_time.getDate()) > 10 ? datas.in_time.getDate() : '0' + datas.in_time.getDate(),
-          hour: datas.in_time.getHours(),
-          minute: datas.in_time.getMinutes()
-        };
-        datas.out_time = new Date(parseInt(datas.out_time));
-        datas.out_time = {
-          year: datas.out_time.getFullYear(),
-          month: parseInt(datas.out_time.getMonth() + 1) > 10 ? datas.out_time.getMonth() + 1 : '' + datas.out_time.getMonth() + 1,
-          day: parseInt(datas.out_time.getDate()) > 10 ? datas.out_time.getDate() : '0' + datas.out_time.getDate(),
-          hour: datas.out_time.getHours(),
-          minute: datas.out_time.getMinutes()
-        };
-        // console.log(datas);
-        ctx.commit('TODAYDETAIL', datas)
+        param.onsuccess(body)
       },
       onFail: () => null
     })
   },
+  // checkincancel(ctx, param){
+  //   ctx.dispatch('resource', {
+  //     url: '/order/precheckin/today/checkincancel',
+  //     onSuccess: (body) => (console.log(body), ctx.commit('CHECKINCANCEL', body.data)),
+  //     onFail: () => null
+  //   })
+  // },
+
+  // //当日预登记订单详情
+  // todayorderdetail(ctx, param){
+  //   ctx.dispatch('resource', {
+  //     url: '/order/precheckin/today/order_id',
+  //     onSuccess: (body) => {
+  //       let datas = {...body.data};
+  //       datas.owner_tel = datas.owner_tel.substring(3, 14);
+  //
+  //       datas.in_time = new Date(parseInt(datas.in_time));
+  //       datas.in_time = {
+  //         year: datas.in_time.getFullYear(),
+  //         month: parseInt(datas.in_time.getMonth() + 1) > 10 ? datas.in_time.getMonth() + 1 : '' + datas.in_time.getMonth() + 1,
+  //         day: parseInt(datas.in_time.getDate()) > 10 ? datas.in_time.getDate() : '0' + datas.in_time.getDate(),
+  //         hour: datas.in_time.getHours(),
+  //         minute: datas.in_time.getMinutes()
+  //       };
+  //       datas.out_time = new Date(parseInt(datas.out_time));
+  //       datas.out_time = {
+  //         year: datas.out_time.getFullYear(),
+  //         month: parseInt(datas.out_time.getMonth() + 1) > 10 ? datas.out_time.getMonth() + 1 : '' + datas.out_time.getMonth() + 1,
+  //         day: parseInt(datas.out_time.getDate()) > 10 ? datas.out_time.getDate() : '0' + datas.out_time.getDate(),
+  //         hour: datas.out_time.getHours(),
+  //         minute: datas.out_time.getMinutes()
+  //       };
+  //       // console.log(datas);
+  //       ctx.commit('TODAYDETAIL', datas)
+  //     },
+  //     onFail: () => null
+  //   })
+  // },
   gethistorylist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/history',
@@ -126,6 +138,20 @@ module.exports = {
         param.onsuccess(body)
       }
     })
+  },
+  // 营业员确认PMS同步结果
+  conformPmsSync(ctx,param){
+    ctx.dispatch('resource', {
+      url: '/order/conform_pms_sync',
+      param: {
+        order_id: param.order_id,
+        action: param.action
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast');
+        param.onsuccess(body);
+      }
+    })
   }
-}
+};
 

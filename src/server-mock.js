@@ -29,7 +29,82 @@ const confirmlist = [
     timeline: { //状态变化时间
       staff_confirm: null, //营业员确认订单的时间
       precheckin_done: null, //预登记全部完成时间
-    }
+    },
+    invoice: {
+      type: "PERSONAL",
+      media: "PAPER",
+      category: "住宿费",
+      title: "上海复创",
+      tax_registry_no: "统一社会信用代码",
+      address: "地址",
+      phone_number: null,
+      bank_name: null,
+      bank_account: null
+    },
+    logs:[{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: '张三'
+    },{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: 'ted'
+    }],
+    room_fees: [{
+      room_type_name: '大床房', //房型名称
+      amount: 2, //房间数
+      date_price: [{
+        date: 1488432346, //日期
+        price: 30000, //房费
+      }]
+    }],
+    suborders: [{
+      suborder_id: "2304204024024011",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "李四",
+        idcard: "343245623456728199"
+      }, {
+        name: "李四",
+        idcard: "343245623456728199"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }, {
+      suborder_id: "2304204024024012",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "204",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "张三",
+        idcard: "360123333333333456"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }]
+
   }, {
     order_id: "230420402402402",//订单号
     order_pmsid: "230420402402402",//订单号
@@ -409,7 +484,14 @@ Mock.mock(
     msg: "ok",
   }
 );
-
+// 营业员确认PMS同步结果
+Mock.mock(
+  prefix + '/order/conform_pms_sync',
+  {
+    errcode: "0",
+    msg: "ok",
+  }
+);
 
 /* 当日预登记订单列表 */
 Mock.mock(
@@ -417,185 +499,9 @@ Mock.mock(
   {
     errcode: "0",
     msg: "ok",
-    data: [{
-      warning: '需退款',  //测试添加
-      order_id: "130420402402404",  //订单号
-      in_time: '',
-      out_time: '',
-      owner: "马化腾", //预订人
-      owner_tel: "+8618500059035", //预订人手机
-      remark: "", //备注
-      rooms: [{
-        room_type: "总统套房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 0,   //总房费
-        pms_pay: 0,   // PMS中的已付金额,
-        staff_pay: null,  // null 0 营业员确认的付款金额,
-        user_pay: 0,   //小程序已付金额
-      },
-      status: {
-        is_staff_confirm: false,  //是否营业已确认
-        need_refund: false,   //是否需要退款(Orders.pms_syn_state==3, 返回true)
-        pmsaccount_result: false,   //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
-        is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
-      },
-      timeline: {   //状态变化时间
-        precheckin_done: '1491014211',  // 预登记完成时间, null未发生
-      }
-    }, {
-      warning: '入账失败',  //测试添加
-      order_id: "130420402402404",  //订单号
-      in_time: '',
-      out_time: '',
-      owner: "马云", //预订人
-      owner_tel: "+8618500059035", //预订人手机
-      remark: "", //备注
-      rooms: [{
-        room_type: "情侣房",
-        room_count: 4
-      }],
-      payinfo: {
-        total_roomfee: 0,   //总房费
-        pms_pay: 0,   // PMS中的已付金额,
-        staff_pay: null,  // null 0 营业员确认的付款金额,
-        user_pay: 0,   //小程序已付金额
-      },
-      status: {
-        is_staff_confirm: false,  //是否营业已确认
-        need_refund: false,   //是否需要退款(Orders.pms_syn_state==3, 返回true)
-        pmsaccount_result: false,   //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
-        is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
-      },
-      timeline: {   //状态变化时间
-        precheckin_done: '1491014211',  // 预登记完成时间, null未发生
-      }
-    }]
+    data: confirmlist
   }
 );
-
-Mock.mock(
-  prefix + '/order/precheckin/today/checkincancel',
-  {
-    errcode: "0",
-    msg: "ok",
-    data: [
-      {
-        order_id: "130420402402404",  //订单号
-        in_time: '',
-        out_time: '',
-        owner: "马云", //预订人
-        owner_tel: "+8618500059035", //预订人手机
-        remark: "", //备注
-        rooms: [{
-          room_type: "总统套房",
-          room_count: 2
-        }],
-        payinfo: {
-          total_roomfee: 0,   //总房费
-          pms_pay: 0,   // PMS中的已付金额,
-          staff_pay: null,  // null 0 营业员确认的付款金额,
-          user_pay: 0,   //小程序已付金额
-        },
-        status: {
-          is_staff_confirm: false,  //是否营业已确认
-          need_refund: false,   //是否需要退款(Orders.pms_syn_state==3, 返回true)
-          pmsaccount_result: false,   //PMS入账是否成功(Orders.pms_syn_state==2, 返回true)
-          is_cancelled: false,  //是否已取消, (Orders.status==2，返回true，其它返回false)
-        },
-        timeline: {   //状态变化时间
-          precheckin_done: '03/21 08:20',  // 预登记完成时间, null未发生
-        }
-      }]
-  }
-);
-
-/* 当日预登记订单详情 */
-Mock.mock(
-  prefix + '/order/precheckin/today/order_id',
-  {
-    errcode: "0",
-    msg: "ok",
-    data: {
-      warning: '入账失败',  //测试添加
-      order_id: "120420402402405", //订单号
-      in_time: '1440000',
-      out_time: '1491014211',
-      owner: "古龙详情",  //预订人
-      owner_tel: "+8618500059035", //预订人手机
-      remark: "", //备注
-      rooms: [{
-        room_type: "大床房",
-        room_count: 2
-      }],
-      payinfo: {
-        total_roomfee: 400,  //总房费
-        pms_pay: 200,  //PMS中的已付金额,
-        staff_pay: null, //null 0,营业员确认的付款金额,
-        user_pay: 0,  //小程序已付金额
-      },
-      status: {
-        is_staff_confirm: false, // 是否营业已确认
-        need_refund: false, // 是否需要退款
-        pmsaccount_result: false, // PMS入账是否成功
-        is_cancelled: false, // 是否已取消
-      },
-      timeline: { //状态变化时间
-        precheckin_done: '', //timestamp, 预登记完成时间, null未发生
-      },
-      suborders: [{
-        suborder_id: "",
-        room_type_id: "房型代码",
-        room_type_name: "大床房",
-        room_number: "203",
-        guests: [{
-          name: "刘斌",
-          idcard: '400800999333222',
-        }, {
-          name: "流川枫",
-          idcard: '400800999333222',
-        }]
-      }, {
-        suborder_id: "",
-        room_type_id: "房型代码",
-        room_type_name: "总统套房",
-        room_number: "204",
-        guests: [{
-          name: "三通",
-          idcard: '400800999333222',
-        }, {
-          name: "三条",
-          idcard: '400800999333222',
-        }]
-      }],
-      invoice: {
-        type: "公司·增值税专用发票",
-        media: "电子发票",
-        category: "住宿费",
-        title: "上海复创",
-        tax_registry_no: "统一社会信用代码",
-        address: "凤凰大厦9999",
-        phone_number: "",
-        bank_name: "",
-        bank_account: ""
-      },
-      logs: [{
-        date: '03/31 08:20',
-        action: '操作“确认退款”转退款流程',
-        operator: '刘斌'
-      }, {
-        date: '03/31 09:20',
-        action: '房间302变更为301',
-        operator: '刘斌'
-      }, {
-        date: '03/31 10:20',
-        action: '检测到订单需退款¥400',
-        operator: '系统'
-      }]
-    }
-  }
-)
 
 //获取历史预登记订单列表
 Mock.mock(

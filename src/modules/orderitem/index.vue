@@ -46,13 +46,12 @@
       </p>
       <p v-if="inTime">
         <span class="key">入离时间：</span>
-        <span>{{inTime}} - {{outTime}}</span>
+        <span>{{inTime | datetimeparse}} - {{outTime |datetimeparse}}</span>
       </p>
       <p v-if="rooms" v-for="room in rooms">
         <span class="key">房型：</span>
         <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
-        <span v-if="inTime" class="intime">{{inTime | getDate}}</span>
-        <!--<span v-if="date" class="data">{{item.timeline.precheckin_done.month}}/{{item.timeline.precheckin_done.day}} {{item.timeline.precheckin_done.hour}}:{{item.timeline.precheckin_done.minute}}</span>-->
+        <span v-if="inTime" class="intime">{{inTime | datetimeparse('MM/DD hh:mm')}}</span>
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
@@ -120,11 +119,6 @@
     filters: {
       CNY(val){
         return '¥' + (val / 100)
-      },
-      getDate(timestampunix){
-        const timestamp = parseInt(timestampunix);
-        const timeobj = moment(timestamp);
-        return (timeobj.month() + 1) + '/' + timeobj.date() + ' ' + timeobj.hours() + ':' + timeobj.minute();//  11/25 22:33
       },
       filterPhoneNum(val){
         return val ? val.substring(3, 14) : null

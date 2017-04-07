@@ -115,7 +115,6 @@
       }
     },
     mounted() {
-      console.log('mounted')
       this.getorderdetail({
         order_id: this.$route.params.id,
         onsuccess: body => {

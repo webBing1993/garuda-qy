@@ -55,7 +55,7 @@
     </scroller>
     <footer>
       <div class="select" v-if="!popupShowCalendar || !popupShowSort">
-        <span v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>
+        <span v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | datetimeparse}} - {{period[1] | datetimeparse('MM/DD')}}| </span>
         <span v-else @click="popupShowCalendar = !popupShowCalendar">筛选 |</span>
         <span v-if="sortSelected == '预登记时间从早到晚'" @click="popupShowSort = !popupShowSort">时间正序</span>
         <span v-else-if="sortSelected == '预登记时间从晚到早'" @click="popupShowSort = !popupShowSort">时间倒序</span>
@@ -152,18 +152,6 @@
             onsuccess: body => this.cancelledList = body.data
           })
         }
-      }
-    },
-    filters: {
-      getDate(timestampunix){
-        const timestamp = parseInt(timestampunix);
-        const timeobj = new Date(timestamp);
-        return timeobj.toLocaleDateString(timeobj);
-      },
-      getMonth(timestampunix){
-        const timestamp = parseInt(timestampunix);
-        const timeobj = moment(timestamp);
-        return (timeobj.month() + 1) + '/' + timeobj.date();
       }
     },
     mounted(){
