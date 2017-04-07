@@ -13,9 +13,15 @@ const unchained = [{
     path: 'roommanager',
     component: require('./containers/unchained/ROOMMANAGER')
   }, {
-    path: 'orderinput',
-    component: require('./containers/unchained/ORDERINPUT')
-  }]
+    path: 'record',
+    component: require('./containers/unchained/RECORD/list.vue')
+  }, {
+    path: 'record/new',
+    component: require('./containers/unchained/RECORD/detail.vue')
+  },{
+    path: 'record/:id',
+    component: require('./containers/unchained/RECORD/detail.vue')
+  },]
 }]
 
 const precheckin = [{
