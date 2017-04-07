@@ -15,7 +15,6 @@
     <scroller v-show="route.params.tab == 0"
               :pulldown-config="app.scroller.config"
               :depend="[tostayList]"
-              @on-pulldown-loading="donePullDown('tableft')"
               lock-x
               ref="tableft"
               use-pulldown
@@ -37,7 +36,6 @@
     <scroller v-show="route.params.tab == 1"
               :depend="[cancelledList]"
               :pulldown-config="app.scroller.config"
-              @on-pulldown-loading="donePullDown('tabright')"
               lock-x
               ref="tabright"
               use-pulldown
@@ -45,8 +43,7 @@
       <div>
         <section v-for="(item,index) in cancelledList" :key="index">
           <orderitem :orderId="item.order_pmsid"
-                     :inTime="item.in_time"
-                     :outTime="item.out_time"
+                     :staff_confirm_timeline="item.timeline.staff_confirm"
                      :booker="item.owner"
                      :phoneNum="item.owner_tel"
                      :rooms="item.rooms_plan"

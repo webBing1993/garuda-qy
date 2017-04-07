@@ -1,6 +1,6 @@
 module.exports = {
   datetimeparse: (timestamp, format) => {
-    console.log(timestamp, format)
+    // console.log(timestamp, format)
     let newtimestamp = timestamp
       ? timestamp.length == 13
         ? timestamp
