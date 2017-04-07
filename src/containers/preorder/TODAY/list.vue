@@ -23,8 +23,8 @@
       <div>
         <section v-for="(item,index) in tostayList" :key="index">
           <orderitem :orderId="item.order_id"
-                     :inTime="item.in_time"
-                     :outTime="item.out_time"
+                     :staff_confirm_timeline="item.timeline.staff_confirm"
+                     :status="item.status"
                      :booker="item.owner"
                      :phoneNum="item.owner_tel"
                      :rooms="item.rooms_plan"
@@ -44,7 +44,7 @@
               height="-44">
       <div>
         <section v-for="(item,index) in cancelledList" :key="index">
-          <orderitem :orderId="item.order_id"
+          <orderitem :orderId="item.order_pmsid"
                      :inTime="item.in_time"
                      :outTime="item.out_time"
                      :booker="item.owner"

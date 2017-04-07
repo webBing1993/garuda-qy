@@ -41,7 +41,7 @@ const precheckin = [{
   path: '/preorder',
   component: {
     name: "preorder",
-    template: `<keep-alive><router-view/></keep-alive>`,
+    template: `<router-view/>`,
   },
   children: [{
     path: 'today/:tab',

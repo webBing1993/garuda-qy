@@ -27,8 +27,8 @@ const confirmlist = [
       is_recording_success: false,// pms入账是否成功
     },
     timeline: { //状态变化时间
-      staff_confirm: null, //营业员确认订单的时间
-      precheckin_done: null, //预登记全部完成时间
+      staff_confirm: '1491384458000', //营业员确认订单的时间
+      precheckin_done: '1491384458000', //预登记全部完成时间
     },
     invoice: {
       type: "PERSONAL",
@@ -130,9 +130,83 @@ const confirmlist = [
       is_recording_success: false,// pms入账是否成功
     },
     timeline: { //状态变化时间
-      staff_confirm: null, //营业员确认订单的时间
-      precheckin_done: null, //预登记全部完成时间
-    }
+      staff_confirm: '1491384458000', //营业员确认订单的时间
+      precheckin_done: '1491384458000', //预登记全部完成时间
+    },
+    invoice: {
+      type: "PERSONAL",
+      media: "PAPER",
+      category: "住宿费",
+      title: "上海复创",
+      tax_registry_no: "统一社会信用代码",
+      address: "地址",
+      phone_number: null,
+      bank_name: null,
+      bank_account: null
+    },
+    logs:[{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: '张三'
+    },{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: 'ted'
+    }],
+    room_fees: [{
+      room_type_name: '大床房', //房型名称
+      amount: 2, //房间数
+      date_price: [{
+        date: 1488432346, //日期
+        price: 30000, //房费
+      }]
+    }],
+    suborders: [{
+      suborder_id: "2304204024024011",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "李四",
+        idcard: "343245623456728199"
+      }, {
+        name: "李四",
+        idcard: "343245623456728199"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }, {
+      suborder_id: "2304204024024012",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "204",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "张三",
+        idcard: "360123333333333456"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }]
   }, {
     order_id: "230420402402403",//订单号
     order_pmsid: "230420402402403",//订单号
@@ -155,12 +229,86 @@ const confirmlist = [
     status: {
       is_cancelled: false,// 是否已取消
       is_refund_required: false, //是否需要退款
-      is_recording_success: false,// pms入账是否成功
+      is_recording_success: true,// pms入账是否成功
     },
     timeline: { //状态变化时间
-      staff_confirm: null, //营业员确认订单的时间
-      precheckin_done: null, //预登记全部完成时间
-    }
+      staff_confirm: '1491384458000', //营业员确认订单的时间
+      precheckin_done: '1491384458000', //预登记全部完成时间
+    },
+    invoice: {
+      type: "PERSONAL",
+      media: "PAPER",
+      category: "住宿费",
+      title: "上海复创",
+      tax_registry_no: "统一社会信用代码",
+      address: "地址",
+      phone_number: null,
+      bank_name: null,
+      bank_account: null
+    },
+    logs:[{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: '张三'
+    },{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: 'ted'
+    }],
+    room_fees: [{
+      room_type_name: '大床房', //房型名称
+      amount: 2, //房间数
+      date_price: [{
+        date: 1488432346, //日期
+        price: 30000, //房费
+      }]
+    }],
+    suborders: [{
+      suborder_id: "2304204024024011",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "李四",
+        idcard: "343245623456728199"
+      }, {
+        name: "李四",
+        idcard: "343245623456728199"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }, {
+      suborder_id: "2304204024024012",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "204",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "张三",
+        idcard: "360123333333333456"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }]
   }, {
     order_id: "230420402402404",//订单号
     order_pmsid: "230420402402404",//订单号
@@ -183,12 +331,86 @@ const confirmlist = [
     status: {
       is_cancelled: false,// 是否已取消
       is_refund_required: false, //是否需要退款
-      is_recording_success: false,// pms入账是否成功
+      is_recording_success: true,// pms入账是否成功
     },
     timeline: { //状态变化时间
-      staff_confirm: null, //营业员确认订单的时间
-      precheckin_done: null, //预登记全部完成时间
-    }
+      staff_confirm: '1491384458000', //营业员确认订单的时间
+      precheckin_done: '1491384458000', //预登记全部完成时间
+    },
+    invoice: {
+      type: "PERSONAL",
+      media: "PAPER",
+      category: "住宿费",
+      title: "上海复创",
+      tax_registry_no: "统一社会信用代码",
+      address: "地址",
+      phone_number: null,
+      bank_name: null,
+      bank_account: null
+    },
+    logs:[{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: '张三'
+    },{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: 'ted'
+    }],
+    room_fees: [{
+      room_type_name: '大床房', //房型名称
+      amount: 2, //房间数
+      date_price: [{
+        date: 1488432346, //日期
+        price: 30000, //房费
+      }]
+    }],
+    suborders: [{
+      suborder_id: "2304204024024011",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "李四",
+        idcard: "343245623456728199"
+      }, {
+        name: "李四",
+        idcard: "343245623456728199"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }, {
+      suborder_id: "2304204024024012",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "204",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "张三",
+        idcard: "360123333333333456"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }]
   }, {
     order_id: "230420402402405",//订单号
     order_pmsid: "230420402402405",//订单号
@@ -211,12 +433,86 @@ const confirmlist = [
     status: {
       is_cancelled: false,// 是否已取消
       is_refund_required: false, //是否需要退款
-      is_recording_success: false,// pms入账是否成功
+      is_recording_success: true,// pms入账是否成功
     },
     timeline: { //状态变化时间
-      staff_confirm: null, //营业员确认订单的时间
-      precheckin_done: null, //预登记全部完成时间
-    }
+      staff_confirm: '1491384458000', //营业员确认订单的时间
+      precheckin_done: '1491384458000', //预登记全部完成时间
+    },
+    invoice: {
+      type: "PERSONAL",
+      media: "PAPER",
+      category: "住宿费",
+      title: "上海复创",
+      tax_registry_no: "统一社会信用代码",
+      address: "地址",
+      phone_number: null,
+      bank_name: null,
+      bank_account: null
+    },
+    logs:[{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: '张三'
+    },{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: 'ted'
+    }],
+    room_fees: [{
+      room_type_name: '大床房', //房型名称
+      amount: 2, //房间数
+      date_price: [{
+        date: 1488432346, //日期
+        price: 30000, //房费
+      }]
+    }],
+    suborders: [{
+      suborder_id: "2304204024024011",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "李四",
+        idcard: "343245623456728199"
+      }, {
+        name: "李四",
+        idcard: "343245623456728199"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }, {
+      suborder_id: "2304204024024012",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "204",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "张三",
+        idcard: "360123333333333456"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }]
   }, {
     order_id: "230420402402406",//订单号
     order_pmsid: "230420402402406",//订单号
@@ -239,12 +535,86 @@ const confirmlist = [
     status: {
       is_cancelled: false,// 是否已取消
       is_refund_required: false, //是否需要退款
-      is_recording_success: false,// pms入账是否成功
+      is_recording_success: true,// pms入账是否成功
     },
     timeline: { //状态变化时间
-      staff_confirm: null, //营业员确认订单的时间
-      precheckin_done: null, //预登记全部完成时间
-    }
+      staff_confirm: '1491384458000', //营业员确认订单的时间
+      precheckin_done: '1491384458000', //预登记全部完成时间
+    },
+    invoice: {
+      type: "PERSONAL",
+      media: "PAPER",
+      category: "住宿费",
+      title: "上海复创",
+      tax_registry_no: "统一社会信用代码",
+      address: "地址",
+      phone_number: null,
+      bank_name: null,
+      bank_account: null
+    },
+    logs:[{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: '张三'
+    },{
+      date: '1491384458000',
+      action: '操作“确认退款”转退款流程',
+      operator: 'ted'
+    }],
+    room_fees: [{
+      room_type_name: '大床房', //房型名称
+      amount: 2, //房间数
+      date_price: [{
+        date: 1488432346, //日期
+        price: 30000, //房费
+      }]
+    }],
+    suborders: [{
+      suborder_id: "2304204024024011",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "李四",
+        idcard: "343245623456728199"
+      }, {
+        name: "李四",
+        idcard: "343245623456728199"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }, {
+      suborder_id: "2304204024024012",
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      room_number: "204",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "房型代码",
+      room_type_name: "大床房",
+      room_price: [{
+        date: '1491384458000',
+        price: '2222',
+      }],
+      guests: [{
+        name: "张三",
+        idcard: "360123333333333456"
+      }],
+      checkin_time: null, //办理入住时间
+      checkout_time: null, //离店时间
+    }]
   }]
 const orderlist = [
   {
@@ -452,13 +822,13 @@ Mock.mock(
 )
 //获取确认订单详情
 Mock.mock(
-  /\/order\/precheckin\/confirm\/\d+$/,
+  /\/order\/detail\/\d+$/,
   function (opts) {
-    // console.log(opts);
+    console.log(opts);
     let id = opts.url.split('/').pop();
-    // console.log(id);
+    console.log(id);
     let orderdetail = confirmlist.filter(item => item.order_id == id)[0];
-    // console.log(orderdetail)
+    console.log(orderdetail)
     return orderdetail ? {
         errcode: 0,
         data: orderdetail

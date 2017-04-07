@@ -10,7 +10,7 @@
 
       <p class="hdr">
         <span v-if="need_hint" class="warning">{{need_hint}}</span>
-        <span>{{status}}</span>
+        <!--<span>{{status}}</span>-->
         <!--<span>{{date}}</span>-->
       </p>
 
@@ -22,7 +22,7 @@
       </p>
 
       <p class="hdr" v-if="status">
-        <span v-if="status.need_refund" class="warning">需退款</span>
+        <span v-if="!status.is_recording_success" class="warning">入账失败</span>
       </p>
     </div>
 
@@ -51,7 +51,7 @@
       <p v-if="rooms" v-for="room in rooms">
         <span class="key">房型：</span>
         <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
-        <span v-if="inTime" class="intime">{{inTime | datetimeparse('MM/DD hh:mm')}}</span>
+        <span v-if="staff_confirm_timeline" class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
@@ -112,6 +112,7 @@
       payinfo: null,
       remark: null,
       need_hint: null,
+      staff_confirm_timeline: null,
       arrow: {
         type: Boolean
       }

@@ -30,7 +30,7 @@ module.exports = {
   //获取确认订单详情
   getorderdetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/precheckin/confirm/'+param.order_id,
+      url: '/order/detail/'+param.order_id,
       param: {
         roomfee: param.roomfee,
         suborder: param.suborder,

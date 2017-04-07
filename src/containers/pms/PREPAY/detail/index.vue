@@ -118,7 +118,6 @@
       this.getorderdetail({
         order_id: this.$route.params.id,
         onsuccess: body => {
-          console.log(body)
           this.orderdetail = body.data
         }
       })
