@@ -20,6 +20,9 @@ import router from './router-config';
 import {sync} from 'vuex-router-sync';
 sync(store, router);
 
+import filters  from './filters'
+Object.entries(filters).forEach(item => Vue.filter(item[0], item[1]))
+
 // Forms
 import XInput from './components/Forms/x-input.vue'
 Vue.component('XInput', XInput)
