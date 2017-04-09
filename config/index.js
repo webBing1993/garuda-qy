@@ -29,10 +29,10 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/gemini': {
-        target: 'https://intg.fortrun.cn/gemini',
+        target: 'http://intg.fortrun.cn:8090/',
         changeOrigin: true,
         pathRewrite: {
-          '^.+proxy/?(.*)$': '/$1'
+          '^/gemini': ''
         }
       },
     },
