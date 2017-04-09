@@ -41,11 +41,11 @@ const confirmlist = [
       bank_name: null,
       bank_account: null
     },
-    logs:[{
+    logs: [{
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: '张三'
-    },{
+    }, {
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: 'ted'
@@ -101,8 +101,8 @@ const confirmlist = [
         name: "张三",
         idcard: "360123333333333456"
       }],
-      checkin_time: null, //办理入住时间
-      checkout_time: null, //离店时间
+      checkin_time: '1491384458000', //办理入住时间
+      checkout_time: '1491384458000', //离店时间
     }]
 
   }, {
@@ -144,11 +144,11 @@ const confirmlist = [
       bank_name: null,
       bank_account: null
     },
-    logs:[{
+    logs: [{
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: '张三'
-    },{
+    }, {
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: 'ted'
@@ -204,8 +204,8 @@ const confirmlist = [
         name: "张三",
         idcard: "360123333333333456"
       }],
-      checkin_time: null, //办理入住时间
-      checkout_time: null, //离店时间
+      checkin_time: '1491384458000', //办理入住时间
+      checkout_time: '1491384458000', //离店时间
     }]
   }, {
     order_id: "230420402402403",//订单号
@@ -246,11 +246,11 @@ const confirmlist = [
       bank_name: null,
       bank_account: null
     },
-    logs:[{
+    logs: [{
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: '张三'
-    },{
+    }, {
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: 'ted'
@@ -348,11 +348,11 @@ const confirmlist = [
       bank_name: null,
       bank_account: null
     },
-    logs:[{
+    logs: [{
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: '张三'
-    },{
+    }, {
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: 'ted'
@@ -450,11 +450,11 @@ const confirmlist = [
       bank_name: null,
       bank_account: null
     },
-    logs:[{
+    logs: [{
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: '张三'
-    },{
+    }, {
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: 'ted'
@@ -552,11 +552,11 @@ const confirmlist = [
       bank_name: null,
       bank_account: null
     },
-    logs:[{
+    logs: [{
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: '张三'
-    },{
+    }, {
       date: '1491384458000',
       action: '操作“确认退款”转退款流程',
       operator: 'ted'
@@ -1139,6 +1139,51 @@ Mock.mock(
       }],
       created_time: "1491384458000", //验证时间
       status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
+    }]
+  }
+);
+//当日入住单列表
+Mock.mock(
+  prefix + '/suborder/today',
+  {
+    errcode: "0",
+    errmsg: "ok",
+    data: [{
+      suborder_id: '230420402402401', //子单号
+      order_id: "230420402402401", //订单号业务查询用
+      order_pmsid: '230420402402401', //pms订单号客户端渲染用
+      intg: '204', //联房标签
+      checkin_time: '1491384458000', //办理登记时间
+      in_time: '1491384458000', //订单入住时间
+      out_time: '1491384458000', //订单离店时间
+      room_type_id: "3", //房型代码
+      room_type_name: "大床房", //房型名称
+      room_number: "201", //房间号
+      guests: [{
+        name: "张三", //入住人姓名
+        idcard: '3344402198912290011', //入住人身份证
+      }, {
+        name: "李四",
+        idcard: '3344402198912290011',
+      }]
+    }, {
+      suborder_id: '230420402402402', //子单号
+      order_id: "230420402402402", //订单号业务查询用
+      order_pmsid: '230420402402402', //pms订单号客户端渲染用
+      intg: '204', //联房标签
+      checkin_time: '1491384458000', //办理登记时间
+      in_time: '1491384458000', //订单入住时间
+      out_time: '1491384458000', //订单离店时间
+      room_type_id: "3", //房型代码
+      room_type_name: "大床房", //房型名称
+      room_number: "201", //房间号
+      guests: [{
+        name: "张三", //入住人姓名
+        idcard: '3344402198912290011', //入住人身份证
+      }, {
+        name: "李四",
+        idcard: '3344402198912290011',
+      }]
     }]
   }
 )
