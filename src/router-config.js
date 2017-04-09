@@ -70,7 +70,13 @@ const checkin = [{
   }, {
     path: 'identity/history',
     component: require('./containers/checkin/IDENTITY/list')
-  },]
+  },{
+    path: 'livein',
+    component: require('./containers/checkin/LIVEIN/list')
+  }, {
+    path: 'livein/detail/:id',
+    component: require('./containers/checkin/LIVEIN/detail')
+  }]
 }]
 
 const invoice = [{

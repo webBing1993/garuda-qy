@@ -67,7 +67,7 @@
 
     <footer v-show="route.params.tab == 0">
       <x-button v-if="batch" value="未支付" @onClick="setMulticonfirm" warn/>
-      <x-button v-else @onClick="goPick" value="未支付批量处理"/>
+      <x-button class="blue-btn" v-else @onClick="goPick" value="未支付批量处理"/>
     </footer>
   </article>
 </template>

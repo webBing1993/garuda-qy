@@ -1,18 +1,22 @@
 <template>
   <div class="orderitem" @click="$emit('onClick')">
 
-    <div class="hd" v-if="orderId || status || date || need_hint">
+    <div class="hd" v-if="orderId || status || date || roomNumber || roomTypeName || intg">
 
-      <p class="hdl">
+      <p class="hdl" v-if="orderId">
         <span class="key">订单号：</span>
         <span>{{orderId}}</span>
       </p>
 
-      <p class="hdr">
-        <span v-if="need_hint" class="warning">{{need_hint}}</span>
-        <!--<span>{{status}}</span>-->
-        <!--<span>{{date}}</span>-->
+      <p class="hdl" v-if="roomNumber || roomTypeName || intg">
+        <span>{{roomNumber}} {{roomTypeName}} (联{{intg}})</span>
       </p>
+
+      <!--<p class="hdr">-->
+        <!--<span v-if="need_hint" class="warning">{{need_hint}}</span>-->
+        <!--&lt;!&ndash;<span>{{status}}</span>&ndash;&gt;-->
+        <!--&lt;!&ndash;<span>{{date}}</span>&ndash;&gt;-->
+      <!--</p>-->
 
       <p class="hdr" v-if=" fee || prepay ">
         <span v-if="prepay === null"></span>
@@ -23,6 +27,10 @@
 
       <p class="hdr" v-if="status">
         <span v-if="!status.is_recording_success" class="warning">入账失败</span>
+      </p>
+
+      <p class="hdr" v-if="checkinTime">
+        <span>{{checkinTime | datetimeparse('hh:mm')}}</span>
       </p>
     </div>
 
@@ -39,6 +47,14 @@
         <span class="key">预订人：</span>
         <span>{{booker}}</span>
         <span>{{phoneNum | filterPhoneNum}}</span>
+      </p>
+      <p v-if="guests">
+        <span class="key">预订人：</span>
+        <span v-for="item in guests" class="guests">
+          <span>{{item.name}}</span>
+          <span>{{item.idcard}}</span>
+        </span>
+
       </p>
       <p v-if="underPhoneNum">
         <span class="key">手机号：</span>
@@ -113,6 +129,11 @@
       remark: null,
       need_hint: null,
       staff_confirm_timeline: null,
+      roomNumber: null,
+      roomTypeName: null,
+      intg: null,
+      checkinTime: null,
+      guests: null,
       arrow: {
         type: Boolean
       }
