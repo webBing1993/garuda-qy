@@ -3,7 +3,7 @@
 module.exports = {
   //获取确认订单列表 0-待确认 1-已确认
   getconfirmelist(ctx, param){
-    if(param.status == 0) {
+    if (param.status == 0) {
       ctx.dispatch('resource', {
         url: '/order/precheckin/confirm',
         param: {
@@ -14,7 +14,7 @@ module.exports = {
         },
         onFail: () => null
       })
-    }else {
+    } else {
       ctx.dispatch('resource', {
         url: '/order/confirmed',
         param: {
@@ -30,12 +30,12 @@ module.exports = {
   //获取确认订单详情
   getorderdetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/detail/'+param.order_id,
+      url: '/order/detail/' + param.order_id,
       param: {
         roomfee: param.roomfee,
         suborder: param.suborder,
         invoice: param.invoice,
-        log:param.log
+        log: param.log
       },
       onSuccess: (body) => {
         param.onsuccess(body)
@@ -47,10 +47,10 @@ module.exports = {
   getTodayList(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
-      method:'POST',
+      method: 'POST',
       param: {
-        is_cancelled : param.is_cancelled, //是否取消
-        is_sequence:param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
+        is_cancelled: param.is_cancelled, //是否取消
+        is_sequence: param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
       },
       onSuccess: (body) => {
         param.onsuccess(body)
@@ -99,21 +99,20 @@ module.exports = {
   gethistorylist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/history',
-      method:'POST',
+      method: 'POST',
       param: {
-        is_cancelled : param.is_cancelled, //是否取消
-        is_sequence:param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
+        is_cancelled: param.is_cancelled, //是否取消
+        is_sequence: param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
         start: param.start, //筛选开始 无则null
         end: param.end, //筛选结束 无则null
       },
       onSuccess: (body) => {
         param.onsuccess(body)
-      },
-      onFail: () => null
+      }
     })
   },
   //批量确认预订单
-  multiconfirm(ctx,param){
+  multiconfirm(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/multiconfirm',
       param: {
@@ -126,7 +125,7 @@ module.exports = {
     })
   },
   //单个确认预订单
-  singleconfirm(ctx,param){
+  singleconfirm(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/singleconfirm',
       param: {
@@ -140,7 +139,7 @@ module.exports = {
     })
   },
   // 营业员确认PMS同步结果
-  conformPmsSync(ctx,param){
+  conformPmsSync(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/conform_pms_sync',
       param: {

@@ -1,5 +1,5 @@
 module.exports = {
-  datetimeparse: (timestamp, format) => {
+  datetimeparse: (timestamp, format, prefix) => {
     // console.log(timestamp, format)
     let newtimestamp = timestamp
       ? timestamp.length == 13
@@ -28,6 +28,6 @@ module.exports = {
     } else {
       output += YYYY + separator + MM + separator + DD
     }
-    return output
+    return prefix ? prefix + output : output
   }
 }

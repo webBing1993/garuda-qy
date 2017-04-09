@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <router-view ></router-view>
+  <div>
+    <router-view></router-view>
     <Toast v-model="app.toast.show" :title="app.toast.title"/>
   </div>
 </template>
@@ -17,11 +17,13 @@
     },
     methods: {
       ...mapActions([
-        'token'
+        'urlquery',
+        'login'
       ])
     },
     mounted(){
-//      this.token()
+      this.urlquery()
+      this.login()
     }
   }
 </script>

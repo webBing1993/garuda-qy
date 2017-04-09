@@ -8,11 +8,18 @@ module.exports = {
   goto: (ctx, param) => {
     typeof param == 'number' ? router.go(param) : router.push(param)
   },
+  urlquery(ctx) {
+    let o = {}
+    window.location.search.split('&').forEach(i => o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1])
+    ctx.commit('URLQUERY', o)
+  },
   resource: (ctx, param) => {
     Vue.http({
       url: '/gemini' + param.url,
       body: param.body || null,
-      headers: param.headers || null,
+      headers: param.headers || {
+        SessionId: sessionStorage.token
+      },
       params: param.params || null,
       method: param.method || "GET",
       timeout: param.timeout || 5000,
@@ -39,14 +46,4 @@ module.exports = {
       }
     )
   },
-  token(ctx, param){
-    ctx.dispatch('resource', {
-      url: "/login",
-      onSuccess: (body) => ctx.commit('TOKEN', body.data.session),
-      onFail: () => null
-    })
-  },
-  showtoast(ctx, param){
-    ctx.commit('TOAST', {show: true})
-  }
 }

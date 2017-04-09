@@ -1,4 +1,5 @@
 module.exports = {
+  url:{},
   app: {
     token: "",
     scroller: {
@@ -17,15 +18,15 @@ module.exports = {
       title: '操作成功'
     }
   },
-  orderlist: {
-    tobeconfirmed: [],
-    confirmed: [],
-    confirmeddetail: {}
-  },
-  todayorderlist: {
-    checkintoday: [],
-    checkincancel: [],
-  },
-  todaydetail: {},
-  historyList: {}
+  // orderlist: {
+  //   tobeconfirmed: [],
+  //   confirmed: [],
+  //   confirmeddetail: {}
+  // },
+  // todayorderlist: {
+  //   checkintoday: [],
+  //   checkincancel: [],
+  // },
+  // todaydetail: {},
+  // historyList: {}
 }
