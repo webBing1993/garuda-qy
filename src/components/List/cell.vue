@@ -1,5 +1,5 @@
 <template>
-  <div class="weui-cell " :class="{'weui-cell_access':link}">
+  <div class="weui-cell " :class="{'weui-cell_access':link}" @click="$emit('onClick')">
     <div class="weui-cell__hd" :class="{'weui-cell__hd_lg':desc}">
       <img v-if="icon"
            :src="icon"
