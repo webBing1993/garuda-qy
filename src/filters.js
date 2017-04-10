@@ -29,5 +29,11 @@ module.exports = {
       output += YYYY + separator + MM + separator + DD
     }
     return prefix ? prefix + output : output
+  },
+  CNY(val){
+    return '¥' + (val / 100)
+  },
+  filterPhoneNum(val){
+    return val ? val.substring(3, 14) : null
   }
 }

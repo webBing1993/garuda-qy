@@ -12,7 +12,7 @@
       </div>
       <div class="room-type">
         <span class="left grey">手机号</span>
-        <span class="right">{{detail.owner_tel}}</span>
+        <span class="right">{{detail.owner_tel |  filterPhoneNum}}</span>
       </div>
       <div class="room-type">
         <span class="left grey">入离时间</span>

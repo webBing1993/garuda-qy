@@ -49,16 +49,15 @@
         <span>{{phoneNum | filterPhoneNum}}</span>
       </p>
       <p v-if="guests">
-        <span class="key">预订人：</span>
+        <span class="key guest-left">预订人：</span>
         <span v-for="item in guests" class="guests">
-          <span>{{item.name}}</span>
+          <span style="padding-right: 5px">{{item.name}}</span>
           <span>{{item.idcard}}</span>
         </span>
-
       </p>
       <p v-if="underPhoneNum">
         <span class="key">手机号：</span>
-        <span>{{underPhoneNum}}</span>
+        <span>{{underPhoneNum | filterPhoneNum}}</span>
       </p>
       <p v-if="inTime">
         <span class="key">入离时间：</span>
@@ -108,7 +107,6 @@
 </template>
 
 <script>
-  import moment from 'moment'
   export default{
     name: 'orderitem',
     props: {
@@ -136,14 +134,6 @@
       guests: null,
       arrow: {
         type: Boolean
-      }
-    },
-    filters: {
-      CNY(val){
-        return '¥' + (val / 100)
-      },
-      filterPhoneNum(val){
-        return val ? val.substring(3, 14) : null
       }
     }
   }
