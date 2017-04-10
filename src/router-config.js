@@ -3,26 +3,32 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 
-const unchained = [{
-  path: '/unchained',
-  component: {
-    name: "unchained",
-    template: `<router-view/>`,
-  },
-  children: [{
-    path: 'roommanager',
-    component: require('./containers/unchained/ROOMMANAGER')
-  }, {
-    path: 'record',
-    component: require('./containers/unchained/RECORD/list.vue')
-  }, {
-    path: 'record/new',
-    component: require('./containers/unchained/RECORD/detail.vue')
-  },{
-    path: 'record/:id',
-    component: require('./containers/unchained/RECORD/detail.vue')
-  },]
-}]
+const unchained = [
+  // {
+  //   path: '/unchained',
+  //   component: require('./containers/unchained/ROOMMANAGER')
+  // },
+  //
+  {
+    path: '/unchained',
+    component: {
+      name: "unchained",
+      template: `<router-view/>`,
+    },
+    children: [{
+      path: 'roommanager',
+      component: require('./containers/unchained/ROOMMANAGER')
+    }, {
+      path: 'record',
+      component: require('./containers/unchained/RECORD/list.vue')
+    }, {
+      path: 'record/new',
+      component: require('./containers/unchained/RECORD/detail.vue')
+    }, {
+      path: 'record/:id',
+      component: require('./containers/unchained/RECORD/detail.vue')
+    },]
+  }]
 
 const precheckin = [{
   path: '/pms',
@@ -70,7 +76,13 @@ const checkin = [{
   }, {
     path: 'identity/history',
     component: require('./containers/checkin/IDENTITY/list')
-  },{
+  }, {
+    path: 'identity/detail/:id',
+    component: require('./containers/checkin/IDENTITY/detail')
+  }, {
+    path: 'identity/todo/:id',
+    component: require('./containers/checkin/IDENTITY/todo')
+  }, {
     path: 'livein',
     component: require('./containers/checkin/LIVEIN/list')
   }, {

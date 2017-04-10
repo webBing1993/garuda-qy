@@ -7,7 +7,6 @@
                :selected="selectedTab === item"
                @onSelected="selectedTab = item"/>
     </Tab>
-
     <scroller lock-x :scrollbar-x=false height="-45">
       <section>
         <group v-for="(item,index) in agreedIdentities" :key="index">
@@ -19,7 +18,6 @@
         </group>
       </section>
     </scroller>
-
   </article>
 </template>
 
