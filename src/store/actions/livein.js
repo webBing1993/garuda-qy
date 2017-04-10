@@ -9,5 +9,13 @@ module.exports = {
         param.onsuccess(body)
       },
     })
+  },
+  getAllSuborder(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/suborder/list',
+      onSuccess: body => {
+        param.onsuccess(body)
+      },
+    })
   }
 }

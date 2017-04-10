@@ -5,26 +5,13 @@
       <div class="title-footer" @click="confirmPmsResult"><input type="button" value="已手工入账"></div>
     </div>
 
-    <!-- 预订信息 -->
-    <div class="cell-title">预订信息</div>
-    <div class="predetail-cell">
-      <div class="cell-body">订单号</div>
-      <div class="cell-footer">{{orderdetail.order_pmsid}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">预订人</div>
-      <div class="cell-footer">{{orderdetail.owner}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">手机号</div>
-      <div class="cell-footer">{{orderdetail.owner_tel}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">入离时间</div>
-      <div class="cell-footer">
-        {{orderdetail.in_time | datetimeparse}} - {{orderdetail.out_time | datetimeparse}}
-      </div>
-    </div>
+    <!--预订信息-->
+    <Group title="预订信息">
+      <Cell title="订单号" :value="orderdetail.order_pmsid"></Cell>
+      <Cell title="预订人" :value="orderdetail.owner"></Cell>
+      <Cell title="手机号" :value="orderdetail.owner_tel"></Cell>
+      <Cell title="入离时间" :value="orderdetail.in_time | datetimeparse"></Cell>
+    </Group>
 
     <!-- PMS支付信息 -->
     <Group title="PMS支付信息" v-if="orderdetail.payinfo">
@@ -107,6 +94,9 @@
       ]),
       is_recording_success() {
         return this.orderdetail.status ? this.orderdetail.status.is_recording_success : false
+      },
+      period() {
+          return
       }
     },
     methods: {

@@ -60,42 +60,16 @@ Mock
     {
       errcode: "0",
       errmsg: "ok",
-      data: [{
-        suborder_id: '230420402402401', //子单号
-        order_id: "230420402402401", //订单号业务查询用
-        order_pmsid: '230420402402401', //pms订单号客户端渲染用
-        intg: '204', //联房标签
-        checkin_time: '1491384458000', //办理登记时间
-        in_time: '1491384458000', //订单入住时间
-        out_time: '1491384458000', //订单离店时间
-        room_type_id: "3", //房型代码
-        room_type_name: "大床房", //房型名称
-        room_number: "201", //房间号
-        guests: [{
-          name: "张三", //入住人姓名
-          idcard: '3344402198912290011', //入住人身份证
-        }, {
-          name: "李四",
-          idcard: '3344402198912290011',
-        }]
-      }, {
-        suborder_id: '230420402402402', //子单号
-        order_id: "230420402402402", //订单号业务查询用
-        order_pmsid: '230420402402402', //pms订单号客户端渲染用
-        intg: '204', //联房标签
-        checkin_time: '1491384458000', //办理登记时间
-        in_time: '1491384458000', //订单入住时间
-        out_time: '1491384458000', //订单离店时间
-        room_type_id: "3", //房型代码
-        room_type_name: "大床房", //房型名称
-        room_number: "201", //房间号
-        guests: [{
-          name: "张三", //入住人姓名
-          idcard: '3344402198912290011', //入住人身份证
-        }, {
-          name: "李四",
-          idcard: '3344402198912290011',
-        }]
-      }]
+      data: data.suborders
     }
   )
+  .mock(
+    // 全部入住单列表 /suborder/list
+    data.prefix + '/suborder/list',
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: data.suborders
+    }
+  )
+

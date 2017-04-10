@@ -788,5 +788,62 @@ module.exports={
         precheckin_done: null, //预登记全部完成时间
       }
     }
-  ]
+  ],
+  //子单模板
+  suborders: [
+    {
+    suborder_id: '230420402402401', //子单号
+    order_id: "230420402402401", //订单号业务查询用
+    order_pmsid: '230420402402401', //pms订单号客户端渲染用
+    union_tag: '204', //联房标签
+    status: {
+      is_cancelled: false,// 是否已取消
+      is_checkin: false,// 是否入住
+      is_checkout: false,// 是否离店
+    },
+    room_number: "201",
+    room_tags: ["靠南", "带窗"],
+    room_type_id: "3", //房型代码
+    room_type_name: "大床房", //房型名称
+    room_price: [{
+      date: '1491384458000',
+      price: '34500'
+    }],
+    guests: [{
+      name: "张三", //入住人姓名
+      idcard: '3344402198912290011', //入住人身份证
+    }, {
+      name: "李四",
+      idcard: '3344402198912290011',
+    }],
+    in_time: '1491384458000', //入住时间
+    out_time: '1491384458000' //离店时间
+  }, {
+    suborder_id: '230420402402402', //子单号
+    order_id: "230420402402402", //订单号业务查询用
+    order_pmsid: '230420402402402', //pms订单号客户端渲染用
+    union_tag: '204', //联房标签
+    status: {
+      is_cancelled: false,// 是否已取消
+      is_checkin: false,// 是否入住
+      is_checkout: false,// 是否离店
+    },
+    room_number: "201",
+    room_tags: ["靠南", "带窗"],
+    room_type_id: "3", //房型代码
+    room_type_name: "大床房", //房型名称
+    room_price: [{
+      date: '1491384458000',
+      price: '34500'
+    }],
+    guests: [{
+      name: "张三", //入住人姓名
+      idcard: '3344402198912290011', //入住人身份证
+    }, {
+      name: "李四",
+      idcard: '3344402198912290011',
+    }],
+    in_time: '1491384458000', //入住时间
+    out_time: '1491384458000' //离店时间
+  }]
 }
