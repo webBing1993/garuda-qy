@@ -1,10 +1,5 @@
 <template>
   <article>
-    <group>
-      <cell title="123" :value="0"></cell>
-    </group>
-
-
     <scroller lock-x use-pulldown>
       <section>
         <orderitem v-for="(item,index) in todayList"

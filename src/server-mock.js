@@ -108,7 +108,7 @@ const confirmlist = [
   }, {
     order_id: "230420402402402",//订单号
     order_pmsid: "230420402402402",//订单号
-    in_time: '1491384458000',
+    in_time: '1491384458888',
     out_time: '1491384458000',
     owner: "张三",//预订人
     owner_tel: "+8618500059035",//预订人手机
@@ -183,8 +183,8 @@ const confirmlist = [
         name: "李四",
         idcard: "343245623456728199"
       }],
-      checkin_time: null, //办理入住时间
-      checkout_time: null, //离店时间
+      checkin_time: '1491384458000', //办理入住时间
+      checkout_time: '1491384458000', //离店时间
     }, {
       suborder_id: "2304204024024012",
       status: {
@@ -204,8 +204,8 @@ const confirmlist = [
         name: "张三",
         idcard: "360123333333333456"
       }],
-      checkin_time: '1491384458000', //办理入住时间
-      checkout_time: '1491384458000', //离店时间
+      checkin_time: '1491384458555', //办理入住时间
+      checkout_time: '1491384458888', //离店时间
     }]
   }, {
     order_id: "230420402402403",//订单号

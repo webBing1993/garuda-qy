@@ -63,13 +63,22 @@
       color: #8A8A8A;
       float: right;
     }
-    .guests {
+    .guests-box {
       display: flex;
-      padding-left: 100px;
-      &:first-child {
-        padding-left: 0;
+      align-items: flex-start;
+      .guest-left {
+        margin-right: 10px;
       }
+      section {
+        display: flex;
+        flex-direction: column;
+        .guests {
+          margin-bottom: 5px;
+        }
+      }
+
     }
+
   }
 
   .ft {

@@ -12,7 +12,7 @@
       </div>
       <div class="room-type">
         <span class="left grey">手机号</span>
-        <span class="right">{{detail.owner_tel}}</span>
+        <span class="right">{{detail.owner_tel |  filterPhoneNum}}</span>
       </div>
       <div class="room-type">
         <span class="left grey">入离时间</span>
@@ -25,8 +25,12 @@
         <span class="left">{{item.room_type_name}} {{item.room_number}}</span>
         <span class="right">{{item.checkin_time | datetimeparse}} - {{item.checkout_time | datetimeparse}}</span>
       </div>
-      <p class="sub-booker" v-for="i in item.guests">{{i.name}} {{i.idcard}} </p>
-      <span class="time">{{item.checkin_time | datetimeparse('MM/DD hh:mm')}}</span>
+      <div class="suborders">
+        <div class="sub">
+          <p class="sub-booker" v-for="i in item.guests">{{i.name}} {{i.idcard}} </p>
+        </div>
+        <p class="time">{{item.checkin_time | datetimeparse('MM/DD hh:mm')}}</p>
+      </div>
     </section>
   </div>
 </template>
