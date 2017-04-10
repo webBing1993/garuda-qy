@@ -1,7 +1,7 @@
 <template>
   <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
     <orderitem title="预定信息"
-               :underOrderId="orderdetail.order_id"
+               :underOrderId="orderdetail.order_pmsid"
                :booker="orderdetail.owner"
                :underPhoneNum="orderdetail.owner_tel"
                :rooms="orderdetail.rooms_plan"
@@ -12,12 +12,14 @@
     <orderitem title="PMS支付信息"
                :payinfo="orderdetail.payinfo">
     </orderitem>
+
     <Group v-if="payInfo">
       <Cell title="已确认" :value="payInfo"></Cell>
     </Group>
+
     <div class="btn-group">
       <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
-                :value="'已全额支付 ￥'+orderdetail.payinfo.total_roomfee"
+                :value="orderdetail.payinfo.total_roomfee | CNY('已全额支付 ')"
                 primary
                 @onClick="staffpayConfirm"/>
       <x-button v-if='orderdetail.payinfo.staff_pay != 0'
@@ -27,7 +29,8 @@
       <x-button
         v-if='orderdetail.payinfo.staff_pay == 0 || orderdetail.payinfo.staff_pay == orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === null'
         value="已付其他金额"
-        @onClick="staffpayConfirm(2)"/>
+        @onClick="staffpayConfirm(2)"
+        plain/>
     </div>
 
     <Dialog v-model="showDialog"
@@ -71,11 +74,11 @@
         if (a == null) {
           return null;
         } else if (a === this.orderdetail.payinfo.total_roomfee) {
-          return '已全额支付￥' + this.orderdetail.payinfo.total_roomfee
+          return '已全额支付￥' + parseInt(a)/100
         } else if (a === 0) {
           return '未支付'
         } else {
-          return '已支付' + a
+          return '已支付' + parseInt(a)/100
         }
       }
     },
@@ -101,17 +104,15 @@
         console.log('staff_pay:' + staff_pay)
 
         this.singleconfirm({
-          order_id: this.orderdetail.order_pmsid,
+          order_id: this.orderdetail.order_id,
           staff_pay: staff_pay,
-          onsuccess: () => {
-            this.orderdetail.payinfo.staff_pay = staff_pay
-          }
+          onsuccess: () => this.orderdetail.payinfo.staff_pay = staff_pay
         })
       }
     },
     watch: {
       showDialog(val, oldV) {
-        val ? null : (this.dialogStatus = null, this.inputValue = null)
+        oldV ? (this.dialogStatus = null, this.inputValue = null) : null
       }
     },
     mounted() {

@@ -10,11 +10,7 @@
     }
   }
   .btn-group {
-    position: fixed;
-    bottom: 0;
-    left: 5%;
-    width: 90%;
-    margin-bottom: 10px;
+    padding: 50px 15px 15px;
   }
   .money {
     border: 1px solid #E6E6E6;
@@ -86,65 +82,29 @@ article {
       }
     }
   }
-  //.orderitem {
-  //  flex-grow: 1;
-  //  position: relative;
-  //  .islink {
-  //    position: absolute;
-  //    top: 50%;
-  //    right: 6px;
-  //    margin-top: -14px;
-  //  }
-  //  .cell,
-  //  .cellbox {
-  //    font-size: 14px;
-  //    ul {
-  //      flex: 1;
-  //      li {
-  //        padding: 5px 0;
-  //      }
-  //    }
-  //    span {
-  //      &:first-child {
-  //        display: inline-block;
-  //        color: #888;
-  //        min-width: 4em;
-  //        text-align: right;
-  //      }
-  //      &.paid {
-  //        float: right;
-  //      }
-  //    }
-  //  }
-  //}
-
-  footer {
-    position: fixed;
-    z-index: 1;
-    bottom: 0;
-    left: 0;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 10px;
-    background-color: #fff;
-    &:before {
-      content: " ";
-      position: absolute;
-      left: 0;
-      top: -1px;
-      right: 0;
-      height: 1px;
-      border-top: 1px solid #D9D9D9;
-      color: #D9D9D9;
-      -webkit-transform-origin: 0 100%;
-      transform-origin: 0 100%;
-      -webkit-transform: scaleY(0.5);
-      transform: scaleY(0.5);
-    }
-    .blue-btn {
-      background-color: #373946;
-      color: #fff;
-    }
-  }
 }
 
+footer {
+  &:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #D9D9D9;
+    color: #D9D9D9;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+}

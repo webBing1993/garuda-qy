@@ -1,6 +1,6 @@
 <template>
   <a class="weui-btn"
-     :class="[type,disable,load,minic]"
+     :class="[type,disable,load,minic,plainc]"
      @click="$emit('onClick')">
     <i v-if="loading" class="weui-loading"></i>
     <span>{{value}}</span>
@@ -12,6 +12,9 @@
     props: {
       value: {
         default: '操作按钮'
+      },
+      plain: {
+        type: Boolean
       },
       loading: {
         type: Boolean
@@ -45,6 +48,9 @@
       },
       minic(){
         return this.mini ? 'weui-btn_mini' : null
+      },
+      plainc(){
+        return this.plain ? 'weui-btn_plain-default' : null
       }
     }
   }

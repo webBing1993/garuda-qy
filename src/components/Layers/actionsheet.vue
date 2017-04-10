@@ -5,7 +5,7 @@
       <div class="weui-actionsheet__menu">
         <div v-for="item in menu" class="weui-actionsheet__cell" @click="option(item)">{{item}}</div>
       </div>
-      <div class="weui-actionsheet__action">
+      <div class="weui-actionsheet__action" v-if="cancel">
         <div class="weui-actionsheet__cell" @click="option('cancel')">取消</div>
       </div>
     </div>
@@ -22,6 +22,9 @@
       },
       value: {
         default: false
+      },
+      cancel: {
+        type: Boolean
       }
     },
     methods: {

@@ -13,9 +13,9 @@
       </p>
 
       <!--<p class="hdr">-->
-        <!--<span v-if="need_hint" class="warning">{{need_hint}}</span>-->
-        <!--&lt;!&ndash;<span>{{status}}</span>&ndash;&gt;-->
-        <!--&lt;!&ndash;<span>{{date}}</span>&ndash;&gt;-->
+      <!--<span v-if="need_hint" class="warning">{{need_hint}}</span>-->
+      <!--&lt;!&ndash;<span>{{status}}</span>&ndash;&gt;-->
+      <!--&lt;!&ndash;<span>{{date}}</span>&ndash;&gt;-->
       <!--</p>-->
 
       <p class="hdr" v-if=" fee || prepay ">
@@ -68,7 +68,8 @@
       <p v-if="rooms" v-for="room in rooms">
         <span class="key">房型：</span>
         <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
-        <span v-if="staff_confirm_timeline" class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>
+        <span v-if="staff_confirm_timeline"
+              class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>

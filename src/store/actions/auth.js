@@ -12,6 +12,7 @@ module.exports = {
         onSuccess: (body) => {
           ctx.commit('SESSION', body.data)
           sessionStorage.token = body.data
+          console.log('SESSION: ' + body.data)
         }
       })
     }

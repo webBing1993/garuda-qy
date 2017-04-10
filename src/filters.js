@@ -2,9 +2,9 @@ module.exports = {
   datetimeparse: (timestamp, format, prefix) => {
     // console.log(timestamp, format)
     let newtimestamp = timestamp
-      ? timestamp.length == 13
-        ? timestamp
-        : timestamp.length == 10
+      ? timestamp.toString().length == 13
+        ? timestamp.toString()
+        : timestamp.toString().length == 10
           ? timestamp + '000'
           : null
       : null
@@ -32,8 +32,8 @@ module.exports = {
 
     return newtimestamp ? output : ''
   },
-  CNY(val){
-    return '¥' + (val / 100)
+  CNY(val, prefix){
+    return prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100)
   },
   filterPhoneNum(val){
     return val ? val.substring(3, 14) : null
