@@ -3,27 +3,27 @@
     <p class="room-title">主单信息</p>
     <section class="sub-rooms">
       <div class="room-type">
-        <span class="left grey">订单号</span>
-        <span class="right">{{detail.order_id}}</span>
+        <span class="grey">订单号</span>
+        <span>{{detail.order_id}}</span>
       </div>
       <div class="room-type">
-        <span class="left grey">预订人</span>
-        <span class="right">{{detail.owner}}</span>
+        <span class="grey">预订人</span>
+        <span >{{detail.owner}}</span>
       </div>
       <div class="room-type">
-        <span class="left grey">手机号</span>
-        <span class="right">{{detail.owner_tel |  filterPhoneNum}}</span>
+        <span class="grey">手机号</span>
+        <span>{{detail.owner_tel |  filterPhoneNum}}</span>
       </div>
       <div class="room-type">
-        <span class="left grey">入离时间</span>
-        <span class="right">{{detail.in_time | datetimeparse}} - {{detail.out_time | datetimeparse}}</span>
+        <span class="grey">入离时间</span>
+        <span>{{detail.in_time | datetimeparse}} - {{detail.out_time | datetimeparse}}</span>
       </div>
     </section>
     <p class="room-title">房间信息</p>
     <section v-for='item in detail.suborders' class="sub-rooms">
       <div class="room-type">
-        <span class="left">{{item.room_type_name}} {{item.room_number}}</span>
-        <span class="right">{{item.checkin_time | datetimeparse}} - {{item.checkout_time | datetimeparse}}</span>
+        <span>{{item.room_type_name}} {{item.room_number}}</span>
+        <span>{{item.checkin_time | datetimeparse}} - {{item.checkout_time | datetimeparse}}</span>
       </div>
       <div class="suborders">
         <div class="sub">

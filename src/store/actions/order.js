@@ -6,7 +6,7 @@ module.exports = {
     if (param.status == 0) {
       ctx.dispatch('resource', {
         url: '/order/precheckin/confirm',
-        param: {
+        params: {
           status: param.status
         },
         onSuccess: (body) => {
@@ -17,7 +17,7 @@ module.exports = {
     } else {
       ctx.dispatch('resource', {
         url: '/order/confirmed',
-        param: {
+        params: {
           status: param.status
         },
         onSuccess: (body) => {
