@@ -48,12 +48,14 @@
         <span>{{booker}}</span>
         <span>{{phoneNum | filterPhoneNum}}</span>
       </p>
-      <p v-if="guests">
+      <p v-if="guests" class="guests-box">
         <span class="key guest-left">预订人：</span>
-        <span v-for="item in guests" class="guests">
-          <span style="padding-right: 5px">{{item.name}}</span>
-          <span>{{item.idcard}}</span>
-        </span>
+        <section>
+          <span v-for="item in guests" class="guests">
+            <span style="padding-right: 5px">{{item.name}}</span>
+            <span>{{item.idcard}}</span>
+          </span>
+        </section>
       </p>
       <p v-if="underPhoneNum">
         <span class="key">手机号：</span>
