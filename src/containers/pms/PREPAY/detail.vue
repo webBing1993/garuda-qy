@@ -74,11 +74,11 @@
         if (a == null) {
           return null;
         } else if (a === this.orderdetail.payinfo.total_roomfee) {
-          return '已全额支付￥' + parseInt(a)/100
+          return '已全额支付￥ ' + parseInt(a)/100
         } else if (a === 0) {
           return '未支付'
         } else {
-          return '已支付' + parseInt(a)/100
+          return '已支付￥ ' + parseInt(a)/100
         }
       }
     },
@@ -99,7 +99,7 @@
       },
       setSingleConfirm () {
         let staff_pay = this.dialogStatus
-          ? this.inputValue ? this.inputValue : 0
+          ? this.inputValue ? this.inputValue * 100 : 0
           : this.orderdetail.payinfo.total_roomfee
         console.log('staff_pay:' + staff_pay)
 
