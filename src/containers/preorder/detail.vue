@@ -37,7 +37,7 @@
       <Cell title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>
     </Group>
 
-    <Group :title="index == 0? '选房信息' : null" v-for="(item,index) in orderdetail.suborders">
+    <Group :title="index == 0? '选房信息' : null" v-for="(item,index) in orderdetail.suborders" :key="'guests'+index">
       <cell :title="getGuestItem(item)"/>
     </Group>
 

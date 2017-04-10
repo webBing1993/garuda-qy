@@ -1,41 +1,12 @@
 // import * as _dataUtil from './dataUtil';
 
 module.exports = {
-  //获取确认订单列表 0-待确认 1-已确认
+  //获取确认订单列表
   getconfirmelist(ctx, param){
-    if (param.status == 0) {
-      ctx.dispatch('resource', {
-        url: '/order/precheckin/confirm',
-        param: {
-          status: param.status
-        },
-        onSuccess: (body) => {
-          param.onsuccess(body)
-        },
-        onFail: () => null
-      })
-    } else {
-      ctx.dispatch('resource', {
-        url: '/order/confirmed',
-        param: {
-          status: param.status
-        },
-        onSuccess: (body) => {
-          param.onsuccess(body)
-        },
-        onFail: () => null
-      })
-    }
-  },
-  //获取确认订单详情
-  getorderdetail(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/detail/' + param.order_id,
-      param: {
-        roomfee: param.roomfee,
-        suborder: param.suborder,
-        invoice: param.invoice,
-        log: param.log
+      url: '/order/precheckin/confirm',
+      params: {
+        status: param.status
       },
       onSuccess: (body) => {
         param.onsuccess(body)
@@ -43,12 +14,27 @@ module.exports = {
       onFail: () => null
     })
   },
+  //获取确认订单详情
+  getorderdetail(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/detail/' + param.order_id,
+      params: {
+        roomfee: param.roomfee,
+        suborder: param.suborder,
+        invoice: param.invoice,
+        log: param.log
+      },
+      onSuccess: (body) => {
+        param.onsuccess(body)
+      }
+    })
+  },
   //当日预登记订单列表
   getTodayList(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
       method: 'POST',
-      param: {
+      params: {
         is_cancelled: param.is_cancelled, //是否取消
         is_sequence: param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
       },
@@ -115,7 +101,8 @@ module.exports = {
   multiconfirm(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/multiconfirm',
-      param: {
+      method: "POST",
+      body: {
         order_ids: param.order_ids
       },
       onSuccess: body => {
@@ -128,7 +115,8 @@ module.exports = {
   singleconfirm(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/singleconfirm',
-      param: {
+      method: 'POST',
+      body: {
         order_id: param.order_id,
         staff_pay: param.staff_pay
       },
