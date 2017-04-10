@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isNotEmpty(orderdetail)" class="predetail-container">
+  <div class="predetail-container">
     <div class="warning-title" v-show="!is_recording_success">
       <div class="title-body" v-if="!is_recording_success">️入账失败</div>
       <div class="title-footer" @click="confirmPmsResult"><input type="button" value="已手工入账"></div>
@@ -22,62 +22,47 @@
     <div class="predetail-cell">
       <div class="cell-body">入离时间</div>
       <div class="cell-footer">
-        {{orderdetail.in_time |datetimeparse}}-{{orderdetail.out_time |datetimeparse}}
+        {{orderdetail.in_time | datetimeparse}} - {{orderdetail.out_time | datetimeparse}}
       </div>
     </div>
 
     <!-- PMS支付信息 -->
-    <div class="cell-title">PMS支付信息</div>
-    <div class="predetail-cell">
-      <div class="cell-body">应付房费</div>
-      <div class="cell-footer">¥{{orderdetail.payinfo.total_roomfee}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">已付</div>
-      <div class="cell-footer">¥{{orderdetail.payinfo.pms_pay}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">备注</div>
-      <div class="cell-footer">{{(orderdetail.remark || '无')}}</div>
-    </div>
-    <div class="cell-title">支付信息</div>
-    <div class="predetail-cell">
-      <div class="cell-body">已付</div>
-      <div class="cell-footer">￥{{orderdetail.payinfo.user_pay}}</div>
-    </div>
+    <Group title="PMS支付信息" v-if="orderdetail.payinfo">
+      <Cell title="应付房费" :value="orderdetail.payinfo.total_roomfee | CNY"></Cell>
+      <Cell title="已付" :value="orderdetail.payinfo.pms_pay | CNY"></Cell>
+      <Cell title="备注" :value="orderdetail.remark"></Cell>
+    </Group>
 
-    <!-- 选房信息 -->
-    <div class="cell-title">选房信息</div>
-    <div class="predetail-cell select-roomCell" v-for="item in orderdetail.suborders">
-      <div class="cell-box">
-        <div class="box-title">{{item.room_type_name}}{{item.room_number}}</div>
-        <div v-for="itm in item.guests">
-          <div class="box-text">{{itm.name}} {{itm.idcard}}</div>
-        </div>
-      </div>
-    </div>
+    <Group title="支付信息" v-if="orderdetail.payinfo">
+      <Cell title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>
+    </Group>
+
+    <Group :title="index == 0? '选房信息' : null" v-for="(item,index) in orderdetail.suborders">
+      <cell :title="getGuestItem(item)"/>
+    </Group>
 
     <!-- 发票信息 -->
-    <div class="cell-title">发票信息</div>
-    <div class="predetail-cell">
-      <div class="cell-body">发票抬头</div>
-      <div class="cell-footer">{{orderdetail.invoice.title}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">开票类型</div>
-      <div class="cell-footer">{{orderdetail.invoice.type}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">领取方式</div>
-      <div class="cell-footer">{{orderdetail.invoice.media}}</div>
-    </div>
-    <div class="predetail-cell">
-      <div class="cell-body">开票内容</div>
-      <div class="cell-footer">{{orderdetail.invoice.category}}</div>
-    </div>
-    <div class="predetail-btn" @click="popupShow = !popupShow">
-      <div class="log-btn">操作日志</div>
-    </div>
+    <Group v-if="orderdetail.invoice" title="发票信息">
+      <div class="predetail-cell">
+        <div class="cell-body">发票抬头</div>
+        <div class="cell-footer">{{orderdetail.invoice.title}}</div>
+      </div>
+      <div class="predetail-cell">
+        <div class="cell-body">开票类型</div>
+        <div class="cell-footer">{{orderdetail.invoice.type}}</div>
+      </div>
+      <div class="predetail-cell">
+        <div class="cell-body">领取方式</div>
+        <div class="cell-footer">{{orderdetail.invoice.media}}</div>
+      </div>
+      <div class="predetail-cell">
+        <div class="cell-body">开票内容</div>
+        <div class="cell-footer">{{orderdetail.invoice.category}}</div>
+      </div>
+      <div class="predetail-btn" @click="popupShow = !popupShow">
+        <div class="log-btn">操作日志</div>
+      </div>
+    </Group>
 
     <!-- log 弹窗 -->
     <popup v-model="popupShow"
@@ -121,7 +106,7 @@
         'orderdetail',
       ]),
       is_recording_success() {
-        return this.orderdetail.status.is_recording_success
+        return this.orderdetail.status ? this.orderdetail.status.is_recording_success : false
       }
     },
     methods: {
@@ -142,6 +127,12 @@
           action: 'SETACCOUNT',
           onsuccess: body => this.orderdetail.status.is_recording_success = true
         })
+      },
+      getGuestItem(item){
+        console.log(item)
+        let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;"><span>${item.room_type_name + ' ' + item.room_number}</span></div>`;
+        item.guests.forEach(i => dom += `<div style="display: flex;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
+        return dom
       }
     },
     mounted() {
@@ -150,7 +141,7 @@
         roomfee: 0,
         suborder: 0,
         invoice: 0,
-        log:0,
+        log: 0,
         onsuccess: body => {
           this.orderdetail = body.data
         }
@@ -159,3 +150,6 @@
   }
 </script>
 
+<style scoped lang="less">
+  @import "index.less";
+</style>

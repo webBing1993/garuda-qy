@@ -3,32 +3,26 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 
-const unchained = [
-  // {
-  //   path: '/unchained',
-  //   component: require('./containers/unchained/ROOMMANAGER')
-  // },
-  //
-  {
-    path: '/unchained',
-    component: {
-      name: "unchained",
-      template: `<router-view/>`,
-    },
-    children: [{
-      path: 'roommanager',
-      component: require('./containers/unchained/ROOMMANAGER')
-    }, {
-      path: 'record',
-      component: require('./containers/unchained/RECORD/list.vue')
-    }, {
-      path: 'record/new',
-      component: require('./containers/unchained/RECORD/detail.vue')
-    }, {
-      path: 'record/:id',
-      component: require('./containers/unchained/RECORD/detail.vue')
-    },]
+const unchained = [{
+  path: '/roommanager',
+  component: require('./containers/unchained/ROOMMANAGER')
+}, {
+  path: '/record',
+  component: {
+    name: "record",
+    template: `<router-view/>`,
+  },
+  children: [{
+    path: '/',
+    component: require('./containers/unchained/RECORD/list.vue')
+  }, {
+    path: 'new',
+    component: require('./containers/unchained/RECORD/detail.vue')
+  }, {
+    path: ':id',
+    component: require('./containers/unchained/RECORD/detail.vue')
   }]
+}]
 
 const precheckin = [{
   path: '/pms',
@@ -40,7 +34,7 @@ const precheckin = [{
     path: 'prepay/:tab',
     component: require('./containers/pms/PREPAY/list')
   }, {
-    path: 'prepay/detail/:id',
+    path: ':id',
     component: require('./containers/pms/PREPAY/detail')
   }]
 }, {
@@ -53,40 +47,44 @@ const precheckin = [{
     path: 'today/:tab',
     component: require('./containers/preorder/TODAY/list')
   }, {
-    path: 'today/predetail/:id',
-    component: require('./containers/preorder/detail')
-  }, {
     path: 'history/:tab',
     component: require('./containers/preorder/HISTORY/list')
   }, {
-    path: 'history/predetail/:id',
+    path: ':id',
     component: require('./containers/preorder/detail')
   }]
-}];
+}]
 
 const checkin = [{
-  path: '/checkin',
+  path: '/identity',
   component: {
-    name: "checkin",
+    name: "identity",
     template: `<router-view/>`,
   },
   children: [{
-    path: 'identity/today',
+    path: 'today',
     component: require('./containers/checkin/IDENTITY/list')
   }, {
-    path: 'identity/history',
+    path: 'history',
     component: require('./containers/checkin/IDENTITY/list')
   }, {
-    path: 'identity/detail/:id',
-    component: require('./containers/checkin/IDENTITY/detail')
-  }, {
-    path: 'identity/todo/:id',
+    path: 'todo/:id',
     component: require('./containers/checkin/IDENTITY/todo')
   }, {
-    path: 'livein',
+    path: ':id',
+    component: require('./containers/checkin/IDENTITY/detail')
+  }]
+}, {
+  path: '/livein',
+  component: {
+    name: "livein",
+    template: `<router-view/>`,
+  },
+  children: [{
+    path: '/',
     component: require('./containers/checkin/LIVEIN/list')
   }, {
-    path: 'livein/detail/:id',
+    path: ':id',
     component: require('./containers/checkin/LIVEIN/detail')
   }]
 }]
@@ -98,12 +96,12 @@ const invoice = [{
     template: `<router-view/>`,
   },
   children: [{
-    path: '',
+    path: '/',
     component: require('./containers/invoice/INVOICE/list.vue')
   }, {
-    path: 'detail',
+    path: ':id',
     component: require('./containers/invoice/INVOICE/detail.vue')
-  },]
+  }]
 }]
 
 const others = [{

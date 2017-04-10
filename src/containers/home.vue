@@ -3,10 +3,10 @@
     <dl>
       <dt>非对接</dt>
       <dd>
-        <router-link to="/unchained/record">录入修改</router-link>
+        <router-link to="/record">录入修改</router-link>
       </dd>
       <dd>
-        <router-link to="/unchained/roommanager">房态管理</router-link>
+        <router-link to="/roommanager">房态管理</router-link>
       </dd>
     </dl>
 
