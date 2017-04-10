@@ -5,5 +5,6 @@ module.exports = {
   ...require('./order'),
   ...require('./roommanager'),
   ...require('./identity'),
-  ...require('./livein')
+  ...require('./livein'),
+  ...require('./record')
 }

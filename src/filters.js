@@ -11,7 +11,7 @@ module.exports = {
     let dateobj = newtimestamp ? new Date(parseInt(newtimestamp)) : new Date()
     let YYYY = dateobj.getFullYear()
     let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1)
-    let DD = dateobj.getDate() > 9 ? dateobj.getDate() > 9 : '0' + dateobj.getDate()
+    let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate()
     let HH = dateobj.getHours()
     let mm = dateobj.getMinutes()
     let ss = dateobj.getSeconds()
@@ -28,7 +28,9 @@ module.exports = {
     } else {
       output += YYYY + separator + MM + separator + DD
     }
-    return prefix ? prefix + output : output
+    output = prefix ? (prefix + output) : output
+
+    return newtimestamp ? output : ''
   },
   CNY(val){
     return '¥' + (val / 100)

@@ -145,7 +145,7 @@
         //非批量模式下点击订单跳转至详情页面
         if (!this.batch) {
           this.batchlist = []
-          this.goto('/pms/PREPAY/detail/' + orderId)
+          this.goto('/pms/' + orderId)
         }
       }
     },
@@ -177,5 +177,5 @@
 </script>
 
 <style scoped lang="less">
-  @import "index.less";
+  @import "./index.less";
 </style>

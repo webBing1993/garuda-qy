@@ -110,13 +110,17 @@
       }
     },
     watch: {
-      showDialog(val,oldV) {
-          val ? null : (this.dialogStatus = null,this.inputValue = null)
+      showDialog(val, oldV) {
+        val ? null : (this.dialogStatus = null, this.inputValue = null)
       }
     },
     mounted() {
       this.getorderdetail({
         order_id: this.$route.params.id,
+        roomfee: 0,
+        suborder: 0,
+        invoice: 0,
+        log: 0,
         onsuccess: body => {
           this.orderdetail = body.data
         }
@@ -126,5 +130,5 @@
 </script>
 
 <style scoped lang="less">
-  @import "index.less";
+  @import "./index.less";
 </style>

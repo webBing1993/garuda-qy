@@ -1,8 +1,8 @@
 <template>
   <div class="weui-cell">
     <div class="weui-cell__bd">
-      <textarea class="weui-textarea" placeholder="请输入文本" rows="3" :maxlength="max" v-model="currentValue"></textarea>
-      <div class="weui-textarea-counter"><span>{{currentValue.length}}</span>/{{max}}</div>
+      <textarea class="weui-textarea" :placeholder="placeholder" rows="3" :maxlength="max" v-model="currentValue"></textarea>
+      <div class="weui-textarea-counter" v-if="currentValue"><span>{{currentValue.length}}</span>/{{max}}</div>
     </div>
   </div>
 </template>
