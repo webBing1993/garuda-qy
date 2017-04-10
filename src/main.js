@@ -1,5 +1,5 @@
 // Mockdata
-import './server-mock';
+import './mock';
 
 import Vue from 'vue';
 import App from './App';
