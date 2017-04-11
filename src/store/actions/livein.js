@@ -1,7 +1,8 @@
-/**
- * Created by lisj on 2017/4/9.
- */
+// ===============================================================
+// 在住管理
+// ===============================================================
 module.exports = {
+  //当日入住单列表
   getTodaySuborder(ctx, param){
     ctx.dispatch('resource', {
       url: '/suborder/today',
@@ -11,6 +12,7 @@ module.exports = {
     })
   },
   getAllSuborder(ctx, param){
+    // 全部入住单列表
     ctx.dispatch('resource', {
       url: '/suborder/list',
       onSuccess: body => {

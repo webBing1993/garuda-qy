@@ -10,7 +10,7 @@
                    :checkinTime="item.in_time"
                    :guests="item.guests"
                    :arrow="true"
-                   @click.native="goto('/checkin/livein/detail/'+item.suborder_id)">
+                   @click.native="goto('/livein/'+item.suborder_id)">
         </orderitem>
       </section>
     </scroller>

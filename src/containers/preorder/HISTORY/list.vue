@@ -114,7 +114,7 @@
         this.$nextTick(() => setTimeout(() => this.$refs[ref].donePulldown(), 3000))
       },
       _gotodetail(orderId) {
-        this.goto('/preorder/today/predetail/' + orderId);
+        this.goto('/preorder/' + orderId);
       },
       //正倒序
       getSequenceList(item, sequence, scroller) {

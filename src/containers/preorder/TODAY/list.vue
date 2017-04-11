@@ -105,7 +105,7 @@
         'getTodayList'
       ]),
       _gotodetail(orderId) {
-        this.goto('/preorder/today/predetail/' + orderId);
+        this.goto('/preorder/' + orderId);
       },
       _showSortBox(){
         this.showSort = true;

@@ -36,10 +36,10 @@
         <router-link to="/checkin/identity/todo/213123">公安验证/待验证</router-link>
       </dd>
       <dd>
-        <router-link to="/checkin/identity/todo/213123">在住管理/当日入住</router-link>
+        <router-link to="/livein/today">在住管理/当日入住</router-link>
       </dd>
       <dd>
-        <router-link to="/checkin/identity/todo/213123">在住管理/全部入住</router-link>
+        <router-link to="/livein/all">在住管理/全部入住</router-link>
       </dd>
     </dl>
 

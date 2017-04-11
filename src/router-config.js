@@ -81,7 +81,10 @@ const checkin = [{
     template: `<router-view/>`,
   },
   children: [{
-    path: '/',
+    path: 'today',
+    component: require('./containers/checkin/LIVEIN/list')
+  }, {
+    path: 'all',
     component: require('./containers/checkin/LIVEIN/list')
   }, {
     path: ':id',
