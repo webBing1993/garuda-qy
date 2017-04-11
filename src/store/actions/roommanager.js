@@ -1,6 +1,5 @@
 module.exports = {
   getroomtypelist(ctx, param){
-    console.log('0')
     ctx.dispatch('resource', {
       url: '/room/room_type_list',
       onSuccess: body => {

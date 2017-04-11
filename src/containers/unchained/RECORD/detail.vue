@@ -1,7 +1,7 @@
 <template>
   <article>
     <Group>
-      <XInput title="订单号" v-model="orderdetail.order_pmsid" placeholder="选填, PMS订单号"></XInput>
+      <XInput title="订单号" v-model="orderdetail.order_pmsid" placeholder="PMS订单号，选填"></XInput>
     </Group>
 
     <Group title="预订人信息">
@@ -13,7 +13,10 @@
       <Cell title="房型" :value="orderdetail.room_type_name || '未选择'" @onClick="showAction = true" link></Cell>
       <Cell title="入住时间" :value="orderdetail.in_time | datetimeparse" @onClick="popupShowCalendar = true" link></Cell>
       <Cell title="离店时间" :value="orderdetail.out_time | datetimeparse" link></Cell>
-      <XInput title="房价" placeholder="2017/04/01"></XInput>
+
+
+      <XInput title="房价" v-for="item in room_numbers" type="number" v-model.number="item.inputValue"></XInput>
+
       <XInput title="房间数" placeholder="未填写"></XInput>
       <Cell title="房号" value="未选择" link></Cell>
     </Group>
@@ -49,21 +52,19 @@
         popupShowCalendar: false,
         period: [],
         showAction: false,
-//        menuAction: ['大床房'],
         roomTypeList: [],
         orderdetail: {
-          order_pmsid: '',
-          owner: "张三",
-          owner_tel: "+8618500059035",
+          order_pmsid: "",
+          owner: "",
+          owner_tel: "",
           room_type_id: "",
-          room_type_name: '大床房',
+          room_type_name: "",
           in_time: '1491559200000',
-          out_time: '1491863200000',
+          out_time: '1491732000000',
           date_price: [{
             date: 1488432346,
             price: 30000,
           }],
-          room_numbers: [],
           staff_pay: "",
           remark: ""
         }
@@ -74,6 +75,17 @@
         let arr = []
         this.roomTypeList.forEach(i => arr.push(i.room_type_name))
         return arr
+      },
+      room_numbers(){
+        const days = Math.floor((this.orderdetail.out_time - this.orderdetail.in_time) / 86400000)
+        let a = []
+        for (let i = 0; i < days; i++) {
+          a.push({
+            date_price: parseInt(this.orderdetail.in_time) + i * 86400000,
+            inputValue: null,
+          })
+        }
+        return a
       }
     },
     methods: {

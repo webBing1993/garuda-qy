@@ -25,7 +25,7 @@
         'goto'
       ]),
       getTitle(item){
-        return `<div class="cell-temp"><span class="cell-title">订单号：</span>${item.order_pmsid}</div>`
+        return `<div><span class="cell-title">订单号：</span>${item.order_pmsid}</div>`
       },
       getBody(item){
         let temp = `<div class="cell-temp"><span class="cell-title">预订人：</span>${item.owner + item.owner_tel}</div>`
