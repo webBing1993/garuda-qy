@@ -99,12 +99,12 @@ const invoice = [{
     template: `<router-view/>`,
   },
   children: [{
-    path: '/',
+    path: ':tab',
     component: require('./containers/invoice/INVOICE/list.vue')
   }, {
-    path: ':id',
+    path: 'detail/:id',
     component: require('./containers/invoice/INVOICE/detail.vue')
-  }]
+  },]
 }]
 
 const others = [{

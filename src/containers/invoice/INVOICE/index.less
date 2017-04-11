@@ -1,0 +1,234 @@
+@import "../../../assets/varible";
+
+.invoice-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  background-color: #FFFFFF;
+  color: #4A4A4A;
+  font-size: 14px;
+  .invoice-title {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 0;
+    border-bottom: solid 1px #E6E6E6;
+    span:nth-child(1) {
+      padding-left: 15px;
+    }
+    span:nth-child(2) {
+      color: #80C435;
+      padding-right: 30px;
+    }
+  }
+  .invoice-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    position: relative;
+    span {
+      display: block;
+      line-height: 24px;
+      i {
+        font-style: normal;
+        float: right;
+        color: #000000;
+        font-weight: bold;
+        padding-right: 30px;
+      }
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      height: 20px;
+      width: 20px;
+      border-right: solid 2px #E6E6E6;
+      border-bottom: solid 2px #E6E6E6;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+article {
+  color: #4A4A4A;
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  .select {
+    margin-top: -130px;
+    background-color: #fff;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    width: 90px;
+    line-height: 38px;
+    box-shadow: 0 2px 20px #bdbdbd;
+  }
+  .sort {
+    padding-bottom: 10px;
+    background-color: #fff;
+    .sortText {
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+      line-height: 45px;
+      font-size: 14px;
+      color: #8B8B8B;
+      span {
+        padding-bottom: 8px;
+        &.selected {
+          border-bottom: 1px solid #8B8B8B;
+          color: #000;
+        }
+      }
+    }
+  }
+}
+
+//发票详情
+.invoice-detail {
+  background-color: #EAEDEF;
+  color: #8A8A8A;
+  font-size: @font3;
+  .invoice-detail-title {
+    font-size: @fon2;
+    position: relative;
+    padding: 6.5px 15px;
+  }
+  .flexColumn {
+    display: flex;
+    flex-direction: column;
+  }
+  .invoice-cell {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    padding: 11.5px 15px;
+    background-color: #ffffff;
+    color: #8A8A8A;
+    .form-title {
+      font-size: @font3;
+      color: #4A4A4A;
+    }
+    .cell-body {
+      flex: 1;
+      color: @font-black9;
+      .body-room-cell {
+        display: flex;
+        padding-left: 16px;
+        justify-content: space-between;
+        a {
+          color: #80C435;
+        }
+      }
+    }
+    .cell-footer {
+      flex: 1;
+      text-align: end;
+      color: @font-black10;
+    }
+    .body-form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      table {
+        border: solid 0.5px #D9D9D9;
+        font-size: 12px;
+        color: #4A4A4A;
+        margin-top: 8px;
+        opacity: .8;
+        tr th, td {
+          padding: 8px 16px;
+          text-align: center;
+        }
+        thead {
+          background-color: #373946;
+          color: #FFFFFF;
+
+        }
+        tbody {
+          background-color: #FFFFFF;
+          color: #4A4A4A;
+        }
+        tfoot {
+          background-color: #FAFAFA;
+        }
+      }
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      margin-left: 16px;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      height: 1px;
+      border-bottom: 1px solid #D9D9D9;
+      color: #D9D9D9;
+      -webkit-transform-origin: 0 100%;
+      transform-origin: 0 100%;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+  }
+  .marginBottom {
+    margin-bottom: 10px;
+  }
+}
+
+//发票详情
+.invoce-detail {
+  .weui-cells__title {
+    font-size: 12px;
+    color: #8A8A8A;
+  }
+  .weui-cells {
+    .weui-cell {
+      .weui-cell__bd {
+        span {
+          color: #8A8A8A;
+          font-size: 14px !important;
+        }
+        .cell-temp {
+          .cell-title {
+            //display: flex;
+            //justify-content: space-between;
+          }
+        }
+      }
+      .weui-cell__ft {
+        span {
+          color: #4A4A4A;
+          font-size: 14px !important;
+        }
+      }
+    }
+    .detailBtn {
+      padding: 12px 15px 12px 0;
+      border-top: solid 1px #D9D9D9;
+      margin-left: 15px;
+      .weui-btn {
+        font-size: 14px;
+        color: #FFFFFF;
+        padding: 2px;
+      }
+    }
+  }
+}
+
+.weui-dialog__bd {
+  color: #2B2B2B;
+}
+
+.weui-dialog__btn_primary {
+  color: #353535;
+}

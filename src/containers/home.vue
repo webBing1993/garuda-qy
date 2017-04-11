@@ -46,7 +46,7 @@
     <dl>
       <dt>发票</dt>
       <dd>
-        <router-link to="/checkin/identity/todo/213123">前台开票/待开发票</router-link>
+        <router-link to="/invoice/:tab">前台开票/待开发票</router-link>
       </dd>
     </dl>
 

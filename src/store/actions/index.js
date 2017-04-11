@@ -7,4 +7,5 @@ module.exports = {
   ...require('./roommanager'),
   ...require('./identity'),
   ...require('./livein'),
+  ...require('./invoice')
 }
