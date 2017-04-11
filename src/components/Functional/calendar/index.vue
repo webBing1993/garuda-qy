@@ -3,7 +3,7 @@
   <div class="calendar">
 
     <div class="tools-bar">
-      <span class="clear" @click="(starttime=null,endtime=null)">清除筛选</span>
+      <span class="clear" @click="reset">清除筛选</span>
       <span class="cancel" @click="$emit('onCancel',false)">取消</span>
     </div>
 
@@ -30,16 +30,16 @@
   export default{
     name: 'calendar',
     props: {
-        value: null,
-        getperiod:{// 多选
-            type: Boolean,
-            default: false
-        },
+      value: null,
+      getperiod: {// 多选
+        type: Boolean,
+        default: false
+      },
     },
     data(){
       return {
         current: Date.parse(new Date()),
-        singletime: this.value instanceof Array ? null:this.value,//单选
+        singletime: this.value instanceof Array ? null : this.value,//单选
         starttime: this.value[0] || null,
         endtime: this.value[1] || null,
       }
@@ -95,32 +95,32 @@
     },
     methods: {
       dateclick(item, getperiod){
-          if(this.value instanceof Array) {//多选
-            if (this.starttime === null && this.endtime === null) {
-              this.starttime = item.date
-            } else if (this.starttime !== null && this.endtime === null) {
-              if (item.date >= this.starttime) {
-                this.endtime = item.date
-              } else {
-                let mm = this.starttime
-                this.starttime = item.date
-                this.endtime = mm
-              }
-              this.$emit('input', [this.starttime, this.endtime]);
-              setTimeout(()=> {
-                this.$emit('onCancel', false);
-              },300);
+        if (this.value instanceof Array) {//多选
+          if (this.starttime === null && this.endtime === null) {
+            this.starttime = item.date
+          } else if (this.starttime !== null && this.endtime === null) {
+            if (item.date >= this.starttime) {
+              this.endtime = item.date
             } else {
+              let mm = this.starttime
               this.starttime = item.date
-              this.endtime = null
+              this.endtime = mm
             }
-          }else {
-            this.singletime = item.date;
-            this.$emit('input', this.singletime);
-            setTimeout(()=> {
+            this.$emit('input', [this.starttime, this.endtime]);
+            setTimeout(() => {
               this.$emit('onCancel', false);
-            },300);
+            }, 300);
+          } else {
+            this.starttime = item.date
+            this.endtime = null
           }
+        } else {
+          this.singletime = item.date;
+          this.$emit('input', this.singletime);
+          setTimeout(() => {
+            this.$emit('onCancel', false);
+          }, 300);
+        }
       },
       nextMonth(val) {
         if (val > 0) {
@@ -128,6 +128,11 @@
         } else {
           this.current = Date.parse(moment(this.current).subtract(1, 'months'))
         }
+      },
+      reset(){
+        this.starttime = null
+        this.endtime = null
+        this.$emit('onReset')
       }
     }
   }

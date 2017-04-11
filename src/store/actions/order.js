@@ -66,7 +66,7 @@ module.exports = {
 
 
   //当日预登记订单列表
-  getTodayList(ctx, param){
+  gettodaylist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/today',
       method: 'POST',

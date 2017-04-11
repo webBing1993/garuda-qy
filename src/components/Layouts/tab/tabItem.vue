@@ -14,6 +14,5 @@
       },
       selected: false
     }
-
   }
 </script>

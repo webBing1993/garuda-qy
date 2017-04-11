@@ -15,7 +15,7 @@
       <Cell title="离店时间" :value="orderdetail.out_time | datetimeparse" link></Cell>
 
 
-      <XInput title="房价" v-for="item in room_numbers" type="number" v-model.number="item.inputValue"></XInput>
+      <XInput title="房价" v-for="(item,index) in room_numbers" :key="index" type="number" v-model.number="item.inputValue"></XInput>
 
       <XInput title="房间数" placeholder="未填写"></XInput>
       <Cell title="房号" value="未选择" link></Cell>

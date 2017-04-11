@@ -41,14 +41,14 @@ const precheckin = [{
   path: '/preorder',
   component: {
     name: "preorder",
-    template: `<router-view/>`,
+    template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
     path: 'today/:tab',
-    component: require('./containers/preorder/TODAY/list')
+    component: require('./containers/preorder/list.vue')
   }, {
     path: 'history/:tab',
-    component: require('./containers/preorder/HISTORY/list')
+    component: require('./containers/preorder/list.vue')
   }, {
     path: ':id',
     component: require('./containers/preorder/detail')
