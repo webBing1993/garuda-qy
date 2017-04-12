@@ -1,7 +1,8 @@
 module.exports = {
   login(ctx, param){
-    if (sessionStorage.token) {
-      ctx.commit('SESSION', sessionStorage.token)
+    if (sessionStorage.session) {
+      ctx.commit('SESSION', sessionStorage.session)
+      console.log('SESSION STORAGE: ' + sessionStorage.session)
     } else {
       ctx.dispatch('resource', {
         url: "/login",
@@ -11,8 +12,8 @@ module.exports = {
         },
         onSuccess: (body) => {
           ctx.commit('SESSION', body.data)
-          sessionStorage.token = body.data
-          console.log('SESSION: ' + body.data)
+          sessionStorage.session = body.data
+          console.log('NEW SESSION: ' + body.data)
         }
       })
     }
