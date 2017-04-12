@@ -23,14 +23,13 @@
       </dd>
     </dl>
 
-
     <dl>
       <dt>入住</dt>
       <dd>
-        <router-link to="/checkin/identity/today">公安验证/当日验证</router-link>
+        <router-link to="/identity/today/0">公安验证/当日验证</router-link>
       </dd>
       <dd>
-        <router-link to="/checkin/identity/history">公安验证/历史验证</router-link>
+        <router-link to="/identity/history/0">公安验证/历史验证</router-link>
       </dd>
       <dd>
         <router-link to="/checkin/identity/todo/213123">公安验证/待验证</router-link>

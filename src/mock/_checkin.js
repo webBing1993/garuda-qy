@@ -8,12 +8,13 @@ import data from './data'
 Mock
   .mock(
     // 获取身份验证列表 /identities
-    data.prefix + '/identities',
+    /\/identities\?status.+/,
     {
       errcode: "0",
       errmsg: "ok",
       data: [{
         identity_id: 'id0001',
+        suborder_id: '',
         owner: "ted",
         phone_number: "15300686661",
         in_time: '1491384458000',
@@ -45,7 +46,219 @@ Mock
         }],
         created_time: "1491384458000", //验证时间
         status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
-      }]
+      },{
+        identity_id: 'id0001',
+        suborder_id: '',
+        owner: "ted",
+        phone_number: "15300686661",
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        room: {
+          room_type_name: "大床房",
+          room_number: "201",
+        },
+        guests: [{
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }, {
+          name: "李四", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }],
+        created_time: "1491384458000", //验证时间
+        status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
+      },{
+        identity_id: 'id0001',
+        suborder_id: '',
+        owner: "ted",
+        phone_number: "15300686661",
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        room: {
+          room_type_name: "大床房",
+          room_number: "201",
+        },
+        guests: [{
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }, {
+          name: "李四", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }],
+        created_time: "1491384458000", //验证时间
+        status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
+      },{
+        identity_id: 'id0001',
+        suborder_id: '',
+        owner: "ted",
+        phone_number: "15300686661",
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        room: {
+          room_type_name: "大床房",
+          room_number: "201",
+        },
+        guests: [{
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }, {
+          name: "李四", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }],
+        created_time: "1491384458000", //验证时间
+        status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
+      },{
+        identity_id: 'id0001',
+        suborder_id: '',
+        owner: "ted",
+        phone_number: "15300686661",
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        room: {
+          room_type_name: "大床房",
+          room_number: "201",
+        },
+        guests: [{
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }, {
+          name: "李四", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }],
+        created_time: "1491384458000", //验证时间
+        status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
+      },{
+        identity_id: 'id0001',
+        suborder_id: '',
+        owner: "ted",
+        phone_number: "15300686661",
+        in_time: '1491384458000',
+        out_time: '1491384458000',
+        room: {
+          room_type_name: "大床房",
+          room_number: "201",
+        },
+        guests: [{
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }, {
+          name: "李四", //姓名
+          sex: "男", //性别
+          ethnicity: "汉族", //民族
+          date_of_birth: "19681010", //生日
+          address: "上海市控江路1680号", //住址
+          idcard: "23042040242420", //身份证号码
+          photo: "", //身份证照片url
+          curr_photo: "", //现在抓拍的照片url
+          similarity: "70" //相似度65"
+        }],
+        created_time: "1491384458000", //验证时间
+        status: "PASSED" //PENDING待审核、PASSED通过、REJECTED拒绝
+      },]
+    }
+  )
+  .mock(
+    /\/identities\/.+/,
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: {
+        identity_id: 'id111',
+        suborder_id: 'suborder111',
+        owner: "张三",
+        phone_number: "17867894324",
+        in_time: "1491384458000",
+        out_time: "1491384458000",
+        room: {
+          room_type_name: "大床房",
+          room_number: "203",
+        },
+        guests: [{
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉", //民族
+          date_of_birth: "", //生日
+          address: "上海市控江路1690", //住址
+          idcard: "230988392980230", //身份证号码
+          photo: "", //身份证照片url
+          live_photo: "", //现在抓拍的照片url
+          similarity: "77" //相似度65"
+        }, {
+          name: "张三", //姓名
+          sex: "男", //性别
+          ethnicity: "汉", //民族
+          date_of_birth: "", //生日
+          address: "上海市控江路1690", //住址
+          idcard: "230988392980230", //身份证号码
+          photo: "", //身份证照片url
+          live_photo: "", //现在抓拍的照片url
+          similarity: "77" //相似度65"
+        },],
+        created_time: "1491384458000", //验证时间
+        status: "PENDING" //PENDING待审核、AGREED通过、REFUSED拒绝
+      }
     }
   )
 

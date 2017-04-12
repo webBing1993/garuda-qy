@@ -6,7 +6,12 @@ import router from '../../router-config.js'
 
 module.exports = {
   goto: (ctx, param) => {
-    typeof param == 'number' ? router.go(param) : router.push(param)
+    typeof param == 'number'
+      ? router.go(param)
+      : router.push(param)
+  },
+  replaceto: (ctx, param) => {
+    router.replace(param)
   },
   urlquery(ctx) {
     let o = {}

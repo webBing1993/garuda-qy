@@ -1,19 +1,20 @@
 <template>
   <article>
-    <Tab>
+    <Tab active-color="#373946">
       <TabItem v-for="(item,index) in tabMenu"
+               :key="'tabmenu'+index"
                :value="item"
-               :key="index"
-               :selected="selectedTab === item"
-               @onSelected="selectedTab = item"/>
+               :selected="route.params.tab == index" @onSelected="toggleTab(index)">
+      </TabItem>
     </Tab>
-    <scroller lock-x :scrollbar-x=false height="-45">
+
+    <scroller lock-x :scrollbar-x=false :depend="renderList" height="-45">
       <section>
-        <group v-for="(item,index) in agreedIdentities" :key="index">
+        <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + item.room.room_type_name"
-                :value="item.created_time | datetimeparse('hhmm')"/>
+                :value="item.created_time | datetimeparse('YYYYMMDDhhmm')"/>
           <cell :title="getGuestItem(item)"
-                @onClick="goto('/checkin/identity/detail/'+item.identity_id)"
+                @onClick="goto('/identity/' + item.identity_id)"
                 link/>
         </group>
       </section>
@@ -35,39 +36,59 @@
       }
     },
     computed: {
+      ...mapState([
+        'route'
+      ]),
       isToday(){
         return !!this.$route.path.match(/today/)
       },
-      isAgreed(){
-        return !this.tabMenu.findIndex(i => i == this.selectedTab)
+      tabIndex(){
+        return +this.route.params.tab
+      },
+      renderList(){
+        return this.tabIndex ? this.refusedIdentities : this.agreedIdentities
       }
     },
     methods: {
       ...mapActions([
         'timeparse',
         'getIdentities',
-        'goto'
+        'goto',
+        'replaceto'
       ]),
-      getGuestItem(item){
-        let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;color:#bdbdbd;"><span>入住人</span><span>相似度</span></div>`;
-        item.guests.forEach(i => dom += `<div style="display: flex;justify-content: space-between;line-height: 2;"><span>${i.name} ${i.idcard}</span><span>${i.similarity}%</span></div>`)
-        return dom
-      }
-    },
-    mounted(){
-      this.getIdentities({
-        onsuccess: body => this.agreedIdentities = body.data
-      })
-    },
-    watch: {
-      selectedTab(val){
-        if ((this.isAgreed && !this.agreedIdentities.length) || (!this.isAgreed && !this.refusedIdentities.length)) {
+      getList(){
+        if ((!this.tabIndex && !this.agreedIdentities.length) || (this.tabIndex && !this.refusedIdentities.length)) {
           this.getIdentities({
             scope: this.isToday ? 'TODAY' : 'HISTORY',
-            status: this.isAgreed ? 'AGREED' : 'REFUSED',
-            onsuccess: body => this.isAgreed ? this.agreedIdentities = body.data : this.refusedIdentities = body.data
+            status: this.tabIndex ? 'REFUSED' : 'AGREED',
+            start_time: '',
+            end_time: '',
+            onsuccess: body => this.tabIndex ? this.refusedIdentities = body.data : this.agreedIdentities = body.data
           })
         }
+      },
+      resetList(){
+        this.agreedIdentities = []
+        this.refusedIdentities = []
+      },
+      getGuestItem(item){
+        let dom = ``;
+        item.guests.forEach(i => dom += `<div style="display: flex;justify-content: space-between;line-height: 2;">
+<span>${i.name} ${i.idcard}</span><span>相似度 ${i.similarity}%</span></div>`)
+        return dom
+      },
+      toggleTab(index){
+        let newpath = this.route.path.replace(this.route.params.tab, index)
+        this.replaceto(newpath)
+      },
+    },
+    mounted(){
+      this.getList()
+    },
+    watch: {
+      tabIndex() {
+        this.resetList()
+        this.getList()
       }
     }
   }

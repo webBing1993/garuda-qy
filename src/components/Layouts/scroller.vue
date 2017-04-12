@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
   import XScroll from 'xscroll/build/cmd/xscroll.js'
   import Pulldown from 'xscroll/build/cmd/plugins/pulldown'
   import Pullup from 'xscroll/build/cmd/plugins/pullup'
@@ -175,11 +175,10 @@
     },
     watch: {
       depend(){
-        this.$nextTick(function () {
-//          console.log('Depend changed, reset scroller!')
+        setTimeout(() => {
+          console.log('Depend changed, reset scroller!')
           this.reset()
-          this.donePulldown()
-        })
+        }, 100)
       },
       currentValue: {
         handler: function (val) {

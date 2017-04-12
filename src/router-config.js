@@ -59,13 +59,13 @@ const checkin = [{
   path: '/identity',
   component: {
     name: "identity",
-    template: `<router-view/>`,
+    template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: 'today',
+    path: 'today/:tab',
     component: require('./containers/checkin/IDENTITY/list')
   }, {
-    path: 'history',
+    path: 'history/:tab',
     component: require('./containers/checkin/IDENTITY/list')
   }, {
     path: 'todo/:id',
