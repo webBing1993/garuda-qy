@@ -18,7 +18,7 @@ module.exports = {
       url: '/gemini' + param.url,
       body: param.body || null,
       headers: param.headers || {
-        Session: sessionStorage.token
+        Session: sessionStorage.session
       },
       params: param.params || null,
       method: param.method || "GET",
