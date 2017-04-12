@@ -73,7 +73,7 @@
       },
       getRoomCount(item){
         let temp = ``
-        item.rooms_plan.forEach(i => temp += `<div>${i.room_type + '*' + i.room_count}</div>`)
+        item.rooms_plan.forEach(i => temp += `<div>${i.room_type + '·' + i.room_count}</div>`)
         return temp
       },
       getIvoiceRoomInfo(item){

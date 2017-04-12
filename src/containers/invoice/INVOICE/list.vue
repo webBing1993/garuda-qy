@@ -58,9 +58,9 @@
 
   </article>
 </template>
+
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-  import './index.less';
 
   module.exports = {
     name: 'INVOICE',
@@ -119,3 +119,7 @@
   }
 
 </script>
+
+<style scoped lang="less">
+  @import "./index.less";
+</style>
