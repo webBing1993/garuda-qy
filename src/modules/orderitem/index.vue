@@ -49,7 +49,7 @@
         <span>{{phoneNum | filterPhoneNum}}</span>
       </p>
       <p v-if="guests" class="guests-box">
-        <span class="key guest-left">预订人：</span>
+        <!--<span class="key guest-left">预订人：</span>-->
         <section>
           <span v-for="item in guests" class="guests">
             <span style="padding-right: 5px">{{item.name}}</span>

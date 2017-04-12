@@ -1,5 +1,5 @@
 <template>
-  <article class="preorder-list">
+  <article>
     <header>
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in renderTabMenu"
@@ -11,7 +11,7 @@
     </header>
 
     <scroller :pulldown-config="app.scroller.config"
-              depend="renderList"
+              :depend="renderList"
               @on-pulldown-loading=""
               use-pulldown
               lock-x

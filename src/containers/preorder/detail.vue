@@ -1,6 +1,6 @@
 <template>
   <article>
-    <div class="preorder-detail" v-if="orderdetail">
+    <div v-if="orderdetail">
       <div class="warning-title" v-show="!is_recording_success">
         <div class="title-body" v-if="!is_recording_success">️入账失败</div>
         <div class="title-footer" @click="confirmPmsResult"><input type="button" value="已手工入账"></div>
@@ -25,7 +25,7 @@
         <Cell title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>
       </Group>
 
-      <Group :title="index == 0? '选房信息' : null" v-for="(item,index) in orderdetail.suborders" :key="'guests'+index">
+      <Group  :title="index == 0? '选房信息' : null" v-for="(item,index) in orderdetail.suborders" :key="'guests'+index">
         <cell :title="getGuestItem(item)"/>
       </Group>
 

@@ -1,12 +1,11 @@
 <template>
   <article>
     <scroller :pulldown-config="app.scroller.config"
-              depend="renderList"
+              :depend="renderList"
               @on-pulldown-loading=""
               use-pulldown
-              lock-x
-              height="-44">
-      <section>
+              lock-x>
+      <div>
         <orderitem v-for="(item,index) in renderList"
                    :key="index"
                    :roomNumber="item.room_number"
@@ -17,22 +16,22 @@
                    :arrow="true"
                    @click.native="goto('/livein/'+item.suborder_id)">
         </orderitem>
-      </section>
-    </scroller>
-    <footer v-if="!isToday">
-      <div class="select" >
-        <span @click="isCalendarShow = true">
-         <abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>
-          <abbr v-else>筛选</abbr>
-        </span>
       </div>
-    </footer>
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
-      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
-    </popup>
+    </scroller>
+    <!--<footer v-if="!isToday">-->
+      <!--<div class="select" >-->
+        <!--<span @click="isCalendarShow = true">-->
+         <!--<abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>-->
+          <!--<abbr v-else>筛选</abbr>-->
+        <!--</span>-->
+      <!--</div>-->
+    <!--</footer>-->
+    <!--<popup v-model="isCalendarShow"-->
+           <!--maskShow-->
+           <!--bottom-->
+           <!--animationTopBottom>-->
+      <!--<calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>-->
+    <!--</popup>-->
   </article>
 </template>
 
@@ -45,8 +44,8 @@
       return {
         todayList: [],
         allList: [],
-        isCalendarShow: false,
-        periodFilter: [null,null]
+//        isCalendarShow: false,
+//        periodFilter: [null,null]
       }
     },
     computed: {
@@ -78,9 +77,9 @@
               onsuccess: body => this.allList = body.data
             })
       },
-      resetFilter() {
-        this.periodFilter = [null, null]
-      }
+//      resetFilter() {
+//        this.periodFilter = [null, null]
+//      }
     },
     watch: {
       isToday() {
