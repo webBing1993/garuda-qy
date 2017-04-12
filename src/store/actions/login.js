@@ -8,7 +8,8 @@ module.exports = {
         url: "/login",
         method: "POST",
         body: {
-          code: ctx.state.url.code
+          code: ctx.state.url.code,
+          corpid: ctx.state.url.state
         },
         onSuccess: (body) => {
           ctx.commit('SESSION', body.data)
