@@ -2,24 +2,26 @@
   <article class="invoce-detail">
     <!-- 主单信息 -->
     <Group title="主单信息">
-      <Cell title="订单号" :value="invoiceList.order_id"></Cell>
-      <Cell title="预订人" :value="invoiceList.owner"></Cell>
-      <Cell title="手机号" :value="18762636236"></Cell>
-      <Cell title="入离时间" :value="invoiceList.in_time | datetimeparse"></Cell>
-      <Cell title="房型" value="大床房·2"></Cell>
+      <Cell title="订单号" :value="invoiceDtail.order_id"></Cell>
+      <Cell title="预订人" :value="invoiceDtail.owner"></Cell>
+      <Cell title="手机号" :value="invoiceDtail.owner_tel | filterPhoneNum"></Cell>
+      <Cell title="入离时间" :value="invoiceDtail.in_time | datetimeparse"></Cell>
+      <Cell title="房型" :value="getRoomCount(invoiceDtail)"></Cell>
     </Group>
 
     <!-- 房间信息 -->
-    <Group :title="index == 0? '房间信息' : null" v-for="(item,index) in room_fees" :key="index">
-      <Cell style="padding: 10px 0 10px 15px" :title="getIvoiceItem(item)"></Cell>
+    <Group :title="index == 0? '房间信息' : null" v-for="(item,index) in invoiceDtail.suborders" :key="index">
+      <Cell :title="item.room_type_name +' '+ item.room_number"
+            :value="item.checkin_time |datetimeparse + '-' + item.checkout_time|datetimeparse"></Cell>
+      <Cell :title="getIvoiceRoomInfo(item)"></Cell>
     </Group>
 
     <!-- 发票信息 -->
-    <Group title="发票信息">
-      <Cell title="发票信息" :value="invoiceList.invoice.title"></Cell>
-      <Cell title="开票类型" :value="invoiceList.invoice.type"></Cell>
-      <Cell title="领取方式" :value="invoiceList.invoice.media"></Cell>
-      <Cell title="开票内容" :value="invoiceList.invoice.category"></Cell>
+    <Group title="发票信息" v-if="invoiceDtail.invoice">
+      <Cell title="发票信息" :value="invoiceDtail.invoice.title"></Cell>
+      <Cell title="开票类型" :value="invoiceDtail.invoice.type"></Cell>
+      <Cell title="领取方式" :value="invoiceDtail.invoice.media"></Cell>
+      <Cell title="开票内容" :value="invoiceDtail.invoice.category"></Cell>
       <div class="detailBtn">
         <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
       </div>
@@ -45,18 +47,7 @@
         showDialog: false,
         dialogStatus: null,
         inputValue: null,
-        invoiceList: [],
-        room_fees: [{
-          room_type_name: '大床房', //房型名称
-          roomNo: 203, //房间数
-          rooms: [{
-            name: '张三',
-            idcard: '4008009999999',
-          }, {
-            name: '李四',
-            idcard: '4008009999999',
-          }]
-        }]
+        invoiceDtail: {}
       }
     },
     computed: {
@@ -80,16 +71,20 @@
       setInvoiceConfirm () {
         console.log('setInvoiceConfirm:')
       },
-      getIvoiceItem(item){
-        console.log(item);
-        let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;border-bottom: solid 1px #D9D9D9;padding: 0 15px 6px 0;margin-bottom: 8px"><span>${item.room_type_name + ' ' + item.roomNo}</span><span>2017/04/04-2017/04/06</span></div>`;
-        item.rooms.forEach(i => dom += `<div style="display: flex;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
+      getRoomCount(item){
+        let temp = ``
+        item.rooms_plan.forEach(i => temp += `<div>${i.room_type + '*' + i.room_count}</div>`)
+        return temp
+      },
+      getIvoiceRoomInfo(item){
+        let dom = ``;
+        item.guests.forEach(i => dom += `<div style="line-height: 2;text-indent: 1em;">${i.name} ${i.idcard}</div>`)
         return dom
       },
     },
     mounted(){
       this.getInvoiceDetail({
-        onsuccess: body => this.invoiceList = body.data
+        onsuccess: body => this.invoiceDtail = body.data
       })
     }
   }
