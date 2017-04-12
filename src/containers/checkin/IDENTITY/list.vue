@@ -9,7 +9,7 @@
     </Tab>
 
     <scroller lock-x :scrollbar-x=false :depend="renderList" height="-45">
-      <section>
+      <div class="scroller-wrap">
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + item.room.room_type_name"
                 :value="item.created_time | datetimeparse('YYYYMMDDhhmm')"/>
@@ -17,8 +17,14 @@
                 @onClick="goto('/identity/' + item.identity_id)"
                 link/>
         </group>
-      </section>
+      </div>
     </scroller>
+
+    <footer class="list-tools">
+      <section>
+        <div>筛选</div>
+      </section>
+    </footer>
   </article>
 </template>
 
@@ -94,3 +100,6 @@
   }
 </script>
 
+<style scoped lang="less">
+  @import "index.less";
+</style>

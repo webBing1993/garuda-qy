@@ -1,5 +1,5 @@
 module.exports = {
-  url:{},
+  urlparams: {},
   app: {
     token: "",
     scroller: {

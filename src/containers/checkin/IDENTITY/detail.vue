@@ -1,7 +1,7 @@
 <template>
   <article>
     <scroller v-if="detail.identity_id" lock-x>
-      <section>
+      <div class="scroller-wrap">
         <group title="预定信息">
           <cell title="预订人" :value="detail.owner"/>
           <cell title="手机号" :value="detail.phone_number"/>
@@ -9,10 +9,9 @@
           <cell title="离店时间" :value="detail.out_time | datetimeparse"/>
           <cell title="房型" :value="detail.room.room_type_name"/>
         </group>
-
         <group title="验证信息">
           <cell :title="detail.room.room_number" :value="detail.created_time | datetimeparse('','验证时间：')"/>
-          <section class="guestinfo" v-for="item in detail.guests">
+          <div class="guestinfo" v-for="item in detail.guests">
             <p><span>姓名</span>{{item.name}}</p>
             <p><span>民族</span>{{item.ethnicity}}</p>
             <p><span>身份证</span>{{item.idcard}}</p>
@@ -22,9 +21,9 @@
               <img src="" alt="当前照片">
             </div>
             <p class="similarity">相似度 {{item.similarity}}%</p>
-          </section>
+          </div>
         </group>
-      </section>
+      </div>
     </scroller>
   </article>
 </template>

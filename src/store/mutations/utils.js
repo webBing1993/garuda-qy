@@ -1,6 +1,6 @@
 module.exports = {
   URLQUERY(state, payload){
-    state.url = {...state.url, ...payload}
+    state.urlparams = {...state.urlparams, ...payload}
   },
   SESSION(state, payload){
     state.app.session = payload

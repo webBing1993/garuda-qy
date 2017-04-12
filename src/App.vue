@@ -12,8 +12,12 @@
     name: 'app',
     computed: {
       ...mapState([
-        'app'
-      ])
+        'app',
+        'urlparams'
+      ]),
+      currentApp(){
+        return this.urlparams.app
+      }
     },
     methods: {
       ...mapActions([
@@ -24,6 +28,11 @@
     mounted(){
       this.urlquery()
       this.login()
+    },
+    watch: {
+      currentApp(val){
+        console.log('CURRENT APP: ' + val)
+      }
     }
   }
 </script>
