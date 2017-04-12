@@ -74,11 +74,11 @@
         if (a == null) {
           return null;
         } else if (a === this.orderdetail.payinfo.total_roomfee) {
-          return '已全额支付￥ ' + parseInt(a)/100
+          return `<span style="font-size: 14px; color: #4a4a4a;">已全额支付<abbr style="color: #80C435">￥`+parseInt(a)/100+`</abbr></span>`
         } else if (a === 0) {
-          return '未支付'
+          return `<span style="color: #DF4A4A; font-size: 14px">未支付</span>`
         } else {
-          return '已支付￥ ' + parseInt(a)/100
+          return `<span style="font-size: 14px;color: #4a4a4a;">已付<abbr style="color: #80C435">￥`+parseInt(a)/100+`</abbr></span>`
         }
       }
     },

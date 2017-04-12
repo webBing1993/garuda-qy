@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="preorder-list">
     <header>
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in renderTabMenu"
@@ -20,13 +20,14 @@
         <orderitem v-for="(item,index) in renderList"
                    :key="index"
                    :orderId="item.order_pmsid"
-                   :inTime="item.in_time"
-                   :outTime="item.out_time"
+                   :staff_confirm_timeline="item.in_time"
+                   :status="item.status"
                    :booker="item.owner"
                    :phoneNum="item.owner_tel"
                    :rooms="item.rooms_plan"
                    :arrow=true
-                   @onClick="goto('/preorder/' + item.order_id)"></orderitem>
+                   @onClick="goto('/preorder/' + item.order_id)">
+        </orderitem>
       </section>
     </scroller>
 
@@ -173,5 +174,5 @@
 </script>
 
 <style scoped lang="less">
-  @import "./index.less";
+  @import "index.less";
 </style>

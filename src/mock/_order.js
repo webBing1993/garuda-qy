@@ -3,9 +3,9 @@ import data from './data'
 
 Mock
   .mock(
-    /\/order\/detail\/\d+$/,
+    /\/order\/detail\/\d+/,
     function (opts) {
-      let id = opts.url.split('/').pop();
+      let id = opts.url.split('?')[0].split('/').pop();
       let orderdetail = data.confirmlist.filter(item => item.order_id == id)[0];
       return orderdetail
         ? {

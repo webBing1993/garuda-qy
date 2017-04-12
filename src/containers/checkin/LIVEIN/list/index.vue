@@ -1,8 +1,13 @@
 <template>
   <article>
-    <scroller lock-x use-pulldown>
+    <scroller :pulldown-config="app.scroller.config"
+              depend="renderList"
+              @on-pulldown-loading=""
+              use-pulldown
+              lock-x
+              height="-44">
       <section>
-        <orderitem v-for="(item,index) in todayList"
+        <orderitem v-for="(item,index) in renderList"
                    :key="index"
                    :roomNumber="item.room_number"
                    :roomTypeName="item.room_type_name"
@@ -14,23 +19,19 @@
         </orderitem>
       </section>
     </scroller>
-    <footer>
-      <div class="select" v-if="!popupShowSort">
-        <span v-if="sortSelected == '入住时间从早到晚'" @click="popupShowSort = !popupShowSort">时间正序</span>
-        <span v-else-if="sortSelected == '入住时间从晚到早'" @click="popupShowSort = !popupShowSort">时间倒序</span>
-        <span v-else @click="popupShowSort = !popupShowSort">筛选</span>
+    <footer v-if="!isToday">
+      <div class="select" >
+        <span @click="isCalendarShow = true">
+         <abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>
+          <abbr v-else>筛选</abbr>
+        </span>
       </div>
     </footer>
-    <popup v-model="popupShowSort"
+    <popup v-model="isCalendarShow"
            maskShow
            bottom
            animationTopBottom>
-      <div class="sort">
-        <div v-for="(item,index) in sort" class="sortText" :key="index">
-        <span :class="{selected:sortSelected === item}"
-              @click="sortSelected = item, popupShowSort = false">{{item}}</span>
-        </div>
-      </div>
+      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
 </template>
@@ -44,17 +45,20 @@
       return {
         todayList: [],
         allList: [],
-        popupShowSort: false,
-        sortSelected: null,
-        sort: ['入住时间从早到晚', '入住时间从晚到早'],
+        isCalendarShow: false,
+        periodFilter: [null,null]
       }
     },
     computed: {
       ...mapState([
+        'app',
         'route'
       ]),
       isToday() {
-          reutrn
+        return !!this.$route.path.match(/today/)
+      },
+      renderList() {
+          return this.isToday ? this.todayList : this.allList
       }
     },
     methods: {
@@ -63,18 +67,30 @@
         'getTodaySuborder',
         'getAllSuborder'
       ]),
+      getList() {
+          this.isToday
+            ?
+            this.getTodaySuborder({
+              onsuccess: body => this.todayList = body.data
+            })
+            :
+            this.getAllSuborder({
+              onsuccess: body => this.allList = body.data
+            })
+      },
+      resetFilter() {
+        this.periodFilter = [null, null]
+      }
+    },
+    watch: {
+      isToday() {
+          this.todayList = [];
+          this.allList = [];
+          this.getList();
+      }
     },
     mounted() {
-      let content = this.$route.path.search('today') > -1;
-      if (content) {
-        this.getTodaySuborder({
-          onsuccess: body => this.todayList = body.data
-        })
-      } else {
-        this.getAllSuborder({
-          onsuccess: body => this.allList = body.data
-        })
-      }
+      this.getList()
     }
   }
 </script>
