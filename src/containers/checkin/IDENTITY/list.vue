@@ -12,10 +12,11 @@
       <div class="scroller-wrap">
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + item.room.room_type_name"
-                :value="item.created_time | datetimeparse('YYYYMMDDhhmm')"/>
-          <cell :title="getGuestItem(item)"
-                @onClick="goto('/identity/' + item.identity_id)"
-                link/>
+                :value="item.created_time | datetimeparse('YYYYMMDDhhmm')"
+                @onClick="goto('/identity/' + item.identity_id)"/>
+          <!--<cell :title="getGuestItem(item)"-->
+          <!--@onClick="goto('/identity/' + item.identity_id)"-->
+          <!--link/>-->
         </group>
       </div>
     </scroller>

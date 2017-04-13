@@ -1,5 +1,8 @@
 <template>
   <div>
+    <p>sessionId: {{sessionId}}</p>
+    {{urlparams.msg}}
+    {{urlparams.app}}
     <dl>
       <dt>非对接</dt>
       <dd>
@@ -48,16 +51,86 @@
         <router-link to="/invoice/:tab">前台开票/待开发票</router-link>
       </dd>
     </dl>
-
-
   </div>
 </template>
 
 <script>
+  import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+
   export default{
     name: "home",
     data(){
       return {}
+    },
+    computed: {
+      ...mapState([
+        'app',
+        'urlparams'
+      ]),
+      currentMsg(){
+        return this.urlparams.msg
+      },
+      currentApp(){
+        return this.urlparams.app
+      },
+      sessionId(){
+        this.crossroad()
+        return this.app.session
+      }
+    },
+    methods: {
+      ...mapActions([
+        'urlquery',
+        'login',
+        'goto'
+      ]),
+      crossroad(){
+        if (this.currentMsg) {
+          this.goto(this.currentMsg)
+        } else {
+          let path = ''
+          switch (this.currentApp) {
+            case 'prepay':
+              path = '/pms/prepay/0'
+              break;
+            case 'record':
+              path = '/record'
+              break;
+            case 'precheckin-today':
+              path = '/preorder/today/0'
+              break;
+            case 'precheckin-history':
+              path = '/preorder/history/0'
+              break;
+            case 'roommanager':
+              path = '/roommanager'
+              break;
+            case 'identity-today':
+              path = '/identity/today/0'
+              break;
+            case 'identity-history':
+              path = '/identity/history/0'
+              break;
+            case 'livein-today':
+              path = '/livein/today'
+              break;
+            case 'livein':
+              path = '/livein/all'
+              break;
+            case 'invoice':
+              path = '/invoice/0'
+              break;
+            case 'setting':
+              path = '/setting'
+              break;
+          }
+          this.goto(path)
+        }
+      }
+    },
+    mounted(){
+      this.urlquery()
+      this.login()
     }
   }
 </script>

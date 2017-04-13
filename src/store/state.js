@@ -1,7 +1,6 @@
 module.exports = {
   urlparams: {},
   app: {
-    token: "",
     scroller: {
       config: {
         content: '下拉刷新列表',

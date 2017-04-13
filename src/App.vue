@@ -14,25 +14,7 @@
       ...mapState([
         'app',
         'urlparams'
-      ]),
-      currentApp(){
-        return this.urlparams.app
-      }
-    },
-    methods: {
-      ...mapActions([
-        'urlquery',
-        'login'
       ])
-    },
-    mounted(){
-      this.urlquery()
-      this.login()
-    },
-    watch: {
-      currentApp(val){
-        console.log('CURRENT APP: ' + val)
-      }
     }
   }
 </script>
