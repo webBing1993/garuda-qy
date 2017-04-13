@@ -6,7 +6,7 @@
                  :key="index"
                  :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/pms/prepay/'+index)"/>
+                 @click.native="replaceto('/pms/prepay/'+index)"/>
       </Tab>
       <div class="toolbar" v-if="batch">
         <span @click="allPick"
@@ -95,6 +95,7 @@
     methods: {
       ...mapActions([
         'goto',
+        'replaceto',
         'getconfirmelist',
         'multiconfirm'
       ]),
