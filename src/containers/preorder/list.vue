@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="preorder-list">
     <header>
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in renderTabMenu"
@@ -12,7 +12,7 @@
 
     <scroller :pulldown-config="app.scroller.config"
               :depend="renderList"
-              @on-pulldown-loading=""
+              @on-pulldown-loading="onpullDown"
               use-pulldown
               lock-x
               height="-44">
@@ -151,6 +151,10 @@
       resetFilter() {
         console.log('resetFilter')
         this.periodFilter = [null, null]
+      },
+      onpullDown() {
+        this.resetList();
+        this.getList();
       }
     },
     watch: {

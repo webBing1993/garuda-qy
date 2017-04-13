@@ -12,6 +12,7 @@
                    :roomTypeName="item.room_type_name"
                    :intg="item.union_tag"
                    :checkinTime="item.in_time"
+                   :timeformat="isToday ? 'hh:mm' : 'MM/DD hh:mm'"
                    :guests="item.guests"
                    :arrow="true"
                    @click.native="goto('/livein/'+item.suborder_id)">

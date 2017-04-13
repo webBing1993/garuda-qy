@@ -15,7 +15,7 @@
       <p v-if="desc" style="font-size: 13px;color: #888888;" v-html="desc"></p>
     </div>
     <div class="weui-cell__ft">
-      <span style="vertical-align:middle; font-size: 17px;" v-html="value"></span>
+      <span style="vertical-align:middle;" v-html="value"></span>
       <span v-if="dot" class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></span>
     </div>
   </div>

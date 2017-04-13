@@ -29,8 +29,8 @@
         <span v-if="!status.is_recording_success" class="warning">入账失败</span>
       </p>
 
-      <p class="hdr" v-if="checkinTime">
-        <span>{{checkinTime | datetimeparse('hh:mm')}}</span>
+      <p class="hdr" v-if="checkinTime || timeformat">
+        <span style="color: #8A8A8A;">{{checkinTime | datetimeparse(timeformat)}}</span>
       </p>
     </div>
 
@@ -48,10 +48,10 @@
         <span>{{booker}}</span>
         <span>{{phoneNum | filterPhoneNum}}</span>
       </p>
-      <p v-if="guests" class="guests-box">
-        <!--<span class="key guest-left">预订人：</span>-->
+      <p v-if="guests" class="list-box">
+        <!--<span class="key list-left">预订人：</span>-->
         <section>
-          <span v-for="item in guests" class="guests">
+          <span v-for="item in guests" class="list-item">
             <span style="padding-right: 5px">{{item.name}}</span>
             <span>{{item.idcard}}</span>
           </span>
@@ -65,11 +65,17 @@
         <span class="key">入离时间：</span>
         <span>{{inTime | datetimeparse}} - {{outTime |datetimeparse}}</span>
       </p>
-      <p v-if="rooms" v-for="room in rooms">
+      <p v-if="rooms" class="list-box">
         <span class="key">房型：</span>
-        <span v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>
-        <span v-if="staff_confirm_timeline"
-              class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>
+        <section>
+          <span v-for="(room,index) in rooms" class="list-item" v-if="room.room_type || room.room_count">
+            <span>{{room.room_type}}x{{room.room_count}} <abbr v-if="index == rooms.length-1" class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</abbr></span>
+          </span>
+        </section>
+        <!--<span v-for="room in rooms"-->
+              <!--v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>-->
+        <!--<span v-if="staff_confirm_timeline"-->
+              <!--class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>-->
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
@@ -134,6 +140,7 @@
       roomTypeName: null,
       intg: null,
       checkinTime: null,
+      timeformat:null,
       guests: null,
       arrow: {
         type: Boolean

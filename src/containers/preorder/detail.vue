@@ -1,17 +1,18 @@
 <template>
-  <article>
+  <article class="detail">
     <div v-if="orderdetail">
-      <div class="warning-title" v-show="!is_recording_success">
-        <div class="title-body" v-if="!is_recording_success">️入账失败</div>
+      <div class="warning-title" v-if="orderdetail.status">
+        <div class="title-body" v-if="!orderdetail.status.is_recording_success">️入账失败</div>
         <div class="title-footer" @click="confirmPmsResult"><input type="button" value="已手工入账"></div>
       </div>
 
       <!--预订信息-->
       <Group title="预订信息">
-        <Cell title="订单号" :value="orderdetail.order_pmsid"></Cell>
+        <Cell :title="`<span style='color: #8A8A8A'>订单号</span>`" :value="orderdetail.order_pmsid"></Cell>
         <Cell title="预订人" :value="orderdetail.owner"></Cell>
         <Cell title="手机号" :value="orderdetail.owner_tel"></Cell>
-        <Cell title="入离时间" :value="period"></Cell>
+        <Cell title="入住时间" :value="orderdetail.in_time |datetimeparse"></Cell>
+        <Cell title="离店时间" :value="orderdetail.out_time |datetimeparse"></Cell>
       </Group>
 
       <!-- PMS支付信息 -->
@@ -79,12 +80,6 @@
         'route',
         'orderdetail',
       ]),
-      is_recording_success() {
-        return this.orderdetail.status ? this.orderdetail.status.is_recording_success : false
-      },
-      period() {
-        return this.orderdetail.in_time + '-' + this.orderdetail.out_time
-      },
       routeId() {
         return this.$route.params.id
       }
@@ -109,9 +104,11 @@
         })
       },
       getGuestItem(item){
-        let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;"><span>${item.room_type_name + ' ' + item.room_number}</span></div>`;
-        item.guests.forEach(i => dom += `<div style="display: flex;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
-        return dom
+        if(item.guests) {
+          let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;color: #4a4a4a"><span>${item.room_type_name + ' ' + item.room_number}</span></div>`;
+          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
+          return dom
+        }
       },
       getDetail() {
         this.getorderdetail({
