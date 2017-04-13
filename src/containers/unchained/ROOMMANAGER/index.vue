@@ -9,9 +9,9 @@
                  @onSelected="tabSelected = item"/>
       </Tab>
       <div class="toolbar" v-show="isBatch == false">
-        <div :class="{reverse:showFloorList}" @click="showFloorList = true, showRoomTypeList = false">{{floorFilter}}
+        <div :class="{reverse:showFloorList}" @click="showFloorList = !showFloorList, showRoomTypeList = false">{{floorFilter}}
         </div>
-        <div :class="{reverse:showRoomTypeList}" @click="showRoomTypeList = true, showFloorList = false">
+        <div :class="{reverse:showRoomTypeList}" @click="showRoomTypeList = !showRoomTypeList, showFloorList = false">
           {{roomTypeFilter}}
         </div>
         <div @click="isBatch = true, showRoomTypeList = false, showFloorList = false">批量选择</div>
@@ -23,7 +23,7 @@
 
     <scroller v-show="tabSelected == '备选房'"
               :depend="[roomlist]"
-              :pulldown-config="app.scroller.config"
+              :pulldown-config="Interface.scroller"
               height="-86"
               use-pulldown
               lock-x>
@@ -53,7 +53,7 @@
 
     <scroller v-show="tabSelected == '所有房'"
               :depend="[roomlist]"
-              :pulldown-config="app.scroller.config"
+              :pulldown-config="Interface.scroller"
               height="-86"
               use-pulldown
               lock-x>
@@ -183,7 +183,7 @@
     },
     computed: {
       ...mapState([
-        'app',
+        'Interface',
         'route',
       ]),
       floorFilter(){

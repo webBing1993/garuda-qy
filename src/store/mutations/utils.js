@@ -1,11 +1,11 @@
 module.exports = {
   URLQUERY(state, payload){
-    state.urlparams = {...state.urlparams, ...payload}
+    state.AppParams = {...state.AppParams, ...payload}
   },
   SESSION(state, payload){
-    state.app.session = payload
+    state.AppParams.session = payload
   },
   TOAST(state, payload){
-    state.app.toast = {...state.app.toast, ...payload}
+    state.Interface.toast = {...state.Interface.toast, ...payload}
   }
 }

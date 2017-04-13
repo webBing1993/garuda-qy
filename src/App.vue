@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view></router-view>
-    <Toast v-model="app.toast.show" :title="app.toast.title"/>
+    <Toast v-model="Interface.toast.show" :title="Interface.toast.title"/>
   </div>
 </template>
 
@@ -12,8 +12,7 @@
     name: 'app',
     computed: {
       ...mapState([
-        'app',
-        'urlparams'
+        'Interface',
       ])
     }
   }

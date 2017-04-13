@@ -12,7 +12,7 @@
     </header>
 
     <scroller v-show="route.params.tab == 0"
-              :pulldown-config="app.scroller.config"
+              :pulldown-config="Interface.scroller"
               :depend="[invoiceList]"
               @on-pulldown-loading="donePullDown('tableft')"
               lock-x
@@ -38,7 +38,7 @@
     </scroller>
 
     <scroller v-show="route.params.tab == 1"
-              :pulldown-config="app.scroller.config"
+              :pulldown-config="Interface.scroller"
               @on-pulldown-loading="donePullDown('tabright')"
               lock-x
               ref="tabright"
@@ -77,7 +77,7 @@
     },
     computed: {
       ...mapState([
-        'app',
+        'Interface',
         'route',
       ])
     },

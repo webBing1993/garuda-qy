@@ -16,7 +16,7 @@
 
 <script>
   export default {
-    name: 'app',
+    name: 'dialog',
     props: {
       value: {
         type: Boolean,

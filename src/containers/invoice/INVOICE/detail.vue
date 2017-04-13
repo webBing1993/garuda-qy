@@ -52,7 +52,7 @@
     },
     computed: {
       ...mapState([
-        'app',
+        'Interface',
         'route',
       ])
     },

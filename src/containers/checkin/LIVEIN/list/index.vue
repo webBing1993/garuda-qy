@@ -1,6 +1,6 @@
 <template>
   <article>
-    <scroller :pulldown-config="app.scroller.config"
+    <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
               @on-pulldown-loading=""
               use-pulldown
@@ -51,7 +51,7 @@
     },
     computed: {
       ...mapState([
-        'app',
+        'Interface',
         'route'
       ]),
       isToday() {

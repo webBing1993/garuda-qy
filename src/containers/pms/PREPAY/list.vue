@@ -17,7 +17,7 @@
     </header>
 
     <scroller v-show="route.params.tab == 0"
-              :pulldown-config="app.scroller.config"
+              :pulldown-config="Interface.scroller"
               :depend="[tobeconfirmed,batch]"
               height="-44"
               use-pulldown
@@ -45,7 +45,7 @@
     </scroller>
 
     <scroller v-show="route.params.tab == 1"
-              :pulldown-config="app.scroller.config"
+              :pulldown-config="Interface.scroller"
               height="-44"
               :depend="[confirmed,batch]"
               use-pulldown
@@ -88,7 +88,7 @@
     },
     computed: {
       ...mapState([
-        'app',
+        'Interface',
         'route'
       ])
     },

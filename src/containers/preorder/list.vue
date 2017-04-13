@@ -10,7 +10,7 @@
       </Tab>
     </header>
 
-    <scroller :pulldown-config="app.scroller.config"
+    <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
               @on-pulldown-loading="onpullDown"
               use-pulldown
@@ -87,7 +87,7 @@
     },
     computed: {
       ...mapState([
-        'app',
+        'Interface',
         'route'
       ]),
       isToday(){
