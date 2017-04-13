@@ -112,12 +112,13 @@
     methods: {
       ...mapActions([
         'goto',
+        'replaceto',
         'gettodaylist',
         'gethistorylist'
       ]),
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index)
-        this.goto(newpath)
+        this.replaceto(newpath)
       },
       getList() {
         if (!this.renderList.length) {
