@@ -159,8 +159,8 @@
       }
     },
     watch: {
-      tabIndex() {
-        this.getList()
+      tabIndex(val) {
+        val >= 0 ? this.getList() : null
       },
       isSequence() {
         this.resetList();

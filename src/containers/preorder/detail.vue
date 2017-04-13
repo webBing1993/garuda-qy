@@ -1,8 +1,8 @@
 <template>
   <article class="detail">
     <div v-if="orderdetail">
-      <div class="warning-title" v-if="orderdetail.status">
-        <div class="title-body" v-if="!orderdetail.status.is_recording_success">️入账失败</div>
+      <div class="warning-title" v-if="orderdetail.status && !orderdetail.status.is_recording_success">
+        <div class="title-body">入账失败</div>
         <div class="title-footer" @click="confirmPmsResult"><input type="button" value="已手工入账"></div>
       </div>
 
@@ -26,7 +26,10 @@
         <Cell title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>
       </Group>
 
-      <Group  :title="index == 0? '选房信息' : null" v-for="(item,index) in orderdetail.suborders" :key="'guests'+index">
+      <Group :title="index == 0? '选房信息' : null"
+             v-if="orderdetail.suborders && orderdetail.suborders.guests && orderdetail.suborders.guests.length"
+             v-for="(item,index) in orderdetail.suborders"
+             :key="'guests'+index">
         <cell :title="getGuestItem(item)"/>
       </Group>
 
@@ -104,7 +107,7 @@
         })
       },
       getGuestItem(item){
-        if(item.guests) {
+        if (item.guests) {
           let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;color: #4a4a4a"><span>${item.room_type_name + ' ' + item.room_number}</span></div>`;
           item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
           return dom

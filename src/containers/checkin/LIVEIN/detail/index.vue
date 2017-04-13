@@ -1,38 +1,22 @@
 <template>
   <article>
     <div class="today-detail" v-if="detail">
-      <p class="room-title">主单信息</p>
-      <section class="sub-rooms">
-        <div class="room-type">
-          <span class="grey">订单号</span>
-          <span>{{detail.order_id}}</span>
-        </div>
-        <div class="room-type">
-          <span class="grey">预订人</span>
-          <span >{{detail.owner}}</span>
-        </div>
-        <div class="room-type">
-          <span class="grey">手机号</span>
-          <span>{{detail.owner_tel |  filterPhoneNum}}</span>
-        </div>
-        <div class="room-type">
-          <span class="grey">入离时间</span>
-          <span>{{detail.in_time | datetimeparse}} - {{detail.out_time | datetimeparse}}</span>
-        </div>
-      </section>
-      <p class="room-title">房间信息</p>
-      <section v-for='item in detail.suborders' class="sub-rooms">
-        <div class="room-type">
-          <span>{{item.room_type_name}} {{item.room_number}}</span>
-          <span>{{item.checkin_time | datetimeparse}} - {{item.checkout_time | datetimeparse}}</span>
-        </div>
-        <div class="suborders">
-          <div class="sub">
-            <p class="sub-booker" v-for="i in item.guests">{{i.name}} {{i.idcard}} </p>
-          </div>
-          <p class="time">{{item.checkin_time | datetimeparse('MM/DD hh:mm')}}</p>
-        </div>
-      </section>
+      <Group  title="主单信息">
+        <Cell  title="订单号" :value="detail.order_pmsid"></Cell>
+        <Cell  title="预订人" :value="detail.owner"></Cell>
+        <Cell  title="手机号" :value="detail.owner_tel"></Cell>
+        <Cell  title="入住时间" :value="detail.in_time | datetimeparse"></Cell>
+        <Cell  title="离店时间" :value="detail.out_time | datetimeparse"></Cell>
+        <Cell  title="房型" v-for="item in detail.rooms_plan" :value="item.room_type + '*' + item.room_count"></Cell>
+      </Group>
+
+      <Group :title="index == 0? '房间信息' : null"
+             v-if="detail.suborders"
+             v-for="(item,index) in detail.suborders"
+             :key="'guests'+index">
+        <Cell :title="`<div style='color: #4a4a4a'>${item.room_type_name +' '+item.room_number}</div>`"></Cell>
+        <Cell :title="getGuestItem(item)"/>
+      </Group>
     </div>
   </article>
 
@@ -58,11 +42,21 @@
       getDetail() {
         this.getorderdetail({
           order_id: this.routeId,
+          roomfee: 0,
           suborder: 1,
+          invoice: 0,
+          log: 0,
           onsuccess: body => {
             this.detail = body.data
           }
         })
+      },
+      getGuestItem(item){
+        if (item.guests) {
+          let dom = ``;
+          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${i.idcard}</span></div>`)
+          return dom
+        }
       },
     },
     watch: {

@@ -15,7 +15,7 @@
                    :timeformat="isToday ? 'hh:mm' : 'MM/DD hh:mm'"
                    :guests="item.guests"
                    :arrow="true"
-                   @click.native="goto('/livein/'+item.suborder_id)">
+                   @click.native="goto('/livein/'+item.order_id)">
         </orderitem>
       </div>
     </scroller>
