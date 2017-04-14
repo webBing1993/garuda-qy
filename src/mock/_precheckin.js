@@ -4,11 +4,10 @@ import data from './data'
 // ===============================================================
 // PMS订单-预付确认
 // ===============================================================
-
 Mock
   .mock(
     // 获取确认订单列表 /order/precheckin/confirm
-    data.prefix + '/order/precheckin/confirm',
+    /\/order\/precheckin\/confirm\?status=\d/,
     {
       errcode: "0",
       errmsg: "ok",

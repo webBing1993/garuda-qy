@@ -26,7 +26,7 @@
                    :phoneNum="item.owner_tel"
                    :rooms="item.rooms_plan"
                    :arrow=true
-                   @onClick="goto('/precheckin/order/' + item.order_id)">
+                   @onClick="goto('/precheckin/order/detail/' + item.order_id)">
         </orderitem>
       </section>
     </scroller>

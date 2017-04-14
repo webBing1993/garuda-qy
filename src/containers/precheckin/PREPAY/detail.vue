@@ -35,7 +35,7 @@
 
     <Dialog v-model="showDialog"
             @onConfirm="setSingleConfirm"
-            confirm
+            :confirm="!!(dialogStatus != 2 || inputValue)"
             cancel>
       <div v-if="!dialogStatus">
         <p>确认已全额支付？</p>
@@ -46,7 +46,7 @@
       <div v-if="dialogStatus == 2">
         <label>输入金额</label>
         <input v-model.number='inputValue'
-               class="money" placeholder="￥400">
+               class="money" :placeholder="orderdetail.payinfo.total_roomfee | CNY('总房费')">
       </div>
     </Dialog>
   </div>

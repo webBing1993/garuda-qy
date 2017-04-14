@@ -146,7 +146,7 @@
         //非批量模式下点击订单跳转至详情页面
         if (!this.batch) {
           this.batchlist = []
-          this.goto('/precheckin/prepay' + orderId)
+          this.goto('/precheckin/prepay/detail/' + orderId)
         }
       }
     },

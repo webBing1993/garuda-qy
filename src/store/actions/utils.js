@@ -33,7 +33,7 @@ module.exports = {
       emulateJSON: false,
     }).then(
       response => {
-        response.body.errcode >= 0 && response.body.errcode < 400
+        response.body.errcode == 0
           ? param.onSuccess ? param.onSuccess(response.body) : null
           : param.onFail ? param.onFail(response.body) : null
       }

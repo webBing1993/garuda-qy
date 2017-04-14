@@ -127,8 +127,8 @@
       },
     },
     watch: {
-      routeId() {
-        this.getDetail();
+      routeId(val) {
+        val ? this.getDetail() : null
       }
     },
     mounted() {

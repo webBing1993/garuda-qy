@@ -59,7 +59,7 @@
       </p>
       <p v-if="underPhoneNum">
         <span class="key">手机号：</span>
-        <span>{{underPhoneNum | filterPhoneNum}}</span>
+        <span>{{underPhoneNum}}</span>
       </p>
       <p v-if="inTime">
         <span class="key">入离时间：</span>

@@ -6,21 +6,18 @@
                  :key="index"
                  :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="goto('/invoice/'+index)">
+                 @onSelected="toggleTab(index)">
         </TabItem>
       </Tab>
     </header>
 
-    <scroller v-show="route.params.tab == 0"
-              :pulldown-config="Interface.scroller"
-              :depend="[invoiceList]"
-              @on-pulldown-loading="donePullDown('tableft')"
+    <scroller :pulldown-config="Interface.scroller"
+              @on-pulldown-loading=""
               lock-x
-              ref="tableft"
               use-pulldown
               height="-44">
       <div>
-        <section v-for="(item,index) in invoiceList" :key="index">
+        <section v-for="(item,index) in renderList" :key="index">
           <div class="invoice-container" @click="orderClick(item.order_id)">
             <div class="invoice-title">
               <span>{{item.rooms_number}}</span>
@@ -37,24 +34,12 @@
       </div>
     </scroller>
 
-    <scroller v-show="route.params.tab == 1"
-              :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="donePullDown('tabright')"
-              lock-x
-              ref="tabright"
-              use-pulldown
-              height="-44">
-      <div>
-        <h1>其他待开</h1>
-      </div>
-    </scroller>
-
-    <footer v-show="route.params.tab == 1">
-      <div class="select">
-        <span v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>
-        <span v-else @click="popupShowCalendar = !popupShowCalendar">筛选</span>
-      </div>
-    </footer>
+    <!--<footer v-show="route.params.tab == 1">-->
+      <!--<div class="select">-->
+        <!--<span v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>-->
+        <!--<span v-else @click="popupShowCalendar = !popupShowCalendar">筛选</span>-->
+      <!--</div>-->
+    <!--</footer>-->
 
   </article>
 </template>
@@ -67,54 +52,55 @@
     data(){
       return {
         tabmenu: ["当日发票", "全部发票"],
-        invoiceList: [],
-        otherinvoice: [],
-        popupShowCalendar: false,
-        sort: ['预登记时间从早到晚', '预登记时间从晚到早'],
-        sortSelected: null,
-        period: [null, null]
+        todayList: [],
+        allList: []
+//        popupShowCalendar: false,
+//        sort: ['预登记时间从早到晚', '预登记时间从晚到早'],
+//        sortSelected: null,
+//        period: [null, null]
       }
     },
     computed: {
       ...mapState([
         'Interface',
         'route',
-      ])
+      ]),
+      tabIndex() {
+        return +this.route.params.tab
+      },
+      renderList() {
+        return this.tabIndex ? this.todayList : this.allList
+      }
     },
     methods: {
       ...mapActions([
         'goto',
+        'replaceto',
         'getInvoiceList'
       ]),
-      reset: function (ref, param) {
-        //重置scroller高度
-        this.$nextTick(() => this.$refs[ref].reset(param))
-      },
       orderClick: function (orderId) {
         this.goto('/invoice/detail/' + orderId);
-//        console.log(orderId);
-      }
+      },
+      invoiceList() {
+        this.getInvoiceList({
+          scope: this.tabIndex == 0 ? 'TODAY' : 'OTHER',
+          invoice_status: 1,
+          onsuccess: body => this.tabIndex? this.todayList = body.data : this.allList = body.data
+        })
+      },
+      toggleTab(index){
+        let newpath = this.route.path.replace(this.route.params.tab, index)
+        this.replaceto(newpath)
+      },
     },
     watch: {
-      'route.params.tab': function (val) {
-        //切换标签卡时
-        if (val == 0 && !this.invoiceList.length) {
-          this.reset('tableft');
-          this.getInvoiceList({
-            onsuccess: body => this.invoiceList = body.data
-        })
-        } else if (val == 1 && !this.otherinvoice.length) {
-          this.reset('tabright');
-          this.getInvoiceList({
-            onsuccess: body => this.otherinvoice = body.data
-        })
-        }
+      tabIndex(val) {
+          val ? this.todayList = [] : this.allList = [];
+          this.invoiceList();
       }
     },
     mounted(){
-      this.getInvoiceList({
-        onsuccess: body => this.invoiceList = body.data
-    })
+      this.invoiceList();
     }
   }
 
