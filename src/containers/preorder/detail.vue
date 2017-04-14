@@ -40,8 +40,8 @@
         <Cell title="领取方式" :value="orderdetail.invoice.media"></Cell>
         <Cell title="开票内容" :value="orderdetail.invoice.category"></Cell>
       </Group>
-      <div class="predetail-btn" @click="popupShow = !popupShow">
-        <div class="log-btn">操作日志</div>
+      <div class="predetail-btn">
+        <XButton value="操作日志" plain mini @onClick="popupShow = !popupShow"></XButton>
       </div>
 
       <!-- log 弹窗 -->
