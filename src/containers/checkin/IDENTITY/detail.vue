@@ -1,6 +1,6 @@
 <template>
   <article>
-    <scroller v-if="detail.identity_id" lock-x>
+    <scroller v-if="detail.identity_id" lock-x :depend="detail">
       <div class="scroller-wrap">
         <group title="预定信息">
           <cell title="预订人" :value="detail.owner"/>
@@ -17,8 +17,8 @@
             <p><span>身份证</span>{{item.idcard}}</p>
             <p><span>地址</span>{{item.address}}</p>
             <div class="photos">
-              <img src="" alt="身份证照片">
-              <img src="" alt="当前照片">
+              <img :src="item.photo" alt="身份证照片">
+              <img :src="item.live_photo" alt="当前照片">
             </div>
             <p class="similarity">相似度 {{item.similarity}}%</p>
           </div>
@@ -57,8 +57,8 @@
       }
     },
     watch: {
-      identityId(){
-        this.getDetail()
+      identityId(val){
+        val ? this.getDetail() : null
       }
     },
     mounted(){

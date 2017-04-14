@@ -254,7 +254,7 @@
           this._xscroll.plug(this.pulldown)
           this.pulldown.on('loading', (e) => {
             this.$emit('on-pulldown-loading', this.uuid)
-            setTimeout(() => this.donePulldown(), 3000)
+            setTimeout(() => this.donePulldown(), 700)
           })
           this.pulldown.on('statuschange', (val) => {
             this.currentValue.pulldownStatus = val.newVal

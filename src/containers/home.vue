@@ -1,14 +1,14 @@
 <template>
   <div>
     <dl>
-    <dt>非对接</dt>
-    <dd>
-      <router-link to="/record">录入修改</router-link>
-    </dd>
-    <dd>
-      <router-link to="/roommanager">房态管理</router-link>
-    </dd>
-  </dl>
+      <dt>非对接</dt>
+      <dd>
+        <router-link to="/record">录入修改</router-link>
+      </dd>
+      <dd>
+        <router-link to="/roommanager">房态管理</router-link>
+      </dd>
+    </dl>
 
     <dl>
       <dt>当日将到</dt>

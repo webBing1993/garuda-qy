@@ -173,6 +173,10 @@
     },
     mounted(){
       this.getList()
+    },
+
+    deactivated(){
+        //reset all data
     }
   }
 </script>

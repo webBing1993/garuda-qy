@@ -2,9 +2,9 @@ module.exports = {
   datetimeparse: (timestamp, format, prefix) => {
     // console.log(timestamp, format)
     let newtimestamp = timestamp
-      ? timestamp.toString().length == 13
+      ? timestamp.toString().length === 13
         ? timestamp.toString()
-        : timestamp.toString().length == 10
+        : timestamp.toString().length === 10
           ? timestamp + '000'
           : null
       : null
