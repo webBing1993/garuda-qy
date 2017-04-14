@@ -19,20 +19,6 @@
         </orderitem>
       </div>
     </scroller>
-    <!--<footer v-if="!isToday">-->
-      <!--<div class="select" >-->
-        <!--<span @click="isCalendarShow = true">-->
-         <!--<abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>-->
-          <!--<abbr v-else>筛选</abbr>-->
-        <!--</span>-->
-      <!--</div>-->
-    <!--</footer>-->
-    <!--<popup v-model="isCalendarShow"-->
-           <!--maskShow-->
-           <!--bottom-->
-           <!--animationTopBottom>-->
-      <!--<calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>-->
-    <!--</popup>-->
   </article>
 </template>
 
@@ -45,8 +31,6 @@
       return {
         todayList: [],
         allList: [],
-//        isCalendarShow: false,
-//        periodFilter: [null,null]
       }
     },
     computed: {
@@ -58,7 +42,7 @@
         return !!this.$route.path.match(/today/)
       },
       renderList() {
-          return this.isToday ? this.todayList : this.allList
+        return this.isToday ? this.todayList : this.allList
       }
     },
     methods: {
@@ -68,25 +52,22 @@
         'getAllSuborder'
       ]),
       getList() {
-          this.isToday
-            ?
-            this.getTodaySuborder({
-              onsuccess: body => this.todayList = body.data
-            })
-            :
-            this.getAllSuborder({
-              onsuccess: body => this.allList = body.data
-            })
+        this.isToday
+          ?
+          this.getTodaySuborder({
+            onsuccess: body => this.todayList = body.data
+          })
+          :
+          this.getAllSuborder({
+            onsuccess: body => this.allList = body.data
+          })
       },
-//      resetFilter() {
-//        this.periodFilter = [null, null]
-//      }
     },
     watch: {
       isToday() {
-          this.todayList = [];
-          this.allList = [];
-          this.getList();
+        this.todayList = [];
+        this.allList = [];
+        this.getList();
       }
     },
     mounted() {
@@ -94,7 +75,3 @@
     }
   }
 </script>
-
-<style scoped lang="less">
-  @import "index.less";
-</style>

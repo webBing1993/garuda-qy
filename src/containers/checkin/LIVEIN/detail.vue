@@ -1,13 +1,14 @@
 <template>
   <article>
     <div class="today-detail" v-if="detail">
-      <Group  title="主单信息">
-        <Cell  title="订单号" :value="detail.order_pmsid"></Cell>
-        <Cell  title="预订人" :value="detail.owner"></Cell>
-        <Cell  title="手机号" :value="detail.owner_tel"></Cell>
-        <Cell  title="入住时间" :value="detail.in_time | datetimeparse"></Cell>
-        <Cell  title="离店时间" :value="detail.out_time | datetimeparse"></Cell>
-        <Cell  title="房型" v-for="item in detail.rooms_plan" :value="item.room_type + '*' + item.room_count"></Cell>
+      <Group title="主单信息">
+        <Cell title="订单号" :value="detail.order_pmsid"></Cell>
+        <Cell title="预订人" :value="detail.owner"></Cell>
+        <Cell title="手机号" :value="detail.owner_tel"></Cell>
+        <Cell title="入住时间" :value="detail.in_time | datetimeparse"></Cell>
+        <Cell title="离店时间" :value="detail.out_time | datetimeparse"></Cell>
+        <Cell title="房型" v-for="(item,index) in detail.rooms_plan" :key="'rooms_plan'+index"
+              :value="item.room_type + '*' + item.room_count"></Cell>
       </Group>
 
       <Group :title="index == 0? '房间信息' : null"
@@ -19,7 +20,6 @@
       </Group>
     </div>
   </article>
-
 </template>
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
@@ -27,7 +27,7 @@
     name: 'liveindetail',
     data() {
       return {
-          detail: {},
+        detail: {},
       }
     },
     computed: {
@@ -69,7 +69,3 @@
     }
   }
 </script>
-
-<style scoped lang="less">
-  @import "index.less";
-</style>

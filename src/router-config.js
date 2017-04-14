@@ -82,13 +82,13 @@ const checkin = [{
   },
   children: [{
     path: 'today',
-    component: require('./containers/checkin/LIVEIN/list')
+    component: require('./containers/checkin/LIVEIN/list.vue')
   }, {
     path: 'all',
-    component: require('./containers/checkin/LIVEIN/list')
+    component: require('./containers/checkin/LIVEIN/list.vue')
   }, {
     path: ':id',
-    component: require('./containers/checkin/LIVEIN/detail')
+    component: require('./containers/checkin/LIVEIN/detail.vue')
   }]
 }]
 
