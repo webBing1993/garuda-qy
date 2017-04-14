@@ -6,7 +6,7 @@
                  :key="index"
                  :value="item"
                  :selected="route.params.tab == index"
-                 @click.native="replaceto('/pms/prepay/'+index)"/>
+                 @click.native="replaceto('/precheckin/prepay/'+index)"/>
       </Tab>
       <div class="toolbar" v-if="batch">
         <span @click="allPick"
@@ -146,7 +146,7 @@
         //非批量模式下点击订单跳转至详情页面
         if (!this.batch) {
           this.batchlist = []
-          this.goto('/pms/' + orderId)
+          this.goto('/precheckin/prepay' + orderId)
         }
       }
     },
@@ -178,5 +178,5 @@
 </script>
 
 <style scoped lang="less">
-  @import "./index.less";
+  @import "index.less";
 </style>

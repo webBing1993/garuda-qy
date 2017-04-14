@@ -8,7 +8,7 @@
 
       <!--预订信息-->
       <Group title="预订信息">
-        <Cell :title="`<span style='color: #8A8A8A'>订单号</span>`" :value="orderdetail.order_pmsid"></Cell>
+        <Cell title="订单号" :value="orderdetail.order_pmsid"></Cell>
         <Cell title="预订人" :value="orderdetail.owner"></Cell>
         <Cell title="手机号" :value="orderdetail.owner_tel"></Cell>
         <Cell title="入住时间" :value="orderdetail.in_time |datetimeparse"></Cell>

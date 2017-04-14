@@ -26,7 +26,7 @@
                    :phoneNum="item.owner_tel"
                    :rooms="item.rooms_plan"
                    :arrow=true
-                   @onClick="goto('/preorder/' + item.order_id)">
+                   @onClick="goto('/precheckin/order/' + item.order_id)">
         </orderitem>
       </section>
     </scroller>
@@ -43,8 +43,7 @@
 
     <popup v-model="isSortShow"
            maskShow
-           bottom
-           animationTopBottom>
+           bottom>
       <div class="sort">
         <div v-for="(item,index) in sortMenu" class="sortText" :key="index">
           <span :class="{selected:isSequence === index}" @click="isSequence = index, isSortShow = false">{{item}}</span>

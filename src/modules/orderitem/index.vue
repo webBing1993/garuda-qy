@@ -69,9 +69,10 @@
         <span class="key">房型：</span>
         <section>
           <span v-for="(room,index) in rooms" class="list-item" v-if="room.room_type || room.room_count">
-            <span>{{room.room_type}}x{{room.room_count}} <abbr v-if="index == rooms.length-1" class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</abbr></span>
+            <span>{{room.room_type}}x{{room.room_count}} </span>
           </span>
         </section>
+        <abbr class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</abbr>
         <!--<span v-for="room in rooms"-->
               <!--v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>-->
         <!--<span v-if="staff_confirm_timeline"-->

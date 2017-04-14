@@ -25,33 +25,26 @@ const unchained = [{
 }]
 
 const precheckin = [{
-  path: '/pms',
+  path: '/precheckin',
   component: {
-    name: "pms",
-    template: `<router-view/>`,
-  },
-  children: [{
-    path: 'prepay/:tab',
-    component: require('./containers/pms/PREPAY/list')
-  }, {
-    path: ':id',
-    component: require('./containers/pms/PREPAY/detail')
-  }]
-}, {
-  path: '/preorder',
-  component: {
-    name: "preorder",
+    name: "precheckin",
     template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: 'today/:tab',
-    component: require('./containers/preorder/list.vue')
+    path: 'prepay/:tab',
+    component: require('./containers/precheckin/PREPAY/list.vue')
   }, {
-    path: 'history/:tab',
-    component: require('./containers/preorder/list.vue')
+    path: 'prepay/:id',
+    component: require('./containers/precheckin/PREPAY/detail.vue')
+  },{
+    path: 'order/today/:tab',
+    component: require('./containers/precheckin/ORDER/list.vue')
   }, {
-    path: ':id',
-    component: require('./containers/preorder/detail')
+    path: 'order/history/:tab',
+    component: require('./containers/precheckin/ORDER/list.vue')
+  }, {
+    path: 'order/:id',
+    component: require('./containers/precheckin/ORDER/detail.vue')
   }]
 }]
 
