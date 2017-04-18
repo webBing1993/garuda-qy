@@ -45,7 +45,7 @@
       </div>
       <div v-if="dialogStatus == 2">
         <label>输入金额</label>
-        <input v-model.number='inputValue'
+        <input type="number" v-model.number='inputValue'
                class="money" :placeholder="orderdetail.payinfo.total_roomfee | CNY('总房费')">
       </div>
     </Dialog>

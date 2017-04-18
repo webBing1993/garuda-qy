@@ -26,8 +26,9 @@ module.exports = {
   },
   confirmInvoice(ctx,param) {
     ctx.dispatch('resource', {
-      url: 'invoice_apply/'+ param.invoice_apply_id + '/invoice_status',
-      params: {
+      url: '/invoice_apply/'+ param.invoice_apply_id + '/invoice_status',
+      method:'PATCH',
+      body: {
         invoice_status:param.invoice_status
       },
       onSuccess:(body) => {
