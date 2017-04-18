@@ -74,11 +74,11 @@
         if (a == null) {
           return null;
         } else if (a === this.orderdetail.payinfo.total_roomfee) {
-          return `<span style="font-size: 14px; color: #4a4a4a;">已全额支付<abbr style="color: #80C435">￥`+parseInt(a)/100+`</abbr></span>`
+          return `<span style="font-size: 14px; color: #4a4a4a;">已全额支付<abbr style="color: #80C435">￥` + parseInt(a) / 100 + `</abbr></span>`
         } else if (a === 0) {
           return `<span style="color: #DF4A4A; font-size: 14px">未支付</span>`
         } else {
-          return `<span style="font-size: 14px;color: #4a4a4a;">已付<abbr style="color: #80C435">￥`+parseInt(a)/100+`</abbr></span>`
+          return `<span style="font-size: 14px;color: #4a4a4a;">已付<abbr style="color: #80C435">￥` + parseInt(a) / 100 + `</abbr></span>`
         }
       }
     },
@@ -108,6 +108,21 @@
           staff_pay: staff_pay,
           onsuccess: () => this.orderdetail.payinfo.staff_pay = staff_pay
         })
+      },
+      getDetail(){
+        this.getorderdetail({
+          order_id: this.$route.params.id,
+          roomfee: 0,
+          suborder: 0,
+          invoice: 0,
+          log: 0,
+          onsuccess: body => {
+            this.orderdetail = body.data
+          }
+        })
+      },
+      resetDetail(){
+        this.orderdetail = {}
       }
     },
     watch: {
@@ -115,17 +130,10 @@
         oldV ? (this.dialogStatus = null, this.inputValue = null) : null
       }
     },
-    mounted() {
-      this.getorderdetail({
-        order_id: this.$route.params.id,
-        roomfee: 0,
-        suborder: 0,
-        invoice: 0,
-        log: 0,
-        onsuccess: body => {
-          this.orderdetail = body.data
-        }
-      })
+    activated(){
+      console.log('activated')
+      this.resetDetail()
+      this.getDetail()
     }
   }
 </script>

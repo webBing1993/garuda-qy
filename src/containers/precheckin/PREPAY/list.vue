@@ -16,7 +16,7 @@
       </div>
     </header>
 
-    <scroller v-show="route.params.tab == 0"
+    <scroller v-show="!isConfirmed"
               :pulldown-config="Interface.scroller"
               :depend="[tobeconfirmed,batch]"
               height="-44"
@@ -45,7 +45,7 @@
       </section>
     </scroller>
 
-    <scroller v-show="route.params.tab == 1"
+    <scroller v-show="isConfirmed"
               :pulldown-config="Interface.scroller"
               height="-44"
               :depend="[confirmed,batch]"
@@ -91,7 +91,10 @@
       ...mapState([
         'Interface',
         'route'
-      ])
+      ]),
+      isConfirmed(){
+        return this.route.params.tab === "1"
+      }
     },
     methods: {
       ...mapActions([
@@ -104,7 +107,7 @@
         route.params.tab ? this.tobeconfirmed = [] : this.confirmed = [];
         this.getconfirmelist({
           status: this.$route.params.tab,
-          onsuccess: body => this[this.$route.params.tab == 0 ? 'tobeconfirmed' : 'confirmed'] = body.data
+          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = body.data
         })
       },
       allPick(){
@@ -152,31 +155,36 @@
           this.batchlist = []
           this.goto('/precheckin/prepay/detail/' + orderId)
         }
+      },
+      getList(){
+        this.getconfirmelist({
+          status: this.route.params.tab,
+          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = body.data
+        })
+      },
+      initList(){
+        if ((this.isConfirmed && this.confirmed.length === 0) || (!this.isConfirmed && this.tobeconfirmed.length === 0)) {
+          this.getList()
+        }
+      },
+      refreshList(){
+        this.getconfirmelist({
+          status: this.route.params.tab,
+          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = [...body.data]
+        })
       }
     },
     watch: {
-      'route.params.tab': function (val, oldval) {
-        val ? this.cancelPick() : null;
-        if (val == 0 && !this.tobeconfirmed.length) {
-          console.log(0)
-          this.getconfirmelist({
-            status: val,
-            onsuccess: body => this.tobeconfirmed = body.data
-          })
-        } else if (val == 1 && !this.confirmed.length) {
-          console.log(1)
-          this.getconfirmelist({
-            status: val,
-            onsuccess: body => this.confirmed = body.data
-          })
-        }
+      isConfirmed: function (val, oldval) {
+        this.cancelPick()
+        this.initList()
       }
     },
     mounted(){
-      this.getconfirmelist({
-        status: this.$route.params.tab,
-        onsuccess: body => this[this.$route.params.tab == 0 ? 'tobeconfirmed' : 'confirmed'] = body.data
-      })
+      this.initList()
+    },
+    activated(){
+      this.refreshList()
     }
   }
 </script>
