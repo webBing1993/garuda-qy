@@ -68,7 +68,7 @@
       },
       setInvoiceConfirm () {
         this.confirmInvoice({
-          invoice_apply_id: this.invoiceDtail.invoice_apply_id,
+          invoice_apply_id: this.invoiceDtail.orderId,
           invoice_status: 2,
           onsuccess:function () {
               this.invoiceDtail.invoice_status = 2
