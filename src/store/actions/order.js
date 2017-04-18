@@ -1,6 +1,7 @@
 // ===============================================================
 // PMS订单-预付确认
 // ===============================================================
+
 module.exports = {
   //获取确认订单列表
   getconfirmelist(ctx, param){
@@ -13,6 +14,21 @@ module.exports = {
         param.onsuccess(body)
       },
       onFail: () => null
+    })
+  },
+  //获取确认订单详情
+  getorderdetail(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/detail/' + param.order_id,
+      params: {
+        roomfee: param.roomfee,
+        suborder: param.suborder,
+        invoice: param.invoice,
+        log: param.log
+      },
+      onSuccess: (body) => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
     })
   },
   //批量确认预订单
@@ -44,26 +60,10 @@ module.exports = {
       }
     })
   },
-  //获取确认订单详情
-  getorderdetail(ctx, param){
-    ctx.dispatch('resource', {
-      url: '/order/detail/' + param.order_id,
-      params: {
-        roomfee: param.roomfee,
-        suborder: param.suborder,
-        invoice: param.invoice,
-        log: param.log
-      },
-      onSuccess: (body) => {
-        param.onsuccess(body)
-      }
-    })
-  },
 
 // ===============================================================
 // 预登记订单
 // ===============================================================
-
 
   //当日预登记订单列表
   gettodaylist(ctx, param){

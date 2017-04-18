@@ -40,7 +40,8 @@ module.exports = {
   setroomenabledpick(ctx, param){
     ctx.dispatch('resource', {
       url: '/room/enabled_pick',
-      param: {
+      method: 'POST',
+      body: {
         room_ids: param.room_ids,
         enabled: param.enabled
       },
@@ -66,7 +67,7 @@ module.exports = {
   cancelsuborder(ctx, param){
     ctx.dispatch('resource', {
       url: '/room/cancel_suborder',
-      method:'POST',
+      method: 'POST',
       param: {
         room_id: param.room_id,
       },

@@ -129,7 +129,6 @@
     },
     watch: {
       sessionId(val){
-        console.log('app.session=', val)
         val ? this.crossroad() : null
       }
     }

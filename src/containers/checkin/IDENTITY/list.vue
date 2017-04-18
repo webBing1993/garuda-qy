@@ -8,7 +8,12 @@
       </TabItem>
     </Tab>
 
-    <scroller lock-x :scrollbar-x=false :depend="renderList" height="-45">
+    <scroller lock-x :scrollbar-x=false
+              :pulldown-config="Interface.scroller"
+              @on-pulldown-loading="getList"
+              :depend="renderList"
+              height="-45"
+              use-pulldown>
       <div class="scroller-wrap">
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
@@ -71,6 +76,7 @@
     },
     computed: {
       ...mapState([
+        'Interface',
         'route'
       ]),
       isToday(){

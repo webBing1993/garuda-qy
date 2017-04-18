@@ -3,6 +3,21 @@ body {
   font-size: 14px;
 }
 
+.cell-multi {
+  //color: #4a4a4a;
+  line-height: 2.5;
+}
+
+.cell-title {
+  display: inline-block;
+  min-width: 4em;
+  text-align: right;
+}
+
+.cell-text {
+  color: #4a4a4a;
+}
+
 //button
 .weui-btn_plain-default {
   background-color: #ffffff;
@@ -14,7 +29,14 @@ body {
 }
 
 //cell
+.weui-cells__title {
+  color: @weuiTextColorTitle;
+}
+
 .weui-cell__hd {
+  .weui-label{
+    color: @weuiTextColorTitle;
+  }
   .weui-icon-info {
     display: block;
     margin-right: 5px;
@@ -36,32 +58,8 @@ body {
 
 .weui-cell__bd {
   color: @weuiTextColorTitle;
-}
-
-.weui-cells__title {
-  color: @weuiTextColorTitle;
-}
-
-.cell-title {
-  color: #8A8A8A;
-  display: inline-block;
-  min-width: 4em;
-  text-align: right;
-}
-
-.cell-temp {
-  line-height: 2;
-}
-
-.cell-table {
-  width: 100%;
-  padding: 15px;
-  .key {
-    //width: 70px;
-    min-width: 5em;
-    color: #8A8A8A;
-    text-align: right;
-    display: inline-block;
+  .weui-input {
+    color: @weuiTextColorGray;
   }
 }
 
@@ -83,4 +81,3 @@ body {
     background-color: #fff;
   }
 }
-
