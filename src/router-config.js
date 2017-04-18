@@ -36,7 +36,7 @@ const precheckin = [{
   }, {
     path: 'prepay/detail/:id',
     component: require('./containers/precheckin/PREPAY/detail.vue')
-  },{
+  }, {
     path: 'order/today/:tab',
     component: require('./containers/precheckin/ORDER/list.vue')
   }, {
@@ -111,5 +111,6 @@ const others = [{
 ]
 
 export default new VueRouter({
+  mode: 'history',
   routes: [...unchained, ...precheckin, ...checkin, ...invoice, ...others]
 })
