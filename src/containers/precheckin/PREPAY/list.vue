@@ -159,7 +159,7 @@
       getList(){
         this.getconfirmelist({
           status: this.route.params.tab,
-          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = body.data
+          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = [...body.data]
         })
       },
       initList(){
@@ -167,12 +167,6 @@
           this.getList()
         }
       },
-      refreshList(){
-        this.getconfirmelist({
-          status: this.route.params.tab,
-          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = [...body.data]
-        })
-      }
     },
     watch: {
       isConfirmed: function (val, oldval) {
@@ -180,11 +174,8 @@
         this.initList()
       }
     },
-    mounted(){
-      this.initList()
-    },
     activated(){
-      this.refreshList()
+      this.getList()
     }
   }
 </script>

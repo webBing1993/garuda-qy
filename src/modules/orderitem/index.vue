@@ -9,7 +9,7 @@
       </p>
 
       <p class="hdl" v-if="roomNumber || roomTypeName || intg">
-        <span>{{roomNumber}} {{roomTypeName}} {{intg ? '(联'+ intg +')' : null}}</span>
+        <span>{{roomNumber}} {{roomTypeName}} {{intg ? '(联' + intg + ')' : null}}</span>
       </p>
 
       <!--<p class="hdr">-->
@@ -20,9 +20,9 @@
 
       <p class="hdr" v-if=" fee || prepay ">
         <span v-if="prepay === null"></span>
-        <span v-else-if="prepay === 0" class="warning">未付款</span>
-        <span v-else-if="prepay === fee" class="default">已付全额</span>
-        <span v-else-if="prepay < fee" class="other">已付其他</span>
+        <span v-if="prepay === 0" class="warning">未付款</span>
+        <span v-if="prepay === fee" class="default">已付全额</span>
+        <span v-if="prepay && prepay !==fee" class="other">已付其他</span>
       </p>
 
       <p class="hdr" v-if="status">
@@ -63,7 +63,7 @@
       </p>
       <p v-if="inTime">
         <span class="key">入离时间：</span>
-        <span>{{inTime | datetimeparse}} - {{outTime |datetimeparse}}</span>
+        <span>{{inTime | datetimeparse}} - {{outTime | datetimeparse}}</span>
       </p>
       <p v-if="rooms" class="list-box">
         <span class="key">房型：</span>
@@ -74,9 +74,9 @@
         </section>
         <abbr class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</abbr>
         <!--<span v-for="room in rooms"-->
-              <!--v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>-->
+        <!--v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>-->
         <!--<span v-if="staff_confirm_timeline"-->
-              <!--class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>-->
+        <!--class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>-->
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
@@ -142,7 +142,7 @@
       roomTypeName: null,
       intg: null,
       checkinTime: null,
-      timeformat:null,
+      timeformat: null,
       guests: null,
       arrow: {
         type: Boolean
