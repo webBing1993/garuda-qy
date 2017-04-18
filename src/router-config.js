@@ -71,7 +71,7 @@ const checkin = [{
   path: '/livein',
   component: {
     name: "livein",
-    template: `<router-view/>`,
+    template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
     path: 'today',

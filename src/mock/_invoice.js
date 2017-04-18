@@ -6,15 +6,15 @@ import data from './data'
 // ===============================================================
 
 Mock.mock(
-  data.prefix + '/invoice_apply',
+  data.prefix + '/invoice_apply?invoice_status=1&scope=OTHER',
   {
     errcode: "0",
     errmsg: "ok",
     data: [{
       invoice_apply_id: '1234',
-      order_id: '11344412345',
-      is_any_checkin: '已入住', //true已入住 false未入住
-      rooms_number: 203,
+      order_id: '230420402402401',
+      is_any_checkin: true, //true已入住 false未入住
+      rooms_number: ['203'],
       owner: '张翠山',
       phone_number: '+8613112334544',
       in_time: '1491384458000',
@@ -23,12 +23,12 @@ Mock.mock(
       category: "住宿费",
       media: "PAPER",
       title: "上海二建",
-      invoice_status: '已开票', //1有效未开票 2已开票
+      invoice_status: 1, //1有效未开票 2已开票
     }, {
       invoice_apply_id: '1234',
-      order_id: '22334412345',
-      is_any_checkin: '已入住', //true已入住 false未入住
-      rooms_number: 205,
+      order_id: '230420402402402',
+      is_any_checkin: false, //true已入住 false未入住
+      rooms_number: ['205'],
       owner: '张无忌',
       phone_number: '+8613112334544',
       in_time: '1491384458000',
@@ -37,7 +37,7 @@ Mock.mock(
       category: "住宿费",
       media: "PAPER",
       title: "上海三建",
-      invoice_status: '已开票', //1有效未开票 2已开票
+      invoice_status: 2, //1有效未开票 2已开票
     }]
   }
 )

@@ -9,7 +9,7 @@
       </p>
 
       <p class="hdl" v-if="roomNumber || roomTypeName || intg">
-        <span>{{roomNumber}} {{roomTypeName}} (联{{intg}})</span>
+        <span>{{roomNumber}} {{roomTypeName}} {{intg ? '(联'+ intg +')' : null}}</span>
       </p>
 
       <!--<p class="hdr">-->
@@ -46,7 +46,7 @@
       <p v-if="booker || phoneNum">
         <span class="key">预订人：</span>
         <span>{{booker}}</span>
-        <span>{{phoneNum | filterPhoneNum}}</span>
+        <span>{{phoneNum}}</span>
       </p>
       <p v-if="guests" class="list-box">
         <!--<span class="key list-left">预订人：</span>-->
@@ -91,6 +91,19 @@
         <span class="key">已付房费：</span>
         <span>{{payinfo.user_pay | CNY}}</span>
       </p>
+      <svg v-if="arrow"
+           class="arrow"
+           width="10px"
+           height="28px"
+           viewBox="718 721 20 56"
+           version="1.1"
+           xmlns="http://www.w3.org/2000/svg">
+        <polyline id="右箭头"
+                  stroke="none"
+                  fill="#C3C3C3"
+                  fill-rule="evenodd"
+                  points="718 722.389391 734.764206 749.037813 718.619206 775.729959 720.91254 777 737.860238 748.950214 720.362143 721.14125 718 722.389391"></polyline>
+      </svg>
     </div>
 
     <div class="ft" v-if="remark">
@@ -100,19 +113,7 @@
       </p>
     </div>
 
-    <svg v-if="arrow"
-         class="arrow"
-         width="10px"
-         height="28px"
-         viewBox="718 721 20 56"
-         version="1.1"
-         xmlns="http://www.w3.org/2000/svg">
-      <polyline id="右箭头"
-                stroke="none"
-                fill="#C3C3C3"
-                fill-rule="evenodd"
-                points="718 722.389391 734.764206 749.037813 718.619206 775.729959 720.91254 777 737.860238 748.950214 720.362143 721.14125 718 722.389391"></polyline>
-    </svg>
+
   </div>
 </template>
 

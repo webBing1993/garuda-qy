@@ -10,7 +10,7 @@
                    :key="index"
                    :roomNumber="item.room_number"
                    :roomTypeName="item.room_type_name"
-                   :intg="item.union_tag"
+                   :intg="getUnionTag(item.union_tag,item.room_number)"
                    :checkinTime="item.in_time"
                    :timeformat="isToday ? 'hh:mm' : 'MM/DD hh:mm'"
                    :guests="item.guests"
@@ -26,11 +26,11 @@
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 
   export default {
-    name: 'livein',
+    name: 'list',
     data() {
       return {
         todayList: [],
-        allList: [],
+        allList: []
       }
     },
     computed: {
@@ -43,6 +43,20 @@
       },
       renderList() {
         return this.isToday ? this.todayList : this.allList
+      },
+      unionTag() {
+        let totalList = [...this.todayList, ...this.allList];
+        let tagList = [];
+        totalList.forEach(item => {
+            if (item.union_tag) {
+              let tagIndex = tagList.findIndex(i => i.tag === item.union_tag);
+              tagIndex === -1
+                ? tagList.push({tag: item.union_tag, room_number: [item.room_number]})
+                : tagList[tagIndex].room_number = [...tagList[tagIndex].room_number, item.room_number]
+            }
+          }
+        );
+        return tagList;
       }
     },
     methods: {
@@ -61,6 +75,9 @@
           this.getAllSuborder({
             onsuccess: body => this.allList = body.data
           })
+      },
+      getUnionTag(tag, tempRoom){
+        return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
       },
     },
     watch: {

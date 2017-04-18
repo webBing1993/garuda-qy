@@ -23,5 +23,17 @@ module.exports = {
       },
       onFail: () => console.log('发票请求失败')
     })
+  },
+  confirmInvoice(ctx,param) {
+    ctx.dispatch('resource', {
+      url: 'invoice_apply/'+ param.invoice_apply_id + '/invoice_status',
+      params: {
+        invoice_status:param.invoice_status
+      },
+      onSuccess:(body) => {
+        ctx.dispatch('showtoast');
+        param.onsuccess(body)
+      }
+    })
   }
 }

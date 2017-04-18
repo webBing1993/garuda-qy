@@ -12,20 +12,23 @@
     </header>
 
     <scroller :pulldown-config="Interface.scroller"
-              @on-pulldown-loading=""
+              :depend="renderList"
+              @on-pulldown-loading="onPullDown"
               lock-x
               use-pulldown
               height="-44">
       <div>
         <section v-for="(item,index) in renderList" :key="index">
-          <div class="invoice-container" @click="orderClick(item.order_id)">
+          <div class="invoice-container" @click="goto('/invoice/detail/' + item.order_id)">
             <div class="invoice-title">
-              <span>{{item.rooms_number}}</span>
-              <span>{{item.is_any_checkin}}</span>
+              <p class="left-title">
+                <span v-for="room in item.rooms_number">{{room}}</span>
+              </p>
+              <span class="right-title">{{item.is_any_checkin ? '已入住' : ''}}</span>
             </div>
             <div class="invoice-body">
-              <span>{{item.owner}} {{item.phone_number | filterPhoneNum}} <i>{{item.invoice_status}}</i></span>
-              <span>{{item.type}}·{{item.category}}·{{item.media}}</span>
+              <span>{{item.owner}} {{item.phone_number}} <i>{{item.invoice_status == 2 ? '已开票' : ''}}</i></span>
+              <span>{{item.type}}·{{item.category}}·{{item.media == 'PAPER' ? '纸质发票' : ''}}</span>
               <span>{{item.title}}</span>
               <span>{{item.in_time | datetimeparse}} - {{item.out_time | datetimeparse}}</span>
             </div>
@@ -33,13 +36,6 @@
         </section>
       </div>
     </scroller>
-
-    <!--<footer v-show="route.params.tab == 1">-->
-      <!--<div class="select">-->
-        <!--<span v-if="period[0] && period[1]" @click="popupShowCalendar = !popupShowCalendar"> {{period[0] | getDate}} - {{period[1] | getMonth}}| </span>-->
-        <!--<span v-else @click="popupShowCalendar = !popupShowCalendar">筛选</span>-->
-      <!--</div>-->
-    <!--</footer>-->
 
   </article>
 </template>
@@ -54,10 +50,6 @@
         tabmenu: ["当日发票", "全部发票"],
         todayList: [],
         allList: []
-//        popupShowCalendar: false,
-//        sort: ['预登记时间从早到晚', '预登记时间从晚到早'],
-//        sortSelected: null,
-//        period: [null, null]
       }
     },
     computed: {
@@ -78,9 +70,6 @@
         'replaceto',
         'getInvoiceList'
       ]),
-      orderClick: function (orderId) {
-        this.goto('/invoice/detail/' + orderId);
-      },
       invoiceList() {
         this.getInvoiceList({
           scope: this.tabIndex == 0 ? 'TODAY' : 'OTHER',
@@ -92,6 +81,10 @@
         let newpath = this.route.path.replace(this.route.params.tab, index)
         this.replaceto(newpath)
       },
+      onPullDown() {
+          this.tabIndex ? this.todayList= [] : this.allList = [];
+          this.invoiceList();
+      }
     },
     watch: {
       tabIndex(val) {
