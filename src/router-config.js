@@ -100,14 +100,14 @@ const invoice = [{
   },]
 }]
 
-const others = [{
-  path: '/',
-  component: require('./containers/home.vue')
-},
-//   {
-//   path: '/*',
-//   redirect: '/'
-// }
+const others = [
+  {
+    path: '/',
+    component: require('./containers/home.vue')
+  }, {
+    path: '/*',
+    redirect: '/'
+  }
 ]
 
 export default new VueRouter({
