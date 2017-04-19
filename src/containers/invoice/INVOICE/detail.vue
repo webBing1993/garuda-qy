@@ -19,8 +19,8 @@
     <!-- 发票信息 -->
     <Group title="发票信息" v-if="invoiceDtail.invoice">
       <Cell title="发票信息" :value="invoiceDtail.invoice.title"></Cell>
-      <Cell title="开票类型" :value="invoiceDtail.invoice.type"></Cell>
-      <Cell title="领取方式" :value="invoiceDtail.invoice.media"></Cell>
+      <Cell title="开票类型" :value="invoiceType"></Cell>
+      <Cell title="领取方式" :value="invoiceDtail.invoice.media === 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
       <Cell title="开票内容" :value="invoiceDtail.invoice.category"></Cell>
       <div class="detailBtn">
         <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
@@ -54,7 +54,12 @@
       ...mapState([
         'Interface',
         'route',
-      ])
+      ]),
+      invoiceType() {
+        if(this.invoiceDtail.invoice.type=== 'PERSONAL') return '个人发票';
+        else if(this.invoiceDtail.invoice.type=== 'GENENAL') return "增值税普通发票";
+        else if(this.invoiceDtail.invoice.type=== 'VAT') return "专用发票";
+      }
     },
     methods: {
       ...mapActions([
@@ -68,7 +73,7 @@
       },
       setInvoiceConfirm () {
         this.confirmInvoice({
-          invoice_apply_id: this.invoiceDtail.orderId,
+          invoice_apply_id: this.invoiceDtail.id,
           invoice_status: 2,
           onsuccess:function () {
               this.invoiceDtail.invoice_status = 2
@@ -93,10 +98,10 @@
     mounted(){
       this.getorderdetail({
         order_id: this.$route.params.id,
-        roomfee: 1,
+        roomfee: 0,
         suborder: 1,
         invoice: 1,
-        log: 1,
+        log: 0,
         onsuccess: body => {
           this.invoiceDtail = body.data
         }

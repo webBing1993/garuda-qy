@@ -1,7 +1,7 @@
 <template>
   <div class="orderitem" @click="$emit('onClick')">
 
-    <div class="hd" v-if="orderId || status || date || roomNumber || roomTypeName || intg">
+    <div class="hd" v-if="orderId || status || roomNumber || roomTypeName || intg">
 
       <p class="hdl" v-if="orderId">
         <span class="key">订单号：</span>
@@ -11,12 +11,6 @@
       <p class="hdl" v-if="roomNumber || roomTypeName || intg">
         <span>{{roomNumber}} {{roomTypeName}} {{intg ? '(联' + intg + ')' : null}}</span>
       </p>
-
-      <!--<p class="hdr">-->
-      <!--<span v-if="need_hint" class="warning">{{need_hint}}</span>-->
-      <!--&lt;!&ndash;<span>{{status}}</span>&ndash;&gt;-->
-      <!--&lt;!&ndash;<span>{{date}}</span>&ndash;&gt;-->
-      <!--</p>-->
 
       <p class="hdr" v-if=" fee || prepay ">
         <span v-if="prepay === null"></span>
@@ -73,10 +67,6 @@
           </span>
         </section>
         <abbr class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</abbr>
-        <!--<span v-for="room in rooms"-->
-        <!--v-if="room.room_type || room.room_count">{{room.room_type}}x{{room.room_count}}</span>-->
-        <!--<span v-if="staff_confirm_timeline"-->
-        <!--class="intime">{{staff_confirm_timeline | datetimeparse('MM/DD hh:mm')}}</span>-->
       </p>
       <p v-if="fee || prepay">
         <span class="key">房费：</span>
@@ -125,7 +115,6 @@
       orderId: null,
       underOrderId: null,
       status: null,
-      date: null,
       booker: null,
       phoneNum: null,
       underPhoneNum: null,
@@ -136,7 +125,6 @@
       prepay: null,//营业员确认的付款金额
       payinfo: null,
       remark: null,
-      need_hint: null,
       staff_confirm_timeline: null,
       roomNumber: null,
       roomTypeName: null,

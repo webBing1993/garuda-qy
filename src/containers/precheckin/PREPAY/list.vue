@@ -21,7 +21,7 @@
               :depend="[tobeconfirmed,batch]"
               height="-44"
               use-pulldown
-              @on-pulldown-loading="onpullDown"
+              @on-pulldown-loading="getList"
               lock-x>
       <section :class="{batch}">
         <checker v-model="batchlist"
@@ -50,6 +50,7 @@
               height="-44"
               :depend="[confirmed,batch]"
               use-pulldown
+              @on-pulldown-loading="getList"
               lock-x>
       <section>
         <orderitem v-for="(item,index) in confirmed"
@@ -103,13 +104,6 @@
         'getconfirmelist',
         'multiconfirm'
       ]),
-      onpullDown() {
-        route.params.tab ? this.tobeconfirmed = [] : this.confirmed = [];
-        this.getconfirmelist({
-          status: this.$route.params.tab,
-          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = body.data
-        })
-      },
       allPick(){
         //全选和取消全选
         if (this.batchlist.length === this.tobeconfirmed.length) {

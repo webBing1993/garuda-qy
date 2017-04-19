@@ -12,7 +12,7 @@
 
     <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
-              @on-pulldown-loading="onpullDown"
+              @on-pulldown-loading="getList"
               use-pulldown
               lock-x
               height="-44">
@@ -20,7 +20,7 @@
         <orderitem v-for="(item,index) in renderList"
                    :key="index"
                    :orderId="item.order_pmsid"
-                   :staff_confirm_timeline="item.in_time"
+                   :staff_confirm_timeline="item.timeline.precheckin_done"
                    :status="item.status"
                    :booker="item.owner"
                    :phoneNum="item.owner_tel"
@@ -54,9 +54,8 @@
            maskShow
            bottom
            animationTopBottom>
-      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+      <calendar v-model="periodFilter"  @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
-
   </article>
 </template>
 <script>
@@ -106,6 +105,12 @@
           : this.tabIndex
             ? this.historyCancelList
             : this.noShowList
+      },
+      maxAndMin() {
+        let timeList = [];
+        this.renderList.forEach(item => timeList.push(item.in_time));
+        timeList.sort((a, b) => a - b);
+        return [timeList[0],timeList[timeList.length-1]];
       }
     },
     methods: {
@@ -116,30 +121,33 @@
         'gethistorylist'
       ]),
       toggleTab(index){
-        let newpath = this.route.path.replace(this.route.params.tab, index)
-        this.replaceto(newpath)
+        let newpath = this.route.path.replace(this.route.params.tab, index);
+        this.replaceto(newpath);
       },
       getList() {
+        this.isToday
+          ?
+          this.gettodaylist({
+            is_cancelled: this.tabIndex,
+            is_sequence: this.isSequence,
+            onsuccess: body => this.tabIndex
+              ? this.todayCancelList = body.data
+              : this.toStayList = body.data
+          })
+          :
+          this.gethistorylist({
+            is_cancelled: this.tabIndex,
+            is_sequence: this.isSequence,
+            start: this.periodFilter[0],
+            end: this.periodFilter[1],
+            onsuccess: body => this.tabIndex
+              ? this.historyCancelList = body.data
+              : this.noShowList = body.data
+          })
+      },
+      initList(){
         if (!this.renderList.length) {
-          this.isToday
-            ?
-            this.gettodaylist({
-              is_cancelled: this.tabIndex,
-              is_sequence: this.isSequence,
-              onsuccess: body => this.tabIndex
-                ? this.todayCancelList = body.data
-                : this.toStayList = body.data
-            })
-            :
-            this.gethistorylist({
-              is_cancelled: this.tabIndex,
-              is_sequence: this.isSequence,
-              start: this.periodFilter[0],
-              end: this.periodFilter[1],
-              onsuccess: body => this.tabIndex
-                ? this.historyCancelList = body.data
-                : this.noShowList = body.data
-            })
+          this.getList()
         }
       },
       resetList() {
@@ -152,10 +160,6 @@
         console.log('resetFilter')
         this.periodFilter = [null, null]
       },
-      onpullDown() {
-        this.resetList();
-        this.getList();
-      }
     },
     watch: {
       tabIndex(val) {
@@ -166,17 +170,17 @@
         this.getList();
       },
       periodFilter() {
-        this.isCalendarShow = false
         this.resetList();
         this.getList();
+        this.isCalendarShow = false;
       }
     },
     mounted(){
-      this.getList()
+      this.initList()
     },
-
-    deactivated(){
-        //reset all data
+    activated(){
+      //reset all data
+      this.getList();
     }
   }
 </script>

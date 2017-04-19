@@ -13,7 +13,7 @@
 
     <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
-              @on-pulldown-loading="onPullDown"
+              @on-pulldown-loading="invoiceList"
               lock-x
               use-pulldown
               height="-44">
@@ -28,7 +28,10 @@
             </div>
             <div class="invoice-body">
               <span>{{item.owner}} {{item.phone_number}} <i>{{item.invoice_status == 2 ? '已开票' : ''}}</i></span>
-              <span>{{item.type}}·{{item.category}}·{{item.media == 'PAPER' ? '纸质发票' : ''}}</span>
+              <span>
+                <abbr v-if="item.type === 'PERSONAL'">个人发票</abbr>
+                <abbr v-if="item.type === 'GENERAL'">增值税普通发票</abbr>
+                <abbr v-if="item.type === 'VAT'">专用发票</abbr>·{{item.category}}·{{item.media == 'PAPER' ? '纸质发票' : '电子发票'}}</span>
               <span>{{item.title}}</span>
               <span>{{item.in_time | datetimeparse}} - {{item.out_time | datetimeparse}}</span>
             </div>
@@ -81,10 +84,6 @@
         let newpath = this.route.path.replace(this.route.params.tab, index)
         this.replaceto(newpath)
       },
-      onPullDown() {
-          this.tabIndex ? this.todayList= [] : this.allList = [];
-          this.invoiceList();
-      }
     },
     watch: {
       tabIndex(val) {

@@ -45,7 +45,7 @@
     <dl>
       <dt>发票</dt>
       <dd>
-        <router-link to="/invoice/:tab">前台开票/待开发票</router-link>
+        <router-link to="/invoice/0">前台开票/待开发票</router-link>
       </dd>
     </dl>
   </div>

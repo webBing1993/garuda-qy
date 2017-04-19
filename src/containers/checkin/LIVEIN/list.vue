@@ -2,7 +2,7 @@
   <article>
     <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
-              @on-pulldown-loading=""
+              @on-pulldown-loading="getList"
               use-pulldown
               lock-x>
       <div>
