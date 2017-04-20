@@ -1,6 +1,6 @@
 module.exports = {
   AppParams: {
-    session:''
+    session: ''
   },
   Interface: {
     scroller: {
@@ -15,6 +15,9 @@ module.exports = {
     toast: {
       show: false,
       title: '操作成功'
+    },
+    loading: {
+      show: false
     }
   }
 }

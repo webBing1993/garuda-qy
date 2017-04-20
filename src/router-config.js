@@ -105,6 +105,9 @@ const others = [
     path: '/',
     component: require('./containers/home.vue')
   }, {
+    path: '/examples',
+    component: require('./containers/examples.vue')
+  }, {
     path: '/*',
     redirect: '/'
   }

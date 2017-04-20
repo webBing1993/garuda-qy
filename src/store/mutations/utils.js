@@ -4,8 +4,5 @@ module.exports = {
   },
   SESSION(state, payload){
     state.AppParams.session = payload
-  },
-  TOAST(state, payload){
-    state.Interface.toast = {...state.Interface.toast, ...payload}
   }
 }

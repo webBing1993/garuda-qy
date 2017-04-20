@@ -6,7 +6,7 @@ import router from '../../router-config.js'
 
 module.exports = {
   goto: (ctx, param) => {
-    typeof param == 'number'
+    typeof param === 'number'
       ? router.go(param)
       : router.push(param)
   },
@@ -15,10 +15,11 @@ module.exports = {
   },
   urlquery(ctx) {
     let o = {}
-    window.location.search.split('&').forEach(i => o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1])
+    window.location.search.split('&').forEach(i => i ? o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1] : null)
     ctx.commit('URLQUERY', o)
   },
   resource: (ctx, param) => {
+    ctx.commit('LOADING', 1)
     Vue.http({
       url: '/gemini' + param.url,
       body: param.body || null,
@@ -46,6 +47,7 @@ module.exports = {
       final => {
         //FinalCallback
         // console.log("request done!")
+        ctx.commit('LOADING')
       }
     )
   }

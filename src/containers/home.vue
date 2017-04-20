@@ -1,5 +1,7 @@
 <template>
   <div>
+    <router-link to="/examples">components示例</router-link>
+
     <dl>
       <dt>非对接</dt>
       <dd>

@@ -165,7 +165,7 @@
     watch: {
       isConfirmed: function (val, oldval) {
         this.cancelPick()
-        this.initList()
+        typeof this.route.params.tab === 'string' ? this.initList() : null
       }
     },
     activated(){
