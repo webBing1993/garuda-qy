@@ -26,10 +26,8 @@
         <Cell title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>
       </Group>
 
-      <Group :title="index == 0? '选房信息' : null"
-             v-if="orderdetail.suborders && orderdetail.suborders.guests && orderdetail.suborders.guests.length"
-             v-for="(item,index) in orderdetail.suborders"
-             :key="'guests'+index">
+      <Group v-for="(item,index) in orderdetail.suborders" :key="'guests'+index"
+             :title="index == 0? '选房信息' : null">
         <cell :title="getGuestItem(item)"/>
       </Group>
 
@@ -71,7 +69,7 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
   module.exports = {
-    name: 'predetails',
+    name: 'detail',
     data(){
       return {
         orderdetail: {},
@@ -107,11 +105,9 @@
         })
       },
       getGuestItem(item){
-        if (item.guests) {
-          let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;color: #4a4a4a"><span>${item.room_type_name + ' ' + item.room_number}</span></div>`;
-          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
-          return dom
-        }
+        let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;color: #4a4a4a"><span>${(item.room_number ? item.room_number : '未选房') + ' ' + item.room_type_name}</span></div>`;
+        item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
+        return dom
       },
       getDetail() {
         this.getorderdetail({

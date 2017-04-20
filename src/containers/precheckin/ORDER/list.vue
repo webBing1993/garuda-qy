@@ -110,7 +110,7 @@
         let timeList = [];
         this.renderList.forEach(item => timeList.push(item.in_time));
         timeList.sort((a, b) => a - b);
-        return [timeList[0],timeList[timeList.length-1]];
+        return [timeList[0], timeList[timeList.length - 1]];
       }
     },
     methods: {
@@ -125,22 +125,23 @@
         this.replaceto(newpath);
       },
       getList() {
+        let currentList = this.tabIndex;
         this.isToday
           ?
           this.gettodaylist({
-            is_cancelled: this.tabIndex,
+            is_cancelled: currentList,
             is_sequence: this.isSequence,
-            onsuccess: body => this.tabIndex
+            onsuccess: body => currentList
               ? this.todayCancelList = body.data
               : this.toStayList = body.data
           })
           :
           this.gethistorylist({
-            is_cancelled: this.tabIndex,
+            is_cancelled: currentList,
             is_sequence: this.isSequence,
             start: this.periodFilter[0],
             end: this.periodFilter[1],
-            onsuccess: body => this.tabIndex
+            onsuccess: body => currentList
               ? this.historyCancelList = body.data
               : this.noShowList = body.data
           })

@@ -16,7 +16,7 @@
         <span v-for="item in renderdays"
               @click="dateclick(item)"
               class="day-item"
-              :class="{checked:item.checked}"
+              :class="{checked:item.checked,disabled:item.disabled}"
         >{{item.day}}</span>
     </div>
 
@@ -35,6 +35,7 @@
         type: Boolean,
         default: false
       },
+      maxAndMin:null
     },
     data(){
       return {
@@ -65,10 +66,12 @@
             month: this.month,
             day: i
           })
+          let timeLengthDisabled = this.starttime ? Math.abs(Date.parse(dd) - this.starttime) > 30*24*60*60*1000 : false;
+          let maxAndMinDisabled = this.maxAndMin ? (Date.parse(dd) > this.maxAndMin[1] || Date.parse(dd) < this.maxAndMin[0]):false;
           arr.push({
             date: Date.parse(dd),
             day: i,
-            disabled: false,
+            disabled: timeLengthDisabled || maxAndMinDisabled,
             checked: (Date.parse(dd) >= this.starttime && Date.parse(dd) <= this.endtime)
             || Date.parse(dd) === this.starttime
             || Date.parse(dd) === this.endtime

@@ -167,7 +167,7 @@ module.exports = {
           is_checkin: false, //是否入住
           is_checkout: false, //是否离店
         },
-        room_number: "203",
+        room_number: "",
         room_tags: ["靠南", "带窗"],
         room_type_id: "房型代码",
         room_type_name: "大床房",
@@ -191,7 +191,7 @@ module.exports = {
           is_checkin: false, //是否入住
           is_checkout: false, //是否离店
         },
-        room_number: "204",
+        room_number: null,
         room_tags: ["靠南", "带窗"],
         room_type_id: "房型代码",
         room_type_name: "大床房",
