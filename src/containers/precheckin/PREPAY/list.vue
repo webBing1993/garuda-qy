@@ -111,11 +111,11 @@
       },
       getCellBody(item){
         let roomtypewords = ''
-        item.rooms_plan.forEach(i => roomtypewords += (i.room_type + '*' + i.room_count))
+        item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
         return `<div class="cell-body">` +
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
           `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-          `<p><span class="cell-key">房费：</span><span class="cell-value">${'￥' + item.payinfo.total_roomfee / 100}</span> <span class="cell-right"><span class="cell-key">已付：</span>${'￥' + (item.payinfo.staff_pay / 100 || 0)}</span></p>` +
+          `<p><span class="cell-key">房费：</span><span class="cell-value">${'¥' + item.payinfo.total_roomfee / 100}</span> <span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span></p>` +
           `</div>`
       },
       getCellFooter(item){
