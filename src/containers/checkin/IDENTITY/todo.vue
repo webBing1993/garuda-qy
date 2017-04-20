@@ -84,7 +84,7 @@
         val ? this.getDetail() : null
       }
     },
-    mounted(){
+    activated(){
       this.getDetail()
     }
   }
