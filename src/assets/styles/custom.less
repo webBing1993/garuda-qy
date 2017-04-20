@@ -3,6 +3,34 @@ body {
   font-size: 14px;
 }
 
+.scroller-wrap {
+  padding-bottom: 140px;
+}
+
+.cell-key {
+  display: inline-block;
+  min-width: 4em;
+  text-align: right;
+  color: #8a8a8a;
+}
+
+.cell-right {
+  float: right;
+  &.warn {
+    color: @weuiBtnWarnBg;
+  }
+  &.other {
+    color: @weuiBtnOtherBg;
+  }
+  &.primary {
+    color: @weuiBtnPrimaryBg;
+  }
+}
+
+.cell-body {
+  line-height: 2;
+}
+
 .cell-multi {
   //color: #4a4a4a;
   line-height: 2.5;
@@ -34,8 +62,8 @@ body {
 }
 
 .weui-cell__hd {
-  .weui-label{
-    color: @weuiTextColorTitle;
+  .weui-label {
+    //color: @weuiTextColorTitle;
   }
   .weui-icon-info {
     display: block;
@@ -57,7 +85,7 @@ body {
 }
 
 .weui-cell__bd {
-  color: @weuiTextColorTitle;
+  //color: @weuiTextColorTitle;
   .weui-input {
     color: @weuiTextColorGray;
   }

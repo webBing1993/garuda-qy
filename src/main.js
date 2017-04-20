@@ -1,5 +1,5 @@
 // Mockdata
-// import './mock';
+import './mock';
 
 import Vue from 'vue';
 import App from './App';
@@ -45,7 +45,7 @@ Vue.component('Toast', Toast)
 import popup from './components/Layers/popup/index.vue'
 Vue.component('popup', popup)
 
-Vue.component('xpopup',require('./components/popup/index.vue'))
+Vue.component('xpopup', require('./components/popup/index.vue'))
 
 // List
 import Group from './components/List/group.vue'
