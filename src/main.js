@@ -23,6 +23,8 @@ sync(store, router);
 import filters  from './filters'
 Object.entries(filters).forEach(item => Vue.filter(item[0], item[1]))
 
+import './mixins'
+
 // Forms
 import XInput from './components/Forms/x-input.vue'
 Vue.component('XInput', XInput)
@@ -81,6 +83,7 @@ Vue.component('CheckerItem', CheckerItem);
 
 //modules
 Vue.component('orderitem', require('./modules/orderitem'));
+
 
 /* eslint-disable no-new */
 new Vue({
