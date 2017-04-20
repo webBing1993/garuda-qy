@@ -25,10 +25,13 @@
       </div>
     </div>
 
-    <div class="button-group">
+    <p class="identity-result" v-if="identityResult">{{identityResult}}</p>
+
+    <div v-if="detail.status === 'PENDING'" class="button-group">
       <XButton value="验证通过" primary @onClick="setidentitystatus(1)"></XButton>
       <XButton value="拒绝" warn @onClick="setidentitystatus(0)"></XButton>
     </div>
+
   </article>
 </template>
 
@@ -47,6 +50,13 @@
       ]),
       identityId(){
         return this.route.params.id
+      },
+      identityResult(){
+        return this.detail.status && this.detail.status !== 'PENDING'
+          ? this.detail.status === 'AGREED' || this.detail.status === 'AUTO_AGREED'
+            ? '已通过'
+            : '已拒绝'
+          : ''
       }
     },
     methods: {
@@ -64,7 +74,8 @@
         this.setIdentityStatus({
           identity_id: this.identityId,
           suborder_id: this.detail.suborder_id,
-          status: val ? 'AGREED' : 'REFUSED'
+          status: val ? 'AGREED' : 'REFUSED',
+          onsuccess: body => this.detail.status = val ? 'AGREED' : 'REFUSED'
         })
       }
     },
