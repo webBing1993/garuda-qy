@@ -16,7 +16,7 @@
               use-pulldown
               lock-x
               height="-44">
-      <section>
+      <div class="scroller-wrap">
         <orderitem v-for="(item,index) in renderList"
                    :key="index"
                    :orderId="item.order_pmsid"
@@ -28,7 +28,7 @@
                    :arrow=true
                    @onClick="goto('/precheckin/order/detail/' + item.order_id)">
         </orderitem>
-      </section>
+      </div>
     </scroller>
 
     <footer>

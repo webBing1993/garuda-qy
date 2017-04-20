@@ -6,14 +6,13 @@
                  :value="item" :selected="currentTab === index"
                  @click.native="replaceto('/precheckin/prepay/'+index)"/>
       </Tab>
-
       <div class="batchbar" v-if="batch">
         <span class="allpick" :class="{batch:batchlist.length === tobeconfirmed.length}" @click="allPick">全选</span>
         <span @click="cancelPick">取消操作</span>
       </div>
     </header>
 
-    <scroller v-show="!isConfirmed"
+    <scroller v-show="!currentTab"
               :pulldown-config="Interface.scroller"
               :depend="[tobeconfirmed,batch]"
               @on-pulldown-loading="getList"
@@ -21,7 +20,6 @@
               height="-44"
               lock-x>
       <div class="scroller-wrap" :class="{batch}">
-
         <checker type="checkbox" v-model="batchlist"
                  default-item-class="checker-item" selected-item-class="selected">
           <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
@@ -30,21 +28,12 @@
               <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
               <Cell v-if="item.remark" :title="getCellFooter(item)"/>
             </Group>
-            <!--<orderitem :orderId="item.order_pmsid"-->
-            <!--:booker="item.owner"-->
-            <!--:phoneNum="item.owner_tel"-->
-            <!--:rooms="item.rooms_plan"-->
-            <!--:fee="item.payinfo.total_roomfee"-->
-            <!--:prepay="item.payinfo.staff_pay"-->
-            <!--:remark="item.remark"-->
-            <!--:arrow="!batch"-->
-            <!--@onClick="orderClick(item.order_id)"/>-->
           </checker-item>
         </checker>
       </div>
     </scroller>
 
-    <scroller v-show="isConfirmed"
+    <scroller v-show="currentTab"
               :depend="[confirmed,batch]"
               :pulldown-config="Interface.scroller"
               @on-pulldown-loading="getList"
@@ -57,17 +46,6 @@
           <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
           <Cell v-if="item.remark" :title="getCellFooter(item)"/>
         </Group>
-        <!--<orderitem v-for="(item,index) in confirmed"-->
-        <!--key="'confirmed'+index"-->
-        <!--:orderId="item.order_pmsid"-->
-        <!--:booker="item.owner"-->
-        <!--:phoneNum="item.owner_tel"-->
-        <!--:rooms="item.rooms_plan"-->
-        <!--:fee="item.payinfo.total_roomfee"-->
-        <!--:prepay="item.payinfo.staff_pay"-->
-        <!--:remark="item.remark"-->
-        <!--:arrow="!batch"-->
-        <!--@onClick="orderClick(item.order_id)"/>-->
       </div>
     </scroller>
 
@@ -99,9 +77,6 @@
       ]),
       currentTab(){
         return parseInt(this.route.params.tab)
-      },
-      isConfirmed(){
-        return this.route.params.tab === "1"
       },
       renderList(){
         return this.currentTab ? this.confirmed : this.tobeconfirmed
@@ -147,13 +122,14 @@
         return `<p><span class="cell-key">备注：</span><span class="cell-value">${item.remark}</span></p>`
       },
       getList(){
+        const currentList = this.currentTab ? 'confirmed' : 'tobeconfirmed'
         this.getconfirmelist({
-          status: this.route.params.tab,
-          onsuccess: body => this[this.isConfirmed ? 'confirmed' : 'tobeconfirmed'] = [...body.data]
+          status: this.currentTab,
+          onsuccess: body => this[currentList] = [...body.data]
         })
       },
       initList(){
-        if ((this.isConfirmed && this.confirmed.length === 0) || (!this.isConfirmed && this.tobeconfirmed.length === 0)) {
+        if ((this.currentTab && this.confirmed.length === 0) || (!this.currentTab && this.tobeconfirmed.length === 0)) {
           this.getList()
         }
       },
@@ -206,9 +182,9 @@
       }
     },
     watch: {
-      isConfirmed: function (val, oldval) {
+      currentTab: function (val, oldval) {
         this.cancelPick()
-        typeof this.route.params.tab === 'string' ? this.initList() : null
+        typeof val === 'number' ? this.initList() : null
       }
     },
     activated(){
