@@ -24,7 +24,7 @@
       </p>
 
       <p class="hdr" v-if="checkinTime || timeformat">
-        <span style="color: #8A8A8A;">{{checkinTime | datetimeparse(timeformat)}}</span>
+        <span style="color: #8A8A8A; padding-right: 15px">{{checkinTime | datetimeparse(timeformat)}}</span>
       </p>
     </div>
 
