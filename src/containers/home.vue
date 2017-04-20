@@ -66,7 +66,6 @@
         'AppParams'
       ]),
       currentMsg(){
-
         return decodeURIComponent(this.AppParams.msg)
       },
       currentApp(){
