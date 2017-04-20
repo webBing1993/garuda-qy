@@ -6,7 +6,7 @@
     </Group>
 
     <footer>
-      <x-button value="添加新订单" @onClick="formDetail = {}, showForm = true"></x-button>
+      <x-button value="添加新订单" @onClick="goto('/record/new')"></x-button>
     </footer>
   </article>
 </template>

@@ -22,7 +22,7 @@
         default: "请输入文本"
       },
       max: {
-        default: 20
+        default: 60
       }
     },
     watch: {

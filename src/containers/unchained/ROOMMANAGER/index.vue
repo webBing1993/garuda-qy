@@ -263,7 +263,7 @@
         })
       },
       setRoomInout(action){
-        this.setroomstatus({
+        this.setroominout({
           room_id: this.payloading.room_id,
           action: action,
           onsuccess: () => {

@@ -27,7 +27,8 @@ module.exports = {
   setroomstatus(ctx, param){
     ctx.dispatch('resource', {
       url: '/room/status',
-      param: {
+      method: 'POST',
+      body: {
         room_ids: param.room_ids,
         room_status: param.room_status
       },
@@ -54,7 +55,8 @@ module.exports = {
   setroominout(ctx, param){
     ctx.dispatch('resource', {
       url: '/room/inout',
-      param: {
+      method: 'POST',
+      body: {
         room_id: param.room_id,
         action: param.action
       },
