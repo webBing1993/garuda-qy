@@ -1,6 +1,6 @@
 <template>
   <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
-    <orderitem title="预定信息"
+    <orderitem title="预订信息"
                :underOrderId="orderdetail.order_pmsid"
                :booker="orderdetail.owner"
                :underPhoneNum="orderdetail.owner_tel"

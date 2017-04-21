@@ -203,7 +203,7 @@
           status: null,
           active: this.statusFilterCurrent == null
         }, {
-          name: '预定',
+          name: '预订',
           status: 3,
           count: this.roomlist.filter(i => i.config.enabled_pick && i.owner_name && i.room_status !== 2).length,
           active: this.statusFilterCurrent == 3

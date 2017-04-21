@@ -2,7 +2,7 @@
   <article>
     <scroller v-if="detail.identity_id" lock-x :depend="detail">
       <div class="scroller-wrap">
-        <group title="预定信息">
+        <group title="预订信息">
           <cell title="预订人" :value="detail.owner"/>
           <cell title="手机号" :value="detail.phone_number"/>
           <cell title="入住时间" :value="detail.in_time | datetimeparse"/>
