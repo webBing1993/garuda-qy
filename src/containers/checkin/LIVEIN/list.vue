@@ -59,12 +59,13 @@
         'getAllSuborder'
       ]),
       getCellTitle(item){
-        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} (联${this.getUnionTag(item.union_tag,item.room_number)})</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
+        let tag = this.getUnionTag(item.union_tag,item.room_number);
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} (联${tag ? tag : null})</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
       getCellBody(item){
         let dom = ``;
         if (item.guests) {
-          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
+          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${i.idcard}</span></div>`)
         }
         return dom
       },
