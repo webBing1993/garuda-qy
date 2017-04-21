@@ -28,14 +28,13 @@
           <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
         </Group>
 
-        <div class="button-group">
+        <div class="button-group" v-if="detail.invoice && detail.invoice.invoice_status ===  1">
           <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
         </div>
+        <p class="tips">已确认开票。</p>
+
       </div>
     </scroller>
-
-
-    <!--<p class="tips">已确认开票。</p>-->
 
     <Dialog v-model="showDialog"
             @onConfirm="setInvoiceConfirm"
@@ -51,7 +50,7 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
   export default{
-    name: 'invoicedetail',
+    name: 'detail',
     data(){
       return {
         showDialog: false,
@@ -80,9 +79,7 @@
         this.confirmInvoice({
           invoice_apply_id: this.detail.id,
           invoice_status: 2,
-          onsuccess: function () {
-            this.detail.invoice_status = 2
-          }
+          onsuccess: () => this.detail.invoice.invoice_status = 2
         })
       },
       getRoomCount(item){
