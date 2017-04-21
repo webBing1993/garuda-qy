@@ -1,17 +1,13 @@
 <template>
   <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
-    <orderitem title="预订信息"
-               :underOrderId="orderdetail.order_pmsid"
-               :booker="orderdetail.owner"
-               :underPhoneNum="orderdetail.owner_tel"
-               :rooms="orderdetail.rooms_plan"
-               :inTime="orderdetail.in_time"
-               :outTime="orderdetail.out_time">
-    </orderitem>
-
-    <orderitem title="PMS支付信息"
-               :payinfo="orderdetail.payinfo">
-    </orderitem>
+    <Group>
+      <Cell title="预订信息"/>
+      <Cell :title="getCellBody()"/>
+    </Group>
+    <Group>
+      <Cell title="PMS支付信息"/>
+      <Cell :title="getCellBodyPMS()"/>
+    </Group>
 
     <Group v-if="payInfo">
       <Cell title="已确认" :value="payInfo"></Cell>
@@ -92,6 +88,23 @@
           return true;
         }
         return false;
+      },
+      getCellBody(){
+        let roomtypewords = ''
+        this.orderdetail.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
+        return `<div class="cell-body">` +
+          `<p><span class="cell-key2">订单号：</span><span class="cell-value">${this.orderdetail.order_pmsid}</span></p>` +
+          `<p><span class="cell-key2">预订人：</span><span class="cell-value">${this.orderdetail.owner}</span></p>` +
+          `<p><span class="cell-key2">手机号：</span><span class="cell-value">${this.orderdetail.owner_tel}</span></p>` +
+          `<p><span class="cell-key2">入离时间：</span><span class="cell-value">${this.datetimeparse(this.orderdetail.in_time)}- ${this.datetimeparse(this.orderdetail.out_time)}</span></p>` +
+          `<p><span class="cell-key2">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+          `</div>`
+      },
+      getCellBodyPMS(){
+          return `<div class="cell-body">` +
+            `<p><span class="cell-key">应付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.total_roomfee/100}</span></p>` +
+            `<p><span class="cell-key">已付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.user_pay/100}</span></p>` +
+            `</div>`
       },
       staffpayConfirm(paystatus){
         this.showDialog = true;

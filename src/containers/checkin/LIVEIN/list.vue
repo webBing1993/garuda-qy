@@ -5,18 +5,11 @@
               @on-pulldown-loading="getList"
               use-pulldown
               lock-x>
-      <div>
-        <orderitem v-for="(item,index) in renderList"
-                   :key="index"
-                   :roomNumber="item.room_number"
-                   :roomTypeName="item.room_type_name"
-                   :intg="getUnionTag(item.union_tag,item.room_number)"
-                   :checkinTime="item.in_time"
-                   :timeformat="isToday ? 'hh:mm' : 'MM/DD hh:mm'"
-                   :guests="item.guests"
-                   :arrow="true"
-                   @click.native="goto('/livein/'+item.order_id)">
-        </orderitem>
+      <div class="scroller-wrap">
+        <Group v-for="(item,index) in renderList">
+          <Cell  :title="getCellTitle(item)"/>
+          <Cell :title="getCellBody(item)" link @onClick="goto('/livein/'+item.order_id)"/>
+        </Group>
       </div>
     </scroller>
   </article>
@@ -65,6 +58,16 @@
         'getTodaySuborder',
         'getAllSuborder'
       ]),
+      getCellTitle(item){
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} (联${this.getUnionTag(item.union_tag,item.room_number)})</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
+      },
+      getCellBody(item){
+        let dom = ``;
+        if (item.guests) {
+          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;text-indent: 1em;"><span>${i.name} ${i.idcard}</span></div>`)
+        }
+        return dom
+      },
       getList() {
         this.isToday
           ?
