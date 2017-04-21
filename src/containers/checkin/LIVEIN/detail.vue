@@ -5,8 +5,7 @@
         <Cell title="订单号" :value="detail.order_pmsid"></Cell>
         <Cell title="预订人" :value="detail.owner"></Cell>
         <Cell title="手机号" :value="detail.owner_tel"></Cell>
-        <Cell title="入住时间" :value="detail.in_time | datetimeparse"></Cell>
-        <Cell title="离店时间" :value="detail.out_time | datetimeparse"></Cell>
+        <Cell title="入离时间" :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
         <Cell title="房型" v-for="(item,index) in detail.rooms_plan" :key="'rooms_plan'+index"
               :value="item.room_type + 'x' + item.room_count"></Cell>
       </Group>
