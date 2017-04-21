@@ -34,8 +34,8 @@
       <!-- 发票信息 -->
       <Group title="发票信息" v-if="orderdetail.invoice">
         <Cell title="发票抬头" :value="orderdetail.invoice.title"></Cell>
-        <Cell title="开票类型" :value="orderdetail.invoice.type"></Cell>
-        <Cell title="领取方式" :value="orderdetail.invoice.media"></Cell>
+        <Cell title="开票类型" :value="invoiceType"></Cell>
+        <Cell title="领取方式" :value="orderdetail.invoice.media == 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
         <Cell title="开票内容" :value="orderdetail.invoice.category"></Cell>
       </Group>
       <div class="predetail-btn">
@@ -78,12 +78,20 @@
     },
     computed: {
       ...mapState([
-        'route',
-        'orderdetail',
+        'route'
       ]),
       routeId() {
         return this.$route.params.id
-      }
+      },
+      invoiceType() {
+        if(this.orderdetail.invoice.type == 'PERSONAL'){
+            return '个人发票'
+        } else if(this.orderdetail.invoice.type == 'GENERAL') {
+            return '增值税普通发票'
+        }else if(this.orderdetail.invoice.type == 'VAT') {
+            return '专用发票'
+        }else return ''
+      },
     },
     methods: {
       ...mapActions([
