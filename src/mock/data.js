@@ -30,7 +30,7 @@ module.exports = {
         precheckin_done: '1491384458000', //预登记全部完成时间
       },
       invoice: {
-        type: "PERSONAL",
+        type: "GENERAL",
         media: "PAPER",
         category: "住宿费",
         title: "上海复创",
@@ -235,7 +235,7 @@ module.exports = {
         precheckin_done: '1491384458000', //预登记全部完成时间
       },
       invoice: {
-        type: "PERSONAL",
+        type: "VAT",
         media: "PAPER",
         category: "住宿费",
         title: "上海复创",
@@ -337,7 +337,7 @@ module.exports = {
         precheckin_done: '1491384458000', //预登记全部完成时间
       },
       invoice: {
-        type: "PERSONAL",
+        type: "",
         media: "PAPER",
         category: "住宿费",
         title: "上海复创",
