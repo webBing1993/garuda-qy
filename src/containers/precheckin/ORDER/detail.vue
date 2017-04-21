@@ -24,9 +24,9 @@
             <Cell class="key" title="备注" :value="orderdetail.remark"></Cell>
           </Group>
 
-          <Group title="支付信息" v-if="orderdetail.payinfo">
-            <Cell class="key" title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>
-          </Group>
+          <!--<Group title="支付信息" v-if="orderdetail.payinfo">-->
+          <!--<Cell class="key" title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>-->
+          <!--</Group>-->
 
           <Group v-for="(item,index) in orderdetail.suborders" :key="'guests'+index"
                  :title="index == 0? '选房信息' : null">

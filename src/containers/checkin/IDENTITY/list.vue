@@ -17,7 +17,7 @@
       <div class="scroller-wrap">
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
-                :value="item.created_time | datetimeparse('hhmm')"
+                :value="datetimeparse(item.created_time,'hhmm')"
                 @onClick="goto('/identity/' + item.identity_id)"></cell>
           <cell :title="getGuestItem(item)"
                 @onClick="goto('/identity/' + item.identity_id)"
@@ -101,8 +101,11 @@
       },
       getGuestItem(item){
         let dom = ``;
-        item.guests.forEach(i => dom += `<div style="display: flex;justify-content: space-between;line-height: 2;color:#4a4a4a;">
-<span>${i.name} ${i.idcard}</span><span>相似度 ${i.similarity}%</span></div>`)
+        item.guests.forEach(i => {
+          dom += `<div style="display: flex;justify-content: space-between;line-height: 2;color:#4a4a4a;">
+<span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
+</div>`
+        })
         return dom
       },
       getList(){

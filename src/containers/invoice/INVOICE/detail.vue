@@ -12,7 +12,8 @@
 
     <!-- 房间信息 -->
     <Group :title="index == 0? '房间信息' : null" v-for="(item,index) in invoiceDtail.suborders" :key="index">
-      <Cell :title="`<span style='color:#4a4a4a'>${item.room_number ? item.room_number : '未选房'} ${item.room_type_name}</span>`"></Cell>
+      <Cell
+        :title="`<span style='color:#4a4a4a'>${item.room_number ? item.room_number : '未选房'} ${item.room_type_name}</span>`"></Cell>
       <Cell :title="getIvoiceRoomInfo(item)"></Cell>
     </Group>
 
@@ -26,6 +27,8 @@
         <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
       </div>
     </Group>
+
+    <!--<p class="tips">已确认开票。</p>-->
 
     <Dialog v-model="showDialog"
             @onConfirm="setInvoiceConfirm"
@@ -56,13 +59,13 @@
         'route',
       ]),
       invoiceType() {
-        if(this.invoiceDtail.invoice.type == 'PERSONAL'){
+        if (this.invoiceDtail.invoice.type == 'PERSONAL') {
           return '个人发票'
-        } else if(this.invoiceDtail.invoice.type == 'GENERAL') {
+        } else if (this.invoiceDtail.invoice.type == 'GENERAL') {
           return '增值税普通发票'
-        }else if(this.invoiceDtail.invoice.type == 'VAT') {
+        } else if (this.invoiceDtail.invoice.type == 'VAT') {
           return '专用发票'
-        }else return ''
+        } else return ''
       }
     },
     methods: {
@@ -79,8 +82,8 @@
         this.confirmInvoice({
           invoice_apply_id: this.invoiceDtail.id,
           invoice_status: 2,
-          onsuccess:function () {
-              this.invoiceDtail.invoice_status = 2
+          onsuccess: function () {
+            this.invoiceDtail.invoice_status = 2
           }
         })
       },

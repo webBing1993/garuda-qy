@@ -82,7 +82,7 @@ Vue.component('Checker', Checker);
 Vue.component('CheckerItem', CheckerItem);
 
 //modules
-Vue.component('orderitem', require('./modules/orderitem'));
+// Vue.component('orderitem', require('./modules/orderitem'));
 
 
 /* eslint-disable no-new */

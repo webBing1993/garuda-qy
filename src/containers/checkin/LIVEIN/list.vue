@@ -7,8 +7,8 @@
               lock-x>
       <div class="scroller-wrap">
         <Group v-for="(item,index) in renderList">
-          <Cell  :title="getCellTitle(item)"/>
-          <Cell :title="getCellBody(item)" link @onClick="goto('/livein/'+item.order_id)"/>
+          <Cell :title="getCellTitle(item)"/>
+          <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
         </Group>
       </div>
     </scroller>
@@ -59,15 +59,11 @@
         'getAllSuborder'
       ]),
       getCellTitle(item){
-        let tag = this.getUnionTag(item.union_tag,item.room_number);
-        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} (联${tag ? tag : null})</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
+        let tag = this.getUnionTag(item.union_tag, item.room_number);
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} ${tag ? '（联' + tag + ')' : ''} </span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
-      getCellBody(item){
-        let dom = ``;
-        if (item.guests) {
-          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${i.idcard}</span></div>`)
-        }
-        return dom
+      getUnionTag(tag, tempRoom){
+        return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
       },
       getList() {
         this.isToday
@@ -79,10 +75,7 @@
           this.getAllSuborder({
             onsuccess: body => this.allList = body.data
           })
-      },
-      getUnionTag(tag, tempRoom){
-        return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
-      },
+      }
     },
     watch: {
       isToday() {

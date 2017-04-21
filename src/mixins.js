@@ -2,9 +2,6 @@ import Vue from 'vue'
 
 Vue.mixin({
   methods: {
-    hi(){
-      console.log('hi')
-    },
     datetimeparse: (timestamp, format, prefix) => {
       // console.log(timestamp, format)
       let newtimestamp = timestamp
@@ -37,6 +34,22 @@ Vue.mixin({
       output = prefix ? (prefix + output) : output
 
       return newtimestamp ? output : ''
+    },
+    idnumber: id => {
+      return id.replace(id.slice(3, 14), '***********')
+    },
+    getGuestItem(item){
+      let dom = ``;
+      if (item.guests) {
+        item.guests.length > 0
+          ? item.guests.forEach(i => {
+          dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+        })
+          : dom += `<div>无入住人</div>`
+      } else {
+        dom += `<div>无入住人</div>`
+      }
+      return dom
     },
   }
 })

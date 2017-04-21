@@ -15,7 +15,7 @@
           <li><span><abbr>性别</abbr>{{item.sex}}</span><span><abbr>民族</abbr>{{item.ethnicity}}</span></li>
           <li><span><abbr>生日</abbr>{{item.date_of_birth}}</span></li>
           <li><span><abbr>住址</abbr>{{item.address}}</span></li>
-          <li><span><abbr>身份证号</abbr>{{item.idcard}}</span></li>
+          <li><span><abbr>身份证号</abbr>{{idnumber(item.idcard)}}</span></li>
         </ul>
         <img :src="item.photo" alt="身份证照片">
       </div>

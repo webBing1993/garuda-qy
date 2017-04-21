@@ -8,14 +8,15 @@
         <Cell title="入住时间" :value="detail.in_time | datetimeparse"></Cell>
         <Cell title="离店时间" :value="detail.out_time | datetimeparse"></Cell>
         <Cell title="房型" v-for="(item,index) in detail.rooms_plan" :key="'rooms_plan'+index"
-              :value="item.room_type + '*' + item.room_count"></Cell>
+              :value="item.room_type + 'x' + item.room_count"></Cell>
       </Group>
 
       <Group :title="index == 0? '房间信息' : null"
              v-if="detail.suborders"
              v-for="(item,index) in detail.suborders"
              :key="'guests'+index">
-        <Cell :title="`<div style='color: #4a4a4a'>${item.room_type_name +' '+item.room_number}</div>`"></Cell>
+        <Cell
+          :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name}</div>`"></Cell>
         <Cell :title="getGuestItem(item)"/>
       </Group>
     </div>
@@ -50,13 +51,6 @@
             this.detail = body.data
           }
         })
-      },
-      getGuestItem(item){
-        if (item.guests) {
-          let dom = ``;
-          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${i.idcard}</span></div>`)
-          return dom
-        }
       },
     },
     watch: {
