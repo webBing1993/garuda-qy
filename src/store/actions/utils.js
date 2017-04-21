@@ -33,11 +33,9 @@ module.exports = {
       emulateHTTP: false,
       emulateJSON: false,
     }).then(
-      response => {
-        response.body.errcode == 0
-          ? param.onSuccess ? param.onSuccess(response.body) : null
-          : param.onFail ? param.onFail(response.body) : null
-      }
+      response => +response.body.errcode === 0
+        ? param.onSuccess ? param.onSuccess(response.body) : null
+        : param.onFail ? param.onFail(response.body) : null
     ).catch(
       error => {
         //ErrorCallback
@@ -46,15 +44,14 @@ module.exports = {
     ).finally(
       final => {
         //FinalCallback
-        // console.log("request done!")
         ctx.commit('LOADING')
       }
     )
   },
-  settitle: (ctx, t) => {
+  settitle: (x, t) => {
     document.title = t;
     let i = document.createElement('iframe');
-    i.src = "/static/redicon.html"
+    i.src = "/static/settitle.html"
     i.style.display = 'none';
     i.onload = () => setTimeout(() => i.remove(), 9)
     document.body.appendChild(i);

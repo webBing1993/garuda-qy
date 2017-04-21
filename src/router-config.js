@@ -108,8 +108,11 @@ const others = [
     path: '/examples',
     component: require('./containers/examples.vue')
   }, {
+    path: '/404',
+    component: require('./containers/404.vue')
+  }, {
     path: '/*',
-    redirect: '/'
+    redirect: '/404'
   }
 ]
 

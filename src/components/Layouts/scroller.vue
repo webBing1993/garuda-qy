@@ -176,7 +176,7 @@
     watch: {
       depend(){
         setTimeout(() => {
-          console.log('Depend changed, reset scroller!')
+//          console.log('Depend changed, reset scroller!')
 //          this.donePulldown()
           this.reset()
         }, 100)

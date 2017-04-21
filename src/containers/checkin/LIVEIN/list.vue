@@ -6,7 +6,7 @@
               use-pulldown
               lock-x>
       <div class="scroller-wrap">
-        <Group v-for="(item,index) in renderList">
+        <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
         </Group>

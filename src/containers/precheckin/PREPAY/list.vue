@@ -41,7 +41,7 @@
               height="-44"
               lock-x>
       <div class="scroller-wrap">
-        <Group v-for="(item,index) in confirmed">
+        <Group v-for="(item,index) in confirmed" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
           <Cell v-if="item.remark" :title="getCellFooter(item)"/>

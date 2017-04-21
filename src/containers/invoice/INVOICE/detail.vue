@@ -4,30 +4,33 @@
       <div class="scroller-wrap">
         <!-- 主单信息 -->
         <Group title="主单信息">
-          <Cell title="订单号" :value="detail.order_pmsid"></Cell>
-          <Cell title="预订人" :value="detail.owner"></Cell>
-          <Cell title="手机号" :value="detail.owner_tel"></Cell>
-          <Cell title="入离时间" :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
-          <Cell title="房型" :value="getRoomCount(detail)"></Cell>
+          <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
+          <Cell class="key" title="预订人" :value="detail.owner"></Cell>
+          <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
+          <Cell class="key" title="入离时间"
+                :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
+          <Cell class="key" title="房型" :value="getRoomCount(detail)"></Cell>
         </Group>
 
         <!-- 房间信息 -->
-        <Group :title="index == 0? '房间信息' : null" v-for="(item,index) in detail.suborders" :key="index">
+        <Group class="key" :title="index == 0? '房间信息' : null" v-for="(item,index) in detail.suborders" :key="index">
+
           <Cell
             :title="`<span style='color:#4a4a4a'>${item.room_number ? item.room_number : '未选房'} ${item.room_type_name}</span>`"></Cell>
-          <Cell :title="getIvoiceRoomInfo(item)"></Cell>
+          <Cell class="key" :title="getGuestItem(item)"></Cell>
         </Group>
 
         <!-- 发票信息 -->
         <Group title="发票信息" v-if="detail.invoice">
-          <Cell title="发票信息" :value="detail.invoice.title"></Cell>
-          <Cell title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
-          <Cell title="领取方式" :value="detail.invoice.media === 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
-          <Cell title="开票内容" :value="detail.invoice.category"></Cell>
-          <div class="button-box">
-            <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
-          </div>
+          <Cell class="key" title="发票信息" :value="detail.invoice.title"></Cell>
+          <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
+          <Cell class="key" title="领取方式" :value="detail.invoice.media === 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
+          <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
         </Group>
+
+        <div class="button-group">
+          <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
+        </div>
       </div>
     </scroller>
 

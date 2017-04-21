@@ -1,89 +1,51 @@
-// Mockdata
-// import './mock';
-
 import Vue from 'vue';
-import App from './App';
+import App from './App.vue';
 
 Vue.config.productionTip = false;
 
-// normalize.css
-import 'normalize.css';
-import './assets/varible.less';
+// Mockdata
+// import './mock';
 
-// utils
+// Utils
 import FastClick from 'fastclick';
 FastClick.attach(document.body);
 
-// router & store
+// Router & Store
 import store from './store';
 import router from './router-config';
 import {sync} from 'vuex-router-sync';
 sync(store, router);
 
+// Filters
 import filters  from './filters'
 Object.entries(filters).forEach(item => Vue.filter(item[0], item[1]))
 
+// Mixins
 import './mixins'
 
-// Forms
-import XInput from './components/Forms/x-input.vue'
-Vue.component('XInput', XInput)
-import XTextarea from './components/Forms/x-textarea.vue'
-Vue.component('XTextarea', XTextarea)
-import XSwitch from './components/Forms/x-switch.vue'
-Vue.component('XSwitch', XSwitch)
-import XRadio from './components/Forms/x-radio.vue'
-Vue.component('XRadio', XRadio)
-import XCheckbox from './components/Forms/x-checkbox.vue'
-Vue.component('XCheckbox', XCheckbox)
-
-// Layers
-import Actionsheet from './components/Layers/actionsheet.vue'
-Vue.component('Actionsheet', Actionsheet)
-import Dialog from './components/Layers/dialog.vue'
-Vue.component('Dialog', Dialog)
-import Toast from './components/Layers/toast.vue'
-Vue.component('Toast', Toast)
-import popup from './components/Layers/popup/index.vue'
-Vue.component('popup', popup)
-
+// Components
+Vue.component('XInput', require('./components/Forms/x-input.vue'))
+Vue.component('XTextarea', require('./components/Forms/x-textarea.vue'))
+Vue.component('XSwitch', require('./components/Forms/x-switch.vue'))
+Vue.component('XRadio', require('./components/Forms/x-radio.vue'))
+Vue.component('XCheckbox', require('./components/Forms/x-checkbox.vue'))
+Vue.component('Actionsheet', require('./components/Layers/actionsheet.vue'))
+Vue.component('Dialog', require('./components/Layers/dialog.vue'))
+Vue.component('Toast', require('./components/Layers/toast.vue'))
+Vue.component('popup', require('./components/Layers/popup/index.vue'))
 Vue.component('xpopup', require('./components/popup/index.vue'))
-
-// List
-import Group from './components/List/group.vue'
-Vue.component('Group', Group)
-import Cell from './components/List/cell.vue'
-Vue.component('Cell', Cell)
-import Link from './components/List/link.vue'
-Vue.component('Link', Link)
-
-// Layouts
-import Grids from './components/Layouts/grids/girds.vue'
-import Grid from './components/Layouts/grids/grid.vue'
-Vue.component('Grids', Grids)
-Vue.component('Grid', Grid)
-import Tab from './components/Layouts/tab/tab.vue'
-import TabItem from './components/Layouts/tab/tabItem.vue'
-Vue.component('Tab', Tab)
-Vue.component('TabItem', TabItem)
-import Scroller from './components/Layouts/scroller.vue'
-Vue.component('Scroller', Scroller)
-
-// Display
-import XButton from './components/Displays/button.vue'
-Vue.component('XButton', XButton)
-
-// Functional
-import calendar from './components/Functional/calendar'
-Vue.component('calendar', calendar)
-import Checker from './components/Functional/checker/checker.vue'
-import CheckerItem from './components/Functional/checker/checker-item.vue'
-Vue.component('Checker', Checker);
-Vue.component('CheckerItem', CheckerItem);
-
-//modules
-// Vue.component('orderitem', require('./modules/orderitem'));
-
+Vue.component('Group', require('./components/List/group.vue'))
+Vue.component('Cell', require('./components/List/cell.vue'))
+Vue.component('Link', require('./components/List/link.vue'))
+Vue.component('Grids', require('./components/Layouts/grids/girds.vue'))
+Vue.component('Grid', require('./components/Layouts/grids/grid.vue'))
+Vue.component('Tab', require('./components/Layouts/tab/tab.vue'))
+Vue.component('TabItem', require('./components/Layouts/tab/tabItem.vue'))
+Vue.component('Scroller', require('./components/Layouts/scroller.vue'))
+Vue.component('XButton', require('./components/Displays/button.vue'))
+Vue.component('calendar', require('./components/Functional/calendar'))
+Vue.component('Checker', require('./components/Functional/checker/checker.vue'));
+Vue.component('CheckerItem', require('./components/Functional/checker/checker-item.vue'));
 
 /* eslint-disable no-new */
 new Vue({
