@@ -31,7 +31,7 @@
         <div class="button-group" v-if="detail.invoice && detail.invoice.invoice_status ===  1">
           <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
         </div>
-        <p class="tips">已确认开票。</p>
+        <p v-if="detail.invoice && detail.invoice.invoice_status ===  2" class="tips">已确认开票。</p>
 
       </div>
     </scroller>
@@ -104,9 +104,7 @@
         suborder: 1,
         invoice: 1,
         log: 0,
-        onsuccess: body => {
-          this.detail = body.data
-        }
+        onsuccess: body => this.detail = body.data
       })
     }
   }
