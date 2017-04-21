@@ -17,26 +17,11 @@
               lock-x
               use-pulldown
               height="-44">
-      <div>
-        <section v-for="(item,index) in renderList" :key="index">
-          <div class="invoice-container" @click="goto('/invoice/detail/' + item.order_id)">
-            <div class="invoice-title">
-              <p class="left-title">
-                <span v-for="room in item.rooms_number">{{room}}</span>
-              </p>
-              <span class="right-title">{{item.is_any_checkin ? '已入住' : ''}}</span>
-            </div>
-            <div class="invoice-body">
-              <span>{{item.owner}} {{item.phone_number}} <i>{{item.invoice_status == 2 ? '已开票' : ''}}</i></span>
-              <span>
-                <abbr v-if="item.type === 'PERSONAL'">个人发票</abbr>
-                <abbr v-if="item.type === 'GENERAL'">增值税普通发票</abbr>
-                <abbr v-if="item.type === 'VAT'">专用发票</abbr>·{{item.category}}·{{item.media == 'PAPER' ? '纸质发票' : '电子发票'}}</span>
-              <span>{{item.title}}</span>
-              <span>{{item.in_time | datetimeparse}} - {{item.out_time | datetimeparse}}</span>
-            </div>
-          </div>
-        </section>
+      <div class="scroller-wrap">
+        <Group v-for="(item,index) in renderList" :key="index">
+          <Cell :title="getCellTitle(item)"/>
+          <Cell :title="getCellBody(item)" link @onClick="goto('/invoice/detail/' + item.order_id)"/>
+        </Group>
       </div>
     </scroller>
 
@@ -73,11 +58,28 @@
         'replaceto',
         'getInvoiceList'
       ]),
+      getCellTitle(item){
+        let roomNumber = '';
+        if(item.rooms_number.length > 0){
+          item.rooms_number.forEach(i => roomNumber += roomNumber ? ' '+i : i);
+        }else {
+            roomNumber += '未选房'
+        }
+        return `<p><span class="cell-value">${roomNumber}</span><span class="cell-right primary">${item.is_any_checkin ? '已入住' : ''}</span></p>`
+      },
+      getCellBody(item){
+        return `<div class="cell-body">` +
+          `<p><span class="cell-value">${item.owner + ' ' + item.phone_number}</span><b class="cell-right">${item.invoice_status == 2 ? '已开票' : ''}</b></p>` +
+          `<p><span class="cell-value">${this.invoiceType(item.type)}·${item.category}·${item.media == 'PAPER' ? '纸质发票' : '电子发票'}</span></p>` +
+          `<p><span class="cell-value">${item.title}</span></p>` +
+          `<p><span class="cell-value">${this.datetimeparse(item.in_time) + '-' + this.datetimeparse(item.out_time)}</span></p>` +
+          `</div>`
+      },
       invoiceList() {
         this.getInvoiceList({
           scope: this.tabIndex == 0 ? 'TODAY' : 'OTHER',
           invoice_status: 1,
-          onsuccess: body => this.tabIndex? this.todayList = body.data : this.allList = body.data
+          onsuccess: body => this.tabIndex ? this.todayList = body.data : this.allList = body.data
         })
       },
       toggleTab(index){
@@ -87,8 +89,8 @@
     },
     watch: {
       tabIndex(val) {
-          val ? this.todayList = [] : this.allList = [];
-          this.invoiceList();
+        val ? this.todayList = [] : this.allList = [];
+        this.invoiceList();
       }
     },
     mounted(){

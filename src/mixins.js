@@ -51,5 +51,16 @@ Vue.mixin({
       }
       return dom
     },
+    invoiceType(type){
+      let typeStr = '';
+      if (type === 'PERSONAL') {
+        typeStr = '个人发票'
+      } else if (type === 'GENERAL') {
+        typeStr = '增值税普通发票'
+      } else if (type === 'VAT') {
+        typeStr = '专用发票'
+      }
+      return typeStr
+    }
   }
 })

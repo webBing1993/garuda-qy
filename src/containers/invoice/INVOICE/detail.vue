@@ -1,32 +1,36 @@
 <template>
   <article class="invoce-detail">
-    <!-- 主单信息 -->
-    <Group title="主单信息">
-      <Cell title="订单号" :value="invoiceDtail.order_pmsid"></Cell>
-      <Cell title="预订人" :value="invoiceDtail.owner"></Cell>
-      <Cell title="手机号" :value="invoiceDtail.owner_tel"></Cell>
-      <Cell title="入住时间" :value="invoiceDtail.in_time | datetimeparse"></Cell>
-      <Cell title="离店时间" :value="invoiceDtail.out_time | datetimeparse"></Cell>
-      <Cell title="房型" :value="getRoomCount(invoiceDtail)"></Cell>
-    </Group>
+    <scroller lock-x :depend="detail">
+      <div class="scroller-wrap">
+        <!-- 主单信息 -->
+        <Group title="主单信息">
+          <Cell title="订单号" :value="detail.order_pmsid"></Cell>
+          <Cell title="预订人" :value="detail.owner"></Cell>
+          <Cell title="手机号" :value="detail.owner_tel"></Cell>
+          <Cell title="入离时间" :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
+          <Cell title="房型" :value="getRoomCount(detail)"></Cell>
+        </Group>
 
-    <!-- 房间信息 -->
-    <Group :title="index == 0? '房间信息' : null" v-for="(item,index) in invoiceDtail.suborders" :key="index">
-      <Cell
-        :title="`<span style='color:#4a4a4a'>${item.room_number ? item.room_number : '未选房'} ${item.room_type_name}</span>`"></Cell>
-      <Cell :title="getIvoiceRoomInfo(item)"></Cell>
-    </Group>
+        <!-- 房间信息 -->
+        <Group :title="index == 0? '房间信息' : null" v-for="(item,index) in detail.suborders" :key="index">
+          <Cell
+            :title="`<span style='color:#4a4a4a'>${item.room_number ? item.room_number : '未选房'} ${item.room_type_name}</span>`"></Cell>
+          <Cell :title="getIvoiceRoomInfo(item)"></Cell>
+        </Group>
 
-    <!-- 发票信息 -->
-    <Group title="发票信息" v-if="invoiceDtail.invoice">
-      <Cell title="发票信息" :value="invoiceDtail.invoice.title"></Cell>
-      <Cell title="开票类型" :value="invoiceType"></Cell>
-      <Cell title="领取方式" :value="invoiceDtail.invoice.media === 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
-      <Cell title="开票内容" :value="invoiceDtail.invoice.category"></Cell>
-      <div class="detailBtn">
-        <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
+        <!-- 发票信息 -->
+        <Group title="发票信息" v-if="detail.invoice">
+          <Cell title="发票信息" :value="detail.invoice.title"></Cell>
+          <Cell title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
+          <Cell title="领取方式" :value="detail.invoice.media === 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
+          <Cell title="开票内容" :value="detail.invoice.category"></Cell>
+          <div class="button-box">
+            <XButton value="登记开票" default @onClick="staffpayConfirm"></XButton>
+          </div>
+        </Group>
       </div>
-    </Group>
+    </scroller>
+
 
     <!--<p class="tips">已确认开票。</p>-->
 
@@ -50,7 +54,7 @@
         showDialog: false,
         dialogStatus: null,
         inputValue: null,
-        invoiceDtail: {}
+        detail: {}
       }
     },
     computed: {
@@ -58,15 +62,6 @@
         'Interface',
         'route',
       ]),
-      invoiceType() {
-        if (this.invoiceDtail.invoice.type == 'PERSONAL') {
-          return '个人发票'
-        } else if (this.invoiceDtail.invoice.type == 'GENERAL') {
-          return '增值税普通发票'
-        } else if (this.invoiceDtail.invoice.type == 'VAT') {
-          return '专用发票'
-        } else return ''
-      }
     },
     methods: {
       ...mapActions([
@@ -80,17 +75,17 @@
       },
       setInvoiceConfirm () {
         this.confirmInvoice({
-          invoice_apply_id: this.invoiceDtail.id,
+          invoice_apply_id: this.detail.id,
           invoice_status: 2,
           onsuccess: function () {
-            this.invoiceDtail.invoice_status = 2
+            this.detail.invoice_status = 2
           }
         })
       },
       getRoomCount(item){
         if (item.rooms_plan) {
           let temp = ``
-          item.rooms_plan.forEach(i => temp += `<div>${i.room_type + '·' + i.room_count}</div>`)
+          item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`)
           return temp
         }
       },
@@ -110,7 +105,7 @@
         invoice: 1,
         log: 0,
         onsuccess: body => {
-          this.invoiceDtail = body.data
+          this.detail = body.data
         }
       })
     }

@@ -13,8 +13,7 @@
             <Cell class="key" title="订单号" :value="orderdetail.order_pmsid"></Cell>
             <Cell class="key" title="预订人" :value="orderdetail.owner"></Cell>
             <Cell class="key" title="手机号" :value="orderdetail.owner_tel"></Cell>
-            <Cell class="key" title="入住时间" :value="orderdetail.in_time |datetimeparse"></Cell>
-            <Cell class="key" title="离店时间" :value="orderdetail.out_time |datetimeparse"></Cell>
+            <Cell class="key" title="入离时间" :value="datetimeparse(orderdetail.in_time) + ' - '+ datetimeparse(orderdetail.out_time)"></Cell>
           </Group>
 
           <!-- PMS支付信息 -->
@@ -36,7 +35,7 @@
           <!-- 发票信息 -->
           <Group title="发票信息" v-if="orderdetail.invoice">
             <Cell class="key" title="领取方式" :value="orderdetail.invoice.media == 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
-            <Cell class="key" title="开票类型" :value="invoiceType"></Cell>
+            <Cell class="key" title="开票类型" :value="invoiceType(orderdetail.invoice.type)"></Cell>
             <Cell class="key" title="开票内容" :value="orderdetail.invoice.category"></Cell>
             <Cell class="key" title="发票抬头" :value="orderdetail.invoice.title"></Cell>
           </Group>
@@ -87,15 +86,6 @@
       ]),
       routeId() {
         return this.$route.params.id
-      },
-      invoiceType() {
-        if (this.orderdetail.invoice.type == 'PERSONAL') {
-          return '个人发票'
-        } else if (this.orderdetail.invoice.type == 'GENERAL') {
-          return '增值税普通发票'
-        } else if (this.orderdetail.invoice.type == 'VAT') {
-          return '专用发票'
-        } else return ''
       },
     },
     methods: {
