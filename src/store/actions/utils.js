@@ -15,7 +15,7 @@ module.exports = {
   },
   urlquery(ctx) {
     let o = {}
-    window.location.search.split('&').forEach(i => i ? o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1] : null)
+    decodeURIComponent(window.location.search).split('&').forEach(i => i ? o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1] : null)
     ctx.commit('URLQUERY', o)
   },
   resource: (ctx, param) => {
@@ -50,5 +50,13 @@ module.exports = {
         ctx.commit('LOADING')
       }
     )
-  }
+  },
+  settitle: (ctx, t) => {
+    document.title = t;
+    let i = document.createElement('iframe');
+    i.src = "/static/redicon.html"
+    i.style.display = 'none';
+    i.onload = () => setTimeout(() => i.remove(), 9)
+    document.body.appendChild(i);
+  },
 }
