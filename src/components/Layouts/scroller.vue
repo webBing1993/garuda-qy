@@ -175,11 +175,13 @@
     },
     watch: {
       depend(){
+        // console.log('reset scroller')
         setTimeout(() => {
-//          console.log('Depend changed, reset scroller!')
-//          this.donePulldown()
           this.reset()
         }, 100)
+        setTimeout(() => {
+          this.reset()
+        }, 500)
       },
       currentValue: {
         handler: function (val) {

@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <p class="identity-result" v-if="identityResult">{{identityResult}}</p>
+    <p class="tips" v-if="identityResult">{{identityResult}}</p>
 
     <div v-if="detail.status === 'PENDING'" class="button-group">
       <XButton value="验证通过" primary @onClick="setidentitystatus(1)"></XButton>

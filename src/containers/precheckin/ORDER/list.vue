@@ -25,24 +25,27 @@
     </scroller>
 
     <footer>
-      <div class="select">
-        <span v-if="!isToday" @click="isCalendarShow = true">
+      <div class="listFilter">
+        <span class="filter" v-if="!isToday" @click="isCalendarShow = true">
           <abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>
           <abbr v-else>筛选</abbr>
         </span>
-        <span @click="isSortShow = true">{{isSequence ? '时间正序' : '时间倒序'}}</span>
+        <span class="sort" @click="isSortShow = true">{{isSequence ? '时间正序' : '时间倒序'}}</span>
       </div>
     </footer>
 
     <popup v-model="isSortShow"
            maskShow
            bottom>
-      <div class="sort">
-        <div v-for="(item,index) in sortMenu" class="sortText" :key="index">
-          <span :class="{selected:isSequence === index}" @click="isSequence = index, isSortShow = false">{{item}}</span>
-        </div>
+      <div class="sortmenu">
+        <p v-for="(item,index) in sortMenu" :key="index"
+           class="sortText" :class="{selected:isSequence === index}"
+           @click="isSequence = index, isSortShow = false">
+          <span>{{item}}</span>
+        </p>
       </div>
     </popup>
+
     <popup v-model="isCalendarShow"
            maskShow
            bottom

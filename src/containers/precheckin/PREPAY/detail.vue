@@ -13,7 +13,7 @@
       <Cell title="已确认" :value="payInfo"></Cell>
     </Group>
 
-    <div class="btn-group">
+    <div class="button-group">
       <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
                 :value="orderdetail.payinfo.total_roomfee | CNY('已全额支付 ')"
                 primary

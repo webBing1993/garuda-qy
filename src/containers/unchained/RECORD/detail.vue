@@ -68,14 +68,12 @@
           <p>{{item.room_number}}</p>
         </div>
       </section>
-
       <p v-if="dirtyRoomForPick.length">空脏房</p>
       <section class="roompick-group">
         <div class="dirty" v-for="item in dirtyRoomForPick">
           <p>{{item.room_number}}</p>
         </div>
       </section>
-
     </Dialog>
   </article>
 </template>

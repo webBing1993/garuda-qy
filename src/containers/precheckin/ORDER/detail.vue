@@ -3,36 +3,30 @@
     <scroller lock-x :depend="orderdetail">
       <div class="scroller-wrap">
         <div v-if="orderdetail">
-          <div class="warning-title" v-if="orderdetail.status && !orderdetail.status.is_recording_success">
+          <div class="recording" v-if="orderdetail.status && !orderdetail.status.is_recording_success">
             <div class="title-body">入账失败</div>
-            <div class="title-footer" @click="confirmPmsResult"><input type="button" value="已手工入账"></div>
+            <a @click="confirmPmsResult">已手工入账</a>
           </div>
 
-          <!--预订信息-->
           <Group title="预订信息">
             <Cell class="key" title="订单号" :value="orderdetail.order_pmsid"></Cell>
             <Cell class="key" title="预订人" :value="orderdetail.owner"></Cell>
             <Cell class="key" title="手机号" :value="orderdetail.owner_tel"></Cell>
-            <Cell class="key" title="入离时间" :value="datetimeparse(orderdetail.in_time) + ' - '+ datetimeparse(orderdetail.out_time)"></Cell>
+            <Cell class="key" title="入离时间"
+                  :value="datetimeparse(orderdetail.in_time) + ' - '+ datetimeparse(orderdetail.out_time)"></Cell>
           </Group>
 
-          <!-- PMS支付信息 -->
           <Group title="PMS支付信息" v-if="orderdetail.payinfo">
             <Cell class="key" title="应付房费" :value="orderdetail.payinfo.total_roomfee | CNY"></Cell>
             <Cell class="key" title="已付" :value="orderdetail.payinfo.pms_pay | CNY"></Cell>
             <Cell class="key" title="备注" :value="orderdetail.remark"></Cell>
           </Group>
 
-          <!--<Group title="支付信息" v-if="orderdetail.payinfo">-->
-          <!--<Cell class="key" title="已付" :value="orderdetail.payinfo.user_pay | CNY"></Cell>-->
-          <!--</Group>-->
-
           <Group v-for="(item,index) in orderdetail.suborders" :key="'guests'+index"
                  :title="index == 0? '选房信息' : null">
             <cell class="key" :title="getGuestItem(item)"/>
           </Group>
 
-          <!-- 发票信息 -->
           <Group title="发票信息" v-if="orderdetail.invoice">
             <Cell class="key" title="领取方式" :value="orderdetail.invoice.media == 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
             <Cell class="key" title="开票类型" :value="invoiceType(orderdetail.invoice.type)"></Cell>
@@ -40,30 +34,6 @@
             <Cell class="key" title="发票抬头" :value="orderdetail.invoice.title"></Cell>
           </Group>
 
-          <!--<div class="predetail-btn">-->
-          <!--<XButton value="操作日志" plain mini @onClick="popupShow = !popupShow"></XButton>-->
-          <!--</div>-->
-
-          <!-- log 弹窗 -->
-          <!--<popup v-model="popupShow"-->
-          <!--:maskShow="true"-->
-          <!--:top="true"-->
-          <!--:animationTop="true">-->
-          <!--<div class="log-box">-->
-          <!--<span class="log-title">操作日志</span>-->
-          <!--<div class="log-cell">-->
-          <!--<div class="log-header">日期</div>-->
-          <!--<div class="log-body textAlign">内容</div>-->
-          <!--<div class="log-footer">操作人</div>-->
-          <!--</div>-->
-          <!--<div class="log-cell" v-for="item in orderdetail.logs">-->
-          <!--<div class="log-header">{{item.date | datetimeparse('YYYY/MM/DD hh:mm')}}</div>-->
-          <!--<div class="log-body">{{item.action}}</div>-->
-          <!--<div class="log-footer">{{item.operator}}</div>-->
-          <!--</div>-->
-          <!--<span class="logBtn" @click="popupShow = false">确定</span>-->
-          <!--</div>-->
-          <!--</popup>-->
         </div>
       </div>
     </scroller>
@@ -77,7 +47,6 @@
     data(){
       return {
         orderdetail: {},
-//        popupShow: false
       }
     },
     computed: {

@@ -1,133 +1,39 @@
-footer {
-  &:before {
-    content: " ";
-    position: absolute;
-    left: 0;
-    top: -1px;
-    right: 0;
-    height: 1px;
-    border-top: 1px solid #D9D9D9;
-    color: #D9D9D9;
-    -webkit-transform-origin: 0 100%;
-    transform-origin: 0 100%;
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
-  }
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  z-index: 1;
-  left: 0;
-  box-sizing: border-box;
-  background-color: #fff;
-  .select {
-    margin-top: -65px;
-    padding: 0 10px;
-    background-color: #fff;
-    font-size: 11px;
-    text-align: center;
-    border: 1px solid transparent;
-    border-radius: 19px;
-    line-height: 33px;
-    box-shadow: 0 2px 20px #bdbdbd;
-  }
-}
-
-.sort {
-  padding-bottom: 10px;
-  background-color: #fff;
-  .sortText {
-    width: 100%;
-    display: inline-block;
-    text-align: center;
-    line-height: 45px;
-    font-size: 14px;
-    color: #8B8B8B;
+// list
+.sortmenu {
+  padding: 15px 0;
+  background-color: #ffffff;
+  text-align: center;
+  line-height: 33px;
+  color: #8B8B8B;
+  .selected {
+    color: #4a4a4a;
     span {
-      padding-bottom: 8px;
-      &.selected {
-        border-bottom: 1px solid #8B8B8B;
-        color: #000;
-      }
+      border-bottom: solid 1px #000;
     }
   }
+  span {
+    padding: 5px 0;
+  }
 }
 
-.warning-title {
+// detail
+.recording {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px 0 10px;
+  padding: 15px;
   color: #F45656;
-  .title-footer {
-    input[type=button] {
-      background-color: #F45656;
-      color: #ffffff;
-      width: 120px;
-      line-height: 40px;
-      border-radius: 5px;
-      border: solid 0;
-      outline: none;
-      font-style: normal;
-    }
-  }
-}
-
-.predetail-btn {
-  margin-top: 10px;
-  margin-right: 10px;
-  text-align: right;
-  .weui-btn_mini {
-    line-height: 2.95;
-  }
-}
-
-.log-box {
-  z-index: 9999;
-  background-color: #ffffff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 90%;
-  margin: 40px 20px 0;
-  line-height: 24px;
-  text-align: center;
-  font-size: 11px;
-  color: #4B4B4B;
-  border-radius: 6px;
-  .log-title {
-    width: 100%;
-    line-height: 50px;
-    font-size: 14px;
+  a {
+    display: block;
+    width: 120px;
+    outline: none;
     text-align: center;
-  }
-  .log-cell {
-    display: flex;
-    line-height: 28px;
-    .log-header {
-      flex: 1.5;
-    }
-    .log-body {
-      flex: 2;
-      text-align: center;
-    }
-    .log-footer {
-      width: 44px;
-      padding-right: 8px;
-    }
-    .textAlign {
-      text-align: center;
-    }
-  }
-  .logBtn {
-    border: solid 1px #8F8F8F;
-    border-radius: 4px;
-    padding: 10px 60px;
-    line-height: 80px;
+    color: #ffffff;
+    line-height: 40px;
+    font-style: normal;
+    background-color: #F45656;
+    border: solid 0;
+    border-radius: 3px;
   }
 }
-
 

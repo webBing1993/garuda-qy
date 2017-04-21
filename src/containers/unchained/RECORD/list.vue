@@ -1,12 +1,22 @@
 <template>
   <article>
-    <Group v-for="(item,index) in recordlist" :key="'record'+index">
-      <Cell :title="getTitle(item)"></Cell>
-      <Cell :title="getBody(item)" link @onClick="goto('/record/'+item.order_id)"></Cell>
-    </Group>
+    <scroller :depend="recordlist"
+              :pulldown-config="Interface.scroller"
+              @on-pulldown-loading="getList"
+              use-pulldown
+              lock-x>
+      <div class="scroller-wrap">
+        <Group v-for="(item,index) in recordlist" :key="'record'+index">
+          <Cell :title="getTitle(item)"></Cell>
+          <Cell :title="getBody(item)" link @onClick="goto('/record/'+item.order_id)"></Cell>
+        </Group>
+      </div>
+    </scroller>
 
     <footer>
-      <x-button value="添加新订单" @onClick="goto('/record/new')"></x-button>
+      <div class="button-group">
+        <x-button value="添加新订单" @onClick="goto('/record/new')"></x-button>
+      </div>
     </footer>
   </article>
 </template>
@@ -19,6 +29,11 @@
       return {
         recordlist: [],
       }
+    },
+    computed: {
+      ...mapState([
+        'Interface'
+      ])
     },
     methods: {
       ...mapActions([
