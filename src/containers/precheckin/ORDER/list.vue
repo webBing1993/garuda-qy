@@ -17,17 +17,10 @@
               lock-x
               height="-44">
       <div class="scroller-wrap">
-        <orderitem v-for="(item,index) in renderList"
-                   :key="index"
-                   :orderId="item.order_pmsid"
-                   :staff_confirm_timeline="item.timeline.precheckin_done"
-                   :status="item.status"
-                   :booker="item.owner"
-                   :phoneNum="item.owner_tel"
-                   :rooms="item.rooms_plan"
-                   :arrow=true
-                   @onClick="goto('/precheckin/order/detail/' + item.order_id)">
-        </orderitem>
+        <Group v-for="(item,index) in renderList" :key="index">
+          <Cell :title="getCellTitle(item)"/>
+          <Cell :title="getCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
+        </Group>
       </div>
     </scroller>
 
@@ -54,7 +47,7 @@
            maskShow
            bottom
            animationTopBottom>
-      <calendar v-model="periodFilter"  @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
 </template>
@@ -120,6 +113,19 @@
         'gettodaylist',
         'gethistorylist'
       ]),
+      getCellTitle(item){
+        let alertdom = item.status.is_recording_success ? `` : `<span class="cell-right warn">入账失败</span>`
+        return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${alertdom}</p>`
+      },
+      getCellBody(item){
+        let roomtypewords = ''
+        item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
+        let time = this.datetimeparse(item.timeline.precheckin_done, this.isToday ? 'hhmm' : 'MMddhhmm')
+        return `<div class="cell-body">` +
+          `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
+          `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span><span class="cell-key cell-right">${time}</span></p>` +
+          `</div>`
+      },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath);

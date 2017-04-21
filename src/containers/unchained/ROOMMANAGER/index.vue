@@ -43,7 +43,7 @@
               <div class="room-item" :class="'roomstatus' + item.room_status">
                 <p>{{getRoomTypeName(item.room_type_id)}}</p>
                 <p>{{item.room_number}}</p>
-                <p>{{item.guest_name||item.owner_name}}</p>
+                <p>{{item.guest_name || item.owner_name}}</p>
               </div>
             </div>
           </checker-item>
@@ -72,7 +72,7 @@
               <div class="room-item" :class="item.config.enabled_pick ? 'enable':''">
                 <p>{{getRoomTypeName(item.room_type_id)}}</p>
                 <p>{{item.room_number}}</p>
-                <p>{{item.guest_name||item.owner_name}}</p>
+                <p>{{item.guest_name || item.owner_name}}</p>
               </div>
             </div>
           </checker-item>

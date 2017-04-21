@@ -64,14 +64,24 @@ body {
 }
 
 //cell
+.key {
+  .weui-cell__bd {
+    color: @weuiTextColorTitle;
+    .weui-input {
+      color: @weuiTextColorGray;
+    }
+  }
+  .weui-label {
+    color: @weuiTextColorTitle;
+  }
+}
+
 .weui-cells__title {
   color: @weuiTextColorTitle;
 }
 
 .weui-cell__hd {
-  .weui-label {
-    //color: @weuiTextColorTitle;
-  }
+
   .weui-icon-info {
     display: block;
     margin-right: 5px;
@@ -92,7 +102,6 @@ body {
 }
 
 .weui-cell__bd {
-  //color: @weuiTextColorTitle;
   .weui-input {
     color: @weuiTextColorGray;
   }

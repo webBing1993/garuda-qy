@@ -18,7 +18,7 @@ Vue.mixin({
       let YYYY = dateobj.getFullYear()
       let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1)
       let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate()
-      let HH = dateobj.getHours()
+      let HH = dateobj.getHours() > 9 ? dateobj.getHours() : '0' + dateobj.getHours()
       let mm = dateobj.getMinutes() > 9 ? dateobj.getMinutes() : '0' + dateobj.getMinutes()
       let ss = dateobj.getSeconds()
       let output = '';
@@ -35,6 +35,7 @@ Vue.mixin({
         output += YYYY + separator + MM + separator + DD
       }
       output = prefix ? (prefix + output) : output
+
       return newtimestamp ? output : ''
     },
   }

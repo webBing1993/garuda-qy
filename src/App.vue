@@ -16,9 +16,10 @@
         'route',
         'Interface',
       ]),
-      currentApp(){
-        let out
+      appTitle(){
         const path = this.route.fullPath
+        let out = '加载中...'
+
         path.match(/record/) ? out = '录入修改' : null
         path.match(/roommanager/) ? out = '房态管理' : null
 
@@ -39,6 +40,7 @@
 
         path.match(/invoice/) ? out = '待开发票' : null
 
+        this.settitle(out)
         return out
       }
     },
@@ -48,8 +50,8 @@
       ])
     },
     watch: {
-      currentApp(val){
-        this.settitle(val)
+      appTitle(val){
+        console.log(val)
       }
     }
   }
