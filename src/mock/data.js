@@ -81,6 +81,8 @@ module.exports = {
         }],
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
+        identity_id:'id0001',
+        is_upload_success:true
       }, {
         suborder_id: "2304204024024012",
         status: {
@@ -102,6 +104,8 @@ module.exports = {
         }],
         checkin_time: '1491384458000', //办理入住时间
         checkout_time: '1491384458000', //离店时间
+        identity_id:'id0001',
+        is_upload_success:false
       }]
 
     }, {
@@ -845,7 +849,9 @@ module.exports = {
         idcard: '3344402198912290011',
       }],
       in_time: '1491384458000', //入住时间
-      out_time: '1491384458000' //离店时间
+      out_time: '1491384458000', //离店时间
+      identity_id:'id0001',
+      is_upload_success:true
     }, {
       suborder_id: '230420402402402', //子单号
       order_id: "230420402402402", //订单号业务查询用
@@ -864,14 +870,16 @@ module.exports = {
         date: '1491384458000',
         price: '34500'
       }],
-      guests: [{
-        name: "张三", //入住人姓名
-        idcard: '3344402198912290011', //入住人身份证
-      }, {
-        name: "李四",
-        idcard: '3344402198912290011',
-      }],
+      // guests: [{
+      //   name: "张三", //入住人姓名
+      //   idcard: '3344402198912290011', //入住人身份证
+      // }, {
+      //   name: "李四",
+      //   idcard: '3344402198912290011',
+      // }],
       in_time: '1491384458000', //入住时间
-      out_time: '1491384458000' //离店时间
+      out_time: '1491384458000', //离店时间
+      identity_id:'id0001',
+      is_upload_success:false
     }]
 }

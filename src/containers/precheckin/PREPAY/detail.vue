@@ -7,6 +7,7 @@
     <Group>
       <Cell title="PMS支付信息"/>
       <Cell :title="getCellBodyPMS()"/>
+      <Cell :title="getCellFooter()"/>
     </Group>
 
     <Group v-if="payInfo">
@@ -101,10 +102,13 @@
           `</div>`
       },
       getCellBodyPMS(){
-          return `<div class="cell-body">` +
-            `<p><span class="cell-key">应付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.total_roomfee/100}</span></p>` +
-            `<p><span class="cell-key">已付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.user_pay/100}</span></p>` +
-            `</div>`
+        return `<div class="cell-body">` +
+          `<p><span class="cell-key">应付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.total_roomfee / 100}</span></p>` +
+          `<p><span class="cell-key">已付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.user_pay / 100}</span></p>` +
+          `</div>`
+      },
+      getCellFooter(){
+        return `<p><span class="cell-key">备注：</span><span class="cell-value">${this.orderdetail.remark}</span></p>`
       },
       staffpayConfirm(paystatus){
         this.showDialog = true;

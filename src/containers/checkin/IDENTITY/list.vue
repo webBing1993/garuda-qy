@@ -17,7 +17,7 @@
       <div class="scroller-wrap">
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
-                :value="datetimeparse(item.created_time,'hhmm')"
+                :value="datetimeparse(item.created_time,isToday ?'hhmm' : 'MMDDhhmm')"
                 @onClick="goto('/identity/' + item.identity_id)"></cell>
           <cell :title="getGuestItem(item)"
                 @onClick="goto('/identity/' + item.identity_id)"
@@ -72,7 +72,7 @@
       },
       renderList(){
         return this.tabIndex ? this.refusedIdentities : this.agreedIdentities
-      }
+      },
     },
     methods: {
       ...mapActions([
@@ -88,9 +88,10 @@
         let dom = ``;
         item.guests.forEach(i => {
           dom += `<div style="display: flex;justify-content: space-between;line-height: 2;color:#4a4a4a;">
-<span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
-</div>`
-        })
+                    <span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
+                  </div>`
+        });
+        !item.is_upload_success ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null;
         return dom
       },
       getList(){

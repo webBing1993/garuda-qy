@@ -26,6 +26,15 @@
             <img :src="item.live_photo" alt="现场照片">
           </div>
         </div>
+        <p v-if="!isUploadSuccess" class="upload"> 上传旅业系统失败，请重试</p>
+        <p v-if="isUploadSuccess" class="upload-time">
+          已成功上传旅业系统。{{datetimeparse(detail.upload_time, 'YYMMDD hhmm')}}</p>
+        <div class="button-group">
+          <x-button v-if="!btnPresent.status || btnPresent.hasNext"
+                    :value="btnPresent.status ? '下一个' : '上传旅业系统'"
+                    :plain="!!btnPresent.status"
+                    @onClick="btnPresent.callback"></x-button>
+        </div>
       </div>
     </scroller>
   </article>
@@ -37,7 +46,7 @@
   module.exports = {
     data(){
       return {
-        detail: {}
+        detail: {},
       }
     },
     computed: {
@@ -53,12 +62,24 @@
             ? '已通过'
             : '已拒绝'
           : ''
+      },
+      isUploadSuccess(){
+        return this.detail.is_upload_success
+      },
+      btnPresent(){
+        return {
+          status: this.isUploadSuccess,
+          hasNext: !!this.detail.next_identity_id,
+          callback: () => this.isUploadSuccess ? this.goto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
+        }
       }
     },
     methods: {
       ...mapActions([
+        'goto',
         'getIdentity',
-        'setIdentityStatus'
+        'setIdentityStatus',
+        'setUploadStatus'
       ]),
       getDetail(){
         this.getIdentity({
@@ -73,7 +94,13 @@
           status: val ? 'AGREED' : 'REFUSED',
           onsuccess: body => this.detail.status = val ? 'AGREED' : 'REFUSED'
         })
-      }
+      },
+      setuploadstatus(){
+        this.setUploadStatus({
+          identity_id: this.identityId,
+          onsuccess: body => this.getDetail()
+        })
+      },
     },
     watch: {
       identityId(val){

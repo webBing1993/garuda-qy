@@ -34,4 +34,16 @@ module.exports = {
       }
     })
   },
+  setUploadStatus(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/identities/' + param.identity_id + '/police',
+      method:'POST',
+      body: {
+        identity_id: param.identity_id
+      },
+      onSuccess: body => {
+        param.onsuccess(body)
+      }
+    })
+  }
 }

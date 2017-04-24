@@ -8,7 +8,7 @@
       <div class="scroller-wrap">
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
-          <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
+          <Cell :title="getGuestItem(item,'fromList')" link @onClick="goto('/livein/'+item.order_id)"/>
         </Group>
       </div>
     </scroller>

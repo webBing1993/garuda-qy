@@ -9,15 +9,21 @@
         <Cell title="房型" v-for="(item,index) in detail.rooms_plan" :key="'rooms_plan'+index"
               :value="item.room_type + 'x' + item.room_count"></Cell>
       </Group>
+      <div v-for="(item,index) in detail.suborders"
+           :key="'guests'+index"
+           v-if="detail.suborders">
+        <Group :title="index === 0 ? '房间信息' : null">
+          <Cell
+            :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name}</div>`"></Cell>
+          <Cell :title="getGuestItem(item)"/>
+        </Group>
+        <p style="color: #DF4A4A;margin: 15px;font-size: 13px"
+            v-if="!item.is_upload_success">
+          当前入住房间信息上网上传旅业系统，您可以前往‘公安验证-当日验证’已通过列表进行旅业系统上传；或点击该链接进行操作。
+          <a style="color: #25B8F1; border-bottom: 1px solid #25B8F1"
+             @click="goto('/identity/' + item.identity_id)">上传旅业系统</a></p>
+      </div>
 
-      <Group :title="index == 0? '房间信息' : null"
-             v-if="detail.suborders"
-             v-for="(item,index) in detail.suborders"
-             :key="'guests'+index">
-        <Cell
-          :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name}</div>`"></Cell>
-        <Cell :title="getGuestItem(item)"/>
-      </Group>
     </div>
   </article>
 </template>
@@ -37,6 +43,7 @@
     },
     methods: {
       ...mapActions([
+        'goto',
         'getorderdetail'
       ]),
       getDetail() {
