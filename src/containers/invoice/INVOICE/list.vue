@@ -78,7 +78,7 @@
       },
       invoiceList() {
         this.getInvoiceList({
-          scope: this.tabIndex == 0 ? 'TODAY' : 'OTHER',
+          scope: this.tabIndex === 0 ? 'TODAY' : 'ALL',
           invoice_status: 1,
           onsuccess: body => this.tabIndex ? this.todayList = body.data : this.allList = body.data
         })
