@@ -104,7 +104,7 @@
       getCellBodyPMS(){
         return `<div class="cell-body">` +
           `<p><span class="cell-key">应付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.total_roomfee / 100}</span></p>` +
-          `<p><span class="cell-key">已付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.user_pay / 100}</span></p>` +
+          `<p><span class="cell-key">已付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.pms_pay / 100}</span></p>` +
           `</div>`
       },
       getCellFooter(){
