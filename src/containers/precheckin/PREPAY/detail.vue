@@ -16,7 +16,7 @@
 
     <div class="button-group">
       <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
-                :value="orderdetail.payinfo.total_roomfee | CNY('已全额支付 ')"
+                :value="cashHandling(orderdetail.payinfo.total_roomfee,'已全额支付 ')"
                 primary
                 @onClick="staffpayConfirm"/>
       <x-button v-if='orderdetail.payinfo.staff_pay != 0'
@@ -43,7 +43,7 @@
       <div v-if="dialogStatus == 2">
         <label>输入金额</label>
         <input type="number" v-model.number='inputValue'
-               class="money" :placeholder="orderdetail.payinfo.total_roomfee | CNY('总房费')">
+               class="money" :placeholder="cashHandling(orderdetail.payinfo.total_roomfee,'总房费')">
       </div>
     </Dialog>
   </div>

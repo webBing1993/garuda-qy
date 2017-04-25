@@ -64,6 +64,9 @@ Vue.mixin({
         typeStr = '专用发票'
       }
       return typeStr
-    }
+    },
+    cashHandling(val, prefix){
+      return prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100)
+    },
   }
 })
