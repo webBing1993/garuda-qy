@@ -14,17 +14,17 @@
 
         <Group title="房间信息">
           <Cell title="房型" :value="getRoomTypeName(detail.room_type_id)" @onClick="isRoomTypeListShow = true" link/>
-          <Cell title="入住时间" :value="detail.in_time | datetimeparse"
+          <Cell title="入住时间" :value="datetimeparse(detail.in_time)"
                 @onClick="isCalendarShow = true, calendarType = 'IN'"
                 link/>
-          <Cell title="离店时间" :value="detail.out_time | datetimeparse"
+          <Cell title="离店时间" :value="datetimeparse(detail.out_time)"
                 @onClick="isCalendarShow = true, calendarType = 'OUT'"
                 link/>
           <XInput title="房价￥"
                   v-model="item.price"
                   v-for="(item,index) in roomPrice"
                   :key="'roomPrice'+index"
-                  :placeholder="item.date | datetimeparse"/>
+                  :placeholder="datetimeparse(item.date)"/>
         </Group>
 
         <Group v-if="detail.room_type_id">

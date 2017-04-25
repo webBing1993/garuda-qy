@@ -5,8 +5,7 @@
         <Group>
           <Cell title="预订人" :value="detail.owner"></Cell>
           <Cell title="手机号" :value="detail.phone_number"></Cell>
-          <Cell title="入住日期" :value="detail.in_time | datetimeparse"></Cell>
-          <Cell title="离店日期" :value="detail.out_time | datetimeparse"></Cell>
+          <Cell title="入离日期" :value="datetimeparse(detail.in_time)+'-'+datetimeparse(detail.out_time)"></Cell>
           <Cell title="房间" v-if="detail.room" :value="detail.room.room_type_name + detail.room.room_number"></Cell>
         </Group>
 
@@ -126,12 +125,12 @@
 <!--<group title="预订信息">-->
 <!--<cell title="预订人" :value="detail.owner"/>-->
 <!--<cell title="手机号" :value="detail.phone_number"/>-->
-<!--<cell title="入住时间" :value="detail.in_time | datetimeparse"/>-->
-<!--<cell title="离店时间" :value="detail.out_time | datetimeparse"/>-->
+<!--<cell title="入住时间" :value="datetimeparse(detail.in_time)"/>-->
+<!--<cell title="离店时间" :value="datetimeparse(detail.out_time)"/>-->
 <!--<cell title="房型" :value="detail.room.room_type_name"/>-->
 <!--</group>-->
 <!--<group title="验证信息">-->
-<!--<cell :title="detail.room.room_number" :value="detail.created_time | datetimeparse('','验证时间：')"/>-->
+<!--<cell :title="detail.room.room_number" :value="datetimeparse(detail.created_time,'','验证时间：')"/>-->
 <!--<div class="guestinfo" v-for="item in detail.guests">-->
 <!--<p><span>姓名</span>{{item.name}}</p>-->
 <!--<p><span>民族</span>{{item.ethnicity}}</p>-->

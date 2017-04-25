@@ -27,7 +27,7 @@
     <footer>
       <div class="listFilter">
         <span class="filter" v-if="!isToday" @click="isCalendarShow = true">
-          <abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>
+          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
           <abbr v-else>筛选</abbr>
         </span>
         <span class="sort" @click="isSortShow = true">{{isSequence ? '时间正序' : '时间倒序'}}</span>

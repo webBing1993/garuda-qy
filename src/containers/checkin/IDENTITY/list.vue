@@ -29,7 +29,7 @@
     <footer v-if="!isToday">
       <div class="listFilter">
         <span class="filter" @click="isCalendarShow = true">
-          <abbr v-if="periodFilter[0]">{{periodFilter[0] | datetimeparse}} - {{periodFilter[1] | datetimeparse}}</abbr>
+          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
           <abbr v-else>筛选</abbr>
         </span>
       </div>

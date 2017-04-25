@@ -3,8 +3,7 @@
     <Group>
       <Cell title="预订人" :value="detail.owner"></Cell>
       <Cell title="手机号" :value="detail.phone_number"></Cell>
-      <Cell title="入住日期" :value="detail.in_time | datetimeparse"></Cell>
-      <Cell title="离店日期" :value="detail.out_time | datetimeparse"></Cell>
+      <Cell title="入住日期" :value="datetimeparse(detail.in_time) +'-' +datetimeparse(detail.out_time)"></Cell>
       <Cell title="房间" v-if="detail.room" :value="detail.room.room_type_name + detail.room.room_number"></Cell>
     </Group>
 
