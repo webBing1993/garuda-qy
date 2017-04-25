@@ -117,6 +117,6 @@ const others = [
 ]
 
 export default new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes: [...unchained, ...precheckin, ...checkin, ...invoice, ...others]
 })

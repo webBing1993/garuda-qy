@@ -36,7 +36,7 @@
       ]),
       crossroad(){
         if (this.currentMsg) {
-          this.goto(this.currentMsg)
+          this.replaceto(this.currentMsg)
         } else {
           let path = ''
           switch (this.currentApp) {
