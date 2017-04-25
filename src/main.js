@@ -17,8 +17,8 @@ import {sync} from 'vuex-router-sync';
 sync(store, router);
 
 // Filters
-import filters  from './filters'
-Object.entries(filters).forEach(item => Vue.filter(item[0], item[1]))
+// import filters  from './filters'
+// Object.entries(filters).forEach(item => Vue.filter(item[0], item[1]))
 
 // Mixins
 import './mixins'
