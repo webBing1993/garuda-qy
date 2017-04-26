@@ -33,9 +33,14 @@ module.exports = {
       emulateHTTP: false,
       emulateJSON: false,
     }).then(
-      response => +response.body.errcode === 0
-        ? param.onSuccess ? param.onSuccess(response.body) : null
-        : param.onFail ? param.onFail(response.body) : null
+      response => {
+        if (+response.body.errcode === 0) {
+          param.method ? ctx.dispatch('showtoast') : null
+          param.onSuccess ? param.onSuccess(response.body) : null
+        } else {
+          param.onFail ? param.onFail(response.body) : null
+        }
+      }
     ).catch(
       error => {
         //ErrorCallback

@@ -4,8 +4,60 @@ import data from './data'
 // ===============================================================
 // 录入修改
 // ===============================================================
-
-
+Mock
+  .mock(
+    //获取录入修改的订单列表 /order/record
+    //录入新订单 /order/record
+    data.prefix + '/order/record',
+    function (opts) {
+      // console.log(opts)
+      return opts.type === 'GET'
+        ? {
+          errcode: "0",
+          errmsg: "ok",
+          data: data.confirmlist
+        }
+        : {
+          errcode: "0",
+          errmsg: "ok",
+          data: {
+            order_id: '001'
+          }
+        }
+    }
+  )
+  .mock(
+    //获取订单来源列表 /order/source
+    data.prefix + '/order/source',
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: [{
+        source_id: 'XC',
+        source_name: '携程'
+      }, {
+        source_id: 'FZ',
+        source_name: '飞猪'
+      }]
+    }
+  )
+.
+mock(
+  //修改订单 /order/record/{order_id}
+  /\/order\/record\/.+/,
+  {
+    errcode: "0",
+    errmsg: "ok"
+  }
+)
+  .mock(
+    //删除订单 /order/record/{order_id}
+    /\/order\/record\/.+/,
+    {
+      errcode: "0",
+      errmsg: "ok"
+    }
+  )
 
 // ===============================================================
 // 房态管理

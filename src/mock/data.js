@@ -4,10 +4,11 @@ module.exports = {
     {
       order_id: "230420402402401",//订单号
       order_pmsid: "230420402402401",//订单号
-      in_time: '1491384458000',
-      out_time: '1491384458000',
+      source_id:'XC',
+      in_time: 1490976000000,
+      out_time: 1491148800000,
       owner: "张三",//预订人
-      owner_tel: "+8618500059035",//预订人手机
+      owner_tel: "8618500059035",//预订人手机
       remark: "携程已付300元",//备注
       rooms_plan: [{
         room_type: "大床房",
@@ -16,7 +17,7 @@ module.exports = {
       payinfo: {
         total_roomfee: 4000, //总房费
         pms_pay: 1000, //PMS中的已付金额,
-        staff_pay: null,//营业员确认的付款金额,
+        staff_pay: 100,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
       },
@@ -66,11 +67,14 @@ module.exports = {
         },
         room_number: "203",
         room_tags: ["靠南", "带窗"],
-        room_type_id: "房型代码",
+        room_type_id: "DCF",
         room_type_name: "大床房",
         room_price: [{
-          date: '1491384458000',
+          date: 1490976000000,
           price: '2222',
+        },{
+          date: 1490976000000+86400000,
+          price: '3333',
         }],
         guests: [{
           name: "李四",
@@ -92,7 +96,7 @@ module.exports = {
         },
         room_number: "204",
         room_tags: ["靠南", "带窗"],
-        room_type_id: "房型代码",
+        room_type_id: "DCF",
         room_type_name: "大床房",
         room_price: [{
           date: '1491384458000',
@@ -108,7 +112,8 @@ module.exports = {
         is_upload_success:false
       }]
 
-    }, {
+    },
+    {
       order_id: "230420402402402",//订单号
       order_pmsid: "230420402402402",//订单号
       in_time: '1491384458888',
@@ -210,7 +215,8 @@ module.exports = {
         checkin_time: '1491384458555', //办理入住时间
         checkout_time: '1491384458888', //离店时间
       }]
-    }, {
+    },
+    {
       order_id: "230420402402403",//订单号
       order_pmsid: "230420402402403",//订单号
       in_time: '1491384458000',
@@ -312,7 +318,8 @@ module.exports = {
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
       }]
-    }, {
+    },
+    {
       order_id: "230420402402404",//订单号
       order_pmsid: "230420402402404",//订单号
       in_time: '1491384458000',
@@ -414,7 +421,8 @@ module.exports = {
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
       }]
-    }, {
+    },
+    {
       order_id: "230420402402405",//订单号
       order_pmsid: "230420402402405",//订单号
       in_time: '1491384458000',
@@ -516,7 +524,8 @@ module.exports = {
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
       }]
-    }, {
+    },
+    {
       order_id: "230420402402406",//订单号
       order_pmsid: "230420402402406",//订单号
       in_time: '1491384458000',
@@ -618,7 +627,8 @@ module.exports = {
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
       }]
-    }],
+    }
+    ],
   orderlist: [
     {
       order_id: "230420402402401",//订单号
