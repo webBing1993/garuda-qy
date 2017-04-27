@@ -14,7 +14,7 @@ module.exports = {
     },
     toast: {
       show: false,
-      title: '操作成功'
+      text: '操作成功'
     },
     loading: {
       show: false

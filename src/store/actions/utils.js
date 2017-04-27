@@ -35,9 +35,10 @@ module.exports = {
     }).then(
       response => {
         if (+response.body.errcode === 0) {
-          param.method ? ctx.dispatch('showtoast') : null
+          param.method && !url.match(/precheckin/) ? ctx.dispatch('showtoast') : null
           param.onSuccess ? param.onSuccess(response.body) : null
         } else {
+          ctx.dispatch('showtoast', 'errcode:' + response.body.errcode + ';\n errmsg:' + response.body.errmsg);
           param.onFail ? param.onFail(response.body) : null
         }
       }

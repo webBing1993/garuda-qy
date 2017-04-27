@@ -3,7 +3,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/room/room_type_list',
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
     })
   },
@@ -11,7 +11,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/room/floor_list',
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
       onFail: () => null
     })
@@ -20,7 +20,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/room/list',
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -34,7 +34,7 @@ module.exports = {
       },
       onSuccess: body => {
         ctx.dispatch('showtoast')
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -48,7 +48,7 @@ module.exports = {
       },
       onSuccess: body => {
         ctx.dispatch('showtoast')
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -62,7 +62,7 @@ module.exports = {
       },
       onSuccess: body => {
         ctx.dispatch('showtoast')
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -74,7 +74,7 @@ module.exports = {
         room_id: param.room_id,
       },
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },

@@ -11,7 +11,7 @@ module.exports = {
         status: param.status
       },
       onSuccess: (body) => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
       onFail: () => null
     })
@@ -41,7 +41,7 @@ module.exports = {
       },
       onSuccess: body => {
         ctx.dispatch('showtoast')
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -56,7 +56,7 @@ module.exports = {
       },
       onSuccess: body => {
         ctx.dispatch('showtoast')
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -75,7 +75,7 @@ module.exports = {
         is_sequence: param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
       },
       onSuccess: (body) => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
       onFail: () => null
     })
@@ -92,7 +92,7 @@ module.exports = {
         end: param.end, //筛选结束 无则null
       },
       onSuccess: (body) => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -108,7 +108,7 @@ module.exports = {
       },
       onSuccess: body => {
         ctx.dispatch('showtoast');
-        param.onsuccess(body);
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   }

@@ -9,7 +9,7 @@ module.exports = {
         end_time: param.end_time
       },
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
     })
   },
@@ -17,7 +17,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/identities/' + param.identity_id,
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -30,19 +30,19 @@ module.exports = {
         status: param.status
       },
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
   setUploadStatus(ctx, param){
     ctx.dispatch('resource', {
-      url: '/identities/' + param.identity_id + '/police',
+      url: '/identities/lvye_report',
       method:'POST',
       body: {
         identity_id: param.identity_id
       },
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   }

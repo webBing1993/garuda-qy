@@ -11,7 +11,7 @@ module.exports = {
         scope: param.scope
       },
       onSuccess: (body) => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
@@ -19,7 +19,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/invoice_apply/invoice_apply_id',
       onSuccess: (body) => {
-        param.onsuccess(body);
+        param.onsuccess ? param.onsuccess(body) : null
       },
       onFail: () => console.log('发票请求失败')
     })
@@ -33,7 +33,7 @@ module.exports = {
       },
       onSuccess:(body) => {
         ctx.dispatch('showtoast');
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       }
     })
   }

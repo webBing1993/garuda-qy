@@ -1,5 +1,10 @@
 module.exports = {
-  showtoast(ctx, param){
-    ctx.commit('TOAST', {show: true})
+  showtoast(ctx, text){
+    ctx.commit('TOAST',
+      {
+        show: true,
+        text: text ? text : '操作成功'
+      }
+    )
   }
 }

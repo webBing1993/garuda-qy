@@ -7,7 +7,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/suborder/today',
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
     })
   },
@@ -16,7 +16,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/suborder/list',
       onSuccess: body => {
-        param.onsuccess(body)
+        param.onsuccess ? param.onsuccess(body) : null
       },
     })
   }
