@@ -6,7 +6,7 @@ import data from './data'
 // ===============================================================
 
 Mock.mock(
-  data.prefix + '/invoice_apply?invoice_status=1&scope=OTHER',
+  data.prefix + '/invoice_apply?invoice_status=1&scope=ALL',
   {
     errcode: "0",
     errmsg: "ok",
