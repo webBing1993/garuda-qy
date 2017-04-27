@@ -45,6 +45,7 @@ module.exports = {
     ).catch(
       error => {
         //ErrorCallback
+        ctx.dispatch('showtoast', 'Request Error');
         console.error("request error occurred!")
       }
     ).finally(

@@ -186,7 +186,7 @@
     watch: {
       currentTab: function (val, oldval) {
         this.cancelPick()
-        typeof val === 'number' ? this.initList() : null
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     },
     activated(){
