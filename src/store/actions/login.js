@@ -15,9 +15,6 @@ module.exports = {
           ctx.commit('SESSION', body.data)
           sessionStorage.session = body.data
           console.log('NEW SESSION: ' + body.data)
-        },
-        onFail: body => {
-          alert('errcode:' + body.errcode + ', errmsg:' + body.errmsg)
         }
       })
     }
