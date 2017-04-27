@@ -48,8 +48,8 @@ Mock
         created_time: "1491384458000", //验证时间
         status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
         is_upload_success:true, //上传旅业系统是否成功
-        upload_time:null, //成功上传旅业系统的时间
-        next_identity_id:'id0001' //下一个待处理的验证id
+        lvye_report_time:null, //成功上传旅业系统的时间时间戳
+        lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
       },{
         identity_id: 'id0002',
         suborder_id: '',
@@ -85,8 +85,8 @@ Mock
         created_time: "1491384458000", //验证时间
         status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
         is_upload_success:false, //上传旅业系统是否成功
-        upload_time:null, //成功上传旅业系统的时间
-        next_identity_id:'id0001' //下一个待处理的验证id
+          lvye_report_time:null, //成功上传旅业系统的时间时间戳
+          lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
       },{
         identity_id: 'id0001',
         suborder_id: '',
@@ -122,8 +122,8 @@ Mock
         created_time: "1491384458000", //验证时间
         status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
         is_upload_success:false, //上传旅业系统是否成功
-        upload_time:null, //成功上传旅业系统的时间
-        next_identity_id:'' //下一个待处理的验证id
+          lvye_report_time:null, //成功上传旅业系统的时间时间戳
+          lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
       },{
         identity_id: 'id0001',
         suborder_id: '',
@@ -196,8 +196,8 @@ Mock
         created_time: "1491384458000", //验证时间
         status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
         is_upload_success:true, //上传旅业系统是否成功
-        upload_time:null, //成功上传旅业系统的时间
-        next_identity_id:'' //下一个待处理的验证id
+          lvye_report_time:null, //成功上传旅业系统的时间时间戳
+          lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
       },{
         identity_id: 'id0001',
         suborder_id: '',
@@ -233,8 +233,8 @@ Mock
         created_time: "1491384458000", //验证时间
         status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
         is_upload_success:true, //上传旅业系统是否成功
-        upload_time:'1491384458000', //成功上传旅业系统的时间
-        next_identity_id:'id0001' //下一个待处理的验证id
+          lvye_report_time:null, //成功上传旅业系统的时间时间戳
+          lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
       },]
     }
   )
@@ -277,16 +277,15 @@ Mock
         },],
         created_time: "1491384458000", //验证时间
         status: "PENDING", //PENDING待审核、AGREED通过、REFUSED拒绝
-        is_upload_success:true, //上传旅业系统是否成功
-        upload_time:'1491384458000', //成功上传旅业系统的时间
-        next_identity_id:'' //下一个待处理的验证id
+        lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+        lvye_report_time:null, //成功上传旅业系统的时间时间戳
+        next_identity_id:'id001' //下一个待处理的验证id
       }
     }
   )
   .mock(
-    //手动上传旅业系统 /identities/{identity_id}/police
-    // data.prefix + '/identities/{identity_id}/police',
-    /\/identities\/.+\/police/,
+    //手动上传旅业系统 /identities/lvye_report
+    data.prefix + '/identities/lvye_report',
     {
       errcode: '0',
       errmsg: 'ok'

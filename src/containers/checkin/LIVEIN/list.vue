@@ -8,7 +8,7 @@
       <div class="scroller-wrap">
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
-          <Cell :title="getGuestItem(item,'fromList')" link @onClick="goto('/livein/'+item.order_id)"/>
+          <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
         </Group>
       </div>
     </scroller>
@@ -64,6 +64,21 @@
       },
       getUnionTag(tag, tempRoom){
         return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
+      },
+      getGuestItem(item){
+        let dom = ``;
+        if (item.guests) {
+          item.guests.length > 0
+            ? item.guests.forEach(i => {
+            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+          })
+            : dom += `<div>无入住人</div>`
+        } else {
+          dom += `<div>无入住人</div>`
+        }
+        item.lvye_report_status ? null : dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>`
+
+        return dom
       },
       getList() {
         this.isToday

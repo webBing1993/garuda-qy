@@ -18,7 +18,7 @@
           <Cell :title="getGuestItem(item)"/>
         </Group>
         <p style="color: #DF4A4A;margin: 15px;font-size: 13px"
-            v-if="!item.is_upload_success">
+            v-if="item.lvye_report_status !== 'SUCCESS'">
           当前入住房间信息上网上传旅业系统，您可以前往‘公安验证-当日验证’已通过列表进行旅业系统上传；或点击该链接进行操作。
           <a style="color: #25B8F1; border-bottom: 1px solid #25B8F1"
              @click="goto('/identity/' + item.identity_id)">上传旅业系统</a></p>

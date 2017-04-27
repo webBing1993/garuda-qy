@@ -38,7 +38,7 @@ Vue.mixin({
     idnumber: id => {
       return id.replace(id.slice(3, 14), '***********')
     },
-    getGuestItem(item,from){
+    getGuestItem(item){
       let dom = ``;
       if (item.guests) {
         item.guests.length > 0
@@ -48,9 +48,6 @@ Vue.mixin({
           : dom += `<div>无入住人</div>`
       } else {
         dom += `<div>无入住人</div>`
-      }
-      if(from === 'fromList'){
-        item.is_upload_success ? null : dom+= `<p style="color:#DF4A4A;">未上传旅业系统</p>`
       }
       return dom
     },
