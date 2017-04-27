@@ -176,10 +176,8 @@
                   ? this.tobeconfirmed.splice(tempIndex, 1)
                   : null
               });
-              if (this.tobeconfirmed.length === 0) {
-                this.batchlist = [];
-                this.batch = false;
-              }
+
+              this.cancelPick()
             }
           })
         }

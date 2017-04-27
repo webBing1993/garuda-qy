@@ -56,7 +56,6 @@
     <Actionsheet v-model="isRoomCountShow" :menu="[1,2,3,4]" @onClick="toggleRoomCount" cancel/>
     <popup v-model="isCalendarShow"
            maskShow
-
            bottom
            animationTopBottom>
       <calendar v-if="calendarType === 'IN'" v-model="detail.in_time" @onCancel="isCalendarShow = false"/>
@@ -125,13 +124,13 @@
         return this.route.params.id
       },
       sourceMenu(){
-        let list = []
-        this.sourcelist.forEach(i => list.push(i.source_name))
+        let list = [];
+        this.sourcelist.forEach(i => list.push(i.source_name));
         return list
       },
       roomTypeMenu(){
-        let list = []
-        this.roomtypelist.forEach(i => list.push(i.room_type_name))
+        let list = [];
+        this.roomtypelist.forEach(i => list.push(i.room_type_name));
         return list
       },
       inOutTime(){
@@ -145,11 +144,6 @@
       },
       submitData(){
         let suborders = [];
-        let roomPrice = [];
-        this.detail.room_price.forEach(i => roomPrice.push({
-          date: i.date,
-          price: i.price / 100,
-        }))
         this.detail.room_numbers.forEach(i => suborders.push({
           room_number: i,
           room_type_id: this.detail.room_type_id,
@@ -162,7 +156,7 @@
         }));
         return {
           type: "IMPORT",
-          order_id:this.orderId,
+          order_id: this.orderId,
           order_pmsid: this.detail.order_pmsid,
           source_id: this.detail.source_id, //订单来源id
           owner: this.detail.owner,
@@ -170,7 +164,7 @@
           in_time: this.detail.in_time,
           out_time: this.detail.out_time,
           payinfo: {
-            staff_pay: this.detail.staff_pay*100, //营业员确认的付款金额,
+            staff_pay: this.detail.staff_pay * 100, //营业员确认的付款金额,
           },
           remark: this.detail.remark,
           suborders: suborders
@@ -191,10 +185,10 @@
           })
         }
         newArr.forEach(i => {
-          let sameTime = this.detail.room_price.filter(j => j.date === i.date)
+          let sameTime = this.detail.room_price.filter(j => j.date === i.date);
           sameTime.length && sameTime[0].price ? i.price = sameTime[0].price : null
         });
-        this.detail.room_price = newArr
+        this.detail.room_price = newArr;
       },
       'detail.room_count': function (val) {
         if (val != this.detail.room_numbers.length) {
@@ -239,9 +233,9 @@
         return arr.filter(i => !this.detail.room_numbers.some(j => j === i.room_number))
       },
       init(){
-        this.getsourcelist({onsuccess: body => this.sourcelist = body.data})//订单来源
-        this.getroomtypelist({onsuccess: body => this.roomtypelist = body.data})//房型
-        this.getroomlist({onsuccess: body => this.roomlist = body.data}) //房间列表
+        this.getsourcelist({onsuccess: body => this.sourcelist = body.data});//订单来源
+        this.getroomtypelist({onsuccess: body => this.roomtypelist = body.data});//房型
+        this.getroomlist({onsuccess: body => this.roomlist = body.data}); //房间列表
         this.orderId ?
           this.getorderdetail({
             order_id: this.$route.params.id,
@@ -250,28 +244,27 @@
             invoice: 0,
             log: 1,
             onsuccess: body => {
-              this.originalDetail = body.data
-              this.detail.order_pmsid = body.data.order_pmsid
-              this.detail.room_type_id = body.data.suborders[0].room_type_id
-              this.detail.source_id = body.data.source_id
-              this.detail.owner = body.data.owner
-              this.detail.owner_tel = body.data.owner_tel
-              this.detail.room_price = body.data.suborders[0].room_price
-              this.detail.in_time = parseInt(body.data.in_time)
-              this.detail.out_time = parseInt(body.data.out_time)
-              this.detail.room_count = body.data.suborders.length
+              this.detail.order_pmsid = body.data.order_pmsid;
+              this.detail.room_type_id = body.data.suborders[0].room_type_id;
+              this.detail.source_id = body.data.source_id;
+              this.detail.owner = body.data.owner;
+              this.detail.owner_tel = body.data.owner_tel;
+              this.detail.room_price = body.data.suborders[0].room_price;
+              this.detail.in_time = parseInt(body.data.in_time);
+              this.detail.out_time = parseInt(body.data.out_time);
+              this.detail.room_count = body.data.suborders.length;
               let newroomNubers = [];
-              body.data.suborders.forEach(i => newroomNubers.push(i.room_number))
-              this.detail.room_numbers = newroomNubers
-              this.detail.remark = body.data.remark
-              this.detail.staff_pay = parseInt(body.data.payinfo.staff_pay) / 100
+              body.data.suborders.forEach(i => newroomNubers.push(i.room_number));
+              this.detail.room_numbers = newroomNubers;
+              this.detail.remark = body.data.remark;
+              this.detail.staff_pay = parseInt(body.data.payinfo.staff_pay) / 100;
             }
           })
           : null
       }
     },
     mounted(){
-      this.init()
+      this.init();
     }
   }
 </script>
