@@ -58,7 +58,7 @@ Vue.mixin({
       } else if (type === 'GENERAL') {
         typeStr = '增值税普通发票'
       } else if (type === 'VAT') {
-        typeStr = '专用发票'
+        typeStr = '增值税专用发票'
       }
       return typeStr
     },

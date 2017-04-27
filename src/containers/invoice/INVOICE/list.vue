@@ -68,7 +68,6 @@
         return `<p><span class="cell-value">${roomNumber}</span><span class="cell-right primary">${item.is_any_checkin ? '已入住' : ''}</span></p>`
       },
       getCellBody(item){
-          console.log(item)
         return `<div class="cell-body">` +
           `<p><span class="cell-value">${item.owner + ' ' + item.phone_number}</span><b class="cell-right">${item.invoice_status == 2 ? '已开票' : ''}</b></p>` +
           `<p><span class="cell-value">${this.invoiceType(item.type)}·${item.category}·${item.media == 'PAPER' ? '纸质发票' : '电子发票'}</span></p>` +
