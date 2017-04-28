@@ -31,17 +31,13 @@
     name: 'calendar',
     props: {
       value: null,
-      getperiod: {// 多选
-        type: Boolean,
-        default: false
-      },
       max: null,
       min: null
     },
     data(){
       return {
         singletime: this.value instanceof Array ? null : this.value,//单选
-        current: (!this.getperiod ?  this.value :null)  || Date.parse(new Date()),
+        current: !Array.isArray(this.value) ? this.value : this.value[0] || Date.parse(new Date()),
         starttime: this.value[0] || null,
         endtime: this.value[1] || null,
       }
@@ -67,7 +63,7 @@
             month: this.month,
             day: i
           })
-          let timeLengthDisabled = this.starttime && this.getperiod ? Math.abs(Date.parse(dd) - this.starttime) > 30 * 24 * 60 * 60 * 1000 : false;
+          let timeLengthDisabled = this.starttime && Array.isArray(this.value) ? Math.abs(Date.parse(dd) - this.starttime) > 30 * 24 * 60 * 60 * 1000 : false;
           let maxDisabled = this.max ? Date.parse(dd) > this.max : false;
           let minDisabled = this.min ? Date.parse(dd) < this.min : false;
           arr.push({
