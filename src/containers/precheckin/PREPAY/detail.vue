@@ -1,35 +1,40 @@
 <template>
-  <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
-    <Group>
-      <Cell title="预订信息"/>
-      <Cell :title="getCellBody()"/>
-    </Group>
-    <Group>
-      <Cell title="PMS支付信息"/>
-      <Cell :title="getCellBodyPMS()"/>
-      <Cell :title="getCellFooter()"/>
-    </Group>
+  <div>
+    <scroller :depend="[orderdetail]" lock-x>
+      <div class="scroller-wrap">
+        <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
+          <Group>
+            <Cell title="预订信息"/>
+            <Cell :title="getCellBody()"/>
+          </Group>
+          <Group>
+            <Cell title="PMS支付信息"/>
+            <Cell :title="getCellBodyPMS()"/>
+            <Cell :title="getCellFooter()"/>
+          </Group>
 
-    <Group v-if="payInfo">
-      <Cell title="已确认" :value="payInfo"></Cell>
-    </Group>
+          <Group v-if="payInfo">
+            <Cell title="已确认" :value="payInfo"></Cell>
+          </Group>
 
-    <div class="button-group">
-      <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
-                :value="cashHandling(orderdetail.payinfo.total_roomfee,'已全额支付 ')"
-                primary
-                @onClick="staffpayConfirm"/>
-      <x-button v-if='orderdetail.payinfo.staff_pay != 0'
-                value="未支付"
-                warn
-                @onClick="staffpayConfirm(1)"/>
-      <x-button
-        v-if='orderdetail.payinfo.staff_pay == 0 || orderdetail.payinfo.staff_pay == orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === null'
-        value="已付其他金额"
-        @onClick="staffpayConfirm(2)"
-        plain/>
-    </div>
-
+          <div class="button-group">
+            <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
+                      :value="cashHandling(orderdetail.payinfo.total_roomfee,'已全额支付 ')"
+                      primary
+                      @onClick="staffpayConfirm"/>
+            <x-button v-if='orderdetail.payinfo.staff_pay != 0'
+                      value="未支付"
+                      warn
+                      @onClick="staffpayConfirm(1)"/>
+            <x-button
+              v-if='orderdetail.payinfo.staff_pay == 0 || orderdetail.payinfo.staff_pay == orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === null'
+              value="已付其他金额"
+              @onClick="staffpayConfirm(2)"
+              plain/>
+          </div>
+        </div>
+      </div>
+    </scroller>
     <Dialog v-model="showDialog"
             @onConfirm="setSingleConfirm"
             :confirm="!!(dialogStatus != 2 || inputValue)"
@@ -47,6 +52,7 @@
       </div>
     </Dialog>
   </div>
+
 </template>
 
 <script>
