@@ -28,7 +28,7 @@ module.exports = {
       },
       params: param.params || null,
       method: param.method || "GET",
-      timeout: param.timeout || 5000,
+      timeout: param.timeout || 10000,
       credentials: false,
       emulateHTTP: false,
       emulateJSON: false,
