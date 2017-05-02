@@ -17,6 +17,7 @@
               lock-x
               height="-44">
       <div class="scroller-wrap">
+        <div v-show="!renderList||renderList.length === 0" class="no-data">暂无数据</div>
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
@@ -24,7 +25,7 @@
       </div>
     </scroller>
 
-    <footer>
+    <footer v-if="renderList.length !== 0">
       <div class="listFilter">
         <span class="filter" v-if="!isToday" @click="isCalendarShow = true">
           <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>

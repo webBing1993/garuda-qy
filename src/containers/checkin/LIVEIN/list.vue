@@ -6,6 +6,7 @@
               use-pulldown
               lock-x>
       <div class="scroller-wrap">
+        <p v-show="!renderList||renderList.length === 0" class="no-data">暂无数据</p>
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>

@@ -18,6 +18,7 @@
               use-pulldown
               height="-44">
       <div class="scroller-wrap">
+        <p v-if="!renderList || renderList.length === 0" class="no-data">暂无数据</p>
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getCellBody(item)" link @onClick="goto('/invoice/detail/' + item.order_id)"/>

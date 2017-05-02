@@ -15,6 +15,7 @@
               height="-45"
               use-pulldown>
       <div class="scroller-wrap">
+        <p v-if="!renderList || renderList.length === 0" class="no-data">暂无数据</p>
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
                 :value="datetimeparse(item.created_time,isToday ?'hhmm' : 'MMDDhhmm')"
