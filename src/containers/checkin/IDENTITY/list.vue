@@ -101,7 +101,7 @@
           status: this.tabIndex ? 'REFUSED' : 'AGREED',
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1],
-          onsuccess: body => this.tabIndex ? this.refusedIdentities = body.data : this.agreedIdentities = body.data
+          onsuccess: body => this.tabIndex ? this.refusedIdentities = [...body.data] : this.agreedIdentities = [...body.data]
         })
       },
       initList(){

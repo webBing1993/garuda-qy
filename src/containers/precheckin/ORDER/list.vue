@@ -142,8 +142,8 @@
             is_cancelled: currentList,
             is_sequence: this.isSequence,
             onsuccess: body => currentList
-              ? this.todayCancelList = body.data
-              : this.toStayList = body.data
+              ? this.todayCancelList = [...body.data]
+              : this.toStayList = [...body.data]
           })
           :
           this.gethistorylist({
@@ -152,8 +152,8 @@
             start: this.periodFilter[0],
             end: this.periodFilter[1],
             onsuccess: body => currentList
-              ? this.historyCancelList = body.data
-              : this.noShowList = body.data
+              ? this.historyCancelList = [...body.data]
+              : this.noShowList = [...body.data]
           })
       },
       initList(){

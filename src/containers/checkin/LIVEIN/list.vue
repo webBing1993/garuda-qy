@@ -85,11 +85,11 @@
         this.isToday
           ?
           this.getTodaySuborder({
-            onsuccess: body => this.todayList = body.data
+            onsuccess: body => this.todayList = [...body.data]
           })
           :
           this.getAllSuborder({
-            onsuccess: body => this.allList = body.data
+            onsuccess: body => this.allList = [...body.data]
           })
       }
     },
