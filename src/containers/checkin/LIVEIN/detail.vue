@@ -1,6 +1,10 @@
 <template>
   <article>
     <div class="today-detail" v-if="detail">
+      <div class="recording" v-if="detail.status && !detail.status.is_recording_success">
+        <div class="title-body">入账失败</div>
+        <a @click="confirmPmsResult">已手工入账</a>
+      </div>
       <Group title="主单信息">
         <Cell title="订单号" :value="detail.order_pmsid"></Cell>
         <Cell title="预订人" :value="detail.owner"></Cell>
@@ -44,7 +48,8 @@
     methods: {
       ...mapActions([
         'goto',
-        'getorderdetail'
+        'getorderdetail',
+        'conformPmsSync'
       ]),
       getDetail() {
         this.getorderdetail({
@@ -58,6 +63,13 @@
           }
         })
       },
+      confirmPmsResult() {
+        this.conformPmsSync({
+          order_id: this.routeId,
+          action: 'SETACCOUNT',
+          onsuccess: body => this.detail.status.is_recording_success = true
+        })
+      },
     },
     watch: {
       routeId(val) {
@@ -69,3 +81,6 @@
     }
   }
 </script>
+<style scoped lang="less">
+  @import "index.less";
+</style>

@@ -21,10 +21,11 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
       },
-      status: {
-        is_cancelled: false,// 是否已取消
+      status:{
+        is_cancelled:false, //是否已取消
         is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
+        is_recording_success: false, //PMS入账是否成功
+        is_any_checkin: false, //订单是否有入住
       },
       timeline: { //状态变化时间
         staff_confirm: '1491384458000', //营业员确认订单的时间
@@ -132,10 +133,11 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
       },
-      status: {
-        is_cancelled: false,// 是否已取消
+      status:{
+        is_cancelled:false, //是否已取消
         is_refund_required: false, //是否需要退款
-        is_recording_success: false,// pms入账是否成功
+        is_recording_success: true, //PMS入账是否成功
+        is_any_checkin: false, //订单是否有入住
       },
       timeline: { //状态变化时间
         staff_confirm: '1491384458000', //营业员确认订单的时间
