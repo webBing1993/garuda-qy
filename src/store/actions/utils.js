@@ -45,8 +45,11 @@ module.exports = {
     ).catch(
       error => {
         //ErrorCallback
-        ctx.dispatch('showtoast', 'Request Error');
-        console.error("request error occurred!")
+        if (error.status === 401) {
+          ctx.dispatch('showtoast', '登录失效!');
+        } else {
+          ctx.dispatch('showtoast', 'Request Error');
+        }
       }
     ).finally(
       final => {
