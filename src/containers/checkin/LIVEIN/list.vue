@@ -2,11 +2,11 @@
   <article>
     <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
-              @on-pulldown-loading="getList"
+              @on-pulldown-loading="refreshList"
               use-pulldown
               lock-x>
       <div class="scroller-wrap">
-        <p v-show="!renderList||renderList.length === 0" class="no-data">暂无数据</p>
+        <p v-show="(!renderList||renderList.length === 0)&& renderPageIndex >0" class="no-data">暂无数据</p>
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
@@ -24,7 +24,9 @@
     data() {
       return {
         todayList: [],
-        allList: []
+        allList: [],
+        todayPageIndex: 0,
+        allPageIndex: 0
       }
     },
     computed: {
@@ -37,6 +39,9 @@
       },
       renderList() {
         return this.isToday ? this.todayList : this.allList
+      },
+      renderPageIndex(){
+        return this.isToday ? this.todayPageIndex : this.allPageIndex
       },
       unionTag() {
         let totalList = [...this.todayList, ...this.allList];
@@ -81,27 +86,36 @@
 
         return dom
       },
-      getList() {
+      getList(callback) {
         this.isToday
           ?
           this.getTodaySuborder({
-            onsuccess: body => this.todayList = [...body.data]
+            onsuccess: callback
           })
           :
           this.getAllSuborder({
-            onsuccess: body => this.allList = [...body.data]
+            onsuccess: callback
           })
+      },
+      initList(){
+        this.renderPageIndex === 0 ? this.getList(body => (this[this.isToday ? 'todayList' : 'allList'] = [...body.data], this.isToday ? this.todayPageIndex++ : this.allPageIndex++)) : null
+      },
+      refreshList(){
+        this.getList(body => this[this.isToday ? 'todayList' : 'allList'] = [...body.data])
+      },
+      moreList(){
+        this.getList(body => (this[this.isToday ? 'todayList' : 'allList'] = [...this.renderList, ...body.data], this.isToday ? this.todayPageIndex++ : this.allPageIndex++))
       }
     },
     watch: {
       isToday() {
         this.todayList = [];
         this.allList = [];
-        this.getList();
+        this.initList();
       }
     },
     mounted() {
-      this.getList()
+      this.initList()
     }
   }
 </script>
