@@ -10,12 +10,12 @@
 
     <scroller lock-x :scrollbar-x=false
               :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="getList"
+              @on-pulldown-loading="refreshList"
               :depend="renderList"
               height="-45"
               use-pulldown>
       <div class="scroller-wrap">
-        <p v-if="!renderList || renderList.length === 0" class="no-data">暂无数据</p>
+        <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
                 :value="datetimeparse(item.created_time,isToday ?'hhmm' : 'MMDDhhmm')"
@@ -56,6 +56,8 @@
         selectedTab: '已通过',
         agreedIdentities: [],
         refusedIdentities: [],
+        agreedPageIndex:0,
+        refusedPageIndex:0,
         periodFilter: [null, null],
         isCalendarShow: false
       }
@@ -74,6 +76,9 @@
       renderList(){
         return this.tabIndex ? this.refusedIdentities : this.agreedIdentities
       },
+      renderPageIndex(){
+          return this.tabIndex ? this.refusedPageIndex : this.agreedPageIndex
+      }
     },
     methods: {
       ...mapActions([
@@ -95,19 +100,22 @@
         !item.lvye_report_status ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null;
         return dom
       },
-      getList(){
+      getList(callback){
         this.getIdentities({
           scope: this.isToday ? 'TODAY' : 'HISTORY',
           status: this.tabIndex ? 'REFUSED' : 'AGREED',
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1],
-          onsuccess: body => this.tabIndex ? this.refusedIdentities = [...body.data] : this.agreedIdentities = [...body.data]
+          onsuccess: callback
         })
       },
       initList(){
         if ((this.tabIndex && !this.refusedIdentities.length) || (!this.tabIndex && !this.agreedIdentities.length)) {
-          this.getList()
+          this.getList(body => (this[this.tabIndex ? 'refusedIdentities':'agreedIdentities']= [...body.data],this.tabIndex? this.refusedPageIndex++ : this.agreedPageIndex++))
         }
+      },
+      refreshList(){
+          this.getList(body => this[this.tabIndex ? 'refusedIdentities':'agreedIdentities']= [...body.data])
       },
       resetList(){
         this.agreedIdentities = []
@@ -121,11 +129,11 @@
       this.initList()
     },
     watch: {
-      tabIndex() {
-        this.initList()
+      tabIndex(val) {
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null
       },
       periodFilter(){
-        this.getList()
+        this.refreshList()
       }
     }
   }

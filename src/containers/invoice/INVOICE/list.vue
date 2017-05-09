@@ -13,12 +13,12 @@
 
     <scroller :pulldown-config="Interface.scroller"
               :depend="renderList"
-              @on-pulldown-loading="invoiceList"
+              @on-pulldown-loading="refreshList"
               lock-x
               use-pulldown
               height="-44">
       <div class="scroller-wrap">
-        <p v-if="!renderList || renderList.length === 0" class="no-data">暂无数据</p>
+        <p v-if="(!renderList || renderList.length === 0) && renderPageIndex >0 " class="no-data">暂无数据</p>
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getCellBody(item)" link @onClick="goto('/invoice/detail/' + item.order_id)"/>
@@ -38,7 +38,9 @@
       return {
         tabmenu: ["当日发票", "全部发票"],
         todayList: [],
-        allList: []
+        allList: [],
+        todayPageIndex: 0,
+        allPageIndex: 0
       }
     },
     computed: {
@@ -50,7 +52,10 @@
         return +this.route.params.tab
       },
       renderList() {
-        return this.tabIndex ? this.todayList : this.allList
+        return this.tabIndex ? this.allList : this.todayList
+      },
+      renderPageIndex(){
+        return this.tabIndex ? this.allPageIndex : this.todayPageIndex
       }
     },
     methods: {
@@ -61,10 +66,10 @@
       ]),
       getCellTitle(item){
         let roomNumber = '';
-        if(item.rooms_number.length > 0){
-          item.rooms_number.forEach(i => roomNumber += roomNumber ? ' '+i : i);
-        }else {
-            roomNumber += '未选房'
+        if (item.rooms_number.length > 0) {
+          item.rooms_number.forEach(i => roomNumber += roomNumber ? ' ' + i : i);
+        } else {
+          roomNumber += '未选房'
         }
         return `<p><span class="cell-value">${roomNumber}</span><span class="cell-right primary">${item.is_any_checkin ? '已入住' : ''}</span></p>`
       },
@@ -76,12 +81,20 @@
           `<p><span class="cell-value">${this.datetimeparse(item.in_time) + '-' + this.datetimeparse(item.out_time)}</span></p>` +
           `</div>`
       },
-      invoiceList() {
+      getList(callback) {
         this.getInvoiceList({
           scope: this.tabIndex === 0 ? 'TODAY' : 'ALL',
           invoice_status: 1,
-          onsuccess: body => this.tabIndex ? this.todayList = [...body.data]: this.allList =[...body.data]
+          onsuccess: callback
         })
+      },
+      initList(){
+        if ((!this.tabIndex && this.todayList.length === 0) || (this.tabIndex && this.allList.length === 0)) {
+          this.getList(body => (this[this.tabIndex ? 'allList' : 'todayList'] = [...body.data], this.tabIndex ? this.allPageIndex++ : this.todayPageIndex++))
+        }
+      },
+      refreshList(){
+        this.getList(body => this[this.tabIndex ? 'allList' : 'todayList'] = [...body.data])
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index)
@@ -90,12 +103,11 @@
     },
     watch: {
       tabIndex(val) {
-        val ? this.todayList = [] : this.allList = [];
-        this.invoiceList();
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     },
     mounted(){
-      this.invoiceList();
+      this.initList();
     }
   }
 

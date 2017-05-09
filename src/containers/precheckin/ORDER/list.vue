@@ -17,7 +17,7 @@
               lock-x
               height="-44">
       <div class="scroller-wrap">
-        <div v-show="!renderList||renderList.length === 0" class="no-data">暂无数据</div>
+        <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
         <Group v-for="(item,index) in renderList" :key="index">
           <Cell :title="getCellTitle(item)"/>
           <Cell :title="getCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
@@ -25,7 +25,7 @@
       </div>
     </scroller>
 
-    <footer v-if="renderList.length !== 0">
+    <footer>
       <div class="listFilter">
         <span class="filter" v-if="!isToday" @click="isCalendarShow = true">
           <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
@@ -66,11 +66,15 @@
         todayTabMenu: ["待入住", "已取消"],
         toStayList: [],
         todayCancelList: [],
+        todayCancelPageIndex: 0,
+        toStayPageIndex: 0,
 
         // history
         historyTabMenu: ["NO-SHOW", "已取消"],
         noShowList: [],
         historyCancelList: [],
+        historyCancelPageIndex: 0,
+        noShowPageIndex: 0,
 
         // common
         isSequence: 0,
@@ -103,11 +107,14 @@
             ? this.historyCancelList
             : this.noShowList
       },
-      maxAndMin() {
-        let timeList = [];
-        this.renderList.forEach(item => timeList.push(item.in_time));
-        timeList.sort((a, b) => a - b);
-        return [timeList[0], timeList[timeList.length - 1]];
+      renderPageIndex(){
+        return this.isToday
+          ? this.tabIndex
+            ? this.todayCancelPageIndex
+            : this.toStayPageIndex
+          : this.tabIndex
+            ? this.historyCancelPageIndex
+            : this.noShowPageIndex
       }
     },
     methods: {
@@ -134,27 +141,28 @@
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath);
       },
-      getList() {
-        let currentList = this.tabIndex;
+      getTodayList(callback){
+        this.gettodaylist({
+          is_cancelled: this.tabIndex,
+          is_sequence: this.isSequence,
+          onsuccess: callback
+        })
+      },
+      getAllList(callback){
+        this.gethistorylist({
+          is_cancelled: this.tabIndex,
+          is_sequence: this.isSequence,
+          start: this.periodFilter[0],
+          end: this.periodFilter[1],
+          onsuccess: callback
+        })
+      },
+      getList(){
         this.isToday
           ?
-          this.gettodaylist({
-            is_cancelled: currentList,
-            is_sequence: this.isSequence,
-            onsuccess: body => currentList
-              ? this.todayCancelList = [...body.data]
-              : this.toStayList = [...body.data]
-          })
+          this.getTodayList(body => (this[this.tabIndex ? 'todayCancelList' : 'toStayList'] = [...body.data], this.tabIndex ? this.todayCancelPageIndex++ : this.toStayPageIndex++))
           :
-          this.gethistorylist({
-            is_cancelled: currentList,
-            is_sequence: this.isSequence,
-            start: this.periodFilter[0],
-            end: this.periodFilter[1],
-            onsuccess: body => currentList
-              ? this.historyCancelList = [...body.data]
-              : this.noShowList = [...body.data]
-          })
+          this.getAllList(body => (this[this.tabIndex ? 'historyCancelList' : 'noShowList'] = [...body.data], this.tabIndex ? this.historyCancelPageIndex++ : this.noShowPageIndex++))
       },
       initList(){
         if (!this.renderList.length) {
@@ -174,7 +182,7 @@
     },
     watch: {
       tabIndex(val) {
-        val >= 0 ? this.getList() : null
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null
       },
       isSequence() {
         this.resetList();
@@ -189,10 +197,10 @@
     mounted(){
       this.initList()
     },
-    activated(){
-      //reset all data
-      this.getList();
-    }
+//    activated(){
+//      //reset all data
+//      this.getList();
+//    }
   }
 </script>
 
