@@ -97,7 +97,9 @@
                     <span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
                   </div>`
         });
-        !item.lvye_report_status ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null;
+        if(!this.tabIndex){
+          !item.lvye_report_status ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null;
+        }
         return dom
       },
       getList(callback){

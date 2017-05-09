@@ -22,11 +22,13 @@
 
         <!-- 发票信息 -->
         <Group title="发票信息" v-if="detail.invoice">
-          <Cell class="key" title="发票信息" :value="detail.invoice.title"></Cell>
-          <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
           <Cell class="key" title="领取方式" :value="detail.invoice.media === 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
+          <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
           <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
+          <Cell class="key" title="发票信息" :value="detail.invoice.title"></Cell>
+          <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="统一社会信用代码" :value="detail.invoice.tax_registry_no"></Cell>
           <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="地址" :value="detail.invoice.address"></Cell>
+          <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="联系电话" :value="detail.invoice.phone_number"></Cell>
           <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="开户银行" :value="detail.invoice.bank_name"></Cell>
           <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="银行账号" :value="detail.invoice.bank_account"></Cell>
         </Group>

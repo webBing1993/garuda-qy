@@ -107,13 +107,11 @@
         this.getList(body => (this[this.isToday ? 'todayList' : 'allList'] = [...this.renderList, ...body.data], this.isToday ? this.todayPageIndex++ : this.allPageIndex++))
       }
     },
-    watch: {
-      isToday() {
-        this.todayList = [];
-        this.allList = [];
-        this.initList();
-      }
-    },
+//    watch: {
+//      isToday() {
+//        this.initList();
+//      }
+//    },
     mounted() {
       this.initList()
     }

@@ -23,10 +23,10 @@
         <img :src="item.live_photo" alt="现场照片">
       </div>
     </div>
-    <p v-if="!isUploadSuccess" class="upload"> 上传旅业系统失败，请重试</p>
-    <p v-if="isUploadSuccess" class="upload-time">
+    <p v-if="detail.status !== 'REFUSED'&& detail.status !== 'AUTO_REFUSED' && !isUploadSuccess" class="upload"> 上传旅业系统失败，请重试</p>
+    <p v-if="detail.status !== 'REFUSED'&& detail.status !== 'AUTO_REFUSED' && isUploadSuccess" class="upload-time">
       已成功上传旅业系统。{{datetimeparse(detail.lvye_report_time, 'YYMMDD hhmm')}}</p>
-    <div class="button-group">
+    <div v-if="detail.status !== 'REFUSED'&&detail.status !== 'AUTO_REFUSED'&& !isUploadSuccess" class="button-group">
       <x-button v-if="!btnPresent.status || btnPresent.hasNext"
                 :value="btnPresent.status ? '下一个' : '上传旅业系统'"
                 :plain="!!btnPresent.status"
