@@ -35,7 +35,7 @@
     },
     watch: {
       value(val){
-        val && !this.loading ? setTimeout((val) => this.$emit('input', false), this.timer) : null
+        (val && !this.loading) ? setTimeout((val) => this.$emit('input', false), this.timer) : null
       }
     }
   }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
-import router from '../../router-config.js'
+import router from '../../router.js'
 
 module.exports = {
   goto: (ctx, param) => {
@@ -45,11 +45,7 @@ module.exports = {
     ).catch(
       error => {
         //ErrorCallback
-        if (error.status === 401) {
-          ctx.dispatch('showtoast', '登录失效!');
-        } else {
-          ctx.dispatch('showtoast', 'Request Error');
-        }
+        ctx.dispatch('showtoast', error.status === 401 ? '登录失效!' : 'Request Error');
       }
     ).finally(
       final => {

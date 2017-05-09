@@ -103,7 +103,7 @@
         this.settitle(title)
       },
       sessionId(val){
-        val ? this.crossroad() : null
+        val ? this.$nextTick(() => this.crossroad()) : null
       }
     }
   }

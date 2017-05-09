@@ -8,7 +8,6 @@ app.use(compression());
 
 app.use(express.static(path.join(__dirname, '../dist')))
 
-app.listen(3000, () => {
-  console.log(`App listening at port: 3000`)
-  opn('http://localhost:3000')
+app.listen(7777, () => {
+  console.log(`App listening at port: 7777`)
 })
