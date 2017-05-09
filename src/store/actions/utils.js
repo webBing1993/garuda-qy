@@ -60,10 +60,16 @@ module.exports = {
   },
   settitle: (x, t) => {
     document.title = t;
-    let i = document.createElement('iframe');
-    i.src = "/static/settitle.html"
-    i.style.display = 'none';
-    i.onload = () => setTimeout(() => i.remove(), 9)
-    document.body.appendChild(i);
+    if (/ip(hone|od|ad)/i.test(navigator.userAgent)) {
+      var i = document.createElement('iframe');
+      i.src = '/favicon.ico';
+      i.style.display = 'none';
+      i.onload = function () {
+        setTimeout(function () {
+          i.remove();
+        })
+      }
+      document.body.appendChild(i);
+    }
   },
 }
