@@ -15,7 +15,7 @@
     <div v-show="!currentTab" :class="{batch}" class="list-wrapper">
       <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
       <p class="synchronize" v-show="tobeconfirmed && tobeconfirmed.length > 0 && !batch">
-        上次同步PMS时间: {{datetimeparse(hotel.order_update_time,'MMDD hhmm')}}
+        上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
       <checker type="checkbox" v-model="batchlist"
@@ -30,10 +30,10 @@
       </checker>
     </div>
 
-    <div v-show="currentTab"  class="list-wrapper">
+    <div v-show="currentTab" class="list-wrapper">
       <p v-show="(!confirmed||confirmed.length === 0) && confirmedPageIndex > 0" class="no-data">暂无数据</p>
       <p class="synchronize" v-show="confirmed && confirmed.length > 0 && !batch">
-        上次同步PMS时间: {{datetimeparse(hotel.order_update_time,'MMDD hhmm')}}
+        上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDD hhmm')}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
       <Group v-for="(item,index) in confirmed" :key="index">
@@ -87,8 +87,7 @@
         'replaceto',
         'getconfirmelist',
         'multiconfirm',
-        'hotelRefresh',
-        'hotelInfo'
+        'hotelrefresh',
       ]),
       getCellTitle(item){
         let paystatus = null
@@ -184,7 +183,7 @@
         }
       },
       syncTime(){
-        this.hotelRefresh({
+        this.hotelrefresh({
           onsuccess: (body) => this.refreshList()
         })
       }
@@ -197,8 +196,6 @@
     },
     activated(){
       this.initList();
-      this.hotelInfo();
-
     }
   }
 </script>

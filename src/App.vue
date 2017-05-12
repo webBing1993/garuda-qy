@@ -15,6 +15,7 @@
       ...mapState([
         'AppParams',
         'Interface',
+        'hotel',
         'route',
       ]),
       currentMsg(){
@@ -33,6 +34,7 @@
         'urlquery',
         'login',
         'replaceto',
+        'gethotelinfo'
       ]),
       crossroad(){
         if (this.currentMsg) {
@@ -103,7 +105,10 @@
         this.settitle(title)
       },
       sessionId(val){
-        val ? this.$nextTick(() => this.crossroad()) : null
+        if (val) {
+          this.gethotelinfo(this.hotel.hotel_id)
+          this.$nextTick(() => this.crossroad())
+        }
       }
     }
   }

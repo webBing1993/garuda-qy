@@ -13,7 +13,7 @@
     <div class="list-wrapper">
       <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
       <p class="synchronize" v-if="renderList.length >0">
-        上次同步PMS时间: {{datetimeparse(hotel.order_update_time,'MMDD hhmm')}}
+        上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDD hhmm')}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
       <Group v-for="(item,index) in renderList" :key="index">
@@ -121,7 +121,7 @@
         'replaceto',
         'gettodaylist',
         'gethistorylist',
-        'hotelRefresh'
+        'hotelrefresh'
       ]),
       getCellTitle(item){
         let alertdom = item.status.is_recording_success ? `` : `<span class="cell-right warn">入账失败</span>`
@@ -169,7 +169,7 @@
         }
       },
       refreshList(){
-          this.getList()
+        this.getList()
       },
       resetList() {
         this.todayCancelList = []
@@ -182,7 +182,7 @@
         this.periodFilter = [null, null]
       },
       syncTime(){
-        this.hotelRefresh({
+        this.hotelrefresh({
           onsuccess: (body) => this.refreshList()
         })
       }
@@ -201,13 +201,9 @@
         this.isCalendarShow = false;
       }
     },
-    mounted(){
+    activated(){
       this.initList()
-    },
-//    activated(){
-//      //reset all data
-//      this.getList();
-//    }
+    }
   }
 </script>
 

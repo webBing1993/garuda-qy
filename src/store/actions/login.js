@@ -1,8 +1,10 @@
 module.exports = {
   login(ctx, param){
-    if (sessionStorage.session) {
+    if (sessionStorage.session && sessionStorage.hotel_id) {
       ctx.commit('SESSION', sessionStorage.session)
+      ctx.commit('HOTEL', {'hotel_id': sessionStorage.hotel_id});
       console.log('SESSION STORAGE: ' + sessionStorage.session)
+      console.log('HOTEL ID: ' + sessionStorage.hotel_id)
     } else {
       ctx.dispatch('resource', {
         url: "/login",
@@ -18,11 +20,14 @@ module.exports = {
           // console.log('NEW SESSION: ' + body.data)
 
           ctx.commit('SESSION', body.data.session_id);
-          ctx.commit('HOTEL', {'hotel_id':body.data.hotel_id});
-          ctx.dispatch('hotelInfo', body);
+          ctx.commit('HOTEL', {'hotel_id': body.data.hotel_id});
+
+          // ctx.dispatch('gethotelinfo', body.data.hotel_id);
 
           sessionStorage.session = body.data.session_id
+          sessionStorage.hotel_id = body.data.hotel_id
           console.log('NEW SESSION: ' + body.data.session_id)
+          console.log('NEW HOTELID: ' + body.data.hotel_id)
         }
       })
     }
