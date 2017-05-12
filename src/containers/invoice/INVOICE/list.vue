@@ -66,7 +66,7 @@
       ]),
       getCellTitle(item){
         let roomNumber = '';
-        if (item.rooms_number.length > 0) {
+        if (item.rooms_number && item.rooms_number.length > 0) {
           item.rooms_number.forEach(i => roomNumber += roomNumber ? ' ' + i : i);
         } else {
           roomNumber += '未选房'
