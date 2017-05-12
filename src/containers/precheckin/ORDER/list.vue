@@ -1,6 +1,6 @@
 <template>
   <article class="preorder-list">
-    <header>
+    <header class="tab-wrapper">
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in renderTabMenu"
                  :key="'tabmenu'+index"
@@ -10,20 +10,17 @@
       </Tab>
     </header>
 
-    <scroller :pulldown-config="Interface.scroller"
-              :depend="renderList"
-              @on-pulldown-loading="getList"
-              use-pulldown
-              lock-x
-              height="-44">
-      <div class="scroller-wrap">
-        <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
-        <Group v-for="(item,index) in renderList" :key="index">
-          <Cell :title="getCellTitle(item)"/>
-          <Cell :title="getCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
-        </Group>
-      </div>
-    </scroller>
+    <div class="list-wrapper">
+      <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
+      <p class="synchronize" v-if="renderList.length >0">
+        上次同步PMS时间: {{datetimeparse(hotel.order_update_time,'MMDD hhmm')}}
+        <x-button mini value="同步" @onClick="syncTime"></x-button>
+      </p>
+      <Group v-for="(item,index) in renderList" :key="index">
+        <Cell :title="getCellTitle(item)"/>
+        <Cell :title="getCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
+      </Group>
+    </div>
 
     <footer>
       <div class="listFilter">
@@ -87,7 +84,8 @@
     computed: {
       ...mapState([
         'Interface',
-        'route'
+        'route',
+        'hotel'
       ]),
       isToday(){
         return !!this.$route.path.match(/today/)
@@ -122,7 +120,8 @@
         'goto',
         'replaceto',
         'gettodaylist',
-        'gethistorylist'
+        'gethistorylist',
+        'hotelRefresh'
       ]),
       getCellTitle(item){
         let alertdom = item.status.is_recording_success ? `` : `<span class="cell-right warn">入账失败</span>`
@@ -169,6 +168,9 @@
           this.getList()
         }
       },
+      refreshList(){
+          this.getList()
+      },
       resetList() {
         this.todayCancelList = []
         this.toStayList = []
@@ -179,6 +181,11 @@
         console.log('resetFilter')
         this.periodFilter = [null, null]
       },
+      syncTime(){
+        this.hotelRefresh({
+          onsuccess: (body) => this.refreshList()
+        })
+      }
     },
     watch: {
       tabIndex(val) {

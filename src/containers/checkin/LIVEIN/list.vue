@@ -1,18 +1,16 @@
 <template>
   <article>
-    <scroller :pulldown-config="Interface.scroller"
-              :depend="renderList"
-              @on-pulldown-loading="refreshList"
-              use-pulldown
-              lock-x>
-      <div class="scroller-wrap">
-        <p v-show="(!renderList||renderList.length === 0)&& renderPageIndex >0" class="no-data">暂无数据</p>
-        <Group v-for="(item,index) in renderList" :key="index">
-          <Cell :title="getCellTitle(item)"/>
-          <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
-        </Group>
-      </div>
-    </scroller>
+    <div class="list-wrapper">
+      <p v-show="(!renderList||renderList.length === 0)&& renderPageIndex >0" class="no-data">暂无数据</p>
+      <p class="synchronize" v-if="renderList.length >0">
+        上次同步PMS时间: {{datetimeparse(hotel.order_update_time,'MMDD hhmm')}}
+        <x-button mini value="同步" @onClick="syncTime"></x-button>
+      </p>
+      <Group v-for="(item,index) in renderList" :key="index">
+        <Cell :title="getCellTitle(item)"/>
+        <Cell :title="getGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
+      </Group>
+    </div>
   </article>
 </template>
 
@@ -32,7 +30,8 @@
     computed: {
       ...mapState([
         'Interface',
-        'route'
+        'route',
+        'hotel'
       ]),
       isToday() {
         return !!this.$route.path.match(/today/)
@@ -105,6 +104,11 @@
       },
       moreList(){
         this.getList(body => (this[this.isToday ? 'todayList' : 'allList'] = [...this.renderList, ...body.data], this.isToday ? this.todayPageIndex++ : this.allPageIndex++))
+      },
+      syncTime(){
+        this.hotelRefresh({
+          onsuccess: (body) => this.refreshList()
+        })
       }
     },
 //    watch: {

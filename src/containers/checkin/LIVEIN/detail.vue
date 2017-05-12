@@ -15,7 +15,7 @@
       </Group>
       <div v-for="(item,index) in detail.suborders"
            :key="'guests'+index"
-           v-if="detail.suborders">
+           v-if="detail.suborders && item.status.is_checkin">
         <Group :title="index === 0 ? '房间信息' : null">
           <Cell
             :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name}</div>`"></Cell>
