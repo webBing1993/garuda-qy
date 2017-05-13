@@ -20,6 +20,7 @@ module.exports = {
           ctx.commit('SESSION', body.data.session_id);
           ctx.commit('HOTEL', {'hotel_id': body.data.hotel_id});
 
+          console.log('NEW')
           console.log('NEW SESSION: ' + body.data.session_id)
           console.log('NEW HOTELID: ' + body.data.hotel_id)
         }
