@@ -1,6 +1,6 @@
 <template>
   <article>
-    <div class="list-wrapper">
+    <div>
       <p class="synchronize">
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDD hhmm')}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
@@ -61,7 +61,8 @@
       ...mapActions([
         'goto',
         'getTodaySuborder',
-        'getAllSuborder'
+        'getAllSuborder',
+        'hotelrefresh'
       ]),
       getCellTitle(item){
         let tag = this.getUnionTag(item.union_tag, item.room_number);
@@ -106,7 +107,7 @@
         this.getList(body => (this[this.isToday ? 'todayList' : 'allList'] = [...this.renderList, ...body.data], this.isToday ? this.todayPageIndex++ : this.allPageIndex++))
       },
       syncTime(){
-        this.hotelRefresh({
+        this.hotelrefresh({
           onsuccess: (body) => this.refreshList()
         })
       }
