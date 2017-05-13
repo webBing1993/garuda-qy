@@ -56,8 +56,8 @@
         selectedTab: '已通过',
         agreedIdentities: [],
         refusedIdentities: [],
-        agreedPageIndex:0,
-        refusedPageIndex:0,
+        agreedPageIndex: 0,
+        refusedPageIndex: 0,
         periodFilter: [null, null],
         isCalendarShow: false
       }
@@ -77,7 +77,7 @@
         return this.tabIndex ? this.refusedIdentities : this.agreedIdentities
       },
       renderPageIndex(){
-          return this.tabIndex ? this.refusedPageIndex : this.agreedPageIndex
+        return this.tabIndex ? this.refusedPageIndex : this.agreedPageIndex
       }
     },
     methods: {
@@ -97,9 +97,12 @@
                     <span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
                   </div>`
         });
-        if(!this.tabIndex){
-          !item.lvye_report_status ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null;
-        }
+        dom += item.lvye_report_status === 'SUBMITTED' || item.lvye_report_status === 'PENDING'
+          ? `<p style="color:#999999;">正在上传旅业系统</p>`
+          : item.lvye_report_status === 'FAILED'
+            ? `<p style="color:#DF4A4A;">未上传旅业系统</p>`
+            : ``
+
         return dom
       },
       getList(callback){
@@ -113,11 +116,11 @@
       },
       initList(){
         if ((this.tabIndex && !this.refusedIdentities.length) || (!this.tabIndex && !this.agreedIdentities.length)) {
-          this.getList(body => (this[this.tabIndex ? 'refusedIdentities':'agreedIdentities']= [...body.data],this.tabIndex? this.refusedPageIndex++ : this.agreedPageIndex++))
+          this.getList(body => (this[this.tabIndex ? 'refusedIdentities' : 'agreedIdentities'] = [...body.data], this.tabIndex ? this.refusedPageIndex++ : this.agreedPageIndex++))
         }
       },
       refreshList(){
-          this.getList(body => this[this.tabIndex ? 'refusedIdentities':'agreedIdentities']= [...body.data])
+        this.getList(body => this[this.tabIndex ? 'refusedIdentities' : 'agreedIdentities'] = [...body.data])
       },
       resetList(){
         this.agreedIdentities = []

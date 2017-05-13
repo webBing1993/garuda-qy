@@ -23,10 +23,9 @@
         <img :src="item.live_photo" alt="现场照片">
       </div>
     </div>
-    <p v-if="detail.status !== 'REFUSED'&& detail.status !== 'AUTO_REFUSED' && !isUploadSuccess" class="upload"> 上传旅业系统失败，请重试</p>
-    <p v-if="detail.status !== 'REFUSED'&& detail.status !== 'AUTO_REFUSED' && isUploadSuccess" class="upload-time">
-      已成功上传旅业系统。{{datetimeparse(detail.lvye_report_time, 'YYMMDD hhmm')}}</p>
-    <div v-if="detail.status !== 'REFUSED'&&detail.status !== 'AUTO_REFUSED'&& !isUploadSuccess" class="button-group">
+
+    <p class="upload-time">{{lvyeStatusName}}</p>
+    <div class="button-group">
       <x-button v-if="!btnPresent.status || btnPresent.hasNext"
                 :value="btnPresent.status ? '下一个' : '上传旅业系统'"
                 :plain="!!btnPresent.status"
@@ -59,7 +58,7 @@
           : ''
       },
       isUploadSuccess(){
-        return this.detail.lvye_report_status === 'SUCCESS'
+        return this.detail.lvye_report_status !== 'FAILED'
       },
       btnPresent(){
         return {
@@ -67,6 +66,13 @@
           hasNext: !!this.detail.next_identity_id,
           callback: () => this.isUploadSuccess ? this.goto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
         }
+      },
+      lvyeStatusName(){
+        return this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING'
+          ? '正在上传旅业系统'
+          : this.detail.lvye_report_status === 'FAILED'
+            ? '上传旅业系统失败，请重试'
+            : '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
       }
     },
     methods: {
