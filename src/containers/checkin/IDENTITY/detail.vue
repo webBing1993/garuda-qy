@@ -24,13 +24,15 @@
       </div>
     </div>
 
-    <p class="upload-time">{{lvyeStatusName}}</p>
-
-    <div class="button-group" v-if="policeIdentitySuccess">
-      <x-button v-if="!btnPresent.status || btnPresent.hasNext"
-                :value="btnPresent.status ? '下一个' : '上传旅业系统'"
-                :plain="!!btnPresent.status"
-                @onClick="btnPresent.callback"></x-button>
+    <!--lvye-->
+    <div v-if="policeIdentitySuccess">
+      <p class="upload-time">{{lvyeStatusName}}</p>
+      <div class="button-group">
+        <x-button v-if="!btnPresent.status || btnPresent.hasNext"
+                  :value="btnPresent.status ? '下一个' : '上传旅业系统'"
+                  :plain="!!btnPresent.status"
+                  @onClick="btnPresent.callback"></x-button>
+      </div>
     </div>
   </article>
 </template>
