@@ -12,35 +12,34 @@
       </div>
     </header>
 
-    <div v-show="!currentTab" :class="{batch}" class="list-wrapper">
-      <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
-      <p class="synchronize" v-show="tobeconfirmed && tobeconfirmed.length > 0 && !batch">
+    <div class="list-wrapper">
+      <p class="synchronize">
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
-      <checker type="checkbox" v-model="batchlist"
-               default-item-class="checker-item" selected-item-class="selected">
-        <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
-          <Group>
-            <Cell :title="getCellTitle(item)"/>
-            <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
-            <Cell v-if="item.remark" :title="getCellFooter(item)"/>
-          </Group>
-        </checker-item>
-      </checker>
-    </div>
 
-    <div v-show="currentTab" class="list-wrapper">
-      <p v-show="(!confirmed||confirmed.length === 0) && confirmedPageIndex > 0" class="no-data">暂无数据</p>
-      <p class="synchronize" v-show="confirmed && confirmed.length > 0 && !batch">
-        上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDD hhmm')}}
-        <x-button mini value="同步" @onClick="syncTime"></x-button>
-      </p>
-      <Group v-for="(item,index) in confirmed" :key="index">
-        <Cell :title="getCellTitle(item)"/>
-        <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
-        <Cell v-if="item.remark" :title="getCellFooter(item)"/>
-      </Group>
+      <div v-show="!currentTab" :class="{batch}">
+        <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
+        <checker type="checkbox" v-model="batchlist"
+                 default-item-class="checker-item" selected-item-class="selected">
+          <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
+            <Group>
+              <Cell :title="getCellTitle(item)"/>
+              <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
+              <Cell v-if="item.remark" :title="getCellFooter(item)"/>
+            </Group>
+          </checker-item>
+        </checker>
+      </div>
+
+      <div v-show="currentTab">
+        <p v-show="(!confirmed||confirmed.length === 0) && confirmedPageIndex > 0" class="no-data">暂无数据</p>
+        <Group v-for="(item,index) in confirmed" :key="index">
+          <Cell :title="getCellTitle(item)"/>
+          <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
+          <Cell v-if="item.remark" :title="getCellFooter(item)"/>
+        </Group>
+      </div>
     </div>
 
     <footer v-show="route.params.tab == 0 && tobeconfirmed.length !== 0 && tobeConfirmedPageIndex > 0">

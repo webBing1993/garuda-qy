@@ -11,11 +11,11 @@
     </header>
 
     <div class="list-wrapper">
-      <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
-      <p class="synchronize" v-if="renderList.length >0">
+      <p class="synchronize">
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDD hhmm')}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
+      <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
       <Group v-for="(item,index) in renderList" :key="index">
         <Cell :title="getCellTitle(item)"/>
         <Cell :title="getCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
