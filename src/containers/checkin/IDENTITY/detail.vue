@@ -25,7 +25,8 @@
     </div>
 
     <p class="upload-time">{{lvyeStatusName}}</p>
-    <div class="button-group">
+
+    <div class="button-group" v-if="policeIdentitySuccess">
       <x-button v-if="!btnPresent.status || btnPresent.hasNext"
                 :value="btnPresent.status ? '下一个' : '上传旅业系统'"
                 :plain="!!btnPresent.status"
@@ -57,14 +58,17 @@
             : '已拒绝'
           : ''
       },
-      isUploadSuccess(){
+      policeIdentitySuccess(){
+        return this.detail.status === 'AUTO_AGREED' || this.detail.status === 'AGREED'
+      },
+      lvyeUploadSuccess(){
         return this.detail.lvye_report_status !== 'FAILED'
       },
       btnPresent(){
         return {
-          status: this.isUploadSuccess,
+          status: this.lvyeUploadSuccess,
           hasNext: !!this.detail.next_identity_id,
-          callback: () => this.isUploadSuccess ? this.goto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
+          callback: () => this.lvyeUploadSuccess ? this.goto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
         }
       },
       lvyeStatusName(){
