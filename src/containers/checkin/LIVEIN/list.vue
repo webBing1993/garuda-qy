@@ -3,6 +3,7 @@
     <div>
       <p class="synchronize">
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDD hhmm')}}
+
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
       <p v-show="(!renderList||renderList.length === 0)&& renderPageIndex >0" class="no-data">暂无数据</p>
@@ -66,7 +67,18 @@
       ]),
       getCellTitle(item){
         let tag = this.getUnionTag(item.union_tag, item.room_number);
-        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} ${tag ? '（联' + tag + ')' : ''} </span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
+        let breakfastStatus = item.breakfast;
+        let breakfastdom = ``;
+        if (breakfastStatus === 0) {
+          breakfastdom = '（无早）'
+        } else if (breakfastStatus === 1) {
+          breakfastdom = '（单早）'
+        } else if (breakfastStatus === 2) {
+          breakfastdom = '（双早）'
+        } else if (breakfastStatus === 3) {
+          breakfastdom = '（全早）'
+        }
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} ${breakfastdom} ${tag ? '（联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
       getUnionTag(tag, tempRoom){
         return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')

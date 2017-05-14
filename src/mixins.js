@@ -65,5 +65,18 @@ Vue.mixin({
     cashHandling(val, prefix){
       return prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100)
     },
+    getBreakFast(breakfastStatus){
+      if (breakfastStatus === 0) {
+        return '(无早)'
+      } else if (breakfastStatus === 1) {
+        return '(单早)'
+      } else if (breakfastStatus === 2) {
+        return '(双早)'
+      } else if (breakfastStatus === 3) {
+        return '(全早)'
+      }else {
+        return ''
+      }
+    },
   }
 })

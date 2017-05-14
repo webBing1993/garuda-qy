@@ -1,58 +1,52 @@
 <template>
-  <div>
-    <scroller :depend="[orderdetail]" lock-x>
-      <div class="scroller-wrap">
-        <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
-          <Group>
-            <Cell title="预订信息"/>
-            <Cell :title="getCellBody()"/>
-          </Group>
-          <Group>
-            <Cell title="PMS支付信息"/>
-            <Cell :title="getCellBodyPMS()"/>
-            <Cell :title="getCellFooter()"/>
-          </Group>
+  <article>
+    <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
+      <p class="synchronize">上次同步PMS时间: {{datetimeparse(orderdetail.update_time, 'MMDD hhmm')}}</p>
+      <Group>
+        <Cell title="预订信息"/>
+        <Cell :title="getCellBody()"/>
+      </Group>
+      <Group>
+        <Cell title="PMS支付信息"/>
+        <Cell :title="getCellBodyPMS()"/>
+        <Cell :title="getCellFooter()"/>
+      </Group>
 
-          <Group v-if="payInfo">
-            <Cell title="已确认" :value="payInfo"></Cell>
-          </Group>
+      <Group>
 
-          <div class="button-group">
-            <x-button v-if='orderdetail.payinfo.staff_pay != orderdetail.payinfo.total_roomfee'
-                      :value="cashHandling(orderdetail.payinfo.total_roomfee,'已全额支付 ')"
-                      primary
-                      @onClick="staffpayConfirm"/>
-            <x-button v-if='orderdetail.payinfo.staff_pay != 0'
-                      value="未支付"
-                      warn
-                      @onClick="staffpayConfirm(1)"/>
-            <x-button
-              v-if='orderdetail.payinfo.staff_pay == 0 || orderdetail.payinfo.staff_pay == orderdetail.payinfo.total_roomfee ||orderdetail.payinfo.staff_pay === null'
-              value="已付其他金额"
-              @onClick="staffpayConfirm(2)"
-              plain/>
-          </div>
-        </div>
+        <Cell v-if="payMode" :title="payInfo"/>
+        <Cell :title="getCellDeposit()"/>
+      </Group>
+
+      <div class="button-group">
+        <x-button value="预付"
+                  primary
+                  @onClick="staffpayConfirm(2)"/>
+        <x-button value="现付"
+                  warn
+                  @onClick="staffpayConfirm(1)"/>
+        <x-button value="后付/挂账等"
+                  @onClick="staffpayConfirm(3)"
+                  plain/>
       </div>
-    </scroller>
+    </div>
     <Dialog v-model="showDialog"
             @onConfirm="setSingleConfirm"
-            :confirm="!!(dialogStatus != 2 || inputValue)"
+            confirm
             cancel>
-      <div v-if="!dialogStatus">
-        <p>确认已全额支付？</p>
-      </div>
-      <div v-if="dialogStatus == 1">
-        <p>确认未支付？</p>
-      </div>
-      <div v-if="dialogStatus == 2">
-        <label>输入金额</label>
-        <input type="number" v-model.number='inputValue'
-               class="money" :placeholder="cashHandling(orderdetail.payinfo.total_roomfee,'总房费')">
+      <div class="choose"
+           style="display: flex;flex-direction: column;text-align: left;line-height: 50px;border-radius: 8% ">
+        <label>{{dialogStatus === 2 ? '是否确认该订单已经预付？' : dialogStatus === 1 ? '是否确认该订单为现付？' : '是否确认该订单为后付/挂账等？'}}</label>
+        <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
+          <checker-item value="isfreeDeposit">免押金</checker-item>
+          <checker-item v-if="dialogStatus === 2" value="otherPrice">输入其他金额</checker-item>
+        </checker>
+        <input type="number" :disabled="inputDisabled" v-if="dialogStatus === 2" v-model.number='inputValue'
+               class="money"
+               :placeholder="orderdetail.payinfo ? cashHandling(orderdetail.payinfo.total_roomfee,'总房费'):null">
       </div>
     </Dialog>
-  </div>
-
+  </article>
 </template>
 
 <script>
@@ -65,7 +59,8 @@
         orderdetail: {},
         showDialog: false,
         dialogStatus: null,
-        inputValue: null
+        inputValue: null,
+        batchlist: []
       }
     },
     computed: {
@@ -73,15 +68,40 @@
         'route'
       ]),
       payInfo() {
-        let a = this.orderdetail.payinfo.staff_pay;
-        if (a == null) {
-          return null;
-        } else if (a === this.orderdetail.payinfo.total_roomfee) {
-          return `<span style="font-size: 14px; color: #4a4a4a;">已全额支付<abbr style="color: #80C435">￥` + parseInt(a) / 100 + `</abbr></span>`
-        } else if (a === 0) {
-          return `<span style="color: #DF4A4A; font-size: 14px">未支付</span>`
-        } else {
-          return `<span style="font-size: 14px;color: #4a4a4a;">已付<abbr style="color: #80C435">￥` + parseInt(a) / 100 + `</abbr></span>`
+        if (this.payMode === 2) {
+          return `<div class="cell-body">` +
+            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">￥` + parseInt(this.orderdetail.payinfo.staff_pay) / 100 + `</abbr></span></p>` +
+            `</div>`
+        } else if (this.payMode === 1) {
+          return `<div class="cell-body">` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="color: #DF4A4A; font-size: 14px">现付</span></p>` +
+            `</div>`
+        } else if (this.payMode === 3) {
+          return `<div class="cell-body">` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="font-size: 14px;color: #4a4a4a;">后付/挂账等</span></p>` +
+            `</div>`
+        }
+      },
+      payMode(){
+        return this.orderdetail.pay_mode
+      },
+      isfreeDeposit(){
+        return this.orderdetail.is_free_deposit
+      },
+      inputDisabled(){
+        return this.batchlist.findIndex(i => i === 'otherPrice') === -1
+      },
+      confirmFormData(){
+        let staff_prepay = 0
+        if (this.dialogStatus === 2) {
+          this.batchlist.some(i => i === 'otherPrice')
+            ? staff_prepay = this.inputValue ? this.inputValue * 100 : this.orderdetail.payinfo.total_roomfee
+            : staff_prepay = this.orderdetail.payinfo.total_roomfee
+        }
+        return {
+          staff_prepay: staff_prepay,
+          is_free_deposit: this.batchlist.some(i => i === 'isfreeDeposit'),
+          pay_mode: this.dialogStatus
         }
       }
     },
@@ -114,22 +134,22 @@
           `</div>`
       },
       getCellFooter(){
-        return `<p><span class="cell-key">备注：</span><span class="cell-value">${this.orderdetail.remark}</span></p>`
+        return `<p><span class="cell-key3">备注：</span><span class="cell-value">${this.orderdetail.remark}</span></p>`
+      },
+      getCellDeposit(){
+        return `<p><span class="cell-key3">免押金</span><span class="cell-right">${this.isfreeDeposit ? '是' : '否'}</span></p>`
       },
       staffpayConfirm(paystatus){
         this.showDialog = true;
-        this.dialogStatus = paystatus ? paystatus : null;
+        this.dialogStatus = paystatus;
       },
       setSingleConfirm () {
-        let staff_pay = this.dialogStatus
-          ? this.inputValue ? this.inputValue * 100 : 0
-          : this.orderdetail.payinfo.total_roomfee
-        console.log('staff_pay:' + staff_pay)
-
         this.singleconfirm({
           order_id: this.orderdetail.order_id,
-          staff_pay: staff_pay,
-          onsuccess: () => this.orderdetail.payinfo.staff_pay = staff_pay
+          staff_prepay: this.confirmFormData.staff_prepay,
+          is_free_deposit: this.confirmFormData.is_free_deposit,
+          pay_mode: this.confirmFormData.pay_mode,
+          onsuccess: () => this.getDetail()
         })
       },
       getDetail(){
@@ -139,9 +159,7 @@
           suborder: 0,
           invoice: 0,
           log: 0,
-          onsuccess: body => {
-            this.orderdetail = body.data
-          }
+          onsuccess: body => this.orderdetail = body.data
         })
       },
       resetDetail(){
@@ -151,10 +169,21 @@
     watch: {
       showDialog(val, oldV) {
         oldV ? (this.dialogStatus = null, this.inputValue = null) : null
+      },
+      isfreeDeposit(val){
+        val ? this.batchlist.push('isfreeDeposit') : null
+      },
+      payMode(val){
+        if (val === 2 && this.orderdetail.payinfo.staff_pay !== this.orderdetail.payinfo.total_roomfee) {
+          this.batchlist.push('otherPrice');
+          this.inputValue = this.orderdetail.payinfo.staff_pay / 100
+        }
+      },
+      batchlist(val){
+        val.every(i => i !== 'otherPrice') ? this.inputValue = null : null
       }
     },
     activated(){
-      console.log('activated')
       this.resetDetail()
       this.getDetail()
     }

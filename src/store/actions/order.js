@@ -52,7 +52,9 @@ module.exports = {
       method: 'POST',
       body: {
         order_id: param.order_id,
-        staff_pay: param.staff_pay
+        is_free_deposit:param.is_free_deposit,//true免押、false不免押
+        pay_mode:param.pay_mode,//1-现付，2-预付，3-后付\挂账
+        staff_prepay:param.staff_prepay, //营业员确认的预付金额，单位：分
       },
       onSuccess: body => {
         ctx.dispatch('showtoast')

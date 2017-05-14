@@ -89,21 +89,15 @@
         'hotelrefresh',
       ]),
       getCellTitle(item){
-        let paystatus = null
-        if (item.payinfo.staff_pay !== null) {
-          paystatus = item.payinfo.staff_pay === 0
-            ? 0 // 未支付
-            : item.payinfo.staff_pay === item.payinfo.total_roomfee
-              ? 1 // 已付全额
-              : 2 // 已付其他
-        }
+        let paystatus = item.payinfo.pay_mode;
+        console.log(paystatus)
         let paystatusdom = ``
-        if (paystatus !== null) {
-          paystatusdom = paystatus === 0
-            ? `<span class="cell-right warn">未支付</span>`
-            : paystatus === 1
-              ? `<span class="cell-right primary">已付全额</span>`
-              : `<span class="cell-right other">已付其他</span>`
+        if (paystatus) {
+          paystatusdom = paystatus === 1
+            ? `<span class="cell-right warn">现付</span>`
+            : paystatus === 2
+              ? `<span class="cell-right primary">预付</span>`
+              : `<span class="cell-right other">后付/挂账等</span>`
         }
 
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`

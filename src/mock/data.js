@@ -4,11 +4,12 @@ module.exports = {
     {
       order_id: "230420402402401",//订单号
       order_pmsid: "230420402402401",//订单号
-      source_id:'XC',
+      source_id: 'XC',
       in_time: 1490976000000,
       out_time: 1491148800000,
       owner: "张三",//预订人
       owner_tel: "8618500059035",//预订人手机
+      is_free_deposit: true,//true免押、false不免押
       remark: "携程已付300元",//备注
       rooms_plan: [{
         room_type: "大床房",
@@ -21,8 +22,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
       },
-      status:{
-        is_cancelled:false, //是否已取消
+      status: {
+        is_cancelled: false, //是否已取消
         is_refund_required: false, //是否需要退款
         is_recording_success: false, //PMS入账是否成功
         is_any_checkin: false, //订单是否有入住
@@ -73,8 +74,8 @@ module.exports = {
         room_price: [{
           date: 1490976000000,
           price: '2222',
-        },{
-          date: 1490976000000+86400000,
+        }, {
+          date: 1490976000000 + 86400000,
           price: '3333',
         }],
         guests: [{
@@ -86,8 +87,8 @@ module.exports = {
         }],
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
-        identity_id:'id0001',
-        is_upload_success:true
+        identity_id: 'id0001',
+        is_upload_success: true
       }, {
         suborder_id: "2304204024024012",
         status: {
@@ -109,8 +110,8 @@ module.exports = {
         }],
         checkin_time: '1491384458000', //办理入住时间
         checkout_time: '1491384458000', //离店时间
-        identity_id:'id0001',
-        is_upload_success:false
+        identity_id: 'id0001',
+        is_upload_success: false
       }]
 
     },
@@ -133,8 +134,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
       },
-      status:{
-        is_cancelled:false, //是否已取消
+      status: {
+        is_cancelled: false, //是否已取消
         is_refund_required: false, //是否需要退款
         is_recording_success: true, //PMS入账是否成功
         is_any_checkin: false, //订单是否有入住
@@ -630,7 +631,7 @@ module.exports = {
         checkout_time: null, //离店时间
       }]
     }
-    ],
+  ],
   orderlist: [
     {
       order_id: "230420402402401",//订单号
@@ -862,8 +863,8 @@ module.exports = {
       }],
       in_time: '1491384458000', //入住时间
       out_time: '1491384458000', //离店时间
-      identity_id:'id0001',
-      is_upload_success:true
+      identity_id: 'id0001',
+      is_upload_success: true
     }, {
       suborder_id: '230420402402402', //子单号
       order_id: "230420402402402", //订单号业务查询用
@@ -891,7 +892,7 @@ module.exports = {
       // }],
       in_time: '1491384458000', //入住时间
       out_time: '1491384458000', //离店时间
-      identity_id:'id0001',
-      is_upload_success:false
+      identity_id: 'id0001',
+      is_upload_success: false
     }]
 }

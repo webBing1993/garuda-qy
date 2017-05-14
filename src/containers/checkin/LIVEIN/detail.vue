@@ -18,7 +18,7 @@
            v-if="detail.suborders && item.status.is_checkin">
         <Group :title="index === 0 ? '房间信息' : null">
           <Cell
-            :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name}</div>`"></Cell>
+            :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
           <Cell :title="getGuestItem(item)"/>
         </Group>
         <p style="color: #DF4A4A;margin: 15px;font-size: 13px"
@@ -51,6 +51,7 @@
         'getorderdetail',
         'conformPmsSync'
       ]),
+
       getDetail() {
         this.getorderdetail({
           order_id: this.routeId,
