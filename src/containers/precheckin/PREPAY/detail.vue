@@ -13,7 +13,6 @@
       </Group>
 
       <Group>
-
         <Cell v-if="payMode" :title="payInfo"/>
         <Cell :title="getCellDeposit()"/>
       </Group>
