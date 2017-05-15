@@ -1,7 +1,7 @@
 <template>
   <article>
     <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
-      <p class="synchronize">上次同步PMS时间: {{datetimeparse(orderdetail.update_time, 'MMDD hhmm')}}</p>
+      <p class="synchronize">上次同步PMS时间: {{datetimeparse(orderdetail.update_time, 'MMDDhhmm')}}</p>
       <Group>
         <Cell title="预订信息"/>
         <Cell :title="getCellBody()"/>
@@ -33,14 +33,16 @@
             @onConfirm="setSingleConfirm"
             confirm
             cancel>
-      <div class="choose"
-           style="display: flex;flex-direction: column;text-align: left;line-height: 50px;border-radius: 8% ">
+      <div class="choose">
         <label>{{dialogStatus === 2 ? '是否确认该订单已经预付？' : dialogStatus === 1 ? '是否确认该订单为现付？' : '是否确认该订单为后付/挂账等？'}}</label>
         <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
           <checker-item value="isfreeDeposit">免押金</checker-item>
           <checker-item v-if="dialogStatus === 2" value="otherPrice">输入其他金额</checker-item>
         </checker>
-        <input type="number" :disabled="inputDisabled" v-if="dialogStatus === 2" v-model.number='inputValue'
+        <input type="number"
+               :disabled="inputDisabled"
+               v-if="dialogStatus === 2"
+               v-model.number='inputValue'
                class="money"
                :placeholder="orderdetail.payinfo ? cashHandling(orderdetail.payinfo.total_roomfee,'总房费'):null">
       </div>
@@ -69,7 +71,7 @@
       payInfo() {
         if (this.payMode === 2) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">￥` + parseInt(this.orderdetail.payinfo.staff_pay) / 100 + `</abbr></span></p>` +
+            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">` + this.cashHandling(this.orderdetail.payinfo.staff_pay) + `</abbr></span></p>` +
             `</div>`
         } else if (this.payMode === 1) {
           return `<div class="cell-body">` +
@@ -88,10 +90,10 @@
         return this.orderdetail.is_free_deposit
       },
       inputDisabled(){
-        return this.batchlist.findIndex(i => i === 'otherPrice') === -1
+        return !this.batchlist.some(i => i === 'otherPrice')
       },
       confirmFormData(){
-        let staff_prepay = 0
+        let staff_prepay = 0;
         if (this.dialogStatus === 2) {
           this.batchlist.some(i => i === 'otherPrice')
             ? staff_prepay = this.inputValue ? this.inputValue * 100 : this.orderdetail.payinfo.total_roomfee
@@ -128,8 +130,8 @@
       },
       getCellBodyPMS(){
         return `<div class="cell-body">` +
-          `<p><span class="cell-key">应付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.total_roomfee / 100}</span></p>` +
-          `<p><span class="cell-key">已付房费：</span><span class="cell-value">￥${this.orderdetail.payinfo.pms_pay / 100}</span></p>` +
+          `<p><span class="cell-key">应付房费：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.total_roomfee)}</span></p>` +
+          `<p><span class="cell-key">已付房费：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.pms_pay)}</span></p>` +
           `</div>`
       },
       getCellFooter(){
@@ -167,7 +169,7 @@
     },
     watch: {
       showDialog(val, oldV) {
-        oldV ? (this.dialogStatus = null, this.inputValue = null) : null
+        oldV ? (this.dialogStatus = null) : null
       },
       isfreeDeposit(val){
         val ? this.batchlist.push('isfreeDeposit') : null
