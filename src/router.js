@@ -84,7 +84,21 @@ const checkin = [{
     component: require('./containers/checkin/LIVEIN/detail.vue')
   }]
 }]
-
+const checkout = [{
+  path: '/checkout',
+  component: {
+    name: "checkout",
+    template: `<router-view/>`
+  },
+  children: [{
+    path: 'application/:tab',
+    component: require('./containers/checkout/application/list.vue')
+  },
+    {
+      path: 'refunds',
+      component: require('./containers/checkout/refunds/list.vue')
+    }]
+}];
 const invoice = [{
   path: '/invoice',
   component: {
@@ -118,5 +132,5 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...precheckin, ...checkin, ...invoice, ...others]
+  routes: [...unchained, ...precheckin, ...checkin, ...invoice, ...checkout, ...others]
 })

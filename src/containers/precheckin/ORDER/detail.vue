@@ -1,42 +1,52 @@
 <template>
   <article class="detail">
-    <scroller lock-x :depend="orderdetail">
-      <div class="scroller-wrap">
-        <div v-if="orderdetail">
-          <div class="recording" v-if="orderdetail.status && !orderdetail.status.is_recording_success">
-            <div class="title-body">入账失败</div>
-            <a @click="confirmPmsResult">已手工入账</a>
-          </div>
-
-          <Group title="预订信息">
-            <Cell class="key" title="订单号" :value="orderdetail.order_pmsid"></Cell>
-            <Cell class="key" title="预订人" :value="orderdetail.owner"></Cell>
-            <Cell class="key" title="手机号" :value="orderdetail.owner_tel"></Cell>
-            <Cell class="key" title="入离时间"
-                  :value="datetimeparse(orderdetail.in_time) + ' - '+ datetimeparse(orderdetail.out_time)"></Cell>
-          </Group>
-
-          <Group title="PMS支付信息" v-if="orderdetail.payinfo">
-            <Cell class="key" title="应付房费" :value="cashHandling(orderdetail.payinfo.total_roomfee)"></Cell>
-            <Cell class="key" title="已付" :value="cashHandling(orderdetail.payinfo.pms_pay)"></Cell>
-            <Cell class="key" title="备注" :value="orderdetail.remark"></Cell>
-          </Group>
-
-          <Group v-for="(item,index) in orderdetail.suborders" :key="'guests'+index"
-                 :title="index == 0? '选房信息' : null">
-            <cell class="key" :title="getGuestItem(item)"/>
-          </Group>
-
-          <Group title="发票信息" v-if="orderdetail.invoice">
-            <Cell class="key" title="领取方式" :value="orderdetail.invoice.media == 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
-            <Cell class="key" title="开票类型" :value="invoiceType(orderdetail.invoice.type)"></Cell>
-            <Cell class="key" title="开票内容" :value="orderdetail.invoice.category"></Cell>
-            <Cell class="key" title="发票抬头" :value="orderdetail.invoice.title"></Cell>
-          </Group>
-
-        </div>
+    <div v-if="detail">
+      <p class="synchronize">上次同步PMS时间: {{datetimeparse(detail.update_time, 'MMDDhhmm')}}</p>
+      <div class="recording" v-if="detail.status && !detail.status.is_recording_success">
+        <div class="title-body">入账失败</div>
+        <a @click="confirmPmsResult">已手工入账</a>
       </div>
-    </scroller>
+
+      <Group title="预订信息">
+        <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
+        <Cell class="key" title="预订人" :value="detail.owner"></Cell>
+        <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
+        <Cell class="key" title="入离时间"
+              :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
+      </Group>
+
+      <Group title="PMS支付信息" v-if="detail.payinfo">
+        <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
+        <Cell class="key" title="预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
+        <Cell class="key" title="备注" :value="detail.remark"></Cell>
+      </Group>
+
+      <Group title="支付信息">
+        <Cell class="key" title="微信交易号" value="1233333333333"></Cell>
+        <Cell class="key" title="支付金额" value="200"></Cell>
+        <Cell class="key" title="交易时间" value="06/05 23:23"></Cell>
+        <Cell class="key" title="免押金" value="是"></Cell>
+      </Group>
+
+      <Group title="退款信息">
+        <Cell class="key" title="消费金额"></Cell>
+        <Cell class="key" title="退款金额"></Cell>
+        <Cell class="key" title="申请时间"></Cell>
+      </Group>
+
+      <Group v-for="(item,index) in detail.suborders" :key="'guests'+index"
+             :title="index == 0? '选房信息' : null">
+        <cell class="key" :title="getGuestItem(item)"/>
+      </Group>
+
+      <Group title="发票信息" v-if="detail.invoice">
+        <Cell class="key" title="领取方式" :value="detail.invoice.media == 'PAPER' ? '纸质发票' : '电子发票'"></Cell>
+        <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
+        <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
+        <Cell class="key" title="发票抬头" :value="detail.invoice.title"></Cell>
+      </Group>
+
+    </div>
   </article>
 </template>
 
@@ -46,7 +56,7 @@
     name: 'detail',
     data(){
       return {
-        orderdetail: {},
+        detail: {},
       }
     },
     computed: {
@@ -73,7 +83,7 @@
         this.conformPmsSync({
           order_id: this.routeId,
           action: 'SETACCOUNT',
-          onsuccess: body => this.orderdetail.status.is_recording_success = true
+          onsuccess: body => this.detail.status.is_recording_success = true
         })
       },
       getGuestItem(item){
@@ -90,9 +100,7 @@
           suborder: 1,
           invoice: 1,
           log: 1,
-          onsuccess: body => {
-            this.orderdetail = body.data
-          }
+          onsuccess: body => this.detail = body.data
         })
       },
     },

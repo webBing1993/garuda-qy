@@ -85,7 +85,7 @@
       ...mapActions([
         'goto',
         'getIdentity',
-        'setIdentityStatus',
+//        'setIdentityStatus',
         'setUploadStatus'
       ]),
       getDetail(){
@@ -94,14 +94,14 @@
           onsuccess: body => this.detail = body.data
         })
       },
-      setidentitystatus(val){
-        this.setIdentityStatus({
-          identity_id: this.identityId,
-          suborder_id: this.detail.suborder_id,
-          status: val ? 'AGREED' : 'REFUSED',
-          onsuccess: body => this.detail.status = val ? 'AGREED' : 'REFUSED'
-        })
-      },
+//      setidentitystatus(val){
+//        this.setIdentityStatus({
+//          identity_id: this.identityId,
+//          suborder_id: this.detail.suborder_id,
+//          status: val ? 'AGREED' : 'REFUSED',
+//          onsuccess: body => this.detail.status = val ? 'AGREED' : 'REFUSED'
+//        })
+//      },
       setuploadstatus(){
         this.setUploadStatus({
           identity_id: this.identityId,
