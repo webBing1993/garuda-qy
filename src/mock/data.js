@@ -93,7 +93,7 @@ module.exports = {
         suborder_id: "2304204024024012",
         status: {
           is_cancelled: false, //是否已取消
-          is_checkin: false, //是否入住
+          is_checkin: true, //是否入住
           is_checkout: false, //是否离店
         },
         room_number: "204",
