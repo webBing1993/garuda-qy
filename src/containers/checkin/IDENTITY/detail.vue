@@ -64,7 +64,8 @@
         return this.detail.status === 'AUTO_AGREED' || this.detail.status === 'AGREED'
       },
       lvyeUploadSuccess(){
-        return this.detail.lvye_report_status !== 'FAILED'
+//        return this.detail.lvye_report_status !== 'FAILED'
+        return this.detail.lvye_report_status === 'SUCCESS'
       },
       btnPresent(){
         return {
@@ -74,11 +75,20 @@
         }
       },
       lvyeStatusName(){
-        return this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING'
-          ? '正在上传旅业系统'
-          : this.detail.lvye_report_status === 'FAILED'
-            ? '上传旅业系统失败，请重试'
-            : '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
+        if (this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING') {
+          return '正在上传旅业系统'
+        } else if (this.detail.lvye_report_status === 'FAILED') {
+          return '上传旅业系统失败'
+        } else if (!this.detail.lvye_report_status) {
+          return '未上传旅业系统'
+        } else {
+          return '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
+        }
+//        return this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING'
+//          ? '正在上传旅业系统'
+//          : this.detail.lvye_report_status === 'FAILED' || !this.detail.lvye_report_status
+//            ? '上传旅业系统失败，请重试'
+//            : '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
       }
     },
     methods: {
