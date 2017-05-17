@@ -21,14 +21,14 @@ module.exports = {
         staff_pay: 100,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
-        pay_mode:1
+        pay_mode: 1
       },
       status: {
         is_cancelled: false, //是否已取消
         is_refund_required: false, //是否需要退款
         is_recording_success: false, //PMS入账是否成功
         is_any_checkin: false, //订单是否有入住
-        is_free_deposit:false//true免押、false不免押
+        is_free_deposit: false//true免押、false不免押
       },
       timeline: { //状态变化时间
         staff_confirm: '1491384458000', //营业员确认订单的时间
@@ -80,17 +80,52 @@ module.exports = {
           date: 1490976000000 + 86400000,
           price: '3333',
         }],
-        guests: [{
-          name: "李四",
-          idcard: "343245623456728199"
-        }, {
-          name: "李四",
-          idcard: "343245623456728199"
-        }],
+        guests: [
+          // {
+          //   name: "李四",
+          //   idcard: "343245623456728199"
+          // }, {
+          //   name: "李四",
+          //   idcard: "343245623456728199"
+          // }
+        ],
         checkin_time: null, //办理入住时间
         checkout_time: null, //离店时间
-        identity_id: 'id0001',
-        is_upload_success: true
+        identity_id: "", //身份验证记录ID:null,
+        lvye_report_time: null, //成功上传旅业系统的时间时间戳
+        lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+      },{
+        suborder_id: "2304204024024011",
+        status: {
+          is_cancelled: false, //是否已取消
+          is_checkin: false, //是否入住
+          is_checkout: false, //是否离店
+        },
+        room_number: "203",
+        room_tags: ["靠南", "带窗"],
+        room_type_id: "DCF",
+        room_type_name: "大床房",
+        room_price: [{
+          date: 1490976000000,
+          price: '2222',
+        }, {
+          date: 1490976000000 + 86400000,
+          price: '3333',
+        }],
+        guests: [
+          {
+            name: "李四",
+            idcard: "343245623456728199"
+          }, {
+            name: "李四",
+            idcard: "343245623456728199"
+          }
+        ],
+        checkin_time: null, //办理入住时间
+        checkout_time: null, //离店时间
+        identity_id: "", //身份验证记录ID:null,
+        lvye_report_time: null, //成功上传旅业系统的时间时间戳
+        lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
       }, {
         suborder_id: "2304204024024012",
         status: {
@@ -112,8 +147,9 @@ module.exports = {
         }],
         checkin_time: '1491384458000', //办理入住时间
         checkout_time: '1491384458000', //离店时间
-        identity_id: 'id0001',
-        is_upload_success: false
+        identity_id: "",  //身份验证记录ID:null,
+        lvye_report_time: null, //成功上传旅业系统的时间时间戳
+        lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
       }]
 
     },

@@ -71,7 +71,7 @@
         return {
           status: this.lvyeUploadSuccess,
           hasNext: !!this.detail.next_identity_id,
-          callback: () => this.lvyeUploadSuccess ? this.goto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
+          callback: () => this.lvyeUploadSuccess ? this.replaceto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
         }
       },
       lvyeStatusName(){
@@ -93,7 +93,7 @@
     },
     methods: {
       ...mapActions([
-        'goto',
+        'replaceto',
         'getIdentity',
         'setIdentityStatus',
         'setUploadStatus'
