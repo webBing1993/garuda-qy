@@ -84,10 +84,10 @@
         }
       },
       payMode(){
-        return this.orderdetail.pay_mode
+        return this.orderdetail.payinfo ? this.orderdetail.payinfo.pay_mode : null
       },
       isfreeDeposit(){
-        return this.orderdetail.is_free_deposit
+        return this.orderdetail.status ? this.orderdetail.status.is_free_deposit : null
       },
       inputDisabled(){
         return !this.batchlist.some(i => i === 'otherPrice')
