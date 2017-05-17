@@ -100,7 +100,7 @@
         path.match(/identity\/todo/) ? title = '待验证' : null
         path.match(/livein\/./) ? title = '入住单详情' : null
         path.match(/livein\/today/) ? title = '当日入住' : null
-        path.match(/livein\/all/) ? title = '全部入住' : null
+        path.match(/livein\/all/) ? title = '全部在住' : null
         path.match(/invoice/) ? title = '待开发票' : null
         this.settitle(title)
       },

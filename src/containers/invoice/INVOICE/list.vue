@@ -76,7 +76,7 @@
       getCellBody(item){
         return `<div class="cell-body">` +
           `<p><span class="cell-value">${item.owner + ' ' + item.phone_number}</span><b class="cell-right">${item.invoice_status == 2 ? '已开票' : ''}</b></p>` +
-          `<p><span class="cell-value">${this.invoiceType(item.type)}·${item.category}·${item.media == 'PAPER' ? '纸质发票' : '电子发票'}</span></p>` +
+          `<p><span class="cell-value">${item.media == 'PAPER' ? '纸质发票' : '电子发票'}·${this.invoiceType(item.type)}·${item.category}</span></p>` +
           `<p><span class="cell-value">${item.title}</span></p>` +
           `<p><span class="cell-value">${this.datetimeparse(item.in_time) + '-' + this.datetimeparse(item.out_time)}</span></p>` +
           `</div>`

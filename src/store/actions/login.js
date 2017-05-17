@@ -3,9 +3,7 @@ module.exports = {
     if (sessionStorage.session_id && sessionStorage.hotel_id) {
       ctx.commit('SESSION', sessionStorage.session_id)
       ctx.commit('HOTEL', {'hotel_id': sessionStorage.hotel_id});
-
-      console.log('STORAGE SESSION: ' + sessionStorage.session_id)
-      console.log('STORAGE HOTELID: ' + sessionStorage.hotel_id)
+      console.log('STORAGE: ', sessionStorage.session_id, sessionStorage.hotel_id)
     } else {
       ctx.dispatch('resource', {
         url: "/login",
@@ -15,14 +13,14 @@ module.exports = {
           corpid: ctx.state.AppParams.state
         },
         onSuccess: (body) => {
+          console.log('LOGIN: ', body.data.session_id, body.data.hotel_id)
           sessionStorage.session_id = body.data.session_id
-          sessionStorage.hotel_id = body.data.hotel_id
           ctx.commit('SESSION', body.data.session_id);
-          ctx.commit('HOTEL', {'hotel_id': body.data.hotel_id});
-
-          console.log('NEW')
-          console.log('NEW SESSION: ' + body.data.session_id)
-          console.log('NEW HOTELID: ' + body.data.hotel_id)
+          console.log(typeof body.data.hotel_id)
+          if (typeof body.data.hotel_id === 'string') {
+            sessionStorage.hotel_id = body.data.hotel_id
+            ctx.commit('HOTEL', {'hotel_id': body.data.hotel_id});
+          }
         }
       })
     }

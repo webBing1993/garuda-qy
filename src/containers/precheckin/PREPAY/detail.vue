@@ -163,8 +163,9 @@
           onsuccess: body => this.orderdetail = body.data
         })
       },
-      resetDetail(){
-        this.orderdetail = {}
+      reset(){
+        this.orderdetail = {};
+        this.batchlist =[];
       }
     },
     watch: {
@@ -172,7 +173,9 @@
         oldV ? (this.dialogStatus = null) : null
       },
       isfreeDeposit(val){
-        val ? this.batchlist.push('isfreeDeposit') : null
+        val ?
+          this.batchlist.every(i => i !== 'isfreeDeposit') ? this.batchlist.push('isfreeDeposit') : null
+          : null
       },
       payMode(val){
         if (val === 2 && this.orderdetail.payinfo.staff_pay !== this.orderdetail.payinfo.total_roomfee) {
@@ -185,7 +188,7 @@
       }
     },
     activated(){
-      this.resetDetail()
+      this.reset()
       this.getDetail()
     }
   }

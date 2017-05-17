@@ -97,11 +97,13 @@
                     <span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
                   </div>`
         });
-        dom += item.lvye_report_status === 'SUBMITTED' || item.lvye_report_status === 'PENDING'
-          ? `<p style="color:#999999;">正在上传旅业系统</p>`
-          : item.lvye_report_status === 'FAILED'
-            ? `<p style="color:#DF4A4A;">未上传旅业系统</p>`
-            : ``
+        if (item.lvye_report_status === 'SUBMITTED' || item.lvye_report_status === 'PENDING') {
+          dom += `<p style="color:#999999;">正在上传旅业系统</p>`
+        } else if (item.lvye_report_status === 'FAILED') {
+          dom += `<p style="color:#DF4A4A;">上传旅业系统失败</p>`
+        } else if (!item.lvye_report_status) {
+          dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>`
+        }
 
         return dom
       },
