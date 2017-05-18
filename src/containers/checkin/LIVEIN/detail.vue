@@ -33,7 +33,7 @@
         <Cell class="key" title="申请时间"></Cell>
       </Group>
 
-      <Group :title="index === roomInfoTitleIndex ? '房间信息':null"
+      <Group :title="index === roomInfoTitleIndex(detail) ? '房间信息':null"
              v-for="(item,index) in detail.suborders"
              :key="'guests'+index"
              v-if="item.guests && item.guests.length > 0">
@@ -75,9 +75,6 @@
     computed: {
       routeId() {
         return this.$route.params.id
-      },
-      roomInfoTitleIndex(){
-        return this.detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
       }
     },
     methods: {

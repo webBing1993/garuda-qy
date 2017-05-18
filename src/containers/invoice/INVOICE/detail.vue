@@ -13,7 +13,7 @@
         </Group>
 
         <!-- 房间信息 -->
-        <Group :title="index == 0? '房间信息' : null"
+        <Group :title="index === roomInfoTitleIndex(detail) ? '房间信息':null"
                v-for="(item,index) in detail.suborders"
                :key="index"
                v-if="item.guests && item.guests.length > 0">

@@ -67,6 +67,9 @@ Vue.mixin({
       }
       return typeStr
     },
+    roomInfoTitleIndex(detail){
+      return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
+    },
     cashHandling(val, prefix){
       return prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100)
     },
