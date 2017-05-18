@@ -90,7 +90,6 @@
       ]),
       getCellTitle(item){
         let paystatus = item.payinfo.pay_mode;
-        console.log(paystatus)
         let paystatusdom = ``
         if (paystatus) {
           paystatusdom = paystatus === 1

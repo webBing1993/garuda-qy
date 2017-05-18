@@ -24,6 +24,7 @@ Mock.mock(
       media: "PAPER",
       title: "上海二建",
       invoice_status: 1, //1有效未开票 2已开票
+      order_status:4
     }, {
       invoice_apply_id: '1234',
       order_id: '230420402402402',
@@ -38,6 +39,7 @@ Mock.mock(
       media: "PAPER",
       title: "上海三建",
       invoice_status: 2, //1有效未开票 2已开票
+      order_status:6
     }]
   }
 )

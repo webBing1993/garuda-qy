@@ -71,7 +71,7 @@
         } else {
           roomNumber += '未选房'
         }
-        return `<p><span class="cell-value">${roomNumber}</span><span class="cell-right primary">${item.is_any_checkin ? '已入住' : ''}</span></p>`
+        return `<p><span class="cell-value">${roomNumber}</span><span class="cell-right primary">${item.order_status === 4 ? '已入住' : item.order_status === 6 ? '已离店':''}</span></p>`
       },
       getCellBody(item){
         return `<div class="cell-body">` +
