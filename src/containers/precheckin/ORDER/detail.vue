@@ -34,8 +34,12 @@
         <Cell class="key" title="申请时间"></Cell>
       </Group>
 
-      <Group v-for="(item,index) in detail.suborders" :key="'guests'+index"
-             :title="index == 0? '选房信息' : null">
+      <Group v-for="(item,index) in detail.suborders"
+             :key="'guests'+index"
+             :title="index == 0? '选房信息' : null"
+             v-if="item.guests && item.guests.length > 0">
+        <Cell
+          :title="`<span style='color:#4a4a4a'>${(item.room_number ? item.room_number : '未选房') + ' ' + item.room_type_name + ' ' + getBreakFast(item.breakfast)}</span>`"></Cell>
         <cell class="key" :title="getGuestItem(item)"/>
       </Group>
 
@@ -44,6 +48,11 @@
         <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
         <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
         <Cell class="key" title="发票抬头" :value="detail.invoice.title"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="统一社会信用代码" :value="detail.invoice.tax_registry_no"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="地址" :value="detail.invoice.address"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="联系电话" :value="detail.invoice.phone_number"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="开户银行" :value="detail.invoice.bank_name"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="银行账号" :value="detail.invoice.bank_account"></Cell>
       </Group>
 
     </div>
@@ -73,25 +82,12 @@
         'getorderdetail',
         'conformPmsSync'
       ]),
-      isNotEmpty(obj){
-        for (var key in obj) {
-          return true;
-        }
-        return false;
-      },
       confirmPmsResult() {
         this.conformPmsSync({
           order_id: this.routeId,
           action: 'SETACCOUNT',
           onsuccess: body => this.detail.status.is_recording_success = true
         })
-      },
-      getGuestItem(item){
-        let dom = `<div style="display: flex;justify-content: space-between;line-height: 2;color: #4a4a4a"><span>${(item.room_number ? item.room_number : '未选房') + ' ' + item.room_type_name + ' ' + this.getBreakFast(item.breakfast)}</span></div>`;
-        if (item.guests) {
-          item.guests.forEach(i => dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${i.idcard}</span></div>`)
-        }
-        return dom
       },
       getDetail() {
         this.getorderdetail({

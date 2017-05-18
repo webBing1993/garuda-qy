@@ -11,8 +11,26 @@
         <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
         <Cell class="key" title="入离时间"
               :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
-        <Cell class="key" title="房型" v-for="(item,index) in detail.rooms_plan" :key="'rooms_plan'+index"
-              :value="item.room_type + 'x' + item.room_count"></Cell>
+        <Cell class="key" title="房型" :value="getRoomType(detail)"></Cell>
+      </Group>
+
+      <Group title="PMS支付信息" v-if="detail.payinfo">
+        <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
+        <Cell class="key" title="预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
+        <Cell class="key" title="备注" :value="detail.remark"></Cell>
+      </Group>
+
+      <Group title="支付信息">
+        <Cell class="key" title="微信交易号" value="1233333333333"></Cell>
+        <Cell class="key" title="支付金额" value="200"></Cell>
+        <Cell class="key" title="交易时间" value="06/05 23:23"></Cell>
+        <Cell class="key" title="免押金" value="是"></Cell>
+      </Group>
+
+      <Group title="退款信息">
+        <Cell class="key" title="消费金额"></Cell>
+        <Cell class="key" title="退款金额"></Cell>
+        <Cell class="key" title="申请时间"></Cell>
       </Group>
 
       <Group :title="index === roomInfoTitleIndex ? '房间信息':null"
@@ -35,6 +53,12 @@
         <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
         <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
         <Cell class="key" title="发票抬头" :value="detail.invoice.title"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="统一社会信用代码"
+              :value="detail.invoice.tax_registry_no"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="地址" :value="detail.invoice.address"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="联系电话" :value="detail.invoice.phone_number"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="开户银行" :value="detail.invoice.bank_name"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="银行账号" :value="detail.invoice.bank_account"></Cell>
       </Group>
     </div>
   </article>
@@ -62,7 +86,6 @@
         'getorderdetail',
         'conformPmsSync'
       ]),
-
       getDetail() {
         this.getorderdetail({
           order_id: this.routeId,
@@ -82,7 +105,6 @@
           onsuccess: body => this.detail.status.is_recording_success = true
         })
       },
-
     },
     watch: {
       routeId(val) {

@@ -9,14 +9,16 @@
           <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
           <Cell class="key" title="入离时间"
                 :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
-          <Cell class="key" title="房型" :value="getRoomCount(detail)"></Cell>
+          <Cell class="key" title="房型" :value="getRoomType(detail)"></Cell>
         </Group>
 
         <!-- 房间信息 -->
-        <Group class="key" :title="index == 0? '房间信息' : null" v-for="(item,index) in detail.suborders" :key="index">
-
+        <Group :title="index == 0? '房间信息' : null"
+               v-for="(item,index) in detail.suborders"
+               :key="index"
+               v-if="item.guests && item.guests.length > 0">
           <Cell
-            :title="`<span style='color:#4a4a4a'>${item.room_number ? item.room_number : '未选房'} ${item.room_type_name}</span>`"></Cell>
+            :title="`<span style='color:#4a4a4a'>${(item.room_number ? item.room_number : '未选房') + ' ' + item.room_type_name + ' ' + getBreakFast(item.breakfast)}</span>`"></Cell>
           <Cell class="key" :title="getGuestItem(item)"></Cell>
         </Group>
 
@@ -86,21 +88,7 @@
           invoice_status: 2,
           onsuccess: () => this.detail.invoice.invoice_status = 2
         })
-      },
-      getRoomCount(item){
-        if (item.rooms_plan) {
-          let temp = ``
-          item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`)
-          return temp
-        }
-      },
-      getIvoiceRoomInfo(item){
-        if (item.guests) {
-          let dom = ``;
-          item.guests.forEach(i => dom += `<div style="line-height: 2;text-indent: 1em;color: #4a4a4a">${i.name} ${i.idcard}</div>`)
-          return dom
-        }
-      },
+      }
     },
     mounted(){
       this.getorderdetail({

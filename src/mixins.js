@@ -51,6 +51,11 @@ Vue.mixin({
       }
       return dom
     },
+    getRoomType(item){
+      let temp = ``;
+      item.rooms_plan ? item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`) : null;
+      return temp;
+    },
     invoiceType(type){
       let typeStr = '';
       if (type === 'PERSONAL') {
@@ -74,7 +79,7 @@ Vue.mixin({
         return '(双早)'
       } else if (breakfastStatus === 3) {
         return '(全早)'
-      }else {
+      } else {
         return ''
       }
     },
