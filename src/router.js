@@ -88,13 +88,15 @@ const checkout = [{
   path: '/checkout',
   component: {
     name: "checkout",
-    template: `<router-view/>`
+    template: `<keep-alive><router-view/></keep-alive>`
   },
   children: [{
     path: 'application/:tab',
     component: require('./containers/checkout/application/list.vue')
-  },
-    {
+  },{
+    path: 'application/detail/:id',
+    component: require('./containers/checkout/application/detail.vue')
+  }, {
       path: 'refunds',
       component: require('./containers/checkout/refunds/list.vue')
     }]

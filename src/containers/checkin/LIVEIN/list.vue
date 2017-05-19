@@ -67,18 +67,7 @@
       ]),
       getCellTitle(item){
         let tag = this.getUnionTag(item.union_tag, item.room_number);
-        let breakfastStatus = item.breakfast;
-        let breakfastdom = ``;
-        if (breakfastStatus === 0) {
-          breakfastdom = '（无早）'
-        } else if (breakfastStatus === 1) {
-          breakfastdom = '（单早）'
-        } else if (breakfastStatus === 2) {
-          breakfastdom = '（双早）'
-        } else if (breakfastStatus === 3) {
-          breakfastdom = '（全早）'
-        }
-        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name} ${breakfastdom} ${tag ? '（联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
       getUnionTag(tag, tempRoom){
         return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')

@@ -879,6 +879,7 @@ module.exports = {
       order_id: "230420402402401", //订单号业务查询用
       order_pmsid: '230420402402401', //pms订单号客户端渲染用
       union_tag: '204sssddeer', //联房标签
+      breakfast:0,
       status: {
         is_cancelled: false,// 是否已取消
         is_checkin: false,// 是否入住
@@ -908,6 +909,7 @@ module.exports = {
       order_id: "230420402402402", //订单号业务查询用
       order_pmsid: '230420402402402', //pms订单号客户端渲染用
       union_tag: '204sssddeer', //联房标签
+      breakfast:3,
       status: {
         is_cancelled: false,// 是否已取消
         is_checkin: false,// 是否入住

@@ -16,6 +16,11 @@
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
         <x-button mini value="同步" @onClick="syncTime"/>
       </p>
+      <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
+      <Group v-for="(item,index) in renderList" :key="index">
+        <Cell :title="getCellTitle(item)"/>
+        <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/application/detail/'+item.order_id)"/>
+      </Group>
     </div>
   </article>
 </template>
@@ -26,7 +31,11 @@
     name: 'application',
     data(){
       return {
-        tabMenu: ['待处理', '已完成']
+        tabMenu: ['待处理', '已完成'],
+        pendingList: [],
+        completedList: [],
+        pendingPageIndex: 0,
+        completedPageIndex: 0
       }
     },
     computed: {
@@ -34,21 +43,74 @@
         'Interface',
         'route',
         'hotel'
-      ])
+      ]),
+      isCompleted(){
+        return +this.route.params.tab;
+      },
+      renderList(){
+        return this.isCompleted ? this.completedList : this.pendingList;
+      },
+      renderPageIndex(){
+        return this.isCompleted ? this.completedPageIndex : this.pendingPageIndex;
+      },
+      unionTag() {
+        let totalList = [...this.pendingList, ...this.completedList];
+        let tagList = [];
+        totalList.forEach(item => {
+            if (item.union_tag) {
+              let tagIndex = tagList.findIndex(i => i.tag === item.union_tag);
+              tagIndex === -1
+                ? tagList.push({tag: item.union_tag, room_number: [item.room_number]})
+                : tagList[tagIndex].room_number = [...tagList[tagIndex].room_number, item.room_number]
+            }
+          }
+        );
+        return tagList;
+      }
     },
     methods: {
       ...mapActions([
+        'goto',
         'replaceto',
-        'hotelrefresh'
+        'hotelrefresh',
+        'getcheckoutlist'
       ]),
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
-        this.replaceto(newpath)
+        this.replaceto(newpath);
       },
       syncTime(){
         this.hotelrefresh({
-//          onsuccess: (body) => this.refreshList()
+          onsuccess: (body) => this.refreshList()
         })
+      },
+      getUnionTag(tag, tempRoom){
+        return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
+      },
+      getCellTitle(item){
+        let tag = this.getUnionTag(item.union_tag, item.room_number);
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
+      },
+      getList(callback) {
+        this.getcheckoutlist({
+          onsuccess: callback
+        });
+      },
+      initList(){
+        if ((this.isCompleted && !this.completedList.length) || (!this.isCompleted && !this.pendingList.length)) {
+          this.getList(body => (this[this.isCompleted ? 'completedList' : 'pendingList'] = [...body.data], this.isCompleted ? this.completedPageIndex++ : this.pendingPageIndex++))
+        }
+      },
+      refreshList(){
+        this.getList(body => this[this.isCompleted ? 'completedList' : 'pendingList'] = [...body.data]);
+      },
+    },
+    activated() {
+      this.initList();
+    },
+    watch: {
+      isCompleted(val){
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     }
   }

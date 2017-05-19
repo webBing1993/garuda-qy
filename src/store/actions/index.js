@@ -9,4 +9,5 @@ module.exports = {
   ...require('./livein'),
   ...require('./invoice'),
   ...require('./hotel'),
+  ...require('./checkout'),
 }
