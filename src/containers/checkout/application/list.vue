@@ -10,18 +10,35 @@
       </Tab>
     </header>
 
-
     <div class="list-wrapper">
       <p class="synchronize">
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
         <x-button mini value="同步" @onClick="syncTime"/>
       </p>
       <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
-      <Group v-for="(item,index) in renderList" :key="index">
+      <Group v-for="(item,index) in renderList"
+             :key="index"
+             :title="isCompleted ? titleFilter(index):null">
         <Cell :title="getCellTitle(item)"/>
         <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/application/detail/'+item.order_id)"/>
       </Group>
     </div>
+
+    <footer>
+      <div class="listFilter" v-if="isCompleted">
+        <span class="filter" @click="isCalendarShow = true">
+          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
+          <abbr v-else>筛选</abbr>
+        </span>
+      </div>
+    </footer>
+
+    <popup v-model="isCalendarShow"
+           maskShow
+           bottom
+           animationTopBottom>
+      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+    </popup>
   </article>
 </template>
 <script>
@@ -35,12 +52,13 @@
         pendingList: [],
         completedList: [],
         pendingPageIndex: 0,
-        completedPageIndex: 0
+        completedPageIndex: 0,
+        isCalendarShow: false,
+        periodFilter: [],
       }
     },
     computed: {
       ...mapState([
-        'Interface',
         'route',
         'hotel'
       ]),
@@ -54,7 +72,7 @@
         return this.isCompleted ? this.completedPageIndex : this.pendingPageIndex;
       },
       unionTag() {
-        let totalList = [...this.pendingList, ...this.completedList];
+        let totalList = this.isCompleted ? this.completedList : this.pendingList;
         let tagList = [];
         totalList.forEach(item => {
             if (item.union_tag) {
@@ -75,6 +93,15 @@
         'hotelrefresh',
         'getcheckoutlist'
       ]),
+      resetFilter() {
+        this.periodFilter = [null, null]
+      },
+      titleFilter(index){
+        return index
+          ? this.datetimeparse(this.completedList[index].created_time) === this.datetimeparse(this.completedList[index - 1].created_time)
+            ? null : this.datetimeparse(this.list[index].created_time)
+          : this.datetimeparse(this.completedList[index].created_time)
+      },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath);
@@ -89,10 +116,17 @@
       },
       getCellTitle(item){
         let tag = this.getUnionTag(item.union_tag, item.room_number);
-        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
+      },
+      resetList() {
+        this.completedList = [];
+        this.pendingList = [];
       },
       getList(callback) {
         this.getcheckoutlist({
+          status: this.isCompleted ? 'DONE' : 'PENDING',
+          start_time: this.periodFilter[0],
+          end_time: this.periodFilter[1],
           onsuccess: callback
         });
       },
@@ -110,7 +144,12 @@
     },
     watch: {
       isCompleted(val){
-        typeof val === 'number' && !isNaN(val) ? this.initList() : null
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null;
+      },
+      periodFilter() {
+        this.resetList();
+        this.getList();
+        this.isCalendarShow = false;
       }
     }
   }

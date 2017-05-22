@@ -22,7 +22,7 @@ const unchained = [{
     path: ':id',
     component: require('./containers/unchained/RECORD/detail.vue')
   }]
-}]
+}];
 
 const precheckin = [{
   path: '/precheckin',
@@ -46,7 +46,7 @@ const precheckin = [{
     path: 'order/detail/:id',
     component: require('./containers/precheckin/ORDER/detail.vue')
   }]
-}]
+}];
 
 const checkin = [{
   path: '/identity',
@@ -83,7 +83,7 @@ const checkin = [{
     path: ':id',
     component: require('./containers/checkin/LIVEIN/detail.vue')
   }]
-}]
+}];
 const checkout = [{
   path: '/checkout',
   component: {
@@ -93,14 +93,28 @@ const checkout = [{
   children: [{
     path: 'application/:tab',
     component: require('./containers/checkout/application/list.vue')
-  },{
+  }, {
     path: 'application/detail/:id',
     component: require('./containers/checkout/application/detail.vue')
-  }, {
-      path: 'refunds',
-      component: require('./containers/checkout/refunds/list.vue')
+  }]
+}];
+
+const refund = [{
+  path: '/refund',
+  component: {
+    name: "refund",
+    template: `<keep-alive><router-view/></keep-alive>`,
+  },
+  children: [{
+    path: '/',
+    component: require('./containers/refund/list.vue')
+  },
+    {
+      path: ':id',
+      component: require('./containers/refund/detail.vue')
     }]
 }];
+
 const invoice = [{
   path: '/invoice',
   component: {
@@ -114,7 +128,7 @@ const invoice = [{
     path: 'detail/:id',
     component: require('./containers/invoice/INVOICE/detail.vue')
   },]
-}]
+}];
 
 const others = [
   {
@@ -130,9 +144,9 @@ const others = [
     path: '/*',
     redirect: '/'
   }
-]
+];
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...precheckin, ...checkin, ...invoice, ...checkout, ...others]
+  routes: [...unchained, ...precheckin, ...checkin, ...invoice, ...checkout, ...refund, ...others]
 })

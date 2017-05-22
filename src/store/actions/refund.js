@@ -1,8 +1,8 @@
 module.exports = {
-  //退房申请列表
-  getcheckoutlist(ctx, param){
+  //退款申请列表
+  getrefundlist(ctx, param){
     ctx.dispatch('resource', {
-      url: '/checkout',
+      url: '/refund_apply_list',
       params: {
         status: param.status,
         start_time: param.start_time,
@@ -13,11 +13,11 @@ module.exports = {
       }
     })
   },
-  //PMS退房
-  pmscheckout(ctx, param){
+  //退款申请
+  refundapply(ctx, param){
     ctx.dispatch('resource', {
-      url: '/checkout/' + param.id + '/pms',
-      method: 'PUT',
+      url: '/orders/' + param.order_id + '/refund',
+      method: 'POST',
       onSuccess: body => {
         ctx.dispatch('showtoast');
         param.onsuccess ? param.onsuccess(body) : null

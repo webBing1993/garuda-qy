@@ -56,7 +56,7 @@
         <router-link to="/checkout/application/0">申请</router-link>
       </dd>
       <dd>
-        <router-link to="/checkout/refunds">退款</router-link>
+        <router-link to="/refund">退款</router-link>
       </dd>
     </dl>
   </div>

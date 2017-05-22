@@ -10,4 +10,5 @@ module.exports = {
   ...require('./invoice'),
   ...require('./hotel'),
   ...require('./checkout'),
-}
+  ...require('./refund'),
+};

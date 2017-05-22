@@ -20,7 +20,7 @@
 
       <Group title="支付信息">
         <Cell class="key" title="微信交易号" value="1233333333333"></Cell>
-        <Cell class="key" title="支付金额" value="200"></Cell>
+        <Cell class="key" title="微信支付" value="200"></Cell>
         <Cell class="key" title="交易时间" value="06/05 23:23"></Cell>
         <Cell class="key" title="免押金" value="是"></Cell>
       </Group>
@@ -28,7 +28,11 @@
       <Group title="退款信息">
         <Cell class="key" title="消费金额"></Cell>
         <Cell class="key" title="退款金额"></Cell>
-        <Cell class="key" title="申请时间"></Cell>
+        <Cell class="key" title="退款时间"></Cell>
+        <div class="button-group" style="padding-top: 0">
+          <p style="color: #DF4A4A;">微信退款失败</p>
+          <x-button value="微信退款" @onClick="refundApply"/>
+        </div>
       </Group>
 
       <Group v-for="(item,index) in detail.suborders"
@@ -38,9 +42,7 @@
         <Cell
           :title="`<span style='color:#4a4a4a'>${(item.room_number ? item.room_number : '未选房') + ' ' + item.room_type_name + ' ' + getBreakFast(item.breakfast)}</span>`"></Cell>
         <cell class="key" :title="getGuestItem(item)"/>
-        <div class="button-group" style="padding-top: 0">
-          <x-button value="PMS退房" @onClick="pmsCheckout"/>
-        </div>
+
       </Group>
 
       <Group title="发票信息" v-if="detail.invoice">
@@ -82,7 +84,7 @@
         'goto',
         'getorderdetail',
         'conformPmsSync',
-        'pmscheckout'
+        'refundapply'
       ]),
       confirmPmsResult() {
         this.conformPmsSync({
@@ -101,9 +103,9 @@
           onsuccess: body => this.detail = body.data
         })
       },
-      pmsCheckout(){
-        this.pmscheckout({
-          id:this.routeId,
+      refundApply(){
+        this.refundapply({
+          order_id:this.routeId,
           onsuccess: body => this.getDetail()
         })
       }
