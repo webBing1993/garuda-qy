@@ -18,13 +18,13 @@
         <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
         <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
         <Cell class="key" title="备注" :value="detail.remark"></Cell>
+        <Cell class="key" title="免押金" value="是"></Cell>
       </Group>
 
       <Group title="支付信息">
         <Cell class="key" title="微信交易号" value="1233333333333"></Cell>
         <Cell class="key" title="支付金额" value="200"></Cell>
         <Cell class="key" title="交易时间" value="06/05 23:23"></Cell>
-        <Cell class="key" title="免押金" value="是"></Cell>
       </Group>
 
       <Group title="退款信息">

@@ -14,15 +14,15 @@
 
       <Group title="PMS支付信息" v-if="detail.payinfo">
         <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
-        <Cell class="key" title="预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
+        <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
         <Cell class="key" title="备注" :value="detail.remark"></Cell>
+        <Cell class="key" title="免押金" value="是"></Cell>
       </Group>
 
       <Group title="支付信息">
-        <Cell class="key" title="微信交易号" value="1233333333333"></Cell>
-        <Cell class="key" title="微信支付" value="200"></Cell>
-        <Cell class="key" title="交易时间" value="06/05 23:23"></Cell>
-        <Cell class="key" title="免押金" value="是"></Cell>
+        <Cell class="key" title="微信交易号" :value="detail.payinfo ? detail.payinfo.payment.wx_order_id : null"></Cell>
+        <Cell class="key" title="微信支付" :value="detail.payinfo ? cashHandling(detail.payinfo.payment.pay_fee) : null"></Cell>
+        <Cell class="key" title="交易时间" :value="detail.payinfo ? datetimeparse(detail.payinfo.payment.pay_time) : null"></Cell>
       </Group>
 
       <Group title="退款信息">
@@ -103,7 +103,7 @@
       },
       pmsCheckout(){
         this.pmscheckout({
-          id:this.routeId,
+          id: this.routeId,
           onsuccess: body => this.getDetail()
         })
       }
