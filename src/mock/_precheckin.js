@@ -1,4 +1,4 @@
-const Mock = require('mockjs')
+const Mock = require('mockjs');
 import data from './data'
 
 // ===============================================================
@@ -29,7 +29,7 @@ Mock
       errcode: "0",
       msg: "ok",
     }
-  )
+  );
 
 // ===============================================================
 // 预订单登记
@@ -43,7 +43,7 @@ Mock
     {
       errcode: "0",
       msg: "ok",
-      data: data.confirmlist
+      data: data.orderlist
     }
   )
   .mock(
@@ -52,7 +52,7 @@ Mock
     {
       errcode: "0",
       msg: "ok",
-      data: data.confirmlist
+      data: data.orderlist
     }
   )
   .mock(

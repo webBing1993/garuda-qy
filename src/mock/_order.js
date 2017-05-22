@@ -1,4 +1,4 @@
-const Mock = require('mockjs')
+const Mock = require('mockjs');
 import data from './data'
 
 Mock
@@ -6,7 +6,7 @@ Mock
     /\/order\/detail\/\d+/,
     function (opts) {
       let id = opts.url.split('?')[0].split('/').pop();
-      let orderdetail = data.confirmlist.filter(item => item.order_id == id)[0];
+      let orderdetail = data.orderlist.filter(item => item.order_id == id)[0];
       return orderdetail
         ? {
           errcode: 0,

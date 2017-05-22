@@ -1,4 +1,4 @@
-const Mock = require('mockjs')
+const Mock = require('mockjs');
 import data from './data'
 
 // ===============================================================
@@ -15,7 +15,7 @@ Mock
         ? {
           errcode: "0",
           errmsg: "ok",
-          data: data.confirmlist
+          data: data.orderlist
         }
         : {
           errcode: "0",
