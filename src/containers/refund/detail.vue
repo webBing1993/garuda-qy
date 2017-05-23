@@ -20,15 +20,18 @@
       </Group>
 
       <Group title="支付信息">
-        <Cell class="key" title="微信交易号" value="1233333333333"></Cell>
-        <Cell class="key" title="微信支付" value="200"></Cell>
-        <Cell class="key" title="交易时间" value="06/05 23:23"></Cell>
+        <Cell class="key" title="微信交易号" :value="detail.bill ? detail.bill.payment.wx_order_id : null"></Cell>
+        <Cell class="key" title="微信支付" :value="detail.bill ? cashHandling(detail.bill.payment.pay_fee) : null"></Cell>
+        <Cell class="key" title="交易时间"
+              :value="detail.bill ? datetimeparse(detail.bill.payment.pay_time,'YYYYMMDDhhmm') : null"></Cell>
       </Group>
 
       <Group title="退款信息">
-        <Cell class="key" title="消费金额"></Cell>
-        <Cell class="key" title="退款金额"></Cell>
-        <Cell class="key" title="退款时间"></Cell>
+        <Cell class="key" title="消费金额" :value="detail.bill ? cashHandling(detail.bill.refund.need_pay_fee) : null"></Cell>
+        <Cell class="key" title="退款金额" :value="detail.bill ? cashHandling(detail.bill.refund.refund_fee) : null"></Cell>
+        <Cell class="key" title="退款状态" :value="detail.bill ? refundStatus(detail.bill.refund.refund_status) : null"></Cell>
+        <Cell class="key" title="退款时间" :value="detail.bill ? datetimeparse(detail.bill.refund.refund_time,'YYYYMMDDhhmm') : null"></Cell>
+
         <div class="button-group" style="padding-top: 0">
           <p style="color: #DF4A4A;">微信退款失败</p>
           <x-button value="微信退款" @onClick="refundApply"/>
@@ -56,8 +59,19 @@
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="联系电话" :value="detail.invoice.phone_number"></Cell>
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="开户银行" :value="detail.invoice.bank_name"></Cell>
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="银行账号" :value="detail.invoice.bank_account"></Cell>
+
+        <div class="button-group" v-if="detail.invoice && detail.invoice.invoice_status ===  1">
+          <XButton value="登记开票" default @onClick="showDialog = true"></XButton>
+        </div>
+        <p v-if="detail.invoice && detail.invoice.invoice_status ===  2" class="tips">已确认开票。</p>
       </Group>
 
+      <Dialog v-model="showDialog"
+              @onConfirm="setInvoiceConfirm"
+              confirm
+              cancel>
+        <p>是否已开发票？</p>
+      </Dialog>
     </div>
   </article>
 </template>
@@ -69,6 +83,7 @@
     data(){
       return {
         detail: {},
+        showDialog: false
       }
     },
     computed: {
@@ -81,16 +96,21 @@
     },
     methods: {
       ...mapActions([
-        'goto',
         'getorderdetail',
-        'conformPmsSync',
-        'refundapply'
+        'refundapply',
+        'confirmInvoice'
       ]),
-      confirmPmsResult() {
-        this.conformPmsSync({
-          order_id: this.routeId,
-          action: 'SETACCOUNT',
-          onsuccess: body => this.detail.status.is_recording_success = true
+      setInvoiceConfirm () {
+        this.confirmInvoice({
+          invoice_apply_id: this.detail.invoice.id,
+          invoice_status: 2,
+          onsuccess: () => this.getDetail()
+        })
+      },
+      refundApply(){
+        this.refundapply({
+          order_id:this.routeId,
+          onsuccess: body => this.getDetail()
         })
       },
       getDetail() {
@@ -99,14 +119,9 @@
           roomfee: 1,
           suborder: 1,
           invoice: 1,
-          log: 1,
+          log: 0,
+          bill:1,
           onsuccess: body => this.detail = body.data
-        })
-      },
-      refundApply(){
-        this.refundapply({
-          order_id:this.routeId,
-          onsuccess: body => this.getDetail()
         })
       }
     },

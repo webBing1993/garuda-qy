@@ -24,6 +24,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+      },
+      bill: {
         payment: {
           wx_order_id: '4008162001602672232323295',
           pay_fee: 0,//支付金额
@@ -33,7 +35,7 @@ module.exports = {
           need_pay_fee: 200,  //消费金额
           refund_fee: 100,  //退款金额
           refund_time: 1495444639000,  //申请退款时间
-          refund_status: 'PENDING',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          refund_status: 'REFUNDED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
         }
       },
       status: {
@@ -209,6 +211,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+      },
+      bill: {
         payment: {
           wx_order_id: '4008162001602672232323295',
           pay_fee: 0,//支付金额
@@ -218,7 +222,7 @@ module.exports = {
           need_pay_fee: 200,  //消费金额
           refund_fee: 100,  //退款金额
           refund_time: 1495444639000,  //申请退款时间
-          refund_status: 'FAILED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          refund_status: 'PENDING',  //PENDING退款中、FAILED失败，REFUNDED退款完成
         }
       },
       status: {
@@ -262,6 +266,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+      },
+      bill: {
         payment: {
           wx_order_id: '4008162001602672232323295',
           pay_fee: 0,//支付金额
@@ -271,7 +277,7 @@ module.exports = {
           need_pay_fee: 200,  //消费金额
           refund_fee: 100,  //退款金额
           refund_time: 1495444639000,  //申请退款时间
-          refund_status: 'REFUNDED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          refund_status: 'PENDING',  //PENDING退款中、FAILED失败，REFUNDED退款完成
         }
       },
       status: {
@@ -376,6 +382,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+      },
+      bill: {
         payment: {
           wx_order_id: '4008162001602672232323295',
           pay_fee: 0,//支付金额
@@ -452,6 +460,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+      },
+      bill: {
         payment: {
           wx_order_id: '4008162001602672232323295',
           pay_fee: 0,//支付金额
@@ -505,6 +515,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+      },
+      bill: {
         payment: {
           wx_order_id: '4008162001602672232323295',
           pay_fee: 0,//支付金额
@@ -926,7 +938,7 @@ module.exports = {
   // ===============================================================
   // 退款
   // ===============================================================
-  refundList:[
+  refundList: [
     {
       order_id: "230420402402401",    //主订单ID
       room_numbers: ["201"], //房号
@@ -953,7 +965,7 @@ module.exports = {
     },
     {
       order_id: "230420402402404",    //主订单ID
-      room_numbers: ["204","205"], //房号
+      room_numbers: ["204", "205"], //房号
       pay_fee: 500000,
       refund: 20000,
       created_time: "1495419805000",  //申请时间

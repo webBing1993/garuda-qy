@@ -86,5 +86,15 @@ Vue.mixin({
         return ''
       }
     },
+    refundStatus(status){
+      return status ?
+        status === 'PENDING'
+          ? '退款中'
+          : status === "REFUNDED"
+          ? '退款完成'
+          : status === "FAILED"
+            ? '退款失败' : null
+        : null
+    },
   }
 })

@@ -24,7 +24,8 @@ module.exports = {
         roomfee: param.roomfee,
         suborder: param.suborder,
         invoice: param.invoice,
-        log: param.log
+        log: param.log,
+        bill:param.bill
       },
       onSuccess: (body) => {
         param.onsuccess ? param.onsuccess(body) : null
