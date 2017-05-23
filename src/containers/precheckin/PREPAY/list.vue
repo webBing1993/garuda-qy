@@ -96,7 +96,7 @@
             ? `<span class="cell-right other">其他</span>`
             : paystatus === 2
               ? `<span class="cell-right primary">预付</span>`
-              : `<span class="cell-right warn">后付/挂账/公付等</span>`
+              : `<span class="cell-right warn">后付/挂账/公账等</span>`
         }
 
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
@@ -109,6 +109,7 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
           `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+          `<p><span class="cell-key">房费：</span><span class="cell-value">${'¥' + item.payinfo.total_roomfee / 100}</span>${paiddom}</p>` +
           `</div>`
       },
       getCellFooter(item){

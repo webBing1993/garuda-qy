@@ -1,7 +1,7 @@
 <template>
   <article>
-    <div class="confirmeddetail" v-if="detail">
-      <p class="synchronize">上次同步PMS时间: {{datetimeparse(detail.update_time, 'MMDDhhmm')}}</p>
+    <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
+      <p class="synchronize">上次同步PMS时间: {{datetimeparse(orderdetail.update_time, 'MMDDhhmm')}}</p>
       <Group>
         <Cell title="预订信息"/>
         <Cell :title="getCellBody()"/>
@@ -14,7 +14,7 @@
 
       <Group>
         <Cell v-if="payMode" :title="payInfo"/>
-        <Cell class="key" title="免押金" :value="isfreeDeposit ? '是' : '否'"/>
+        <Cell title="免押金" :value="isfreeDeposit ? '是' : '否'"/>
       </Group>
 
       <div class="button-group">
@@ -44,7 +44,7 @@
                v-if="dialogStatus === 2"
                v-model.number='inputValue'
                class="money"
-               :placeholder="detail.payinfo ? cashHandling(detail.payinfo.total_roomfee,'总房费'):null">
+               :placeholder="orderdetail.payinfo ? cashHandling(orderdetail.payinfo.total_roomfee,'总房费'):null">
       </div>
     </Dialog>
   </article>
@@ -57,7 +57,7 @@
     name: "prepaydetail",
     data(){
       return {
-        detail: {},
+        orderdetail: {},
         showDialog: false,
         dialogStatus: null,
         inputValue: null,
@@ -71,7 +71,7 @@
       payInfo() {
         if (this.payMode === 2) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">` + this.cashHandling(this.detail.payinfo.staff_pay) + `</abbr></span></p>` +
+            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">` + this.cashHandling(this.orderdetail.payinfo.staff_pay) + `</abbr></span></p>` +
             `</div>`
         } else if (this.payMode === 1) {
           return `<div class="cell-body">` +
@@ -79,15 +79,15 @@
             `</div>`
         } else if (this.payMode === 3) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="font-size: 14px;color: #DF4A4A;">后付/挂账/公付等</span></p>` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="font-size: 14px;color: #DF4A4A;">后付/挂账/公账等</span></p>` +
             `</div>`
         }
       },
       payMode(){
-        return this.detail.payinfo ? this.detail.payinfo.pay_mode : null
+        return this.orderdetail.payinfo ? this.orderdetail.payinfo.pay_mode : null
       },
       isfreeDeposit(){
-        return this.detail.status ? this.detail.status.is_free_deposit : null
+        return this.orderdetail.status ? this.orderdetail.status.is_free_deposit : null
       },
       inputDisabled(){
         return !this.batchlist.some(i => i === 'otherPrice')
@@ -96,8 +96,8 @@
         let staff_prepay = 0;
         if (this.dialogStatus === 2) {
           this.batchlist.some(i => i === 'otherPrice')
-            ? staff_prepay = this.inputValue ? this.inputValue * 100 : this.detail.payinfo.total_roomfee
-            : staff_prepay = this.detail.payinfo.total_roomfee
+            ? staff_prepay = this.inputValue ? this.inputValue * 100 : this.orderdetail.payinfo.total_roomfee
+            : staff_prepay = this.orderdetail.payinfo.total_roomfee
         }
         return {
           staff_prepay: staff_prepay,
@@ -111,25 +111,31 @@
         'getorderdetail',
         'singleconfirm'
       ]),
+      isNotEmpty(obj){
+        for (var key in obj) {
+          return true;
+        }
+        return false;
+      },
       getCellBody(){
         let roomtypewords = ''
-        this.detail.rooms_plan ? this.detail.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count)) : null;
+        this.orderdetail.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
         return `<div class="cell-body">` +
-          `<p><span class="cell-key2">订单号：</span><span class="cell-value">${this.detail.order_pmsid}</span></p>` +
-          `<p><span class="cell-key2">预订人：</span><span class="cell-value">${this.detail.owner}</span></p>` +
-          `<p><span class="cell-key2">手机号：</span><span class="cell-value">${this.detail.owner_tel}</span></p>` +
-          `<p><span class="cell-key2">入离时间：</span><span class="cell-value">${this.datetimeparse(this.detail.in_time)}- ${this.datetimeparse(this.detail.out_time)}</span></p>` +
+          `<p><span class="cell-key2">订单号：</span><span class="cell-value">${this.orderdetail.order_pmsid}</span></p>` +
+          `<p><span class="cell-key2">预订人：</span><span class="cell-value">${this.orderdetail.owner}</span></p>` +
+          `<p><span class="cell-key2">手机号：</span><span class="cell-value">${this.orderdetail.owner_tel}</span></p>` +
+          `<p><span class="cell-key2">入离时间：</span><span class="cell-value">${this.datetimeparse(this.orderdetail.in_time)}- ${this.datetimeparse(this.orderdetail.out_time)}</span></p>` +
           `<p><span class="cell-key2">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
           `</div>`
       },
       getCellBodyPMS(){
-        return this.detail.payinfo ? `<div class="cell-body">` +
-          `<p><span class="cell-key">应付房费：</span><span class="cell-value">${this.cashHandling(this.detail.payinfo.total_roomfee)}</span></p>` +
-          `<p><span class="cell-key">PMS预付：</span><span class="cell-value">${this.cashHandling(this.detail.payinfo.pms_pay)}</span></p>` +
-          `</div>` : null;
+        return `<div class="cell-body">` +
+          `<p><span class="cell-key">应付房费：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.total_roomfee)}</span></p>` +
+          `<p><span class="cell-key">PMS预付：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.pms_pay)}</span></p>` +
+          `</div>`
       },
       getCellFooter(){
-        return `<p><span class="cell-key3">备注：</span><span class="cell-value">${this.detail.remark}</span></p>`
+        return `<p><span class="cell-key3">备注：</span><span class="cell-value">${this.orderdetail.remark}</span></p>`
       },
       staffpayConfirm(paystatus){
         this.showDialog = true;
@@ -137,7 +143,7 @@
       },
       setSingleConfirm () {
         this.singleconfirm({
-          order_id: this.detail.order_id,
+          order_id: this.orderdetail.order_id,
           staff_prepay: this.confirmFormData.staff_prepay,
           is_free_deposit: this.confirmFormData.is_free_deposit,
           pay_mode: this.confirmFormData.pay_mode,
@@ -151,12 +157,12 @@
           suborder: 0,
           invoice: 0,
           log: 0,
-          onsuccess: body => this.detail = body.data
+          onsuccess: body => this.orderdetail = body.data
         })
       },
       reset(){
-        this.detail = {};
-        this.batchlist = [];
+        this.orderdetail = {};
+        this.batchlist =[];
       }
     },
     watch: {
@@ -169,9 +175,9 @@
           : null
       },
       payMode(val){
-        if (val === 2 && this.detail.payinfo.staff_pay !== this.detail.payinfo.total_roomfee) {
+        if (val === 2 && this.orderdetail.payinfo.staff_pay !== this.orderdetail.payinfo.total_roomfee) {
           this.batchlist.push('otherPrice');
-          this.inputValue = this.detail.payinfo.staff_pay / 100
+          this.inputValue = this.orderdetail.payinfo.staff_pay / 100
         }
       },
       batchlist(val){
