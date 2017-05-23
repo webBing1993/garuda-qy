@@ -18,14 +18,14 @@
       <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
       <Group v-for="(item,index) in renderList"
              :key="index"
-             :title="isCompleted ? titleFilter(index):null">
+             :title="titleFilter(index)">
         <Cell :title="getCellTitle(item)"/>
         <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/application/detail/'+item.order_id)"/>
       </Group>
     </div>
 
     <footer>
-      <div class="listFilter" v-if="isCompleted">
+      <div class="listFilter">
         <span class="filter" @click="isCalendarShow = true">
           <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
           <abbr v-else>筛选</abbr>
@@ -98,9 +98,9 @@
       },
       titleFilter(index){
         return index
-          ? this.datetimeparse(this.completedList[index].created_time) === this.datetimeparse(this.completedList[index - 1].created_time)
-            ? null : this.datetimeparse(this.list[index].created_time)
-          : this.datetimeparse(this.completedList[index].created_time)
+          ? this.datetimeparse(this[this.isCompleted?'completedList':'pendingList'][index].created_time) === this.datetimeparse(this[this.isCompleted?'completedList':'pendingList'][index - 1].created_time)
+            ? null : this.datetimeparse(this[this.isCompleted?'completedList':'pendingList'][index].created_time)
+          : this.datetimeparse(this[this.isCompleted?'completedList':'pendingList'][index].created_time)
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);

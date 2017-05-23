@@ -93,10 +93,10 @@
         let paystatusdom = ``
         if (paystatus) {
           paystatusdom = paystatus === 1
-            ? `<span class="cell-right warn">现付</span>`
+            ? `<span class="cell-right other">其他</span>`
             : paystatus === 2
               ? `<span class="cell-right primary">预付</span>`
-              : `<span class="cell-right other">后付/挂账等</span>`
+              : `<span class="cell-right warn">后付/挂账/公付等</span>`
         }
 
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
