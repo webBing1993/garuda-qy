@@ -14,18 +14,18 @@
 
       <Group>
         <Cell v-if="payMode" :title="payInfo"/>
-        <Cell :title="getCellDeposit()"/>
+        <Cell title="免押金" :value="isfreeDeposit ? '是' : '否'"/>
       </Group>
 
       <div class="button-group">
         <x-button value="预付"
                   primary
                   @onClick="staffpayConfirm(2)"/>
-        <x-button value="现付"
+        <x-button value="后付/挂账/公付等"
                   warn
-                  @onClick="staffpayConfirm(1)"/>
-        <x-button value="后付/挂账等"
-                  @onClick="staffpayConfirm(3)"
+                  @onClick="staffpayConfirm(3)"/>
+        <x-button value="其他"
+                  @onClick="staffpayConfirm(1)"
                   plain/>
       </div>
     </div>
@@ -34,7 +34,7 @@
             confirm
             cancel>
       <div class="choose">
-        <label>{{dialogStatus === 2 ? '是否确认该订单已经预付？' : dialogStatus === 1 ? '是否确认该订单为现付？' : '是否确认该订单为后付/挂账等？'}}</label>
+        <label>{{dialogStatus === 2 ? '是否确认该订单已经预付？' : dialogStatus === 1 ? '是否确认该订单为其他？' : '是否确认该订单为后付/挂账/公付等？'}}</label>
         <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
           <checker-item value="isfreeDeposit">免押金</checker-item>
           <checker-item v-if="dialogStatus === 2" value="otherPrice">输入其他金额</checker-item>
@@ -75,11 +75,11 @@
             `</div>`
         } else if (this.payMode === 1) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="color: #DF4A4A; font-size: 14px">现付</span></p>` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="color: #5077AA; font-size: 14px">其他</span></p>` +
             `</div>`
         } else if (this.payMode === 3) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="font-size: 14px;color: #4a4a4a;">后付/挂账等</span></p>` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="font-size: 14px;color: #DF4A4A;">后付/挂账/公账等</span></p>` +
             `</div>`
         }
       },
@@ -131,14 +131,11 @@
       getCellBodyPMS(){
         return `<div class="cell-body">` +
           `<p><span class="cell-key">应付房费：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.total_roomfee)}</span></p>` +
-          `<p><span class="cell-key">已付房费：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.pms_pay)}</span></p>` +
+          `<p><span class="cell-key">PMS预付：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.pms_pay)}</span></p>` +
           `</div>`
       },
       getCellFooter(){
         return `<p><span class="cell-key3">备注：</span><span class="cell-value">${this.orderdetail.remark}</span></p>`
-      },
-      getCellDeposit(){
-        return `<p><span class="cell-key3">免押金</span><span class="cell-right">${this.isfreeDeposit ? '是' : '否'}</span></p>`
       },
       staffpayConfirm(paystatus){
         this.showDialog = true;
