@@ -20,7 +20,7 @@
              :key="index"
              :title="titleFilter(index)">
         <Cell :title="getCellTitle(item)"/>
-        <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/application/detail/'+item.order_id)"/>
+        <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/detail/'+item.order_id)"/>
       </Group>
     </div>
 

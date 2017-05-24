@@ -36,7 +36,22 @@ iframe {
   height: 45px;
   width: 100%;
 }
-
+.sortmenu {
+  padding: 15px 0;
+  background-color: #ffffff;
+  text-align: center;
+  line-height: 33px;
+  color: #8B8B8B;
+  .selected {
+    color: #4a4a4a;
+    span {
+      border-bottom: solid 1px #000;
+    }
+  }
+  span {
+    padding: 5px 0;
+  }
+}
 .synchronize {
   display: flex;
   justify-content: space-between;
@@ -44,7 +59,13 @@ iframe {
   margin: 7.5px 15px -2.5px 15px;
   color: #2B2B2B;
   font-size: 14px;
+  box-sizing: border-box;
   .weui-btn_mini {
+    margin-right: 0;
+    padding: 0 30px;
+    line-height: 2.7;
+  }
+  .weui-btn_warn{
     margin-right: 0;
     padding: 0 30px;
     line-height: 2.7;

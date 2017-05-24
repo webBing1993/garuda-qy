@@ -106,13 +106,8 @@
         typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     },
-    mounted(){
-      this.initList();
+    mounted(){this.initList();
     }
   }
 
 </script>
-
-<style scoped lang="less">
-  @import "./index.less";
-</style>
