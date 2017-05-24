@@ -14,7 +14,7 @@
 
       <Group>
         <Cell v-if="payMode" :title="payInfo"/>
-        <Cell title="免押金" :value="isfreeDeposit ? '是' : '否'"/>
+        <Cell class="key" title="免押金" :value="isfreeDeposit ? '是' : '否'"/>
       </Group>
 
       <div class="button-group">
@@ -68,18 +68,23 @@
       ...mapState([
         'route'
       ]),
+      confirmMode(){
+        return this.orderdetail.payinfo
+          ? this.orderdetail.payinfo.confirm_mode === 2 ? '(手动确认)' : ''
+          : ''
+      },
       payInfo() {
         if (this.payMode === 2) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">` + this.cashHandling(this.orderdetail.payinfo.staff_pay) + `</abbr></span></p>` +
+            `<p><span class="cell-key3">已确认</span><span style="font-size: 14px; color: #4a4a4a;" class="cell-right ">预付<abbr style="color: #80C435">` + this.cashHandling(this.orderdetail.payinfo.staff_pay) + `</abbr> ${this.confirmMode}</span></p>` +
             `</div>`
         } else if (this.payMode === 1) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="color: #5077AA; font-size: 14px">其他</span></p>` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right "><abbr style="color: #5077AA; font-size: 14px">其他</abbr> ${this.confirmMode}</span></p>` +
             `</div>`
         } else if (this.payMode === 3) {
           return `<div class="cell-body">` +
-            `<p><span class="cell-key3">已确认</span><span class="cell-right " style="font-size: 14px;color: #DF4A4A;">后付/挂账/公账等</span></p>` +
+            `<p><span class="cell-key3">已确认</span><span class="cell-right "><abbr style="font-size: 14px;color: #DF4A4A;">后付/挂账/公账等</abbr> ${this.confirmMode}</span></p>` +
             `</div>`
         }
       },
@@ -162,7 +167,7 @@
       },
       reset(){
         this.orderdetail = {};
-        this.batchlist =[];
+        this.batchlist = [];
       }
     },
     watch: {

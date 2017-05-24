@@ -78,7 +78,8 @@
       },
       renderList(){
         return this.currentTab ? this.confirmed : this.tobeconfirmed
-      }
+      },
+
     },
     methods: {
       ...mapActions([
@@ -88,15 +89,20 @@
         'multiconfirm',
         'hotelrefresh',
       ]),
+      confirmMode(item){
+        return item.payinfo
+          ? item.payinfo.confirm_mode === 2 ? '(手动确认)' : ''
+          : ''
+      },
       getCellTitle(item){
         let paystatus = item.payinfo.pay_mode;
         let paystatusdom = ``
         if (paystatus) {
           paystatusdom = paystatus === 1
-            ? `<span class="cell-right other">其他</span>`
+            ? `<span class="cell-right other">其他 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
             : paystatus === 2
-              ? `<span class="cell-right primary">预付</span>`
-              : `<span class="cell-right warn">后付/挂账/公账等</span>`
+              ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+              : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
         }
 
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`

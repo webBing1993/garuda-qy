@@ -24,6 +24,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+        confirm_mode:2
       },
       bill: {
         payment: {
@@ -211,6 +212,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 2,
+        confirm_mode:2
       },
       bill: {
         payment: {
@@ -266,6 +268,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 3,
+        confirm_mode:2
       },
       bill: {
         payment: {
