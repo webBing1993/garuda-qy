@@ -594,7 +594,7 @@ module.exports = {
       out_time: null, //离店时间
       identity_id: "", //身份验证记录ID:null,
       lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-      lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
     },
     {
       suborder_id: "2304204024024011",
@@ -674,7 +674,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: true, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: null, //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0002',
