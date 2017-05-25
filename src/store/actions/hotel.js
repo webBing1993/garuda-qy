@@ -9,6 +9,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/hotel/' + ctx.state.hotel.hotel_id + '/refresh',
       method: "PUT",
+      timeout: 180000,
       onSuccess: body => {
         ctx.commit('HOTEL', {...body.data})
         param.onsuccess ? param.onsuccess(body) : null
