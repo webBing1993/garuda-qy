@@ -142,6 +142,9 @@
       periodFilter(){
         this.refreshList()
       }
+    },
+    activated(){
+      this.refreshList();
     }
   }
 </script>
