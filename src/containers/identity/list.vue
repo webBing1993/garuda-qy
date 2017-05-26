@@ -101,7 +101,7 @@
           dom += `<p style="color:#999999;">正在上传旅业系统</p>`
         } else if (item.lvye_report_status === 'FAILED') {
           dom += `<p style="color:#DF4A4A;">上传旅业系统失败</p>`
-        } else if (!item.lvye_report_status) {
+        } else if (!item.lvye_report_status || item.lvye_report_status === 'NONE') {
           dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>`
         }
 
@@ -142,6 +142,9 @@
       periodFilter(){
         this.refreshList()
       }
+    },
+    activated(){
+      this.refreshList();
     }
   }
 </script>
