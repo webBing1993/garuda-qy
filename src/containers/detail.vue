@@ -60,8 +60,13 @@
              @click="goto('/identity/' + item.identity_id)">上传旅业系统</a>
         </p>
 
-        <div class="button-group" style="padding-top: 0" v-if="isCheckout">
+        <div class="button-group" style="padding-top: 0" v-if="isCheckout && detail.pmscheckout_status === 'FAILED'">
+          <p style="color: #DF4A4A;">PMS退房失败</p>
           <XButton value="PMS退房" @onClick="pmsCheckout"/>
+        </div>
+        <div class="button-group" style="padding-top: 0" v-if="isCheckout && detail.lvye_report_status === 'FAILED'">
+          <p style="color: #DF4A4A;">旅业系统更新失败</p>
+          <XButton value="重新上传旅业系统" @onClick="pmsCheckout"/>
         </div>
       </Group>
 
