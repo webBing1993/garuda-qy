@@ -33,10 +33,7 @@
       </div>
     </footer>
 
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
+    <popup v-model="isCalendarShow">
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>

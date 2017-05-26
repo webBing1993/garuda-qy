@@ -32,9 +32,7 @@
       </div>
     </footer>
 
-    <popup v-model="isSortShow"
-           maskShow
-           bottom>
+    <popup v-model="isSortShow">
       <div class="sortmenu">
         <p v-for="(item,index) in sortMenu" :key="index"
            class="sortText" :class="{selected:isSequence === index}"
@@ -44,10 +42,7 @@
       </div>
     </popup>
 
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
+    <popup v-model="isCalendarShow">
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
