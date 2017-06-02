@@ -103,7 +103,7 @@
     watch: {
       periodFilter() {
         this.list = [];
-        this.getList();
+        this.refreshList();
         this.isCalendarShow = false;
       }
     },

@@ -7,7 +7,7 @@
         <XButton value="已手工入账" warn @onClick="confirmPmsResult"></XButton>
       </div>
 
-      <Group title="预订信息">
+      <Group :title="isPreCheckin ?'预订信息':'主单信息'">
         <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
         <Cell class="key" title="预订人" :value="detail.owner"></Cell>
         <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
@@ -60,11 +60,13 @@
              @click="goto('/identity/' + item.identity_id)">上传旅业系统</a>
         </p>
 
-        <div class="button-group" style="padding-top: 0" v-if="isCheckout && detail.pmscheckout_status === 'FAILED'">
-          <p style="color: #DF4A4A;">PMS退房失败</p>
-          <XButton value="PMS退房" @onClick="pmsCheckout"/>
+        <div class="button-group" style="padding-top: 0" v-if="isCheckout">
+          <p v-if="item.pmscheckout_status === 'FAILED'" style="color: #DF4A4A">退房失败</p>
+          <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
+          <p v-else="item.pmscheckout_status === 'SUCCESS'">退房时间: {{datetimeparse(item.pmscheckout_time,'YYYYMMDDhhmm')}}</p>
+          <XButton value="PMS退房"  v-if="item.pmscheckout_status === 'FAILED'" @onClick="pmsCheckout"/>
         </div>
-        <div class="button-group" style="padding-top: 0" v-if="isCheckout && detail.lvye_report_status === 'FAILED'">
+        <div class="button-group" style="padding-top: 0" v-if="isCheckout && item.lvye_report_status === 'FAILED'">
           <p style="color: #DF4A4A;">旅业系统更新失败</p>
           <XButton value="重新上传旅业系统" @onClick="pmsCheckout"/>
         </div>
@@ -129,7 +131,7 @@
         return this.$route.path.match(/refund/)
       },
       isShowInvoiceBtn(){
-          return this.isInvoice || this.isCheckout || this.isRefund
+        return this.isInvoice || this.isCheckout || this.isRefund
       }
     },
     methods: {

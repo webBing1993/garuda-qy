@@ -145,7 +145,7 @@
       },
       periodFilter() {
         this.resetList();
-        this.getList();
+        this.refreshList();
         this.isCalendarShow = false;
       }
     }
