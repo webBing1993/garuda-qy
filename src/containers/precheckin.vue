@@ -4,8 +4,9 @@
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in renderTabMenu"
                  :key="'tabmenu'+index"
-                 :value="item"
-                 :selected="route.params.tab == index" @onSelected="toggleTab(index)">
+                 :class="{'vux-1px-r': index===0}"
+                 :selected="route.params.tab == index"
+                 @on-item-click="toggleTab(index)">{{item}}
         </TabItem>
       </Tab>
     </header>
