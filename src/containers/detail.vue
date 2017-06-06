@@ -116,19 +116,19 @@
         return this.$route.params.id
       },
       isPreCheckin(){
-        return this.$route.path.match(/precheckin/)
+        return /precheckin/.test(this.$route.path)
       },
       isLivein(){
-        return this.$route.path.match(/livein/)
+        return /livein/.test(this.$route.path)
       },
       isInvoice(){
-        return this.$route.path.match(/invoice/)
+        return /invoice/.test(this.$route.path)
       },
       isCheckout(){
-        return this.$route.path.match(/checkout/)
+        return /checkout/.test(this.$route.path)
       },
       isRefund(){
-        return this.$route.path.match(/refund/)
+        return /refund/.test(this.$route.path)
       },
       isShowInvoiceBtn(){
         return this.isInvoice || this.isCheckout || this.isRefund
