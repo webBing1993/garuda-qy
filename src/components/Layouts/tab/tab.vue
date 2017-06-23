@@ -96,7 +96,7 @@
   @effect-duration: .3s;
 
   @tab-text-disabled-color: #ddd;
-  @tab-text-default-color: #666;
+  @tab-text-default-color: #A3A3A3;
   @tab-text-active-color:  #04BE02;
   @tab-bar-active-color:  #04BE02;
 

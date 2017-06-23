@@ -76,15 +76,15 @@
               : refurndStatus === 'PENDING'
                 ? `<span class="cell-right other">退款中</span>` : null
         }
-        return `<p><span class="cell-value">${item.room_numbers.join()}</span>${refurndStatusDom}</p>`
+        return `<p><span class="cell-value">${item.room_numbers}</span>${refurndStatusDom}</p>`
       },
       getCellBody(item){
         return `<p><span class="cell-value">微信支付：${this.cashHandling(item.pay_fee)}</span></p>` +
-          `<p><span class="cell-value">退款金额：${this.cashHandling(item.refund)}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, 'hhmm')}</span></p>`;
+          `<p><span class="cell-value">退款金额：${this.cashHandling(item.refund_fee)}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, 'hhmm')}</span></p>`;
       },
       getList(callback){
         this.getrefundlist({
-          status: 'REFUNDED',                    //PENDING退款中、FAILED失败，REFUNDED退款完成,
+          status:'FAILED',
           start_time: this.periodFilter[0],      //开始时间 无则null
           end_time: this.periodFilter[1],        //结束时间 无则null
           onsuccess: callback

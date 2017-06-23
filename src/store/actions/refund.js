@@ -3,7 +3,8 @@ module.exports = {
   getrefundlist(ctx, param){
     ctx.dispatch('resource', {
       url: '/refund_apply_list',
-      params: {
+      method: 'POST',
+      body: {
         status: param.status,
         start_time: param.start_time,
         end_time: param.end_time

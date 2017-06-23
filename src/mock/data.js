@@ -105,19 +105,20 @@ module.exports = {
             price: '3333',
           }],
           guests: [
-            // {
-            //   name: "李四",
-            //   idcard: "343245623456728199"
-            // }, {
-            //   name: "李四",
-            //   idcard: "343245623456728199"
-            // }
+            {
+              name: "李四",
+              idcard: "343245623456728199"
+            }, {
+              name: "李四",
+              idcard: "343245623456728199"
+            }
           ],
           in_time: null, //办理入住时间
           out_time: null, //离店时间
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-          lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status:"FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }, {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
@@ -153,7 +154,8 @@ module.exports = {
           out_time: null, //离店时间
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-          lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status:"PENDING"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }, {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
@@ -190,6 +192,7 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status:"SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }]
     },
     {
@@ -946,7 +949,7 @@ module.exports = {
       order_id: "230420402402401",    //主订单ID
       room_numbers: ["201"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495252046000",  //申请时间
       status: 'FAILED'
     },
@@ -954,7 +957,7 @@ module.exports = {
       order_id: "230420402402402",    //主订单ID
       room_numbers: ["202"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495358557000",  //申请时间
       status: 'FAILED'
     },
@@ -962,7 +965,7 @@ module.exports = {
       order_id: "230420402402403",    //主订单ID
       room_numbers: ["203"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495350550000",  //申请时间
       status: 'FAILED'
     },
@@ -970,7 +973,7 @@ module.exports = {
       order_id: "230420402402404",    //主订单ID
       room_numbers: ["204", "205"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495419805000",  //申请时间
       status: 'REFUNDED'
     },
