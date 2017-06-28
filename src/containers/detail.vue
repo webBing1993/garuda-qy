@@ -22,21 +22,21 @@
         <Cell class="key" title="免押金" :value="detail.status.is_free_deposit ?'是':'否'"></Cell>
       </Group>
 
-      <Group title="支付信息" v-if="detail.bill.payment">
-        <Cell class="key" title="微信交易号" :value="detail.bill.payment.wx_order_id"></Cell>
-        <Cell class="key" title="微信支付" :value="cashHandling(detail.bill.payment.pay_fee)"></Cell>
-        <Cell class="key" title="交易时间" :value="datetimeparse(detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
+      <Group title="支付信息" v-if="detail.bill && detail.bill.payment">
+        <Cell class="key" title="微信交易号" :value="detail.bill.payment && detail.bill.payment.wx_order_id"></Cell>
+        <Cell class="key" title="微信支付" :value="cashHandling(detail.bill.payment && detail.bill.payment.pay_fee)"></Cell>
+        <Cell class="key" title="交易时间" :value="datetimeparse(detail.bill.payment && detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
       </Group>
 
-      <Group title="退款信息" v-if="detail.bill.refund">
-        <Cell class="key" title="消费金额" :value="cashHandling(detail.bill.refund.need_pay_fee)"></Cell>
-        <Cell class="key" title="退款金额" :value="cashHandling(detail.bill.refund.refund_fee)"></Cell>
-        <Cell class="key" title="退款状态" :value="refundStatus(detail.bill.refund.refund_status)"></Cell>
-        <Cell class="key" title="退款时间" :value="datetimeparse(detail.bill.refund.refund_time,'YYYYMMDDhhmm')"></Cell>
+      <Group title="退款信息" v-if="detail.bill && detail.bill.refund">
+        <Cell class="key" title="消费金额" :value="cashHandling(detail.bill.refund && detail.bill.refund.need_pay_fee)"></Cell>
+        <Cell class="key" title="退款金额" :value="cashHandling(detail.bill.refund && detail.bill.refund.refund_fee)"></Cell>
+        <Cell class="key" title="退款状态" :value="refundStatus(detail.bill.refund && detail.bill.refund.refund_status)"></Cell>
+        <Cell class="key" title="退款时间" :value="datetimeparse(detail.bill.refund && detail.bill.refund.refund_time,'YYYYMMDDhhmm')"></Cell>
 
         <div class="button-group" style="padding-top: 0" v-if="isRefund">
-          <p style="color: #DF4A4A;" v-if="detail.bill.refund.refund_status === 'FAILED'">微信退款失败</p>
-          <x-button value="微信退款" v-if="detail.bill.refund.refund_status === 'FAILED'" @onClick="showRefundDialog = true"/>
+          <p style="color: #DF4A4A;" v-if="detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'">微信退款失败</p>
+          <x-button value="微信退款" v-if="detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'" @onClick="showRefundDialog = true"/>
         </div>
       </Group>
 
