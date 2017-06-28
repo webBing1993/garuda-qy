@@ -72,6 +72,12 @@
             case 'invoice':
               path = '/invoice/0'
               break;
+            case 'checkout':
+              path = '/checkout';
+              break;
+            case 'refund':
+              path = '/refund';
+              break;
             case 'setting':
               path = '/setting'
               break;
@@ -102,6 +108,8 @@
         path.match(/livein\/today/) ? title = '当日入住' : null
         path.match(/livein\/all/) ? title = '全部在住' : null
         path.match(/invoice/) ? title = '待开发票' : null
+        path.match(/checkout/) ? title = '退房申请' : null;
+        path.match(/refund/) ? title = '退款' : null;
         this.settitle(title)
       },
       sessionId(val){
