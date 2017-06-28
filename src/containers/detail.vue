@@ -22,13 +22,13 @@
         <Cell class="key" title="免押金" :value="detail.status.is_free_deposit ?'是':'否'"></Cell>
       </Group>
 
-      <Group title="支付信息" v-if="detail.bill">
+      <Group title="支付信息" v-if="detail.bill.payment">
         <Cell class="key" title="微信交易号" :value="detail.bill.payment.wx_order_id"></Cell>
         <Cell class="key" title="微信支付" :value="cashHandling(detail.bill.payment.pay_fee)"></Cell>
         <Cell class="key" title="交易时间" :value="datetimeparse(detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
       </Group>
 
-      <Group title="退款信息" v-if="detail.bill">
+      <Group title="退款信息" v-if="detail.bill.refund">
         <Cell class="key" title="消费金额" :value="cashHandling(detail.bill.refund.need_pay_fee)"></Cell>
         <Cell class="key" title="退款金额" :value="cashHandling(detail.bill.refund.refund_fee)"></Cell>
         <Cell class="key" title="退款状态" :value="refundStatus(detail.bill.refund.refund_status)"></Cell>
