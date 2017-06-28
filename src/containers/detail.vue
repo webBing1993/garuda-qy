@@ -57,12 +57,12 @@
         <div class="button-group" style="padding-top: 0" v-if="isCheckout">
           <p v-if="item.pmscheckout_status === 'FAILED'" style="color: #DF4A4A">PMS退房失败</p>
           <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
-          <p v-else="item.pmscheckout_status === 'SUCCESS'">退房时间: {{datetimeparse(item.pmscheckout_time,'YYYYMMDDhhmm')}}</p>
-          <XButton value="PMS退房"  v-if="item.pmscheckout_status === 'FAILED' || item.pmscheckout_status === 'NONE'" @onClick="pmsCheckout"/>
+          <p v-else-if="item.pmscheckout_status === 'SUCCESS'">退房时间: {{datetimeparse(item.pmscheckout_time,'YYYYMMDDhhmm')}}</p>
+          <XButton value="PMS退房"  v-if="item.pmscheckout_status === 'FAILED' || item.pmscheckout_status === 'NONE'" @onClick="pmsCheckout(item.suborder_id)"/>
         </div>
         <div class="button-group" style="padding-top: 0" v-if="isCheckout && item.lvye_report_status === 'FAILED'">
           <p style="color: #DF4A4A;">旅业系统更新失败</p>
-          <XButton value="重新上传旅业系统" @onClick="pmsCheckout"/>
+          <XButton value="重新上传旅业系统" @onClick="setLvYeStatus(item.suborder_id)"/>
         </div>
       </Group>
 
@@ -139,7 +139,9 @@
         'pmscheckout',
         'confirmInvoice',
         'refundapply',
+        'setUploadStatus'
       ]),
+      //手工入账
       confirmPmsResult() {
         this.conformPmsSync({
           order_id: this.routeId,
@@ -147,12 +149,14 @@
           onsuccess: body => this.detail.status.is_recording_success = true
         })
       },
+      //退款申请
       refundApply(){
         this.refundapply({
           order_id: this.routeId,
           onsuccess: body => this.getDetail()
         })
       },
+      //确认开票
       setInvoiceConfirm () {
         this.confirmInvoice({
           invoice_apply_id: this.detail.invoice.id,
@@ -160,9 +164,17 @@
           onsuccess: () => this.getDetail()
         })
       },
-      pmsCheckout(){
+      //手动上传旅业系统
+      setLvYeStatus(suborderId){
+        this.setUploadStatus({
+          identity_id: suborderId,
+          onsuccess: body => this.getDetail()
+        })
+      },
+      //退房申请
+      pmsCheckout(suborderId){
         this.pmscheckout({
-          id: this.routeId,
+          id: suborderId,
           onsuccess: body => this.getDetail()
         })
       },
