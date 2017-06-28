@@ -5,7 +5,7 @@ module.exports = {
       url: '/refund_apply_list',
       method: 'POST',
       body: {
-        status: param.status,
+        // status: param.status,
         start_time: param.start_time,
         end_time: param.end_time
       },

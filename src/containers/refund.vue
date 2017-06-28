@@ -72,9 +72,7 @@
           refurndStatusDom = refurndStatus === 'FAILED'
             ? `<span class="cell-right warn">退款失败</span>`
             : refurndStatus === 'REFUNDED'
-              ? `<span class="cell-right primary">已退款</span>`
-              : refurndStatus === 'PENDING'
-                ? `<span class="cell-right other">退款中</span>` : null
+              ? `<span class="cell-right primary">已退款</span>` : null
         }
         return `<p><span class="cell-value">${item.room_numbers}</span>${refurndStatusDom}</p>`
       },
@@ -84,7 +82,6 @@
       },
       getList(callback){
         this.getrefundlist({
-          status:'FAILED',
           start_time: this.periodFilter[0],      //开始时间 无则null
           end_time: this.periodFilter[1],        //结束时间 无则null
           onsuccess: callback
