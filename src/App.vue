@@ -73,7 +73,7 @@
               path = '/invoice/0'
               break;
             case 'checkout':
-              path = '/checkout';
+              path = '/checkout/0';
               break;
             case 'refund':
               path = '/refund';
