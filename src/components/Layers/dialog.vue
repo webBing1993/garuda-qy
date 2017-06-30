@@ -7,8 +7,8 @@
         <slot>弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内</slot>
       </div>
       <div class="weui-dialog__ft">
-        <a v-if="cancel" class="weui-dialog__btn weui-dialog__btn_default" @click="onCancel">取消</a>
-        <a v-if="confirm" class="weui-dialog__btn weui-dialog__btn_primary" @click="onConfirm">确定</a>
+        <a v-if="cancel" class="weui-dialog__btn weui-dialog__btn_default" @click="onCancel">否</a>
+        <a v-if="confirm" class="weui-dialog__btn weui-dialog__btn_default" @click="onConfirm">是</a>
       </div>
     </div>
   </div>

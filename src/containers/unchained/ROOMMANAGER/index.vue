@@ -113,7 +113,7 @@
       </ul>
     </footer>
 
-    <popup v-model="showFloorList" maskShow :top="86">
+    <popup v-model="showFloorList">
       <div class="pick-box">
         <p @click="(floorFilterCurrent = null,showFloorList = false)">全部楼层</p>
         <p v-for="item in floorList" @click="(floorFilterCurrent = item.floor_id,showFloorList = false)">

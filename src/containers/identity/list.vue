@@ -3,9 +3,10 @@
     <Tab active-color="#373946">
       <TabItem v-for="(item,index) in tabMenu"
                :key="'tabmenu'+index"
-               :value="item"
-               :selected="route.params.tab == index" @onSelected="toggleTab(index)">
-      </TabItem>
+               :class="{'vux-1px-r': index===0}"
+               :selected="route.params.tab == index"
+               @on-item-click="toggleTab(index)">{{item}}
+        </TabItem>
     </Tab>
 
     <scroller lock-x :scrollbar-x=false

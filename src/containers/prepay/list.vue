@@ -1,10 +1,12 @@
 <template>
   <article>
     <header class="tab-wrapper">
-      <Tab>
-        <TabItem v-for="(item,index) in tabmenu" :key="index"
-                 :value="item" :selected="currentTab === index"
-                 @click.native="replaceto('/precheckin/prepay/'+index)"/>
+      <Tab active-color="#373946">
+        <TabItem v-for="(item,index) in tabmenu"
+                 :key="index"
+                 :class="{'vux-1px-r': index===0}"
+                 :selected="currentTab === index"
+                 @click.native="replaceto('/precheckin/prepay/'+index)">{{item}}</TabItem>
       </Tab>
       <div class="batchbar" v-if="batch">
         <span class="allpick" :class="{batch:batchlist.length === tobeconfirmed.length}" @click="allPick">全选</span>

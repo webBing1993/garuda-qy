@@ -3,8 +3,8 @@ module.exports = {
   getrefundlist(ctx, param){
     ctx.dispatch('resource', {
       url: '/refund_apply_list',
-      params: {
-        status: param.status,
+      method: 'POST',
+      body: {
         start_time: param.start_time,
         end_time: param.end_time
       },
@@ -16,8 +16,13 @@ module.exports = {
   //退款申请
   refundapply(ctx, param){
     ctx.dispatch('resource', {
-      url: '/orders/' + param.order_id + '/refund',
+      url: '/orders/applyRefund',
       method: 'POST',
+      body: {
+        orderId: param.orderId,
+        refundFee: param.refundFee,
+        type: param.type,
+      },
       onSuccess: body => {
         ctx.dispatch('showtoast');
         param.onsuccess ? param.onsuccess(body) : null

@@ -13,6 +13,7 @@ module.exports = {
       owner: "张三",//预订人
       owner_tel: "8618500059035",//预订人手机
       remark: "携程已付300元",//备注
+      is_support_checkout:false,        //是否支持checkout
       rooms_plan: [{
         room_type: "大床房",
         room_count: 2
@@ -36,7 +37,7 @@ module.exports = {
           need_pay_fee: 200,  //消费金额
           refund_fee: 100,  //退款金额
           refund_time: 1495444639000,  //申请退款时间
-          refund_status: 'REFUNDED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          refund_status: 'FAILED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
         }
       },
       status: {
@@ -105,19 +106,20 @@ module.exports = {
             price: '3333',
           }],
           guests: [
-            // {
-            //   name: "李四",
-            //   idcard: "343245623456728199"
-            // }, {
-            //   name: "李四",
-            //   idcard: "343245623456728199"
-            // }
+            {
+              name: "李四",
+              idcard: "343245623456728199"
+            }, {
+              name: "李四",
+              idcard: "343245623456728199"
+            }
           ],
           in_time: null, //办理入住时间
           out_time: null, //离店时间
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-          lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status:"FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }, {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
@@ -153,7 +155,8 @@ module.exports = {
           out_time: null, //离店时间
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-          lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status:"PENDING"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }, {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
@@ -190,6 +193,7 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status:"SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }]
     },
     {
@@ -946,7 +950,7 @@ module.exports = {
       order_id: "230420402402401",    //主订单ID
       room_numbers: ["201"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495252046000",  //申请时间
       status: 'FAILED'
     },
@@ -954,7 +958,7 @@ module.exports = {
       order_id: "230420402402402",    //主订单ID
       room_numbers: ["202"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495358557000",  //申请时间
       status: 'FAILED'
     },
@@ -962,7 +966,7 @@ module.exports = {
       order_id: "230420402402403",    //主订单ID
       room_numbers: ["203"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495350550000",  //申请时间
       status: 'FAILED'
     },
@@ -970,7 +974,7 @@ module.exports = {
       order_id: "230420402402404",    //主订单ID
       room_numbers: ["204", "205"], //房号
       pay_fee: 500000,
-      refund: 20000,
+      refund_fee: 20000,
       created_time: "1495419805000",  //申请时间
       status: 'REFUNDED'
     },
