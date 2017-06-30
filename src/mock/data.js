@@ -13,6 +13,7 @@ module.exports = {
       owner: "张三",//预订人
       owner_tel: "8618500059035",//预订人手机
       remark: "携程已付300元",//备注
+      is_support_checkout:false,        //是否支持checkout
       rooms_plan: [{
         room_type: "大床房",
         room_count: 2
@@ -36,7 +37,7 @@ module.exports = {
           need_pay_fee: 200,  //消费金额
           refund_fee: 100,  //退款金额
           refund_time: 1495444639000,  //申请退款时间
-          refund_status: 'REFUNDED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          refund_status: 'FAILED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
         }
       },
       status: {

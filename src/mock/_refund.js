@@ -4,7 +4,7 @@ import data from './data';
 //退款申请列表
 Mock.mock(
   // data.prefix + '/refund_apply_list',
-   /\/refund_apply_list\?status.+/,
+   /\/refund_apply_list/,
   {
     errcode: "0",
     errmsg: "ok",
@@ -14,7 +14,7 @@ Mock.mock(
 
 //PMS退房
 Mock.mock(
-  /\/orders\/.+\/refund/,// data.prefix + '/orders/{order_id}/refund'
+  /\/orders\/applyRefund/,
   {
     errcode: "0",
     msg: "ok",
