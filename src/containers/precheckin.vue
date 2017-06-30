@@ -4,8 +4,9 @@
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in renderTabMenu"
                  :key="'tabmenu'+index"
-                 :value="item"
-                 :selected="route.params.tab == index" @onSelected="toggleTab(index)">
+                 :class="{'vux-1px-r': index===0}"
+                 :selected="route.params.tab == index"
+                 @on-item-click="toggleTab(index)">{{item}}
         </TabItem>
       </Tab>
     </header>
@@ -32,9 +33,7 @@
       </div>
     </footer>
 
-    <popup v-model="isSortShow"
-           maskShow
-           bottom>
+    <popup v-model="isSortShow">
       <div class="sortmenu">
         <p v-for="(item,index) in sortMenu" :key="index"
            class="sortText" :class="{selected:isSequence === index}"
@@ -44,10 +43,7 @@
       </div>
     </popup>
 
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
+    <popup v-model="isCalendarShow">
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
@@ -206,7 +202,3 @@
     }
   }
 </script>
-
-<style scoped lang="less">
-  @import "index.less";
-</style>

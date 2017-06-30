@@ -3,10 +3,10 @@
     <header>
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in tabmenu"
-                 :key="index"
-                 :value="item"
+                 :key="'tabmenu'+index"
+                 :class="{'vux-1px-r': index===0}"
                  :selected="route.params.tab == index"
-                 @onSelected="toggleTab(index)">
+                 @on-item-click="toggleTab(index)">{{item}}
         </TabItem>
       </Tab>
     </header>
@@ -106,13 +106,8 @@
         typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     },
-    mounted(){
-      this.initList();
+    mounted(){this.initList();
     }
   }
 
 </script>
-
-<style scoped lang="less">
-  @import "./index.less";
-</style>

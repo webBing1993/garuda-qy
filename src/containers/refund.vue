@@ -24,10 +24,7 @@
       </div>
     </footer>
 
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
+    <popup v-model="isCalendarShow">
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
@@ -75,19 +72,16 @@
           refurndStatusDom = refurndStatus === 'FAILED'
             ? `<span class="cell-right warn">退款失败</span>`
             : refurndStatus === 'REFUNDED'
-              ? `<span class="cell-right primary">已退款</span>`
-              : refurndStatus === 'PENDING'
-                ? `<span class="cell-right other">退款中</span>` : null
+              ? `<span class="cell-right primary">已退款</span>` : null
         }
-        return `<p><span class="cell-value">${item.room_numbers.join()}</span>${refurndStatusDom}</p>`
+        return `<p><span class="cell-value">${item.room_numbers}</span>${refurndStatusDom}</p>`
       },
       getCellBody(item){
         return `<p><span class="cell-value">微信支付：${this.cashHandling(item.pay_fee)}</span></p>` +
-          `<p><span class="cell-value">退款金额：${this.cashHandling(item.refund)}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, 'hhmm')}</span></p>`;
+          `<p><span class="cell-value">退款金额：${this.cashHandling(item.refund_fee)}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, 'hhmm')}</span></p>`;
       },
       getList(callback){
         this.getrefundlist({
-          status: 'REFUNDED',                    //PENDING退款中、FAILED失败，REFUNDED退款完成,
           start_time: this.periodFilter[0],      //开始时间 无则null
           end_time: this.periodFilter[1],        //结束时间 无则null
           onsuccess: callback
@@ -106,7 +100,7 @@
     watch: {
       periodFilter() {
         this.list = [];
-        this.getList();
+        this.refreshList();
         this.isCalendarShow = false;
       }
     },

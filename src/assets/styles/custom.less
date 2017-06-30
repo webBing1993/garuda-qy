@@ -1,3 +1,129 @@
+//cell
+.key {
+  .weui-cell__bd {
+    color: @weuiTextColorTitle;
+    .weui-input {
+      color: @weuiTextColorGray;
+    }
+  }
+  .weui-label {
+    color: @weuiTextColorTitle;
+  }
+}
+
+.weui-cells__title {
+  color: @weuiTextColorTitle;
+}
+
+.weui-cell__hd {
+  .weui-icon-info {
+    display: block;
+    margin-right: 5px;
+    width: 20px;
+  }
+  &.weui-cell__hd_lg {
+    position: relative;
+    //margin-right: 10px;
+    .weui-icon-info {
+      width: 50px;
+    }
+    .weui-badge {
+      position: absolute;
+      top: -.4em;
+      right: -.4em;
+    }
+  }
+}
+
+.weui-cell__bd {
+  .weui-input {
+    color: @weuiTextColorGray;
+  }
+}.cell-key {
+  display: inline-block;
+  min-width: 4em;
+  text-align: right;
+  color: #8a8a8a;
+}
+
+.cell-key2 {
+  display: inline-block;
+  min-width: 5em;
+  text-align: right;
+  color: #8a8a8a;
+}
+
+.cell-key3 {
+  display: inline-block;
+  min-width: 3em;
+  text-align: right;
+  color: #8a8a8a;
+}
+
+.cell-right {
+  float: right;
+  &.warn {
+    color: @weuiBtnWarnBg;
+  }
+  &.other {
+    color: @weuiBtnOtherBg;
+  }
+  &.primary {
+    color: @weuiBtnPrimaryBg;
+  }
+  &.gray {
+    color: #8a8a8a;
+  }
+}
+
+.cell-body {
+  line-height: 2;
+}
+
+.cell-multi {
+  //color: #4a4a4a;
+  line-height: 2.5;
+}
+
+.cell-title {
+  display: inline-block;
+  min-width: 4em;
+  text-align: right;
+}
+
+.cell-text {
+  color: #4a4a4a;
+}
+
+//button
+.weui-btn_plain-default {
+  background-color: #ffffff;
+}
+
+.weui-btn + .weui-btn {
+  border: 1px solid;
+  margin-top: @weuiBtnDefaultGap;
+}
+
+//tab
+//.weui-navbar {
+//  position: relative;
+//  background-color: #fff;
+//  z-index: 0;
+//}
+//
+//.weui-navbar__item {
+//  box-sizing: border-box;
+//  height: 45px;
+//  padding: 0;
+//  line-height: 42px;
+//  &.weui-bar__item_on {
+//    color: #4a4a4a;
+//    border-bottom: 3px solid #373946;
+//    background-color: #fff;
+//  }
+//}
+
 body {
   background-color: #EAEDF0;
   font-size: 14px;
@@ -37,6 +163,23 @@ iframe {
   width: 100%;
 }
 
+.sortmenu {
+  padding: 15px 0;
+  background-color: #ffffff;
+  text-align: center;
+  line-height: 33px;
+  color: #8B8B8B;
+  .selected {
+    color: #4a4a4a;
+    span {
+      border-bottom: solid 1px #000;
+    }
+  }
+  span {
+    padding: 5px 0;
+  }
+}
+
 .synchronize {
   display: flex;
   justify-content: space-between;
@@ -44,7 +187,13 @@ iframe {
   margin: 7.5px 15px -2.5px 15px;
   color: #2B2B2B;
   font-size: 14px;
+  box-sizing: border-box;
   .weui-btn_mini {
+    margin-right: 0;
+    padding: 0 30px;
+    line-height: 2.7;
+  }
+  .weui-btn_warn{
     margin-right: 0;
     padding: 0 30px;
     line-height: 2.7;
@@ -121,134 +270,6 @@ footer {
 
 }
 
-.cell-key {
-  display: inline-block;
-  min-width: 4em;
-  text-align: right;
-  color: #8a8a8a;
-}
-
-.cell-key2 {
-  display: inline-block;
-  min-width: 5em;
-  text-align: right;
-  color: #8a8a8a;
-}
-.cell-key3 {
-  display: inline-block;
-  min-width: 3em;
-  text-align: right;
-  color: #8a8a8a;
-}
-
-.cell-right {
-  float: right;
-  &.warn {
-    color: @weuiBtnWarnBg;
-  }
-  &.other {
-    color: @weuiBtnOtherBg;
-  }
-  &.primary {
-    color: @weuiBtnPrimaryBg;
-  }
-  &.gray {
-    color: #8a8a8a;
-  }
-}
-
-.cell-body {
-  line-height: 2;
-}
-
-.cell-multi {
-  //color: #4a4a4a;
-  line-height: 2.5;
-}
-
-.cell-title {
-  display: inline-block;
-  min-width: 4em;
-  text-align: right;
-}
-
-.cell-text {
-  color: #4a4a4a;
-}
-
-//button
-.weui-btn_plain-default {
-  background-color: #ffffff;
-}
-
-.weui-btn + .weui-btn {
-  border: 1px solid;
-  margin-top: @weuiBtnDefaultGap;
-}
-
-//cell
-.key {
-  .weui-cell__bd {
-    color: @weuiTextColorTitle;
-    .weui-input {
-      color: @weuiTextColorGray;
-    }
-  }
-  .weui-label {
-    color: @weuiTextColorTitle;
-  }
-}
-
-.weui-cells__title {
-  color: @weuiTextColorTitle;
-}
-
-.weui-cell__hd {
-
-  .weui-icon-info {
-    display: block;
-    margin-right: 5px;
-    width: 20px;
-  }
-  &.weui-cell__hd_lg {
-    position: relative;
-    //margin-right: 10px;
-    .weui-icon-info {
-      width: 50px;
-    }
-    .weui-badge {
-      position: absolute;
-      top: -.4em;
-      right: -.4em;
-    }
-  }
-}
-
-.weui-cell__bd {
-  .weui-input {
-    color: @weuiTextColorGray;
-  }
-}
-
-//tab
-.weui-navbar {
-  position: relative;
-  background-color: #fff;
-  z-index: 0;
-}
-
-.weui-navbar__item {
-  box-sizing: border-box;
-  height: 45px;
-  padding: 0;
-  line-height: 42px;
-  &.weui-bar__item_on {
-    color: #4a4a4a;
-    border-bottom: 3px solid #373946;
-    background-color: #fff;
-  }
-}
-
 .no-data {
   display: flex;
   flex-direction: column;
@@ -266,4 +287,27 @@ footer {
     background-position: center;
     background-size: contain;
   }
+}
+
+.refund-dialog-title {
+  font-size: 16px;
+  color: #2B2B2B;
+  padding-top: 15px;
+}
+
+.refund-money {
+  width: 100%;
+  height: 45px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  outline: none;
+  border: 1px solid #E6E6E6;
+  border-radius: 6px;
+  text-indent: 1em;
+  font-size: 16px;
+  color: #4A4A4A;
+}
+
+.weui-dialog {
+  border-radius: 8px;
 }

@@ -4,9 +4,10 @@
       <Tab active-color="#373946">
         <TabItem v-for="(item,index) in tabMenu"
                  :key="'tabmenu'+index"
-                 :value="item"
                  :selected="route.params.tab == index"
-                 @onSelected="toggleTab(index)"/>
+                 :class="{'vux-1px-r': index===0}"
+                 @on-item-click="toggleTab(index)">{{item}}
+        </TabItem>
       </Tab>
     </header>
 
@@ -15,12 +16,12 @@
         上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
         <x-button mini value="同步" @onClick="syncTime"/>
       </p>
-      <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>
+      <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex> 0" class="no-data">暂无数据</div>
       <Group v-for="(item,index) in renderList"
              :key="index"
              :title="titleFilter(index)">
         <Cell :title="getCellTitle(item)"/>
-        <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/application/detail/'+item.order_id)"/>
+        <Cell :title="getGuestItem(item)" link @onClick="goto('/checkout/detail/'+item.order_id)"/>
       </Group>
     </div>
 
@@ -33,10 +34,7 @@
       </div>
     </footer>
 
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
+    <popup v-model="isCalendarShow">
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
@@ -148,7 +146,7 @@
       },
       periodFilter() {
         this.resetList();
-        this.getList();
+        this.refreshList();
         this.isCalendarShow = false;
       }
     }

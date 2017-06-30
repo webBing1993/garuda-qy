@@ -32,19 +32,19 @@ const precheckin = [{
   },
   children: [{
     path: 'prepay/:tab',
-    component: require('./containers/precheckin/PREPAY/list.vue')
+    component: require('./containers/prepay/list.vue')
   }, {
     path: 'prepay/detail/:id',
-    component: require('./containers/precheckin/PREPAY/detail.vue')
+    component: require('./containers/prepay/detail.vue')
   }, {
     path: 'order/today/:tab',
-    component: require('./containers/precheckin/ORDER/list.vue')
+    component: require('./containers/precheckin.vue')
   }, {
     path: 'order/history/:tab',
-    component: require('./containers/precheckin/ORDER/list.vue')
+    component: require('./containers/precheckin.vue')
   }, {
     path: 'order/detail/:id',
-    component: require('./containers/precheckin/ORDER/detail.vue')
+    component: require('./containers/detail.vue')
   }]
 }];
 
@@ -56,16 +56,16 @@ const checkin = [{
   },
   children: [{
     path: 'today/:tab',
-    component: require('./containers/checkin/IDENTITY/list')
+    component: require('./containers/identity/list')
   }, {
     path: 'history/:tab',
-    component: require('./containers/checkin/IDENTITY/list')
+    component: require('./containers/identity/list')
   }, {
     path: 'todo/:id',
-    component: require('./containers/checkin/IDENTITY/todo')
+    component: require('./containers/identity/todo')
   }, {
     path: ':id',
-    component: require('./containers/checkin/IDENTITY/detail')
+    component: require('./containers/identity/detail')
   }]
 }, {
   path: '/livein',
@@ -75,13 +75,13 @@ const checkin = [{
   },
   children: [{
     path: 'today',
-    component: require('./containers/checkin/LIVEIN/list.vue')
+    component: require('./containers/livein.vue')
   }, {
     path: 'all',
-    component: require('./containers/checkin/LIVEIN/list.vue')
+    component: require('./containers/livein.vue')
   }, {
     path: ':id',
-    component: require('./containers/checkin/LIVEIN/detail.vue')
+    component: require('./containers/detail.vue')
   }]
 }];
 const checkout = [{
@@ -91,11 +91,11 @@ const checkout = [{
     template: `<keep-alive><router-view/></keep-alive>`
   },
   children: [{
-    path: 'application/:tab',
-    component: require('./containers/checkout/application/list.vue')
+    path: ':tab',
+    component: require('./containers/checkout.vue')
   }, {
-    path: 'application/detail/:id',
-    component: require('./containers/checkout/application/detail.vue')
+    path: 'detail/:id',
+    component: require('./containers/detail.vue')
   }]
 }];
 
@@ -107,11 +107,11 @@ const refund = [{
   },
   children: [{
     path: '/',
-    component: require('./containers/refund/list.vue')
+    component: require('./containers/refund.vue')
   },
     {
       path: ':id',
-      component: require('./containers/refund/detail.vue')
+      component: require('./containers/detail.vue')
     }]
 }];
 
@@ -123,10 +123,10 @@ const invoice = [{
   },
   children: [{
     path: ':tab',
-    component: require('./containers/invoice/INVOICE/list.vue')
+    component: require('./containers/invoice.vue')
   }, {
     path: 'detail/:id',
-    component: require('./containers/invoice/INVOICE/detail.vue')
+    component: require('./containers/detail.vue')
   },]
 }];
 
