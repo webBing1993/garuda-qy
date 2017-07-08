@@ -28,7 +28,7 @@
         <Cell class="key" title="交易时间" :value="datetimeparse(detail.bill.payment && detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
       </Group>
 
-      <Group title="退款信息" v-if="detail.bill && detail.bill.refund">
+      <Group title="退款信息" v-if="detail.bill">
         <Cell class="key" title="消费金额" :value="cashHandling(detail.bill.refund && detail.bill.refund.need_pay_fee)"></Cell>
         <Cell class="key" title="退款金额" :value="cashHandling(detail.bill.refund && detail.bill.refund.refund_fee)"></Cell>
         <Cell class="key" title="退款状态" :value="refundStatus(detail.bill.refund && detail.bill.refund.refund_status)"></Cell>
