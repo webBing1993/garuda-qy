@@ -71,7 +71,9 @@ Vue.mixin({
       return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
     },
     cashHandling(val, prefix){
-      return prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100)
+      return val
+        ? prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100) : ''
+
     },
     getBreakFast(breakfastStatus){
       if (breakfastStatus === 0) {
