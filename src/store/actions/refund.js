@@ -16,11 +16,11 @@ module.exports = {
   //退款申请
   refundapply(ctx, param){
     ctx.dispatch('resource', {
-      url: '/orders/applyRefund',
+      url: '/applyRefund',
       method: 'POST',
       body: {
         orderId: param.orderId,
-        refundFee: param.refundFee,
+        refundfee: param.refundfee,
         type: param.type,
       },
       onSuccess: body => {
