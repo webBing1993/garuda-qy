@@ -168,7 +168,7 @@
       refundApply(){
         this.refundapply({
           orderId: this.routeId,
-          refundFee: this.isSupportCheckout ? null : this.refundValue,
+          refundfee: this.isSupportCheckout ? null : +this.refundValue * 100,
           type: this.isSupportCheckout ? null : 2,
           onsuccess: body => {
             this.getDetail();
