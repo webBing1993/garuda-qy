@@ -37,7 +37,7 @@
         <div class="button-group" style="padding-top: 0" v-if="isRefund">
           <p style="color: #DF4A4A;" v-if="detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'">
             微信退款失败</p>
-          <x-button value="微信退款" v-if="isRefund" @onClick="refundMode"/>
+          <x-button value="微信退款" v-if="isRefund && detail.bill.refund.refund_status !== 'REFUNDED'" @onClick="refundMode"/>
         </div>
       </Group>
 
