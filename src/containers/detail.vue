@@ -137,7 +137,11 @@
           if(this.isSupportCheckout) {
             this.detail.bill.refund.refund_status !== 'REFUNDED' ? isShow = true : null
           } else {
-            isShow = true
+            if(this.detail.bill.refund) {
+              this.detail.bill.refund.refund_status !== 'REFUNDED' ? isShow = true : null
+            }else {
+              isShow = true
+            }
           }
           return isShow;
       }
