@@ -98,6 +98,7 @@
 //button
 .weui-btn_plain-default {
   background-color: #ffffff;
+  margin-top: @weuiBtnDefaultGap;
 }
 
 .weui-btn + .weui-btn {
@@ -203,6 +204,13 @@ iframe {
 .button-group {
   flex-grow: 1;
   padding: 10px 15px;
+  .pick-btn-group {
+    display: flex;
+    flex-direction: row;
+    .weui-btn {
+      width: 40%;
+    }
+  }
 }
 
 .tips {
