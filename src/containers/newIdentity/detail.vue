@@ -19,43 +19,24 @@
     </div>
 
     <div class="order-info">
-      <div class="info-col">
-        <label>房间号码:</label>
-        <input type="number" v-model="roomNumber">
-      </div>
-      <div class="info-col">
-        <label>入住几晚:</label>
-        <input type="number" v-model="days">
-      </div>
-      <div class="info-col">
-        <label>入住时间:</label>
-        <span @click="isInTimeShow = true" class="select-time">{{datetimeparse(Date.parse(new Date()))}}</span>
-      </div>
-      <div class="info-col">
-        <label>离店时间:</label>
-        <span @click="isOutTimeShow = true" class="select-time">{{this.datetimeparse(outTimeFilter)}}</span>
-      </div>
+      <div class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></div>
+      <div class="info-col"><label>入住几晚:</label><input type="number" v-model="days"></div>
+      <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
+      <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></div>
       <x-button value="上传旅业系统" @onClick="showDialog = true"></x-button>
     </div>
-    <Dialog v-model="showDialog" @onConfirm="btnPresent.callback" confirm cancel>
-      <p>姓名：{{detail.owner}}</p>
-      <p>证件号码：{{detail.guests ? detail.guests[0].idcard :''}}</p>
-      <p>房间：{{roomNumber}}</p>
-      <p>入住天数：{{days}}</p>
-      <p>入住日期：{{inTimeFilter}}</p>
-      <p>离店日期：{{outTimeFilter}}</p>
+
+    <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
+      <ul class="dialog-info">
+        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{detail.guests ? detail.guests[0].name :''}}</span></li>
+        <li class="info-col"><span class="dialog-key">证件号码：</span><span class="dialog-value">{{detail.guests ? idnumber(detail.guests[0].idcard) :''}}</span></li>
+        <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住日期：</span><span class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">离店日期：</span><span class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
+      </ul>
     </Dialog>
 
-    <!--lvye-->
-    <div v-if="policeIdentitySuccess">
-      <p class="upload-time">{{lvyeStatusName}}</p>
-      <div class="button-group">
-        <x-button v-if="!btnPresent.status || btnPresent.hasNext"
-                  :value="btnPresent.status ? '下一个' : '上传旅业系统'"
-                  :plain="!!btnPresent.status"
-                  @onClick="btnPresent.callback"></x-button>
-      </div>
-    </div>
   </article>
 </template>
 
@@ -66,69 +47,30 @@
     data(){
       return {
         detail: {},
-        isInTimeShow: false,
-        isOutTimeShow: false,
-        inTimeFilter:'',
+        roomNumber:'',
+        days: null,
+        inTimeFilter: Date.parse(new Date()),
         outTimeFilter:'',
         showDialog: false,
-        roomNumber:'',
-        days: null
       }
     },
     computed: {
       ...mapState([
         'route'
       ]),
-
       identityId(){
         return this.route.params.id
       },
-      identityResult(){
-        return this.detail.status && this.detail.status !== 'PENDING'
-          ? this.detail.status === 'AGREED' || this.detail.status === 'AUTO_AGREED'
-            ? '已通过'
-            : '已拒绝'
-          : ''
-      },
-      policeIdentitySuccess(){
-        return this.detail.status === 'AUTO_AGREED' || this.detail.status === 'AGREED'
-      },
-      lvyeUploadSuccess(){
-//        return this.detail.lvye_report_status !== 'FAILED'
-        return this.detail.lvye_report_status === 'SUCCESS'
-      },
-      btnPresent(){
-        return {
-          status: this.lvyeUploadSuccess,
-          hasNext: !!this.detail.next_identity_id,
-          callback: () => this.lvyeUploadSuccess ? this.replaceto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
-        }
-      },
-      lvyeStatusName(){
-        if (this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING') {
-          return '正在上传旅业系统'
-        } else if (this.detail.lvye_report_status === 'FAILED') {
-          return '上传旅业系统失败'
-        } else if (!this.detail.lvye_report_status || this.detail.lvye_report_status === 'NONE') {
-          return '未上传旅业系统'
-        } else {
-          return '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
-        }
-//        return this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING'
-//          ? '正在上传旅业系统'
-//          : this.detail.lvye_report_status === 'FAILED' || !this.detail.lvye_report_status
-//            ? '上传旅业系统失败，请重试'
-//            : '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
-      }
     },
     methods: {
       ...mapActions([
         'replaceto',
         'getIdentity',
-//        'setIdentityStatus',
         'setUploadStatus'
       ]),
       resetFilter() {
+        this.days = '';
+        this.room_number = '';
         this.inTimeFilter = '';
         this.outTimeFilter = '';
       },
@@ -138,18 +80,16 @@
           onsuccess: body => this.detail = body.data
         })
       },
-//      setidentitystatus(val){
-//        this.setIdentityStatus({
-//          identity_id: this.identityId,
-//          suborder_id: this.detail.suborder_id,
-//          status: val ? 'AGREED' : 'REFUSED',
-//          onsuccess: body => this.detail.status = val ? 'AGREED' : 'REFUSED'
-//        })
-//      },
-      setuploadstatus(){
+      setMultiConfirm() {
         this.setUploadStatus({
-          identity_id: this.identityId,
-          onsuccess: body => this.getDetail()
+          identity_id: this.detail.guests ? this.detail.guests[0].idcard.split(' '):'',//转数组
+          room_number: this.roomNumber,
+          days: this.days,
+          in_time: this.inTimeFilter,
+          out_time: this.outTimeFilter,
+          onsuccess: () => {
+            this.resetFilter();
+          }
         })
       },
     },
@@ -160,15 +100,13 @@
       days(val){
         this.outTimeFilter = '';
         let nowDate = new Date();
-        console.log(val);
         let tempTime = nowDate.setTime(nowDate.getTime()+24*60*60*1000*val);
-        console.log(nowDate.setTime(nowDate.getTime()+24*60*60*1000*val))
         this.outTimeFilter = tempTime
       },
     },
     activated(){
-      this.detail = {}
-      this.getDetail()
+      this.detail = {};
+      this.getDetail();
     }
   }
 </script>
@@ -176,77 +114,3 @@
 <style scoped lang="less">
   @import "index.less";
 </style>
-
-
-<!--<template>-->
-<!--<article>-->
-<!--<scroller v-if="detail.identity_id" lock-x :depend="detail">-->
-<!--<div class="scroller-wrap">-->
-<!--<group title="预订信息">-->
-<!--<cell title="预订人" :value="detail.owner"/>-->
-<!--<cell title="手机号" :value="detail.phone_number"/>-->
-<!--<cell title="入住时间" :value="datetimeparse(detail.in_time)"/>-->
-<!--<cell title="离店时间" :value="datetimeparse(detail.out_time)"/>-->
-<!--<cell title="房型" :value="detail.room.room_type_name"/>-->
-<!--</group>-->
-<!--<group title="验证信息">-->
-<!--<cell :title="detail.room.room_number" :value="datetimeparse(detail.created_time,'','验证时间：')"/>-->
-<!--<div class="guestinfo" v-for="item in detail.guests">-->
-<!--<p><span>姓名</span>{{item.name}}</p>-->
-<!--<p><span>民族</span>{{item.ethnicity}}</p>-->
-<!--<p><span>身份证</span>{{item.idcard}}</p>-->
-<!--<p><span>地址</span>{{item.address}}</p>-->
-<!--<div class="photos">-->
-<!--<img :src="item.photo" alt="身份证照片">-->
-<!--<img :src="item.live_photo" alt="当前照片">-->
-<!--</div>-->
-<!--<p class="similarity">相似度 {{item.similarity}}%</p>-->
-<!--</div>-->
-<!--</group>-->
-<!--</div>-->
-<!--</scroller>-->
-<!--</article>-->
-<!--</template>-->
-
-<!--<script type="text/ecmascript-6">-->
-<!--import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';-->
-
-<!--module.exports = {-->
-<!--data(){-->
-<!--return {-->
-<!--detail: {}-->
-<!--}-->
-<!--},-->
-<!--computed: {-->
-<!--...mapState([-->
-<!--'route'-->
-<!--]),-->
-<!--identityId(){-->
-<!--return this.route.params.id-->
-<!--}-->
-<!--},-->
-<!--methods: {-->
-<!--...mapActions([-->
-<!--'getIdentity'-->
-<!--]),-->
-<!--getDetail(){-->
-<!--this.getIdentity({-->
-<!--identity_id: this.identityId,-->
-<!--onsuccess: body => this.detail = body.data-->
-<!--})-->
-<!--}-->
-<!--},-->
-<!--watch: {-->
-<!--identityId(val){-->
-<!--val ? this.getDetail() : null-->
-<!--}-->
-<!--},-->
-<!--activated(){-->
-<!--this.getDetail()-->
-<!--}-->
-<!--}-->
-<!--</script>-->
-
-<!--<style scoped lang="less">-->
-<!--@import "index.less";-->
-<!--</style>-->

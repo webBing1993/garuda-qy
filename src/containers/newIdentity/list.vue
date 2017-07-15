@@ -8,10 +8,6 @@
                  :selected="currentTab === index"
                  @click.native="replaceto('/new-identity/handle/'+index)">{{item}}</TabItem>
       </Tab>
-      <!--<div class="batchbar" v-if="batch">-->
-        <!--<span class="allpick" :class="{batch:batchlist.length === tobeHandled.length}" @click="allPick">全选</span>-->
-        <!--<span @click="cancelPick">取消操作</span>-->
-      <!--</div>-->
     </header>
 
     <div class="list-wrapper">
@@ -41,7 +37,7 @@
       <div class="button-group">
         <div class="pick-btn-group" v-if="batch">
           <x-button value="取消" @onClick="cancelPick" plain/>
-          <x-button value="确认选择" @onClick="setMultiConfirm"/>
+          <x-button value="确认选择" @onClick="showDialog = true"/>
         </div>
         <x-button class="blue-btn" v-else @onClick="goPick()" value="批量处理"/>
       </div>
@@ -62,6 +58,25 @@
            animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
+
+    <Dialog v-model="showDialog" :confirm="!select" :cancel="!select" @onConfirm="setMultiConfirm" >
+      <div class="confirm-info" v-if="select">
+        <div class="info-col"><span>入住人:</span><span>{{this.selectedName.join()}}</span></div>
+        <div class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></div>
+        <div class="info-col"><label>入住几晚:</label><input type="number" v-model="days"></div>
+        <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
+        <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></div>
+        <x-button value="上传旅业系统" @onClick="select = false"></x-button>
+      </div>
+
+      <ul class="dialog-info" v-if="!select">
+        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{selectedName.join()}}</span></li>
+        <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住日期：</span><span class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">离店日期：</span><span class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
+      </ul>
+    </Dialog>
   </article>
 </template>
 
@@ -80,7 +95,13 @@
         tobeHandledPageIndex: 0,
         handledPageIndex: 0,
         periodFilter: [null, null],
-        isCalendarShow: false
+        isCalendarShow: false,
+        roomNumber:'',
+        days: null,
+        inTimeFilter: Date.parse(new Date()),
+        outTimeFilter:'',
+        showDialog: false,
+        select: true
       }
     },
     computed: {
@@ -96,13 +117,22 @@
       },
       renderPageIndex(){
         return this.currentTab ? this.handledPageIndex : this.tobeHandledPageIndex
+      },
+      selectedName() {
+          let names = [];
+          this.tobeHandled.forEach(i => {
+            let tempIndex = this.batchlist.findIndex(id => i.identity_id === id);
+            tempIndex > -1 && names.push(i.owner);
+          });
+          return names;
       }
     },
     methods: {
       ...mapActions([
         'getIdentities',
         'replaceto',
-        'goto'
+        'goto',
+        'setUploadStatus'
       ]),
       goPick(){
         // 批量选择
@@ -133,14 +163,13 @@
         }
       },
       tobeHandledItem(item){
-        let dom = ``;
+        let dom = `<span class="cell-right warn">待处理</abbr></span>`;
         item.guests.forEach(i => {
           dom +=`<div class="cell-body">` +
             `<p><span class="cell-key">姓名：</span><span class="cell-value">${i.name}</span></p>` +
             `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(i.idcard)}</span></p>` +
             `</div>`
         });
-
         return dom
       },
       handledItem(item,in_time,out_time){
@@ -170,28 +199,32 @@
         }
       },
       setMultiConfirm() {
-        if (this.batchlist.length != 0) {
-//          this.multiconfirm({
-//            order_ids: this.batchlist,
-//            onsuccess: () => {
-//              this.batchlist.forEach(item => {
-//                let tempIndex = this.tobeHandled.findIndex(i => i.identity_id === item);
-//                tempIndex > -1
-//                  ? this.tobeHandled.splice(tempIndex, 1)
-//                  : null
-//              });
-//
-//              this.cancelPick()
-//            }
-//          })
+        if (this.batchlist.length !== 0) {
+          this.setUploadStatus({
+            identity_id: this.batchlist,
+            room_number: this.roomNumber, //房间号码
+            days: this.days, //入住几晚
+            in_time: this.inTimeFilter, //入住几晚
+            out_time: this.outTimeFilter, //入住几晚
+            onsuccess: () => {
+              this.batchlist.forEach(item => {
+                let tempIndex = this.tobeHandled.findIndex(i => i.identity_id === item);
+                tempIndex > -1
+                  ? this.tobeHandled.splice(tempIndex, 1)
+                  : null
+              });
+
+              this.cancelPick()
+            }
+          })
         }
       },
       refreshList(){
         this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data])
       },
       resetList(){
-        this.handled = []
-        this.tobeHandled = []
+        this.handled = [];
+        this.tobeHandled = [];
       },
       resetFilter() {
         this.periodFilter = [null, null]
@@ -206,7 +239,13 @@
       },
       periodFilter(){
         this.refreshList()
-      }
+      },
+      days(val){
+        this.outTimeFilter = '';
+        let nowDate = new Date();
+        let tempTime = nowDate.setTime(nowDate.getTime()+24*60*60*1000*val);
+        this.outTimeFilter = tempTime
+      },
     },
     activated(){
       this.refreshList();
