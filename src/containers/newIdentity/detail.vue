@@ -1,20 +1,20 @@
 <template>
   <article>
 
-    <div class="guestcard" v-for="item in detail.guests">
+    <div class="guestcard">
       <div class="hd">
         <ul>
-          <li><span><abbr>姓名</abbr>{{item.name}}</span></li>
-          <li><span><abbr>性别</abbr>{{item.sex}}</span><span><abbr>民族</abbr>{{item.ethnicity}}</span></li>
-          <li><span><abbr>生日</abbr>{{item.date_of_birth}}</span></li>
-          <li><span><abbr>住址</abbr>{{item.address}}</span></li>
-          <li><span><abbr>身份证号</abbr>{{idnumber(item.idcard)}}</span></li>
+          <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
+          <li><span><abbr>性别</abbr>{{detail.sex}}</span><span><abbr>民族</abbr>{{detail.ethnicity}}</span></li>
+          <li><span><abbr>生日</abbr>{{detail.dateOfBirth}}</span></li>
+          <li><span><abbr>住址</abbr>{{detail.address}}</span></li>
+          <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
         </ul>
-        <img :src="item.photo" alt="身份证照片">
+        <img :src="detail.photo" alt="身份证照片">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span>相似度： <abbr>{{item.similarity}}%</abbr></span></p>
-        <img :src="item.live_photo" alt="现场照片">
+        <p><span>现场图片</span><span>相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
+        <img :src="detail.livePhoto" alt="现场照片">
       </div>
     </div>
 
@@ -28,8 +28,8 @@
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
       <ul class="dialog-info">
-        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{detail.guests ? detail.guests[0].name :''}}</span></li>
-        <li class="info-col"><span class="dialog-key">证件号码：</span><span class="dialog-value">{{detail.guests ? idnumber(detail.guests[0].idcard) :''}}</span></li>
+        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{detail.name}}</span></li>
+        <li class="info-col"><span class="dialog-key">证件号码：</span><span class="dialog-value">{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
         <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
         <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
         <li class="info-col"><span class="dialog-key">入住日期：</span><span class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
@@ -65,28 +65,28 @@
     methods: {
       ...mapActions([
         'replaceto',
-        'getIdentity',
-        'setUploadStatus'
+        'newIdentityDetail',
+        'reportLvYe'
       ]),
       resetFilter() {
         this.days = '';
-        this.room_number = '';
+        this.roomNumber = '';
         this.inTimeFilter = '';
         this.outTimeFilter = '';
       },
       getDetail(){
-        this.getIdentity({
+        this.newIdentityDetail({
           identity_id: this.identityId,
           onsuccess: body => this.detail = body.data
         })
       },
       setMultiConfirm() {
-        this.setUploadStatus({
-          identity_id: this.detail.guests ? this.detail.guests[0].idcard.split(' '):'',//转数组
-          room_number: this.roomNumber,
-          days: this.days,
-          in_time: this.inTimeFilter,
-          out_time: this.outTimeFilter,
+        this.reportLvYe({
+          lvyeReportRecordIds: this.detail.idCard.split(' '),//旅业上报记录Id
+          roomNumber: this.roomNumber,//房间号
+          nights: this.days,//入住晚数
+          inTime: this.inTimeFilter,//入住时间
+          outTime: this.outTimeFilter,//离店时间
           onsuccess: () => {
             this.resetFilter();
           }

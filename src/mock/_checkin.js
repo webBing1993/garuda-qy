@@ -16,6 +16,15 @@ Mock
     }
   )
   .mock(
+    // 获取身份验证列表 //lvye/searchLvyeReportInfo
+    data.prefix + '/lvye/searchLvyeReportInfo',
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: data.newIdentityList
+    }
+  )
+  .mock(
     /\/identities\/.+/,
     {
       errcode: "0",

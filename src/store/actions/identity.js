@@ -49,5 +49,46 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
-  }
+  },
+  newIdentityList(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/lvye/searchLvyeReportInfo',
+      method: 'POST',
+      body: {
+        startTime: param.startTime,
+        endTime: param.endTime,
+        isDesc: true,//true 降序
+        reportInStatuses: param.reportInStatuses,//需要的入住上报旅业状态
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  newIdentityDetail(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/lvye/lvyeReportInfo/' + param.identity_id,
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  reportLvYe(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/lvye/lvyeReport',
+      method: 'PUT',
+      body: {
+        lvyeReportRecordIds: param.lvyeReportRecordIds,//旅业上报记录Id
+        roomNumber: param.roomNumber,//房间号
+        nights: param.nights,//入住晚数
+        inTime: param.inTime,//入住时间
+        outTime: param.outTime,//离店时间
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast');
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+
 }

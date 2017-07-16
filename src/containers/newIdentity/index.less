@@ -27,6 +27,7 @@
     }
   }
 }
+
 .batch {
   .checker-item {
     &:before {
@@ -47,6 +48,7 @@
     }
   }
 }
+
 .guestcard {
   margin: 15px 10px;
   background-color: #ffffff;
@@ -112,7 +114,7 @@
   }
 }
 
-.order-info,.confirm-info {
+.order-info, .confirm-info {
   margin: 15px 10px;
   padding: 15px 10px;
   background-color: #ffffff;
@@ -120,9 +122,10 @@
   //border: solid 1px #e0e0e0;
   box-sizing: border-box;
   .info-col {
-    margin: 15px  0 10px 0;
+    margin: 15px 0 10px 0;
     display: flex;
     flex-direction: row;
+    text-align: left;
     align-items: center;
     justify-content: space-between;
   }
@@ -149,20 +152,32 @@
     }
   }
 }
+
 .confirm-info {
   margin: 0;
+  .info-col {
+    .select-name {
+      flex-grow: 1;
+      margin-left: 8px;
+    }
+    select {
+      flex-grow: 1;
+    }
+  }
 }
+
 .upload {
   color: #DF4A4A;
   margin-left: 15px;
 }
-.upload-time{
+
+.upload-time {
   color: #4A4A4A;
   font-size: 14px;
   margin-left: 15px;
 }
 
-footer{
+footer {
   &:before {
     content: " ";
     position: absolute;
@@ -203,5 +218,16 @@ footer{
       text-align: left;
       color: #4A4A4A;
     }
+  }
+}
+
+select {
+  outline: none;
+  :after {
+    width:0;
+    height:0;
+    border-style: solid;
+    border-width: 10px;
+    border-color: #f65314 transparent transparent transparent;
   }
 }
