@@ -223,11 +223,16 @@ footer {
 
 select {
   outline: none;
-  :after {
-    width:0;
-    height:0;
-    border-style: solid;
-    border-width: 10px;
-    border-color: #f65314 transparent transparent transparent;
+  padding:10px 0;
+  border: 1px solid #E6E6E6;
+  &::-ms-expand {
+    display: block;
   }
+//  &:after {
+//    width:0;
+//    height:0;
+//    border-style: solid;
+//    border-width: 10px;
+//    border-color: #f65314 transparent transparent transparent;
+//  }
 }

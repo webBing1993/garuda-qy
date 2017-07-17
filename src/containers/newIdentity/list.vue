@@ -64,9 +64,11 @@
       <div class="confirm-info" v-if="select">
         <div class="info-col"><span>入住人:</span><span class="select-name">{{this.selectedName.join()}}</span></div>
         <div class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></div>
-        <div class="info-col"><label>入住几晚:</label><select class="daysSelect" v-model="days">
-          <option v-for="item in selectList" :value="item">{{item}}</option>
-        </select></div>
+        <div class="info-col"><label>入住几晚:</label>
+          <select v-model="days">
+            <option v-for="item in selectList" :value="item">{{item}}</option>
+          </select>
+        </div>
         <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
         <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span>
         </div>
@@ -106,7 +108,7 @@
         roomNumber: '',
         days: 1,
         inTimeFilter: Date.parse(new Date()),
-        outTimeFilter: '',
+//        outTimeFilter: '',
         showDialog: false,
         select: true,
         isDaysShow: false,
@@ -134,6 +136,11 @@
           tempIndex > -1 && names.push(i.name);
         });
         return names;
+      },
+      outTimeFilter() {
+        let nowDate = new Date();
+        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
+        return tempTime;
       }
     },
     methods: {
@@ -252,13 +259,7 @@
       },
       periodFilter(){
         this.refreshList()
-      },
-      days(val){
-        this.outTimeFilter = '';
-        let nowDate = new Date();
-        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * val);
-        this.outTimeFilter = tempTime
-      },
+      }
     },
 //    activated(){
 //      this.refreshList();
