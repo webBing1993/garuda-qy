@@ -111,8 +111,7 @@
 //        outTimeFilter: '',
         showDialog: false,
         select: true,
-        isDaysShow: false,
-        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       }
     },
     computed: {
