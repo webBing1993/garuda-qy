@@ -187,7 +187,7 @@
         return `<div class="cell-body">` +
           `<span class="cell-right warn">待处理</abbr></span>`+
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
-          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
+          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span><span class="cell-right">${this.datetimeparse(item.createdTime,'hhmm')}</span></p>` +
           `</div>`;
       },
       handledItem(item, in_time, out_time){

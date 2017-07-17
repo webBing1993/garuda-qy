@@ -57,7 +57,7 @@ module.exports = {
       body: {
         startTime: param.startTime,
         endTime: param.endTime,
-        isDesc: true,//true 降序
+        desc: true,//true 降序
         reportInStatuses: param.reportInStatuses,//需要的入住上报旅业状态
       },
       onSuccess: body => {
