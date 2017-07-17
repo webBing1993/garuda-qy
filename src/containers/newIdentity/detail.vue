@@ -20,7 +20,11 @@
 
     <div class="order-info">
       <div class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></div>
-      <div class="info-col"><label>入住几晚:</label><input type="number" v-model="days"></div>
+      <div class="info-col"><label>入住几晚:</label>
+        <select v-model="days">
+          <option v-for="item in selectList" :value="item">{{item}}</option>
+        </select>
+      </div>
       <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
       <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></div>
       <x-button value="上传旅业系统" @onClick="showDialog = true"></x-button>
@@ -48,10 +52,12 @@
       return {
         detail: {},
         roomNumber:'',
-        days: null,
+        days: 1,
         inTimeFilter: Date.parse(new Date()),
-        outTimeFilter:'',
+//        outTimeFilter:'',
         showDialog: false,
+        isDaysListShow: false,
+        selectList: [1,2,3,4,5,6,7,8,9,10]
       }
     },
     computed: {
@@ -61,6 +67,11 @@
       identityId(){
         return this.route.params.id
       },
+      outTimeFilter() {
+        let nowDate = new Date();
+        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
+        return tempTime;
+      }
     },
     methods: {
       ...mapActions([
