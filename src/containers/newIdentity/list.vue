@@ -14,8 +14,7 @@
     <div class="list-wrapper">
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
-        <checker type="checkbox" v-model="batchlist"
-                 default-item-class="checker-item" selected-item-class="selected">
+        <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
           <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
             <group>
               <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
@@ -27,8 +26,7 @@
       <div v-show="currentTab">
         <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
         <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
-          <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+          <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')" :value="datetimeparse(item.createdTime,'hhmm')"></cell>
           <cell :title="handledItem(item,item.inTime,item.outTime)" @onClick="orderClick(item.lvyeReportRecordId)"></cell>
         </group>
       </div>
@@ -53,37 +51,30 @@
       </div>
     </footer>
 
-    <popup v-model="isCalendarShow"
-           maskShow
-           bottom
-           animationTopBottom>
+    <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
 
     <Dialog v-model="showDialog" :confirm="!select" :cancel="!select" @onConfirm="setMultiConfirm">
-      <div class="confirm-info" v-if="select">
-        <div class="info-col"><span>入住人:</span><span class="select-name">{{this.selectedName.join()}}</span></div>
-        <div class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></div>
-        <div class="info-col"><label>入住几晚:</label>
+      <ul class="confirm-info" v-if="select">
+        <li class="info-col"><span>入住人:</span><span class="select-name">{{this.selectedName.join()}}</span></li>
+        <li class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></li>
+        <li class="info-col"><label>入住几晚:</label>
           <select v-model="days">
             <option v-for="item in selectList" :value="item">{{item}}</option>
           </select>
-        </div>
-        <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
-        <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span>
-        </div>
+        </li>
+        <li class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></li>
+        <li class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></li>
         <x-button value="上传旅业系统" @onClick="select = false"></x-button>
-      </div>
+      </ul>
 
       <ul class="dialog-info" v-if="!select">
-        <li class="info-col"><span class="dialog-key">姓名：</span><span
-          class="dialog-value">{{selectedName.join()}}</span></li>
+        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{selectedName.join()}}</span></li>
         <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
         <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住日期：</span><span
-          class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><span class="dialog-key">离店日期：</span><span
-          class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住日期：</span><span class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">离店日期：</span><span class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
       </ul>
     </Dialog>
   </article>
@@ -108,7 +99,6 @@
         roomNumber: '',
         days: 1,
         inTimeFilter: Date.parse(new Date()),
-//        outTimeFilter: '',
         showDialog: false,
         select: true,
         selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -116,7 +106,6 @@
     },
     computed: {
       ...mapState([
-        'Interface',
         'route'
       ]),
       currentTab(){
@@ -144,7 +133,6 @@
     },
     methods: {
       ...mapActions([
-        'getIdentities',
         'replaceto',
         'goto',
         'reportLvYe',
@@ -161,60 +149,18 @@
       goPick(){
         // 批量选择
         this.batchlist = [];
-        this.batch = true
+        this.batch = true;
       },
       cancelPick(){
         // 退出批量选择
         this.batchlist = [];
         this.batch ? this.batch = false : null
       },
-      allPick(){
-        // 全选和取消全选
-        if (this.batchlist.length === this.tobeHandled.length) {
-          this.batchlist = []
-        } else {
-          this.batchlist = [];
-          this.tobeHandled.forEach(
-            item => this.batchlist.push(item.identity_id)
-          )
-        }
-      },
       orderClick: function (orderId) {
         //非批量模式下点击订单跳转至详情页面
         if (!this.batch) {
-          this.batchlist = []
+          this.batchlist = [];
           this.goto('/new-identity/' + orderId)
-        }
-      },
-      tobeHandledItem(item){
-        let dom = `<span class="cell-right warn">待处理</abbr></span>`;
-        dom += `<div class="cell-body">` +
-          `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
-          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-          `</div>`;
-        return dom
-      },
-      handledItem(item, in_time, out_time){
-        let dom = ``;
-        dom += `<div class="cell-body">` +
-          `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
-          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span></p>` +
-          `</div>`;
-
-        return dom
-      },
-      getList(callback){
-        this.newIdentityList({
-          startTime: this.periodFilter ? this.periodFilter[0] : '',
-          endTime: this.periodFilter ? this.periodFilter[1] : '',
-          reportInStatuses: this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'],//需要的入住上报旅业状态
-          onsuccess: callback
-        })
-      },
-      initList(){
-        if ((this.currentTab && !this.handled.length) || (!this.currentTab && !this.tobeHandled.length)) {
-          this.getList(body => (this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? this.handledPageIndex++ : this.tobeHandledPageIndex++))
         }
       },
       setMultiConfirm() {
@@ -227,15 +173,41 @@
             outTime: this.outTimeFilter, //入住几晚
             onsuccess: () => {
               this.batchlist.forEach(item => {
-                let tempIndex = this.tobeHandled.findIndex(i => i.identity_id === item);
+                let tempIndex = this.tobeHandled.findIndex(i => i.identityId === item);
                 tempIndex > -1
                   ? this.tobeHandled.splice(tempIndex, 1)
                   : null
               });
-
               this.cancelPick()
             }
           })
+        }
+      },
+      tobeHandledItem(item){
+        return `<div class="cell-body">` +
+          `<span class="cell-right warn">待处理</abbr></span>`+
+          `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
+          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
+          `</div>`;
+      },
+      handledItem(item, in_time, out_time){
+        return `<div class="cell-body">` +
+          `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
+          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
+          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span></p>` +
+          `</div>`
+      },
+      getList(callback){
+        this.newIdentityList({
+          startTime: this.periodFilter ? this.periodFilter[0] : '',
+          endTime: this.periodFilter ? this.periodFilter[1] : '',
+          reportInStatuses: this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'],//需要的入住上报旅业状态
+          onsuccess: callback
+        })
+      },
+      initList(){
+        if ((this.currentTab && !this.handled.length) || (!this.currentTab && !this.tobeHandled.length)) {
+          this.getList(body => (this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? this.handledPageIndex++ : this.tobeHandledPageIndex++))
         }
       },
       refreshList(){
@@ -257,7 +229,7 @@
         typeof val === 'number' && !isNaN(val) ? this.initList() : null
       },
       periodFilter(){
-        this.refreshList()
+        this.refreshList();
       }
     },
 //    activated(){

@@ -884,7 +884,7 @@ module.exports = {
       ethnicity:"汉", //民族
       dateOfBirth:"1491384458000", //生日
       address:"定好纷纷为", //住址
-      idcard:"360124199501280100", //身份证号码
+      idCard:"360124199501280100", //身份证号码
       photo:"", //身份证照片url
       livePhoto:"", //现在抓拍的照片url
       similarity:"85", //相似度65"
@@ -908,7 +908,7 @@ module.exports = {
       ethnicity:"汉", //民族
       dateOfBirth:"1491384458000", //生日
       address:"定好纷纷为", //住址
-      idcard:"360124199501280100", //身份证号码
+      idCard:"360124199501280100", //身份证号码
       photo:"", //身份证照片url
       livePhoto:"", //现在抓拍的照片url
       similarity:"85", //相似度65"
