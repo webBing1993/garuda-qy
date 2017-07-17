@@ -173,7 +173,7 @@
             outTime: this.outTimeFilter, //入住几晚
             onsuccess: () => {
               this.batchlist.forEach(item => {
-                let tempIndex = this.tobeHandled.findIndex(i => i.identityId === item);
+                let tempIndex = this.tobeHandled.findIndex(i => i.lvyeReportRecordId === item);
                 tempIndex > -1
                   ? this.tobeHandled.splice(tempIndex, 1)
                   : null

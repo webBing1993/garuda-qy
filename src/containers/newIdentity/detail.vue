@@ -19,15 +19,21 @@
     </div>
 
     <div class="order-info">
-      <div class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></div>
-      <div class="info-col"><label>入住几晚:</label>
-        <select v-model="days">
+      <div class="info-col">
+        <label>房间号码:</label>
+        <span v-if="detail.reportInStatus === 'SUCCESS'" class="select-time">{{roomNumber}}</span>
+        <input type="number" v-if="detail.reportInStatus !== 'SUCCESS'" v-model="roomNumber">
+      </div>
+      <div class="info-col">
+        <label>入住几晚:</label>
+        <span v-if="detail.reportInStatus === 'SUCCESS'" class="select-time">{{days}}</span>
+        <select v-model="days" v-if="detail.reportInStatus !== 'SUCCESS'">
           <option v-for="item in selectList" :value="item">{{item}}</option>
         </select>
       </div>
       <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
       <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></div>
-      <x-button value="上传旅业系统" @onClick="showDialog = true"></x-button>
+      <x-button value="上传旅业系统" @onClick="showDialog = true" v-if="detail.reportInStatus !== 'SUCCESS'"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -88,7 +94,12 @@
       getDetail(){
         this.newIdentityDetail({
           identity_id: this.identityId,
-          onsuccess: body => this.detail = body.data
+          onsuccess: body => {
+            this.detail = body.data;
+            this.days = body.data.nights;
+            this.roomNumber = body.data.roomNumber;
+            this.inTimeFilter = body.data.reportInTime;
+          }
         })
       },
       setMultiConfirm() {
