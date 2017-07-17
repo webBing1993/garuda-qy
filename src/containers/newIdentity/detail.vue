@@ -96,21 +96,22 @@
           identity_id: this.identityId,
           onsuccess: body => {
             this.detail = body.data;
-            this.days = body.data.nights;
-            this.roomNumber = body.data.roomNumber;
-            this.inTimeFilter = body.data.reportInTime;
+            body.data.nights && (this.days = body.data.nights);
+            body.data.roomNumber&& (this.roomNumber = body.data.roomNumber);
+            body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime) ;
           }
         })
       },
       setMultiConfirm() {
         this.reportLvYe({
-          lvyeReportRecordIds: this.detail.idCard.split(' '),//旅业上报记录Id
+          lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
           roomNumber: this.roomNumber,//房间号
           nights: this.days,//入住晚数
           inTime: this.inTimeFilter,//入住时间
           outTime: this.outTimeFilter,//离店时间
           onsuccess: () => {
             this.resetFilter();
+            this.getDetail();
           }
         })
       },
