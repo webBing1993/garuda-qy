@@ -21,19 +21,19 @@
     <div class="order-info">
       <div class="info-col">
         <label>房间号码:</label>
-        <span v-if="detail.reportInStatus === 'SUCCESS'" class="select-time">{{roomNumber}}</span>
         <input type="number" v-if="detail.reportInStatus !== 'SUCCESS'" v-model="roomNumber">
+        <span v-if="detail.reportInStatus === 'SUCCESS'" class="select-time">{{roomNumber}}</span>
       </div>
       <div class="info-col">
         <label>入住几晚:</label>
-        <span v-if="detail.reportInStatus === 'SUCCESS'" class="select-time">{{days}}</span>
         <select v-model="days" v-if="detail.reportInStatus !== 'SUCCESS'">
           <option v-for="item in selectList" :value="item">{{item}}</option>
         </select>
+        <span v-if="detail.reportInStatus === 'SUCCESS'" class="select-time">{{days}}</span>
       </div>
       <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
       <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></div>
-      <x-button value="上传旅业系统" @onClick="showDialog = true" v-if="detail.reportInStatus !== 'SUCCESS'"></x-button>
+      <x-button value="上传旅业系统" @onClick="showDialog = true" v-if="detail.reportInStatus !== 'SUCCESS'" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -119,12 +119,6 @@
     watch: {
       identityId(val){
         val ? this.getDetail() : null
-      },
-      days(val){
-        this.outTimeFilter = '';
-        let nowDate = new Date();
-        let tempTime = nowDate.setTime(nowDate.getTime()+24*60*60*1000*val);
-        this.outTimeFilter = tempTime
       },
     },
     activated(){
