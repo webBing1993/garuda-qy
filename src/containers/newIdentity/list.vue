@@ -58,7 +58,7 @@
           <x-button value="取消" @onClick="cancelPick" plain/>
           <x-button value="确认选择" @onClick="showDialog = true"/>
         </div>
-        <x-button class="blue-btn" v-else @onClick="goPick()" value="批量处理"/>
+        <x-button class="blue-btn" v-else @onClick="goPick()" value="合并入住"/>
       </div>
     </footer>
 
