@@ -114,77 +114,6 @@
   }
 }
 
-.order-info {
-  margin: 15px 10px;
-  padding: 15px 10px;
-  background-color: #ffffff;
-  border-radius: 4px;
-  font-size: 14px;
-  box-sizing: border-box;
-  label {
-    margin-right: 10px;
-    font-size: 14px;
-    color: #8A8A8A;
-    min-width: 60px;
-  }
-}
-
-.confirm-info {
-  font-size: 14px;
-  padding-bottom: 10px;
-  label {
-    min-width: 5em;
-    font-size: 14px;
-    color: #8A8A8A;
-  }
-}
-
-.info-col {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  box-sizing: border-box;
-  height: 40px;
-  text-align: left;
-  span {
-    font-size: 14px;
-    color: #8A8A8A;
-    &.select-time {
-      flex-grow: 1;
-      color: #4A4A4A;
-      text-indent: 1em;
-    }
-    &.select-reset {
-      flex-grow: 1;
-      margin-right: 0;
-      background-color: #fff;
-      position: relative;
-      span {
-        color: #4A4A4A;
-        padding-left: 15px;
-      }
-
-    }
-  }
-  input {
-    flex-grow: 1;
-    border: 1px solid #E6E6E6;
-    line-height: 35px;
-    border-radius: 4px;
-    outline: none;
-    text-indent: 1em;
-  }
-  select {
-    width: 100%;
-    border: 1px solid #E6E6E6;
-    border-radius: 4px;
-    line-height: 33px;
-    height: 33px;
-    padding-left: 15px;
-  }
-}
-
-
 .upload {
   color: #DF4A4A;
   margin-left: 15px;
@@ -252,5 +181,72 @@ select {
   border: 1px solid #E6E6E6;
   &::-ms-expand {
     display: block;
+  }
+}
+
+.report-info {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 10px;
+  padding: 15px 10px;
+  background-color: #ffffff;
+  font-size: 14px;
+  box-sizing: border-box;
+  .info-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 44px;
+    box-sizing: border-box;
+    .item-left {
+      margin-right: 10px;
+      color: #8A8A8A;
+      min-width: 5em;
+    }
+    .item-right {
+      flex-grow: 1;
+      text-indent: 1em;
+      text-align: left;
+      color: #4A4A4A;
+      &.room-number {
+        border: 1px solid #E6E6E6;
+        line-height: 35px;
+        border-radius: 4px;
+        outline: none;
+      }
+      &.days-item {
+        text-indent: 0;
+        display: flex;
+        align-items: center;
+        border: 1px solid #E6E6E6;
+        border-radius: 4px;
+        input {
+          width: 40px;
+          line-height: 33px;
+          flex-grow: 1;
+          display: inline-block;
+          text-align: center;
+          outline: none;
+        }
+        .days-reduce {
+          border-right: 1px solid #E6E6E6;
+          padding: 5px;
+        }
+        .days-add {
+          border-left: 1px solid #E6E6E6;
+          padding: 5px;
+        }
+      }
+    }
+
+  }
+  .weui-btn {
+    width: 100%;
+  }
+}
+.dialog-report-info {
+  .report-info {
+    margin: 0;
+    padding: 0 0 1em 0;
   }
 }

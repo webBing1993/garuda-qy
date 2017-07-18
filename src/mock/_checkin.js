@@ -25,6 +25,14 @@ Mock
     }
   )
   .mock(
+    /lvye\/lvyeReportInfo/,
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: data.newIdentityDetail
+    }
+  )
+  .mock(
     /\/identities\/.+/,
     {
       errcode: "0",
@@ -63,9 +71,9 @@ Mock
         },],
         created_time: "1491384458000", //验证时间
         status: "PENDING", //PENDING待审核、AGREED通过、REFUSED拒绝
-        lvye_report_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
-        lvye_report_time:null, //成功上传旅业系统的时间时间戳
-        next_identity_id:'id001' //下一个待处理的验证id
+        lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+        lvye_report_time: null, //成功上传旅业系统的时间时间戳
+        next_identity_id: 'id001' //下一个待处理的验证id
       }
     }
   )

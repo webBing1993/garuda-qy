@@ -921,6 +921,30 @@ module.exports = {
 
     }
   ],
+  newIdentityDetail: {
+    address: "重庆市永川区红炉镇红庆村代家桥村民小组12号",
+    createdTime: 1500340868000,
+    dateOfBirth: "1992-08-24",
+    ethnicity: "汉",
+    idCard: "50038319920824735X",
+    identityGuestId: "0ca0870f87af405f972bc46974435979",
+    identityId: "6c64aaf5d57c460da6f11a2e1538a085",
+    identityStatus: "AGREED",
+    inTime: 1500342730000,
+    livePhoto: "http://livephoto.storage.fortrun.cn/20170718/15003408649005342480.jpeg",
+    lvyeReportRecordId: "6784ff269d7f4b96a218f74fa0408945",
+    name: "谢洪",
+    nights: 2,
+    outTime: 1500429131000,
+    photo: "http://idcard-1252821823.cossh.myqcloud.com/20170718/289b9c37d05b1005b098d42ccc1001be.png",
+    reportInStatus: "NONE",
+    reportInTime: 1500342744000,
+    reportOutStatus: "NONE",
+    reportOutTime: null,
+    roomNumber: "1024",
+    sex:"男",
+    similarity:96
+  },
   // ===============================================================
   // 退房
   // ===============================================================

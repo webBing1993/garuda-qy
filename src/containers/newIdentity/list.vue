@@ -76,25 +76,35 @@
     </popup>
 
     <Dialog v-model="showDialog" :confirm="!select" :cancel="!select" @onConfirm="setMultiConfirm">
-      <div class="confirm-info" v-if="select">
-        <div class="info-col">
-          <label>入住人:</label>
-          <span class="select-name">{{this.selectedName.join()}}</span>
+      <div class="dialog-report-info" v-if="select">
+        <div class="report-info ">
+          <div class="info-item">
+            <label class="item-left">入住人:</label>
+            <span class="item-right">{{selectedName.join()}}</span>
+          </div>
+          <div class="info-item">
+            <label class="item-left">房间号码:</label>
+            <input type="number" class="item-right room-number" v-model="roomNumber"/>
+          </div>
+          <div class="info-item">
+            <label class="item-left">入住几晚:</label>
+            <div class="item-right days-item">
+              <span class="days-reduce" @click="daysReduce">-</span>
+              <input type="number" class="days" v-model="days"/>
+              <span class="days-add" @click="daysAdd()">+</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <label class="item-left">入住时间:</label>
+            <span class="item-right">{{datetimeparse(inTimeFilter)}}</span>
+          </div>
+
+          <div class="info-item">
+            <label class="item-left">离店时间:</label>
+            <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
+          </div>
+          <x-button value="上传旅业系统" @onClick="select = false" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
         </div>
-        <div class="info-col">
-          <label>房间号码:</label>
-          <input type="number" v-model="roomNumber">
-        </div>
-        <div class="info-col">
-          <label>入住几晚:</label>
-          <select v-model="days">
-            <option v-for="item in selectList" :value="item">{{item}}</option>
-          </select>
-        </div>
-        <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
-        <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span>
-        </div>
-        <x-button value="上传旅业系统" @onClick="select = false" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
       </div>
 
       <ul class="dialog-info" v-if="!select">
@@ -130,9 +140,10 @@
         roomNumber: '',
         days: 1,
         inTimeFilter: Date.parse(new Date()),
+        outTimeFilter: '',
         showDialog: false,
         select: true,
-        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+//        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       }
     },
     computed: {
@@ -156,11 +167,6 @@
           tempIndex > -1 && names.push(i.name);
         });
         return names;
-      },
-      outTimeFilter() {
-        let nowDate = new Date();
-        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
-        return tempTime;
       }
     },
     methods: {
@@ -170,6 +176,12 @@
         'reportLvYe',
         'newIdentityList'
       ]),
+      daysReduce() {
+        this.days !==1 ? this.days = this.days-1 : null
+      },
+      daysAdd() {
+        this.days <10 ? this.days = this.days+1 : null
+      },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index)
         this.replaceto(newpath)
@@ -258,7 +270,8 @@
       }
     },
     mounted(){
-      this.initList()
+      this.initList();
+      this.days === 1 &&(this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     },
     watch: {
       currentTab(val) {
@@ -266,6 +279,11 @@
       },
       periodFilter(){
         this.refreshList();
+      },
+      days() {
+        let nowDate = new Date();
+        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
+        this.outTimeFilter =  tempTime;
       }
     },
 //    activated(){
