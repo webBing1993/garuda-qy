@@ -1,36 +1,56 @@
 <template>
   <article>
-    <header class="tab-wrapper">
-      <Tab active-color="#373946">
-        <TabItem v-for="(item,index) in tabMenu"
-                 :key="index"
-                 :class="{'vux-1px-r': index===0}"
-                 :selected="currentTab === index"
-                 @click.native="replaceto('/new-identity/handle/'+index)">{{item}}
-        </TabItem>
-      </Tab>
-    </header>
+    <Tab active-color="#373946">
+      <TabItem v-for="(item,index) in tabMenu"
+               :key="index"
+               :class="{'vux-1px-r': index===0}"
+               :selected="currentTab === index"
+               @on-item-click="toggleTab(index)">{{item}}
+      </TabItem>
+    </Tab>
 
-    <div class="list-wrapper">
-      <div v-show="!currentTab" :class="{batch}">
-        <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
-        <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
-          <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
-            <group>
-              <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
-            </group>
-          </checker-item>
-        </checker>
+    <scroller lock-x :scrollbar-x=false
+              :pulldown-config="Interface.scroller"
+              @on-pulldown-loading="refreshList"
+              :depend="tobeHandled"
+              height="-45"
+              use-pulldown
+              v-show="!currentTab">
+      <div class="scroller-wrap">
+        <div v-show="!currentTab" :class="{batch}">
+          <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
+          <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
+            <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId"
+                          style="width: 100%">
+              <group>
+                <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
+              </group>
+            </checker-item>
+          </checker>
+        </div>
       </div>
+    </scroller>
 
-      <div v-show="currentTab">
-        <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-        <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
-          <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')" :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-          <cell :title="handledItem(item,item.inTime,item.outTime)" @onClick="orderClick(item.lvyeReportRecordId)"></cell>
-        </group>
+    <scroller lock-x :scrollbar-x=false
+              :pulldown-config="Interface.scroller"
+              @on-pulldown-loading="refreshList"
+              :depend="handled"
+              height="-45"
+              use-pulldown
+              v-show="currentTab">
+      <div class="scroller-wrap">
+        <div v-show="currentTab">
+          <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
+          <group v-for="(item,index) in handled" :key="index" :title="titleFilter(index)">
+            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
+                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+            <cell :title="handledItem(item,item.inTime,item.outTime)"
+                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+          </group>
+        </div>
       </div>
-    </div>
+    </scroller>
+
 
     <footer v-show="route.params.tab == 0 && tobeHandled.length !== 0 && tobeHandledPageIndex > 0">
       <div class="button-group">
@@ -56,25 +76,36 @@
     </popup>
 
     <Dialog v-model="showDialog" :confirm="!select" :cancel="!select" @onConfirm="setMultiConfirm">
-      <ul class="confirm-info" v-if="select">
-        <li class="info-col"><span>入住人:</span><span class="select-name">{{this.selectedName.join()}}</span></li>
-        <li class="info-col"><label>房间号码:</label><input type="number" v-model="roomNumber"></li>
-        <li class="info-col"><label>入住几晚:</label>
+      <div class="confirm-info" v-if="select">
+        <div class="info-col">
+          <label>入住人:</label>
+          <span class="select-name">{{this.selectedName.join()}}</span>
+        </div>
+        <div class="info-col">
+          <label>房间号码:</label>
+          <input type="number" v-model="roomNumber">
+        </div>
+        <div class="info-col">
+          <label>入住几晚:</label>
           <select v-model="days">
             <option v-for="item in selectList" :value="item">{{item}}</option>
           </select>
-        </li>
-        <li class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span></li>
-        <x-button value="上传旅业系统" @onClick="select = false"></x-button>
-      </ul>
+        </div>
+        <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
+        <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span>
+        </div>
+        <x-button value="上传旅业系统" @onClick="select = false" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+      </div>
 
       <ul class="dialog-info" v-if="!select">
-        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{selectedName.join()}}</span></li>
+        <li class="info-col"><span class="dialog-key">姓名：</span><span
+          class="dialog-value">{{selectedName.join()}}</span></li>
         <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
         <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住日期：</span><span class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><span class="dialog-key">离店日期：</span><span class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住日期：</span><span
+          class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">离店日期：</span><span
+          class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
       </ul>
     </Dialog>
   </article>
@@ -106,7 +137,8 @@
     },
     computed: {
       ...mapState([
-        'route'
+        'route',
+        'Interface'
       ]),
       currentTab(){
         return parseInt(this.route.params.tab)
@@ -138,6 +170,10 @@
         'reportLvYe',
         'newIdentityList'
       ]),
+      toggleTab(index){
+        let newpath = this.route.path.replace(this.route.params.tab, index)
+        this.replaceto(newpath)
+      },
       titleFilter(index){
         if (this.handled.length > 0) {
           return index
@@ -185,9 +221,9 @@
       },
       tobeHandledItem(item){
         return `<div class="cell-body">` +
-          `<span class="cell-right warn">待处理</abbr></span>`+
+          `<span class="cell-right warn">待处理</abbr></span>` +
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
-          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span><span class="cell-right">${this.datetimeparse(item.createdTime,'hhmm')}</span></p>` +
+          `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span><span class="cell-right">${this.datetimeparse(item.createdTime, 'hhmm')}</span></p>` +
           `</div>`;
       },
       handledItem(item, in_time, out_time){
@@ -238,6 +274,6 @@
   }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   @import "index.less";
 </style>
