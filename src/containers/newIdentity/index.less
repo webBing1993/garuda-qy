@@ -1,33 +1,3 @@
-.batchbar {
-  background-color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  padding: 0 15px;
-  font-size: 16px;
-  .allpick {
-    display: flex;
-    align-items: center;
-    &:before {
-      content: " ";
-      display: block;
-      box-sizing: border-box;
-      width: 18px;
-      height: 18px;
-      border-radius: 100%;
-      border: solid 2px #C3C3C3;
-      margin-right: 15px;
-
-    }
-    &.batch {
-      &:before {
-        background-color: #5077aa;
-      }
-    }
-  }
-}
-
 .batch {
   .checker-item {
     &:before {
@@ -114,17 +84,6 @@
   }
 }
 
-.upload {
-  color: #DF4A4A;
-  margin-left: 15px;
-}
-
-.upload-time {
-  color: #4A4A4A;
-  font-size: 14px;
-  margin-left: 15px;
-}
-
 footer {
   &:before {
     content: " ";
@@ -170,17 +129,6 @@ footer {
       text-align: left;
       color: #4A4A4A;
     }
-  }
-}
-
-select {
-  outline: none;
-  line-height: 35px;
-  height: 35px;
-  background-color: #fff;
-  border: 1px solid #E6E6E6;
-  &::-ms-expand {
-    display: block;
   }
 }
 
@@ -230,15 +178,14 @@ select {
         }
         .days-reduce {
           border-right: 1px solid #E6E6E6;
-          padding: 5px;
+          padding: 5px 15px;
         }
         .days-add {
           border-left: 1px solid #E6E6E6;
-          padding: 5px;
+          padding: 5px 15px;
         }
       }
     }
-
   }
   .weui-btn {
     width: 100%;

@@ -21,7 +21,8 @@
     <div class="report-info">
       <div class="info-item">
         <label class="item-left">房间号码:</label>
-        <input type="number" class="item-right room-number" v-model="roomNumber" v-if="detail.reportInStatus !== 'SUCCESS'"/>
+        <input type="number" class="item-right room-number" v-model="roomNumber"
+               v-if="detail.reportInStatus !== 'SUCCESS'"/>
         <span class="item-right" v-else>{{roomNumber}}</span>
       </div>
       <div class="info-item">
@@ -42,17 +43,21 @@
         <label class="item-left">离店时间:</label>
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
-      <x-button value="上传旅业系统" @onClick="showDialog = true" v-if="detail.reportInStatus !== 'SUCCESS'" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+      <x-button value="上传旅业系统" @onClick="isDialogShow" v-if="detail.reportInStatus !== 'SUCCESS'"
+                :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
       <ul class="dialog-info">
         <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{detail.name}}</span></li>
-        <li class="info-col"><span class="dialog-key">证件号码：</span><span class="dialog-value">{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
+        <li class="info-col"><span class="dialog-key">证件号码：</span><span
+          class="dialog-value">{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
         <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
         <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住日期：</span><span class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><span class="dialog-key">离店日期：</span><span class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">入住日期：</span><span
+          class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
+        <li class="info-col"><span class="dialog-key">离店日期：</span><span
+          class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
       </ul>
     </Dialog>
 
@@ -66,13 +71,13 @@
     data(){
       return {
         detail: {},
-        roomNumber:'',
+        roomNumber: '',
         days: 1,
         inTimeFilter: Date.parse(new Date()),
-        outTimeFilter:'',
+        outTimeFilter: '',
         showDialog: false,
         isDaysListShow: false,
-        selectList: [1,2,3,4,5,6,7,8,9,10]
+        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       }
     },
     computed: {
@@ -94,11 +99,18 @@
         'newIdentityDetail',
         'reportLvYe'
       ]),
+      isDialogShow() {
+        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
+          this.showDialog = true;
+        } else {
+          this.showDialog = false;
+        }
+      },
       daysReduce() {
-        this.days !==1 ? this.days = this.days-1 : null
+        this.days !== 1 ? this.days = this.days - 1 : null
       },
       daysAdd() {
-        this.days <10 ? this.days = this.days+1 : null
+        this.days < 10 ? this.days = this.days + 1 : null
       },
       resetFilter() {
         this.days = '';
@@ -112,8 +124,8 @@
           onsuccess: body => {
             this.detail = body.data;
             body.data.nights && (this.days = body.data.nights);
-            body.data.roomNumber&& (this.roomNumber = body.data.roomNumber);
-            body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime) ;
+            body.data.roomNumber && (this.roomNumber = body.data.roomNumber);
+            body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime);
           }
         })
       },
@@ -136,16 +148,15 @@
         val ? this.getDetail() : null
       },
       days(val) {
-          console.log(val);
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
-        console.log(tempTime)
-        this.outTimeFilter =tempTime;
+        this.outTimeFilter = tempTime;
       }
     },
     activated(){
       this.detail = {};
       this.getDetail();
+      this.days === 1 &&(this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     }
   }
 </script>

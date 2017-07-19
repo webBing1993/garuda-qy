@@ -20,8 +20,7 @@
         <div v-show="!currentTab" :class="{batch}">
           <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
           <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
-            <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId"
-                          style="width: 100%">
+            <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
               <group>
                 <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
               </group>
@@ -42,10 +41,8 @@
         <div v-show="currentTab">
           <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
           <group v-for="(item,index) in handled" :key="index" :title="titleFilter(index)">
-            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-            <cell :title="handledItem(item,item.inTime,item.outTime)"
-                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')" :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+            <cell :title="handledItem(item,item.inTime,item.outTime)" @onClick="orderClick(item.lvyeReportRecordId)"></cell>
           </group>
         </div>
       </div>
@@ -103,7 +100,7 @@
             <label class="item-left">离店时间:</label>
             <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
           </div>
-          <x-button value="上传旅业系统" @onClick="select = false" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+          <x-button value="上传旅业系统" @onClick="isDialogShow" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
         </div>
       </div>
 
@@ -176,6 +173,13 @@
         'reportLvYe',
         'newIdentityList'
       ]),
+      isDialogShow() {
+        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
+          this.select = false;
+        } else {
+          this.select = true;
+        }
+      },
       daysReduce() {
         this.days !==1 ? this.days = this.days-1 : null
       },
@@ -183,7 +187,7 @@
         this.days <10 ? this.days = this.days+1 : null
       },
       toggleTab(index){
-        let newpath = this.route.path.replace(this.route.params.tab, index)
+        let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
       },
       titleFilter(index){
@@ -212,7 +216,7 @@
         }
       },
       setMultiConfirm() {
-        if (this.batchlist.length !== 0) {
+        if (this.batchlist.length !== 0 && this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
           this.reportLvYe({
             lvyeReportRecordIds: this.batchlist,
             roomNumber: this.roomNumber, //房间号码
