@@ -68,7 +68,7 @@
           <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
           <XButton value="一键退房" v-if="isCheckout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
-                   @onClick="showCheckoutDialog = true"></XButton>
+                   @onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>
         </div>
         <div class="button-group" style="padding-top: 0" v-if="isCheckout && item.lvye_report_status === 'FAILED'">
           <p style="color: #DF4A4A;">旅业系统更新失败</p>
@@ -99,7 +99,7 @@
       </Dialog>
 
       <Dialog v-model="showCheckoutDialog" @onConfirm="pmsCheckout" confirm cancel>
-        <p>是否一键退房</p>
+        <p>该操作会联动PMS退房，旅业退房，及退款。是否继续操作？</p>
       </Dialog>
 
       <Dialog v-model="showRefundDialog" @onConfirm="refundApply" confirm cancel>
@@ -125,6 +125,7 @@
         showCheckoutDialog: false,
         showRefundDialog: false,
         refundValue: null,
+        pmsCheckoutId:'',
       }
     },
     computed: {
@@ -149,22 +150,6 @@
       isShowInvoiceBtn(){
         return this.isInvoice || this.isCheckout || this.isRefund
       },
-//      isSupportCheckout() {
-//        return this.detail.is_support_checkout
-//      },
-//      isShowRefundBtn() {
-//          let isShow;
-//          if(this.isSupportCheckout) {
-//            this.detail.bill.refund.refund_status !== 'REFUNDED' ? isShow = true : null
-//          } else {
-//            if(this.detail.bill.refund) {
-//              this.detail.bill.refund.refund_status !== 'REFUNDED' ? isShow = true : null
-//            }else {
-//              isShow = true
-//            }
-//          }
-//          return isShow;
-//      }
     },
     methods: {
       ...mapActions([
@@ -176,6 +161,10 @@
         'refundapply',
         'setUploadStatus'
       ]),
+      isShowCheckoutDialog(id){
+        this.showCheckoutDialog = true;
+        this.pmsCheckoutId = id;
+      },
       //手工入账
       confirmPmsResult() {
         this.conformPmsSync({
@@ -184,19 +173,12 @@
           onsuccess: body => this.detail.status.is_recording_success = true
         })
       },
-      //退款
-//      refundMode() {
-//        this.isSupportCheckout ? this.refundApply() : this.showRefundDialog = true;
-//      },
       //退款申请
       refundApply(){
         this.refundapply({
           orderId: this.routeId,
-//          refundfee: this.isSupportCheckout ? null : +this.refundValue * 100,
-//          type: this.isSupportCheckout ? null : 2,
           onsuccess: body => {
             this.getDetail();
-//            this.refundValue && (this.refundValue = '')
           }
         })
       },
@@ -216,9 +198,9 @@
         })
       },
       //退房申请
-      pmsCheckout(suborderId){
+      pmsCheckout(){
         this.pmscheckout({
-          id: suborderId,
+          id: this.pmsCheckoutId,
           onsuccess: body => this.getDetail()
         })
       },
