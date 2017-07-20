@@ -41,6 +41,7 @@ Vue.component('XButton', require('./components/Displays/button.vue'))
 Vue.component('calendar', require('./components/Functional/calendar'))
 Vue.component('Checker', require('./components/Functional/checker/checker.vue'));
 Vue.component('CheckerItem', require('./components/Functional/checker/checker-item.vue'));
+Vue.component('Search', require('./components/Functional/search'));
 
 /* eslint-disable no-new */
 new Vue({

@@ -2,6 +2,7 @@
   <div>
     <scroller lock-x :scrollbar-x=false use-pulldown>
       <div>
+        <Search v-model="searchValue" :results="searchResult" @on-result-click="resultClick" @on-change="getResult"></Search>
         <h1>Forms</h1>
         <Group title="XInput">
           <XInput title="手机号"/>
@@ -100,7 +101,21 @@
         checklistValue: [1, 2],
         popupShow: true,
         tabMenu: ['待确认', '已确认', 'xxx'],
-        selectedTab: '待确认'
+        selectedTab: '待确认',
+        searchValue: '',
+        searchResult: []
+      }
+    },
+    methods: {
+      resultClick(item) {
+          console.log(item);
+      },
+      getResult(val) {
+        if(this.searchValue) {
+            this.searchResult = ['201','201','204']
+        }else {
+            this.searchResult = [];
+        }
       }
     }
   }
