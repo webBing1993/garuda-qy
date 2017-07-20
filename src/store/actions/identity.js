@@ -24,7 +24,7 @@ module.exports = {
   setIdentityStatus(ctx, param){
     ctx.dispatch('resource', {
       url: '/identities/' + param.identity_id + '/status',
-      method:'PUT',
+      method: 'PUT',
       body: {
         suborder_id: param.suborder_id,
         status: param.status
@@ -37,13 +37,58 @@ module.exports = {
   setUploadStatus(ctx, param){
     ctx.dispatch('resource', {
       url: '/identities/lvye_report',
-      method:'POST',
+      method: 'POST',
       body: {
-        identity_id: param.identity_id
+        identity_id: param.identity_id,
+        room_number: param.room_number, //房间号码
+        days: param.days, //入住几晚
+        in_time: param.in_time, //入住几晚
+        out_time: param.out_time, //入住几晚
       },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
-  }
+  },
+  newIdentityList(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/lvye/searchLvyeReportInfo',
+      method: 'POST',
+      body: {
+        startTime: param.startTime,
+        endTime: param.endTime,
+        desc: true,//true 降序
+        reportInStatuses: param.reportInStatuses,//需要的入住上报旅业状态
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  newIdentityDetail(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/lvye/lvyeReportInfo/' + param.identity_id,
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  reportLvYe(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/lvye/lvyeReport',
+      method: 'PUT',
+      body: {
+        lvyeReportRecordIds: param.lvyeReportRecordIds,//旅业上报记录Id
+        roomNumber: param.roomNumber,//房间号
+        nights: param.nights,//入住晚数
+        inTime: param.inTime,//入住时间
+        outTime: param.outTime,//离店时间
+      },
+      onSuccess: body => {
+        ctx.dispatch('showtoast');
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+
 }

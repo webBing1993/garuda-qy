@@ -135,6 +135,18 @@ iframe {
 
 .scroller-wrap {
   padding-bottom: 140px;
+  width: 100%;
+  .batch {
+    padding-top: 10px;
+  }
+  .checker-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .weui-cell-group {
+      width: 100%;
+    }
+  }
 }
 
 .list-wrapper {
@@ -203,6 +215,13 @@ iframe {
 .button-group {
   flex-grow: 1;
   padding: 10px 15px;
+  .pick-btn-group {
+    display: flex;
+    flex-direction: row;
+    .weui-btn {
+      width: 40%;
+    }
+  }
 }
 
 .tips {

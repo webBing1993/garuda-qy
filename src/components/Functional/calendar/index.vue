@@ -37,7 +37,7 @@
     data(){
       return {
         singletime: this.value instanceof Array ? null : this.value,//单选
-        current: !Array.isArray(this.value) ? this.value : this.value[0] || Date.parse(new Date()),
+        current: this.value !== '' && !Array.isArray(this.value) ? this.value : this.value[0] || Date.parse(new Date()),
         starttime: this.value[0] || null,
         endtime: this.value[1] || null,
       }

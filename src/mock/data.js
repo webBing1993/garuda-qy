@@ -721,7 +721,7 @@ module.exports = {
       lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
-      identity_id: 'id0001',
+      identity_id: 'id0003',
       suborder_id: '',
       owner: "ted",
       phone_number: "15300686661",
@@ -759,7 +759,7 @@ module.exports = {
       lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
-      identity_id: 'id0001',
+      identity_id: 'id0004',
       suborder_id: '',
       owner: "ted",
       phone_number: "15300686661",
@@ -797,7 +797,7 @@ module.exports = {
       next_identity_id: '' //下一个待处理的验证id
     },
     {
-      identity_id: 'id0001',
+      identity_id: 'id0005',
       suborder_id: '',
       owner: "ted",
       phone_number: "15300686661",
@@ -835,7 +835,7 @@ module.exports = {
       lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
-      identity_id: 'id0001',
+      identity_id: 'id0006',
       suborder_id: '',
       owner: "ted",
       phone_number: "15300686661",
@@ -873,6 +873,80 @@ module.exports = {
       lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
   ],
+  newIdentityList: [
+    {
+      lvyeReportRecordId: 'id001',//旅业上报记录ID
+      identityId: 'id001',  //身份验证记录ID
+      identityGuestId:"001",  //用户身份验证ID
+      inTime: '1491384458000',
+      outTime:'1491384458000',
+      roomNumber:"201",
+      name:"李思静", //姓名
+      sex:"女", //性别
+      ethnicity:"汉", //民族
+      dateOfBirth:"1491384458000", //生日
+      address:"定好纷纷为", //住址
+      idCard:"360124199501280100", //身份证号码
+      photo:"", //身份证照片url
+      livePhoto:"", //现在抓拍的照片url
+      similarity:"85", //相似度65"
+      identityStatus:"", //身份状态
+      createdTime:'', //验证时间
+      reportInStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
+      reportOutStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
+      reportOutTime:'1491384458000'//成功上传旅业系统的时间时间戳
+
+    },
+    {
+      lvyeReportRecordId: 'id002',//旅业上报记录ID
+      identityId: 'id002',  //身份验证记录ID
+      identityGuestId:"001",  //用户身份验证ID
+      inTime: '1491384458000',
+      outTime:'1491384458000',
+      roomNumber:"201",
+      name:"李思静", //姓名
+      sex:"女", //性别
+      ethnicity:"汉", //民族
+      dateOfBirth:"1491384458000", //生日
+      address:"定好纷纷为", //住址
+      idCard:"360124199501280100", //身份证号码
+      photo:"", //身份证照片url
+      livePhoto:"", //现在抓拍的照片url
+      similarity:"85", //相似度65"
+      identityStatus:"", //身份状态
+      createdTime:'', //验证时间
+      reportInStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
+      reportOutStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
+      reportOutTime:'1491384458000'//成功上传旅业系统的时间时间戳
+
+    }
+  ],
+  newIdentityDetail: {
+    address: "重庆市永川区红炉镇红庆村代家桥村民小组12号",
+    createdTime: 1500340868000,
+    dateOfBirth: "1992-08-24",
+    ethnicity: "汉",
+    idCard: "50038319920824735X",
+    identityGuestId: "0ca0870f87af405f972bc46974435979",
+    identityId: "6c64aaf5d57c460da6f11a2e1538a085",
+    identityStatus: "AGREED",
+    inTime: 1500342730000,
+    livePhoto: "http://livephoto.storage.fortrun.cn/20170718/15003408649005342480.jpeg",
+    lvyeReportRecordId: "6784ff269d7f4b96a218f74fa0408945",
+    name: "谢洪",
+    nights: 2,
+    outTime: 1500429131000,
+    photo: "http://idcard-1252821823.cossh.myqcloud.com/20170718/289b9c37d05b1005b098d42ccc1001be.png",
+    reportInStatus: "NONE",
+    reportInTime: 1500342744000,
+    reportOutStatus: "NONE",
+    reportOutTime: null,
+    roomNumber: "1024",
+    sex:"男",
+    similarity:96
+  },
   // ===============================================================
   // 退房
   // ===============================================================

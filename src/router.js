@@ -68,6 +68,19 @@ const checkin = [{
     component: require('./containers/identity/detail')
   }]
 }, {
+  path: '/new-identity',
+  component: {
+    name: "newIdentity",
+    template: `<keep-alive><router-view/></keep-alive>`,
+  },
+  children: [{
+    path: 'handle/:tab',
+    component: require('./containers/newIdentity/list')
+  },{
+    path: ':id',
+    component: require('./containers/newIdentity/detail')
+  }]
+},{
   path: '/livein',
   component: {
     name: "livein",
