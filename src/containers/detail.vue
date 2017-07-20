@@ -18,7 +18,7 @@
 
       <Group title="PMS支付信息" v-if="detail.payinfo">
         <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
-        <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
+        <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.staff_pay)"></Cell>
         <Cell class="key" title="备注" :value="detail.remark ? detail.remark : '无'"></Cell>
         <Cell class="key" title="免押金" :value="detail.status.is_free_deposit ?'是':'否'"></Cell>
       </Group>
