@@ -72,8 +72,8 @@
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
 
-    <Dialog v-model="showDialog" :confirm="!select" :cancel="!select" @onConfirm="setMultiConfirm">
-      <div class="dialog-report-info" v-if="select">
+    <Dialog v-show="select" v-model="showDialog">
+      <div class="dialog-report-info">
         <div class="report-info ">
           <div class="info-item">
             <label class="item-left">入住人:</label>
@@ -100,11 +100,13 @@
             <label class="item-left">离店时间:</label>
             <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
           </div>
-          <x-button value="上传旅业系统" @onClick="isDialogShow" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+          <x-button value="上传旅业系统" @onClick="isInfoDialogShow" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
         </div>
       </div>
+    </Dialog>
 
-      <ul class="dialog-info" v-if="!select">
+    <Dialog  v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel" @onConfirm="setMultiConfirm">
+      <ul class="dialog-info">
         <li class="info-col"><span class="dialog-key">姓名：</span><span
           class="dialog-value">{{selectedName.join()}}</span></li>
         <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
@@ -139,6 +141,7 @@
         inTimeFilter: Date.parse(new Date()),
         outTimeFilter: '',
         showDialog: false,
+        showInfoDialog: false,
         select: true,
 //        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       }
@@ -173,11 +176,16 @@
         'reportLvYe',
         'newIdentityList'
       ]),
-      isDialogShow() {
+      infoDialogCancel(){
+        this.showInfoDialog = false;
+        this.select = true;
+        this.showDialog = true;
+      },
+      isInfoDialogShow() {
         if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
           this.select = false;
-        } else {
-          this.select = true;
+          this.showDialog = false;
+          this.showInfoDialog = true;
         }
       },
       daysReduce() {
