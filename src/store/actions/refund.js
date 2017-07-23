@@ -20,8 +20,8 @@ module.exports = {
       method: 'POST',
       body: {
         orderId: param.orderId,
-        refundfee: param.refundfee,
-        type: param.type,
+        // refundfee: param.refundfee,
+        // type: param.type,
       },
       onSuccess: body => {
         ctx.dispatch('showtoast');

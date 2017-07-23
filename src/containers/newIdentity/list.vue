@@ -20,8 +20,7 @@
         <div v-show="!currentTab" :class="{batch}">
           <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
           <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
-            <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId"
-                          style="width: 100%">
+            <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
               <group>
                 <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
               </group>
@@ -42,10 +41,8 @@
         <div v-show="currentTab">
           <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
           <group v-for="(item,index) in handled" :key="index" :title="titleFilter(index)">
-            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-            <cell :title="handledItem(item,item.inTime,item.outTime)"
-                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')" :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+            <cell :title="handledItem(item,item.inTime,item.outTime)" @onClick="orderClick(item.lvyeReportRecordId)"></cell>
           </group>
         </div>
       </div>
@@ -75,29 +72,41 @@
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
 
-    <Dialog v-model="showDialog" :confirm="!select" :cancel="!select" @onConfirm="setMultiConfirm">
-      <div class="confirm-info" v-if="select">
-        <div class="info-col">
-          <label>入住人:</label>
-          <span class="select-name">{{this.selectedName.join()}}</span>
-        </div>
-        <div class="info-col">
-          <label>房间号码:</label>
-          <input type="number" v-model="roomNumber">
-        </div>
-        <div class="info-col">
-          <label>入住几晚:</label>
-          <select v-model="days">
-            <option v-for="item in selectList" :value="item">{{item}}</option>
-          </select>
-        </div>
-        <div class="info-col"><label>入住时间:</label><span class="select-time">{{datetimeparse(inTimeFilter)}}</span></div>
-        <div class="info-col"><label>离店时间:</label><span class="select-time">{{datetimeparse(outTimeFilter)}}</span>
-        </div>
-        <x-button value="上传旅业系统" @onClick="select = false" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
-      </div>
+    <Dialog v-show="select" v-model="showDialog">
+      <div class="dialog-report-info">
+        <div class="report-info ">
+          <div class="info-item">
+            <label class="item-left">入住人:</label>
+            <span class="item-right">{{selectedName.join()}}</span>
+          </div>
+          <div class="info-item">
+            <label class="item-left">房间号码:</label>
+            <input type="number" class="item-right room-number" v-model="roomNumber"/>
+          </div>
+          <div class="info-item">
+            <label class="item-left">入住几晚:</label>
+            <div class="item-right days-item">
+              <span class="days-reduce" @click="daysReduce">-</span>
+              <input type="number" class="days" v-model="days"/>
+              <span class="days-add" @click="daysAdd()">+</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <label class="item-left">入住时间:</label>
+            <span class="item-right">{{datetimeparse(inTimeFilter)}}</span>
+          </div>
 
-      <ul class="dialog-info" v-if="!select">
+          <div class="info-item">
+            <label class="item-left">离店时间:</label>
+            <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
+          </div>
+          <x-button value="上传旅业系统" @onClick="isInfoDialogShow" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+        </div>
+      </div>
+    </Dialog>
+
+    <Dialog  v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel" @onConfirm="setMultiConfirm">
+      <ul class="dialog-info">
         <li class="info-col"><span class="dialog-key">姓名：</span><span
           class="dialog-value">{{selectedName.join()}}</span></li>
         <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
@@ -130,9 +139,11 @@
         roomNumber: '',
         days: 1,
         inTimeFilter: Date.parse(new Date()),
+        outTimeFilter: '',
         showDialog: false,
+        showInfoDialog: false,
         select: true,
-        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+//        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       }
     },
     computed: {
@@ -156,11 +167,6 @@
           tempIndex > -1 && names.push(i.name);
         });
         return names;
-      },
-      outTimeFilter() {
-        let nowDate = new Date();
-        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
-        return tempTime;
       }
     },
     methods: {
@@ -170,8 +176,26 @@
         'reportLvYe',
         'newIdentityList'
       ]),
+      infoDialogCancel(){
+        this.showInfoDialog = false;
+        this.select = true;
+        this.showDialog = true;
+      },
+      isInfoDialogShow() {
+        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
+          this.select = false;
+          this.showDialog = false;
+          this.showInfoDialog = true;
+        }
+      },
+      daysReduce() {
+        this.days !==1 ? this.days = this.days-1 : null
+      },
+      daysAdd() {
+        this.days <10 ? this.days = this.days+1 : null
+      },
       toggleTab(index){
-        let newpath = this.route.path.replace(this.route.params.tab, index)
+        let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
       },
       titleFilter(index){
@@ -200,7 +224,7 @@
         }
       },
       setMultiConfirm() {
-        if (this.batchlist.length !== 0) {
+        if (this.batchlist.length !== 0 && this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
           this.reportLvYe({
             lvyeReportRecordIds: this.batchlist,
             roomNumber: this.roomNumber, //房间号码
@@ -258,7 +282,8 @@
       }
     },
     mounted(){
-      this.initList()
+      this.initList();
+      this.days === 1 &&(this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     },
     watch: {
       currentTab(val) {
@@ -266,6 +291,11 @@
       },
       periodFilter(){
         this.refreshList();
+      },
+      days() {
+        let nowDate = new Date();
+        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
+        this.outTimeFilter =  tempTime;
       }
     },
 //    activated(){

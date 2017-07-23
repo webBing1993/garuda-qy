@@ -11,13 +11,14 @@
         <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
         <Cell class="key" title="预订人" :value="detail.owner"></Cell>
         <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
-        <Cell class="key" title="入离时间" :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
+        <Cell class="key" title="入离时间"
+              :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
         <Cell class="key" title="房型" :value="getRoomType(detail)"></Cell>
       </Group>
 
       <Group title="PMS支付信息" v-if="detail.payinfo">
         <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
-        <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.pms_pay)"></Cell>
+        <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.staff_pay)"></Cell>
         <Cell class="key" title="备注" :value="detail.remark ? detail.remark : '无'"></Cell>
         <Cell class="key" title="免押金" :value="detail.status.is_free_deposit ?'是':'否'"></Cell>
       </Group>
@@ -25,19 +26,24 @@
       <Group title="支付信息" v-if="detail.bill && detail.bill.payment">
         <Cell class="key" title="微信交易号" :value="detail.bill.payment && detail.bill.payment.wx_order_id"></Cell>
         <Cell class="key" title="微信支付" :value="cashHandling(detail.bill.payment && detail.bill.payment.pay_fee)"></Cell>
-        <Cell class="key" title="交易时间" :value="datetimeparse(detail.bill.payment && detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
+        <Cell class="key" title="交易时间"
+              :value="datetimeparse(detail.bill.payment && detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
       </Group>
 
       <Group title="退款信息" v-if="detail.bill">
-        <Cell class="key" title="消费金额" :value="cashHandling(detail.bill.refund && detail.bill.refund.need_pay_fee)"></Cell>
-        <Cell class="key" title="退款金额" :value="cashHandling(detail.bill.refund && detail.bill.refund.refund_fee)"></Cell>
-        <Cell class="key" title="退款状态" :value="refundStatus(detail.bill.refund && detail.bill.refund.refund_status)"></Cell>
-        <Cell class="key" title="退款时间" :value="datetimeparse(detail.bill.refund && detail.bill.refund.refund_time,'YYYYMMDDhhmm')"></Cell>
+        <Cell class="key" title="消费金额"
+              :value="cashHandling(detail.bill.refund && detail.bill.refund.need_pay_fee)"></Cell>
+        <Cell class="key" title="退款金额"
+              :value="cashHandling(detail.bill.refund && detail.bill.refund.refund_fee)"></Cell>
+        <Cell class="key" title="退款状态"
+              :value="refundStatus(detail.bill.refund && detail.bill.refund.refund_status)"></Cell>
+        <Cell class="key" title="退款时间"
+              :value="datetimeparse(detail.bill.refund && detail.bill.refund.refund_time,'YYYYMMDDhhmm')"></Cell>
 
         <div class="button-group" style="padding-top: 0" v-if="isRefund">
           <p style="color: #DF4A4A;" v-if="detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'">
             微信退款失败</p>
-          <x-button value="微信退款" v-if="isRefund && isShowRefundBtn" @onClick="refundMode"/>
+          <x-button value="微信退款" v-if="isRefund && detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'" @onClick="showRefundDialog = true"/>
         </div>
       </Group>
 
@@ -45,12 +51,15 @@
              v-for="(item,index) in detail.suborders"
              :key="'guests'+index"
              v-if="item.guests && item.guests.length > 0">
-        <Cell :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
+        <Cell
+          :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)"/>
 
-        <p style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;background-color: #EAEDF0;" v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
+        <p style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;background-color: #EAEDF0;"
+           v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
           当前入住房间信息尚未上传旅业系统，您可以前往‘公安验证-当日验证’已通过列表进行旅业系统上传；或点击该链接进行操作。
-          <a v-if="item.identity_id" style="color: #25B8F1; border-bottom: 1px solid #25B8F1" @click="goto('/identity/' + item.identity_id)">上传旅业系统</a>
+          <a v-if="item.identity_id" style="color: #25B8F1; border-bottom: 1px solid #25B8F1"
+             @click="goto('/identity/' + item.identity_id)">上传旅业系统</a>
         </p>
 
         <div class="button-group" style="padding-top: 0" v-if="isCheckout">
@@ -58,7 +67,8 @@
           <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
           <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
-          <XButton value="PMS退房" v-if="item.pmscheckout_status === 'FAILED' || item.pmscheckout_status === 'NONE'" @onClick="pmsCheckout(item.suborder_id)"/>
+          <XButton value="一键退房" v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
+                   @onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>
         </div>
         <div class="button-group" style="padding-top: 0" v-if="isCheckout && item.lvye_report_status === 'FAILED'">
           <p style="color: #DF4A4A;">旅业系统更新失败</p>
@@ -71,7 +81,8 @@
         <Cell class="key" title="开票类型" :value="invoiceType(detail.invoice.type)"></Cell>
         <Cell class="key" title="开票内容" :value="detail.invoice.category"></Cell>
         <Cell class="key" title="发票抬头" :value="detail.invoice.title"></Cell>
-        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="统一社会信用代码" :value="detail.invoice.tax_registry_no"></Cell>
+        <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="统一社会信用代码"
+              :value="detail.invoice.tax_registry_no"></Cell>
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="地址" :value="detail.invoice.address"></Cell>
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="联系电话" :value="detail.invoice.phone_number"></Cell>
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="开户银行" :value="detail.invoice.bank_name"></Cell>
@@ -87,10 +98,18 @@
         <p>是否已开发票？</p>
       </Dialog>
 
-      <Dialog v-model="showRefundDialog" @onConfirm="refundApply" confirm cancel>
-        <p class="refund-dialog-title">输入退款金额</p>
-        <input v-model="refundValue" type="number" class="refund-money"/>
+      <Dialog v-model="showCheckoutDialog" @onConfirm="pmsCheckout" confirm cancel>
+        <p>该操作会联动PMS退房，旅业退房，及退款。是否继续操作？</p>
       </Dialog>
+
+      <Dialog v-model="showRefundDialog" @onConfirm="refundApply" confirm cancel>
+        <p>是否退款</p>
+      </Dialog>
+
+      <!--<Dialog v-model="showRefundDialog" @onConfirm="refundApply" confirm cancel>-->
+      <!--<p class="refund-dialog-title">输入退款金额</p>-->
+      <!--<input v-model="refundValue" type="number" class="refund-money"/>-->
+      <!--</Dialog>-->
     </div>
   </article>
 </template>
@@ -103,8 +122,10 @@
       return {
         detail: {},
         showDialog: false,
+        showCheckoutDialog: false,
         showRefundDialog: false,
         refundValue: null,
+        pmsCheckoutId:'',
       }
     },
     computed: {
@@ -129,22 +150,6 @@
       isShowInvoiceBtn(){
         return this.isInvoice || this.isCheckout || this.isRefund
       },
-      isSupportCheckout() {
-        return this.detail.is_support_checkout
-      },
-      isShowRefundBtn() {
-          let isShow;
-          if(this.isSupportCheckout) {
-            this.detail.bill.refund.refund_status !== 'REFUNDED' ? isShow = true : null
-          } else {
-            if(this.detail.bill.refund) {
-              this.detail.bill.refund.refund_status !== 'REFUNDED' ? isShow = true : null
-            }else {
-              isShow = true
-            }
-          }
-          return isShow;
-      }
     },
     methods: {
       ...mapActions([
@@ -156,6 +161,10 @@
         'refundapply',
         'setUploadStatus'
       ]),
+      isShowCheckoutDialog(id){
+        this.showCheckoutDialog = true;
+        this.pmsCheckoutId = id;
+      },
       //手工入账
       confirmPmsResult() {
         this.conformPmsSync({
@@ -164,19 +173,12 @@
           onsuccess: body => this.detail.status.is_recording_success = true
         })
       },
-      //退款
-      refundMode() {
-        this.isSupportCheckout ? this.refundApply() : this.showRefundDialog = true;
-      },
       //退款申请
       refundApply(){
         this.refundapply({
           orderId: this.routeId,
-          refundfee: this.isSupportCheckout ? null : +this.refundValue * 100,
-          type: this.isSupportCheckout ? null : 2,
           onsuccess: body => {
             this.getDetail();
-            this.refundValue && (this.refundValue = '')
           }
         })
       },
@@ -196,9 +198,9 @@
         })
       },
       //退房申请
-      pmsCheckout(suborderId){
+      pmsCheckout(){
         this.pmscheckout({
-          id: suborderId,
+          id: this.pmsCheckoutId,
           onsuccess: body => this.getDetail()
         })
       },

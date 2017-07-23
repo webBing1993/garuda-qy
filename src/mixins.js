@@ -71,7 +71,7 @@ Vue.mixin({
       return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
     },
     cashHandling(val, prefix){
-      return val
+      return typeof val === 'number' && !isNaN(val)
         ? prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100) : ''
 
     },

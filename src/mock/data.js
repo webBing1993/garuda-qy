@@ -13,7 +13,9 @@ module.exports = {
       owner: "张三",//预订人
       owner_tel: "8618500059035",//预订人手机
       remark: "携程已付300元",//备注
-      is_support_checkout:false,        //是否支持checkout
+      is_cash_pay: true,//是否是现付 true代表是，false代表不是 17-07-13
+      is_one_room: true,//是否是一个房间 true代表是，false代表不是 17-07-13
+      is_support_checkout: false,//是否支持checkout
       rooms_plan: [{
         room_type: "大床房",
         room_count: 2
@@ -25,7 +27,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
-        confirm_mode:2
+        confirm_mode: 2
       },
       bill: {
         payment: {
@@ -119,7 +121,7 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-          pmscheckout_status:"FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          pmscheckout_status: "FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }, {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
@@ -156,7 +158,7 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-          pmscheckout_status:"PENDING"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          pmscheckout_status: "PENDING"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }, {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
@@ -193,7 +195,7 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-          pmscheckout_status:"SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          pmscheckout_status: "SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }]
     },
     {
@@ -216,7 +218,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 2,
-        confirm_mode:2
+        confirm_mode: 2
       },
       bill: {
         payment: {
@@ -272,7 +274,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 3,
-        confirm_mode:2
+        confirm_mode: 2
       },
       bill: {
         payment: {
@@ -921,6 +923,30 @@ module.exports = {
 
     }
   ],
+  newIdentityDetail: {
+    address: "重庆市永川区红炉镇红庆村代家桥村民小组12号",
+    createdTime: 1500340868000,
+    dateOfBirth: "1992-08-24",
+    ethnicity: "汉",
+    idCard: "50038319920824735X",
+    identityGuestId: "0ca0870f87af405f972bc46974435979",
+    identityId: "6c64aaf5d57c460da6f11a2e1538a085",
+    identityStatus: "AGREED",
+    inTime: 1500342730000,
+    livePhoto: "http://livephoto.storage.fortrun.cn/20170718/15003408649005342480.jpeg",
+    lvyeReportRecordId: "6784ff269d7f4b96a218f74fa0408945",
+    name: "谢洪",
+    nights: 2,
+    outTime: 1500429131000,
+    photo: "http://idcard-1252821823.cossh.myqcloud.com/20170718/289b9c37d05b1005b098d42ccc1001be.png",
+    reportInStatus: "NONE",
+    reportInTime: 1500342744000,
+    reportOutStatus: "NONE",
+    reportOutTime: null,
+    roomNumber: "1024",
+    sex:"男",
+    similarity:96
+  },
   // ===============================================================
   // 退房
   // ===============================================================
