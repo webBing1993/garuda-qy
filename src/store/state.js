@@ -22,5 +22,6 @@ module.exports = {
   },
   hotel:{
     // hotel_id:'c336ea2b2b5911e780ad5cb9018d9b5c'
-  }
+  },
+  roomNumberList: []
 }

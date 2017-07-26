@@ -90,5 +90,11 @@ module.exports = {
       }
     })
   },
+  getRoomNumberList(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/room/numberList',
+      onSuccess: body => ctx.commit('ROOMNUMBERLIST', body.data)
+    })
+  }
 
 }

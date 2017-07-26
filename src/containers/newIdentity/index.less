@@ -1,3 +1,7 @@
+article {
+  width: 100%;
+  box-sizing: border-box;
+}
 .batch {
   .checker-item {
     &:before {
@@ -140,9 +144,11 @@ footer {
   background-color: #ffffff;
   font-size: 14px;
   box-sizing: border-box;
+  position: relative;
   .info-item {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     height: 44px;
     box-sizing: border-box;
@@ -187,13 +193,58 @@ footer {
       }
     }
   }
+  .search {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px;
+    position: absolute;
+    top: 22%;
+    right: 0;
+    label {
+      width: 5em;
+      margin-right: 10px;
+      opacity: 0;
+    }
+    .search-result {
+      flex-grow: 1;
+      list-style: none;
+      background-color: #FFF;
+      z-index: 5;
+      max-height: 165px;
+      line-height: 36px;
+      border: 1px solid #7FC6FF;
+      border-radius: 4px;
+      overflow: hidden;
+      overflow-y: auto;
+      text-indent: 1em;
+      li {
+        border-bottom: 1px solid #E6E6E6;
+      }
+    }
+  }
+
   .weui-btn {
     width: 100%;
+  }
+  .error-room-number {
+    color: red;
+    text-indent: 6em;
   }
 }
 .dialog-report-info {
   .report-info {
     margin: 0;
     padding: 0 0 1em 0;
+    .search {
+      padding: 0;
+      top:30%
+    }
+    .error-room-number {
+      text-indent: 3em;
+    }
+    .search-result {
+      text-align: left;
+    }
   }
 }

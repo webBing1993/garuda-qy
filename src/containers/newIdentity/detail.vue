@@ -21,10 +21,17 @@
     <div class="report-info">
       <div class="info-item">
         <label class="item-left">房间号码:</label>
-        <input type="number" class="item-right room-number" v-model="roomNumber"
+        <input class="item-right room-number" v-model="roomNumber"
                v-if="detail.reportInStatus !== 'SUCCESS'"/>
         <span class="item-right" v-else>{{roomNumber}}</span>
       </div>
+      <div class="search">
+        <label>搜索结果</label>
+        <ul class="search-result" v-if="resultList.length > 0">
+          <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
+        </ul>
+      </div>
+      <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">房间号输入错误</p>
       <div class="info-item">
         <label class="item-left">入住几晚:</label>
         <div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">
@@ -44,7 +51,7 @@
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
       <x-button value="上传旅业系统" @onClick="isDialogShow" v-if="detail.reportInStatus !== 'SUCCESS'"
-                :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+                :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter || isErrorNumber"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -77,12 +84,15 @@
         outTimeFilter: '',
         showDialog: false,
         isDaysListShow: false,
-        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        resultList: [],
+        isErrorNumber: false,
+        canSearch: true
       }
     },
     computed: {
       ...mapState([
-        'route'
+        'route',
+        'roomNumberList'
       ]),
       identityId(){
         return this.route.params.id
@@ -99,8 +109,13 @@
         'newIdentityDetail',
         'reportLvYe'
       ]),
+      resultPick(item) {
+        this.canSearch = false;
+        this.roomNumber = item;
+        this.resultList = [];
+      },
       isDialogShow() {
-        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
+        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter && !this.isErrorNumber) {
           this.showDialog = true;
         } else {
           this.showDialog = false;
@@ -113,10 +128,9 @@
         this.days < 10 ? this.days = this.days + 1 : null
       },
       resetFilter() {
-        this.days = '';
+        this.days = 1;
         this.roomNumber = '';
-        this.inTimeFilter = '';
-        this.outTimeFilter = '';
+        this.inTimeFilter = Date.parse(new Date());
       },
       getDetail(){
         this.newIdentityDetail({
@@ -145,18 +159,33 @@
     },
     watch: {
       identityId(val){
-        val ? this.getDetail() : null
+        val ? (this.resetFilter(), this.getDetail()) : null
       },
       days(val) {
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
+      },
+      roomNumber(val, old) {
+        if (!this.canSearch) return;
+        if (!val) {
+          this.resultList = [];
+          this.isErrorNumber = false;
+        }
+        if (this.roomNumberList.length > 0 && val) {
+          this.resultList = [];
+          this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
+          if (this.resultList.length === 0 && this.detail.reportInStatus !== 'SUCCESS') this.isErrorNumber = true;
+        }
+      },
+      resultList(val, old) {
+        if (old.length > 0) this.canSearch = true
       }
     },
     activated(){
       this.detail = {};
       this.getDetail();
-      this.days === 1 &&(this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
+      this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     }
   }
 </script>
