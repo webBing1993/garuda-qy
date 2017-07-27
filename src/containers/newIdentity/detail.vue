@@ -31,7 +31,7 @@
           <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
         </ul>
       </div>
-      <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">房间号输入错误</p>
+      <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
       <div class="info-item">
         <label class="item-left">入住几晚:</label>
         <div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">
