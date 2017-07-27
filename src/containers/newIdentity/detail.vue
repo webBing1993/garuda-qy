@@ -100,7 +100,7 @@
       isDisabled(){
         if (this.roomNumberList.length > 0) {
           let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-          return !this.roomNumber || !this.days || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+          return !this.roomNumber || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
         } else {
           return !this.roomNumber || !this.days || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
         }
@@ -168,8 +168,7 @@
         val ? (this.resetFilter(), this.getDetail()) : null
       },
       days(val) {
-        if(val && val.match(/\./)) this.days = 0;
-        if(val && val.match(/-/)) this.days = 0;
+        if(/\./.test(val) || !/^\d+$/.test(val)) this.days = 0;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
