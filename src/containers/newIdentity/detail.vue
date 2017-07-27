@@ -107,7 +107,8 @@
       ...mapActions([
         'replaceto',
         'newIdentityDetail',
-        'reportLvYe'
+        'reportLvYe',
+        'getRoomNumberList'
       ]),
       resultPick(item) {
         this.canSearch = false;
@@ -185,6 +186,7 @@
     activated(){
       this.detail = {};
       this.getDetail();
+      if(this.roomNumberList.length === 0) this.getRoomNumberList();
       this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     }
   }
