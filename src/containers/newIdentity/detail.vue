@@ -36,7 +36,7 @@
         <label class="item-left">入住几晚:</label>
         <div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">
           <span class="days-reduce" @click="daysReduce">-</span>
-          <input type="number" class="days" v-model="days"/>
+          <input class="days" v-model="days"/>
           <span class="days-add" @click="daysAdd()">+</span>
         </div>
         <span class="item-right" v-else>{{days}}</span>
@@ -120,7 +120,7 @@
         this.isErrorNumber = false
       },
       isDialogShow() {
-        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter && !this.isErrorNumber) {
+        if (!this.isDisabled) {
           this.resultList = [];
           this.showDialog = true;
         } else {
@@ -143,7 +143,7 @@
           identity_id: this.identityId,
           onsuccess: body => {
             this.detail = body.data;
-            body.data.nights && (this.days = body.data.nights);
+            body.data.nights >=0 && (this.days = body.data.nights);
             body.data.roomNumber && (this.roomNumber = body.data.roomNumber);
             body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime);
           }
@@ -153,7 +153,7 @@
         this.reportLvYe({
           lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
           roomNumber: this.roomNumber,//房间号
-          nights: this.days,//入住晚数
+          nights: +this.days,//入住晚数
           inTime: this.inTimeFilter,//入住时间
           outTime: this.outTimeFilter,//离店时间
           onsuccess: () => {
@@ -168,7 +168,7 @@
         val ? (this.resetFilter(), this.getDetail()) : null
       },
       days(val) {
-        if(/\./.test(val) || !/^\d+$/.test(val)) this.days = 0;
+        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = '';
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
@@ -182,7 +182,7 @@
         if (!/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
           this.roomNumber = ''
         }
-        if (this.roomNumberList.length > 0 && val) {
+        if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS') {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
           if (this.resultList.length === 0 ) this.isErrorNumber = true;
