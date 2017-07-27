@@ -41,8 +41,10 @@
         <div v-show="currentTab">
           <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
           <group v-for="(item,index) in handled" :key="index" :title="titleFilter(index)">
-            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')" :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-            <cell :title="handledItem(item,item.inTime,item.outTime)" @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
+                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+            <cell :title="handledItem(item,item.inTime,item.outTime)"
+                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
           </group>
         </div>
       </div>
@@ -81,8 +83,15 @@
           </div>
           <div class="info-item">
             <label class="item-left">房间号码:</label>
-            <input type="number" class="item-right room-number" v-model="roomNumber"/>
+            <input class="item-right room-number" v-model="roomNumber"/>
           </div>
+          <div class="search">
+            <label>搜索结果</label>
+            <ul class="search-result" v-if="resultList.length > 0">
+              <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
+            </ul>
+          </div>
+          <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
           <div class="info-item">
             <label class="item-left">入住几晚:</label>
             <div class="item-right days-item">
@@ -100,12 +109,14 @@
             <label class="item-left">离店时间:</label>
             <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
           </div>
-          <x-button value="上传旅业系统" @onClick="isInfoDialogShow" :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+          <x-button value="上传旅业系统" @onClick="isInfoDialogShow"
+                    :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
         </div>
       </div>
     </Dialog>
 
-    <Dialog  v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel" @onConfirm="setMultiConfirm">
+    <Dialog v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel"
+            @onConfirm="setMultiConfirm">
       <ul class="dialog-info">
         <li class="info-col"><span class="dialog-key">姓名：</span><span
           class="dialog-value">{{selectedName.join()}}</span></li>
@@ -143,13 +154,16 @@
         showDialog: false,
         showInfoDialog: false,
         select: true,
-//        selectList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        resultList: [],
+        isErrorNumber: false,
+        canSearch: true
       }
     },
     computed: {
       ...mapState([
         'route',
-        'Interface'
+        'Interface',
+        'roomNumberList'
       ]),
       currentTab(){
         return parseInt(this.route.params.tab)
@@ -174,8 +188,14 @@
         'replaceto',
         'goto',
         'reportLvYe',
-        'newIdentityList'
+        'newIdentityList',
+        'getRoomNumberList'
       ]),
+      resultPick(item) {
+        this.canSearch = false;
+        this.roomNumber = item;
+        this.resultList = [];
+      },
       infoDialogCancel(){
         this.showInfoDialog = false;
         this.select = true;
@@ -189,10 +209,10 @@
         }
       },
       daysReduce() {
-        this.days !==1 ? this.days = this.days-1 : null
+        this.days !== 1 ? this.days = this.days - 1 : null
       },
       daysAdd() {
-        this.days <10 ? this.days = this.days+1 : null
+        this.days < 10 ? this.days = this.days + 1 : null
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
@@ -283,7 +303,8 @@
     },
     mounted(){
       this.initList();
-      this.days === 1 &&(this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
+      this.getRoomNumberList();
+      this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     },
     watch: {
       currentTab(val) {
@@ -295,7 +316,22 @@
       days() {
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
-        this.outTimeFilter =  tempTime;
+        this.outTimeFilter = tempTime;
+      },
+      roomNumber(val, old) {
+        if (!this.canSearch) return;
+        if (!val) {
+          this.resultList = [];
+          this.isErrorNumber = false;
+        }
+        if (this.roomNumberList.length > 0 && val) {
+          this.resultList = [];
+          this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
+          if (this.resultList.length === 0) this.isErrorNumber = true;
+        }
+      },
+      resultList(val, old) {
+        if (old.length > 0) this.canSearch = true
       }
     },
 //    activated(){
