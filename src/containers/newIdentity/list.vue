@@ -185,9 +185,9 @@
       isDisabled(){
         if (this.roomNumberList.length > 0) {
           let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-          return !this.roomNumber || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+          return !this.roomNumber ||  (typeof this.days === 'string' &&!this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
         } else {
-          return !this.roomNumber || !this.days || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+          return !this.roomNumber || (typeof this.days === 'string' &&!this.days ) || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
         }
       }
     },
@@ -222,7 +222,7 @@
         this.days >= 1 ? this.days = +this.days - 1 : null
       },
       daysAdd() {
-        this.days >= 0 ? this.days = +this.days + 1 : null
+        this.days <=30 ? this.days = +this.days + 1 : null
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
@@ -324,7 +324,8 @@
         this.refreshList();
       },
       days(val,old) {
-        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = old;
+        if(val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;
+        if(val >31) this.days = 0;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
@@ -335,7 +336,7 @@
           this.isErrorNumber = false;
         }
         if (!this.canSearch) return;
-        if (!/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
+        if (val && !/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
           this.roomNumber = old
         }
         if (this.roomNumberList.length > 0 && val) {
