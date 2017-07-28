@@ -96,7 +96,7 @@
             <label class="item-left">入住几晚:</label>
             <div class="item-right days-item">
               <span class="days-reduce" @click="daysReduce">-</span>
-              <input type="number" class="days" v-model="days"/>
+              <input class="days" v-model="days"/>
               <span class="days-add" @click="daysAdd()">+</span>
             </div>
           </div>
@@ -110,7 +110,7 @@
             <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
           </div>
           <x-button value="上传旅业系统" @onClick="isInfoDialogShow"
-                    :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter"></x-button>
+                    :disabled="isDisabled"></x-button>
         </div>
       </div>
     </Dialog>
@@ -181,6 +181,14 @@
           tempIndex > -1 && names.push(i.name);
         });
         return names;
+      },
+      isDisabled(){
+        if (this.roomNumberList.length > 0) {
+          let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
+          return !this.roomNumber || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+        } else {
+          return !this.roomNumber || !this.days || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+        }
       }
     },
     methods: {
@@ -195,6 +203,7 @@
         this.canSearch = false;
         this.roomNumber = item;
         this.resultList = [];
+        this.isErrorNumber = false
       },
       infoDialogCancel(){
         this.showInfoDialog = false;
@@ -202,17 +211,18 @@
         this.showDialog = true;
       },
       isInfoDialogShow() {
-        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
+        if (!this.isDisabled) {
           this.select = false;
+          this.resultList = [];
           this.showDialog = false;
           this.showInfoDialog = true;
         }
       },
       daysReduce() {
-        this.days !== 1 ? this.days = this.days - 1 : null
+        this.days >= 1 ? this.days = +this.days - 1 : null
       },
       daysAdd() {
-        this.days < 10 ? this.days = this.days + 1 : null
+        this.days >= 0 ? this.days = +this.days + 1 : null
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
@@ -244,11 +254,11 @@
         }
       },
       setMultiConfirm() {
-        if (this.batchlist.length !== 0 && this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter) {
+        if (this.batchlist.length !== 0 && this.roomNumber && +this.days>=0 && this.inTimeFilter && this.outTimeFilter) {
           this.reportLvYe({
             lvyeReportRecordIds: this.batchlist,
             roomNumber: this.roomNumber, //房间号码
-            nights: this.days, //入住几晚
+            nights: +this.days, //入住几晚
             inTime: this.inTimeFilter, //入住几晚
             outTime: this.outTimeFilter, //入住几晚
             onsuccess: () => {
@@ -313,21 +323,25 @@
       periodFilter(){
         this.refreshList();
       },
-      days() {
+      days(val,old) {
+        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = old;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
       },
       roomNumber(val, old) {
-        if (!this.canSearch) return;
         if (!val) {
           this.resultList = [];
           this.isErrorNumber = false;
         }
+        if (!this.canSearch) return;
+        if (!/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
+          this.roomNumber = old
+        }
         if (this.roomNumberList.length > 0 && val) {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-          if (this.resultList.length === 0) this.isErrorNumber = true;
+          if (this.resultList.length === 0 ) this.isErrorNumber = true;
         }
       },
       resultList(val, old) {

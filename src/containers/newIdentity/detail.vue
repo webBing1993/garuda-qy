@@ -36,7 +36,7 @@
         <label class="item-left">入住几晚:</label>
         <div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">
           <span class="days-reduce" @click="daysReduce">-</span>
-          <input type="number" class="days" v-model="days"/>
+          <input class="days" v-model="days"/>
           <span class="days-add" @click="daysAdd()">+</span>
         </div>
         <span class="item-right" v-else>{{days}}</span>
@@ -51,7 +51,7 @@
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
       <x-button value="上传旅业系统" @onClick="isDialogShow" v-if="detail.reportInStatus !== 'SUCCESS'"
-                :disabled="!roomNumber || !days || !inTimeFilter || !outTimeFilter || isErrorNumber"></x-button>
+                :disabled="isDisabled"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -97,11 +97,14 @@
       identityId(){
         return this.route.params.id
       },
-//      outTimeFilter() {
-//        let nowDate = new Date();
-//        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
-//        return tempTime;
-//      }
+      isDisabled(){
+        if (this.roomNumberList.length > 0) {
+          let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
+          return !this.roomNumber || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+        } else {
+          return !this.roomNumber || !this.days || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+        }
+      }
     },
     methods: {
       ...mapActions([
@@ -114,19 +117,21 @@
         this.canSearch = false;
         this.roomNumber = item;
         this.resultList = [];
+        this.isErrorNumber = false
       },
       isDialogShow() {
-        if (this.roomNumber && this.days && this.inTimeFilter && this.outTimeFilter && !this.isErrorNumber) {
+        if (!this.isDisabled) {
+          this.resultList = [];
           this.showDialog = true;
         } else {
           this.showDialog = false;
         }
       },
       daysReduce() {
-        this.days !== 1 ? this.days = this.days - 1 : null
+        this.days >= 1 ? this.days = +this.days - 1 : null
       },
       daysAdd() {
-        this.days < 10 ? this.days = this.days + 1 : null
+        this.days >= 0 ? this.days = +this.days + 1 : null
       },
       resetFilter() {
         this.days = 1;
@@ -138,7 +143,7 @@
           identity_id: this.identityId,
           onsuccess: body => {
             this.detail = body.data;
-            body.data.nights && (this.days = body.data.nights);
+            body.data.nights >=0 && (this.days = body.data.nights);
             body.data.roomNumber && (this.roomNumber = body.data.roomNumber);
             body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime);
           }
@@ -148,7 +153,7 @@
         this.reportLvYe({
           lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
           roomNumber: this.roomNumber,//房间号
-          nights: this.days,//入住晚数
+          nights: +this.days,//入住晚数
           inTime: this.inTimeFilter,//入住时间
           outTime: this.outTimeFilter,//离店时间
           onsuccess: () => {
@@ -162,21 +167,25 @@
       identityId(val){
         val ? (this.resetFilter(), this.getDetail()) : null
       },
-      days(val) {
+      days(val,old) {
+        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = old;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
       },
       roomNumber(val, old) {
-        if (!this.canSearch) return;
         if (!val) {
           this.resultList = [];
           this.isErrorNumber = false;
         }
-        if (this.roomNumberList.length > 0 && val) {
+        if (!this.canSearch) return;
+        if (!/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
+          this.roomNumber = old
+        }
+        if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS') {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-          if (this.resultList.length === 0 && this.detail.reportInStatus !== 'SUCCESS') this.isErrorNumber = true;
+          if (this.resultList.length === 0 ) this.isErrorNumber = true;
         }
       },
       resultList(val, old) {
@@ -186,7 +195,7 @@
     activated(){
       this.detail = {};
       this.getDetail();
-      if(this.roomNumberList.length === 0) this.getRoomNumberList();
+      if (this.roomNumberList.length === 0) this.getRoomNumberList();
       this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     }
   }
