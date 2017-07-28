@@ -323,8 +323,8 @@
       periodFilter(){
         this.refreshList();
       },
-      days(val) {
-        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = '';
+      days(val,old) {
+        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = old;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
@@ -336,7 +336,7 @@
         }
         if (!this.canSearch) return;
         if (!/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
-          this.roomNumber = ''
+          this.roomNumber = old
         }
         if (this.roomNumberList.length > 0 && val) {
           this.resultList = [];
