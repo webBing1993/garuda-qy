@@ -148,7 +148,6 @@ footer {
   .info-item {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
     height: 44px;
     box-sizing: border-box;
@@ -169,35 +168,40 @@ footer {
         outline: none;
         -webkit-appearance: none;
         display: inline-block;
-        font-size: 14px;
       }
       &.days-item {
         text-indent: 0;
         display: flex;
+        flex-grow: 1;
         align-items: center;
         border: 1px solid #E6E6E6;
         border-radius: 4px;
+        box-sizing: border-box;
         input {
           -webkit-appearance: none;
-          width: 40px;
+          width: 40%;
+          min-width: 50px;
           line-height: 35px;
-          flex-grow: 1;
-          display: inline-block;
+          box-sizing: border-box;
+          flex: 1;
+          display: block;
           text-align: center;
           outline: none;
           border: none;
-          font-size: 14px;
         }
         .days-reduce {
+          flex-grow: 1;
+          text-align: center;
           border-right: 1px solid #E6E6E6;
-          padding: 5px 15px;
         }
         .days-add {
+          flex-grow: 1;
+          text-align: center;
           border-left: 1px solid #E6E6E6;
-          padding: 5px 15px;
         }
       }
     }
+
   }
   .search {
     display: flex;
@@ -218,7 +222,7 @@ footer {
       list-style: none;
       background-color: #FFF;
       z-index: 55;
-      max-height: 165px;
+      max-height: 111px;
       line-height: 36px;
       border: 1px solid #7FC6FF;
       border-radius: 4px;

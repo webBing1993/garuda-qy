@@ -100,9 +100,9 @@
       isDisabled(){
         if (this.roomNumberList.length > 0) {
           let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-          return !this.roomNumber || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+          return !this.roomNumber ||  (typeof this.days === 'string' &&!this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
         } else {
-          return !this.roomNumber || !this.days || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+          return !this.roomNumber || (typeof this.days === 'string' &&!this.days ) || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
         }
       }
     },
@@ -131,7 +131,7 @@
         this.days >= 1 ? this.days = +this.days - 1 : null
       },
       daysAdd() {
-        this.days >= 0 ? this.days = +this.days + 1 : null
+        this.days <=30 ? this.days = +this.days + 1 : null
       },
       resetFilter() {
         this.days = 1;
@@ -143,7 +143,7 @@
           identity_id: this.identityId,
           onsuccess: body => {
             this.detail = body.data;
-            body.data.nights >=0 && (this.days = body.data.nights);
+            typeof body.data.nights === 'number' && (this.days = body.data.nights);
             body.data.roomNumber && (this.roomNumber = body.data.roomNumber);
             body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime);
           }
@@ -168,7 +168,8 @@
         val ? (this.resetFilter(), this.getDetail()) : null
       },
       days(val,old) {
-        if(val && !/^[1-9]\d*|0$/.test(val)) this.days = old;
+        if(val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;
+        if(val >31) this.days = 31;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
