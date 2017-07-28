@@ -168,7 +168,7 @@
         val ? (this.resetFilter(), this.getDetail()) : null
       },
       days(val,old) {
-        if(!/^([\u4e00-\u9fa5]+|[0-9]+)$/.test(val)) this.days = old;
+        if(val && !/^[1-9]\d*|0$/.test(val)) this.days = old;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
