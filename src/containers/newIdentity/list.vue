@@ -336,7 +336,7 @@
           this.isErrorNumber = false;
         }
         if (!this.canSearch) return;
-        if (val && !/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
+        if (val && val.split('').some(i => !/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(i))) {//验证特殊字符
           this.roomNumber = old
         }
         if (this.roomNumberList.length > 0 && val) {
