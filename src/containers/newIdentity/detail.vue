@@ -168,7 +168,7 @@
         val ? (this.resetFilter(), this.getDetail()) : null
       },
       days(val,old) {
-        if(val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;
+        if(val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;//验证数字
         if(val >31) this.days = 31;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
@@ -180,7 +180,7 @@
           this.isErrorNumber = false;
         }
         if (!this.canSearch) return;
-        if (val && !/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {
+        if (val && !/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(val)) {//验证特殊字符
           this.roomNumber = old
         }
         if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS') {
