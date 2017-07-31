@@ -183,7 +183,7 @@
         if (val && val.split('').some(i => !/^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/.test(i))) {//验证特殊字符
           this.roomNumber = old
         }
-        if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS') {
+        if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
           if (this.resultList.length === 0 ) this.isErrorNumber = true;

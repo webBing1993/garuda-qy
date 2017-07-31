@@ -85,7 +85,7 @@ module.exports = {
         outTime: param.outTime,//离店时间
       },
       onSuccess: body => {
-        ctx.dispatch('showtoast');
+        ctx.dispatch('showtoast','提交成功');
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
