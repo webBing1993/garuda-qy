@@ -180,7 +180,7 @@
           this.isErrorNumber = false;
         }
         if (!this.canSearch) return;
-        if (val && val.split('').some(i => !/^([a-zA-Z0-9]+)$/.test(i))) {//验证特殊字符
+        if (val && val.split('').some(i => !/^[A-Za-z0-9]+$/.test(i))) {//验证特殊字符
           this.roomNumber = old
         }
         if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
