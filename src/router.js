@@ -128,6 +128,23 @@ const refund = [{
     }]
 }];
 
+//ljs的老版发票
+// const invoice = [{
+//   path: '/invoice',
+//   component: {
+//     name: "invoice",
+//     template: `<router-view/>`,
+//   },
+//   children: [{
+//     path: ':tab',
+//     component: require('./containers/invoice.vue')
+//   }, {
+//     path: 'detail/:id',
+//     component: require('./containers/detail.vue')
+//   },]
+// }];
+
+//闪开发票
 const invoice = [{
   path: '/invoice',
   component: {
@@ -135,11 +152,11 @@ const invoice = [{
     template: `<router-view/>`,
   },
   children: [{
-    path: ':tab',
-    component: require('./containers/invoice.vue')
+    path: '/',
+    component: require('./containers/invoice/index.vue')
   }, {
-    path: 'detail/:id',
-    component: require('./containers/detail.vue')
+    path: ':id',
+    component: require('./containers/invoice/detail.vue')
   },]
 }];
 
