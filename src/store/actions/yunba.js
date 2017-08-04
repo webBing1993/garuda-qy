@@ -6,7 +6,7 @@ module.exports = {
     ctx.state.yunbaInstance.init((success) => {
       if (success) {
         console.log('yunba init');
-        ctx.state.yunbaInstance.connect_by_customid(ctx.state.deviceId, (success) => {
+        ctx.state.yunbaInstance.connect_by_customid(ctx.state.AppParams.session, (success) => {
           if (success) {
             console.log('yunba connect');
             ctx.commit('ISYUNBACONNECTED', true);

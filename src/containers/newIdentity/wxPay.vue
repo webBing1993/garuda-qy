@@ -32,6 +32,7 @@
         <p class="dialog-btn" @click="dialogBtnClick">{{dialogBtnText}}</p>
       </div>
     </div>
+    <Toast v-model="isToastShow" title="操作成功" timer='100'/>
   </article>
 </template>
 
@@ -48,14 +49,16 @@
         orderId: '',
         cmd: '',
         wxPayStatus: '',
-        errCode: ''
+        errCode: '',
+        isToastShow: false
       }
     },
     computed: {
       ...mapState([
         'yunbaInstance',
         'yunbaConnected',
-        'AppParams'
+        'AppParams',
+        'deviceId'
       ]),
       totalFee() {
         let r1, r2, m;
@@ -128,26 +131,35 @@
         }
       },
       getwxPay() {
-        this.wxPayConfirm({
-          identity_id: this.$route.params.id,
-          room_fee: Math.round(this.roomFee * 100),//房费
-          deposit: Math.round(this.deposit * 100),
-          onsuccess: (body) => {
-            this.oderId = body.order_id;
-            this.subscribe(this.orderId);
-            let msg = {
-              "tid": this.getUUID(),
-              "sender": 'orders/' + this.orderId,//orders/{order_id}
-              "cmd": '3074', //指令编号 3074 支付订单二维码
-              "code": "0",
-              "data": {
-                "order_id": this.orderId
+        console.log(this.roomFee, this.deposit);
+        if ((+this.roomFee) >= 0 && (+this.deposit) >= 0) {
+          this.wxPayConfirm({
+            identity_id: this.$route.params.identityId,
+            room_fee: Math.round(this.roomFee * 100),//房费
+            deposit: Math.round(this.deposit * 100),
+            onsuccess: (body) => {
+                console.log(body);
+              if (body.data) {
+                this.isToastShow = true;
+                this.oderId = body.order_id;
+                this.subscribe(this.orderId);
+                let msg = {
+                  "tid": this.getUUID(),
+                  "sender": 'orders/' + this.orderId,//orders/{order_id}
+                  "cmd": '3074', //指令编号 3074 支付订单二维码
+                  "code": "0",
+                  "data": {
+                    "order_id": this.orderId
+                  }
+                };
+                this.publish(msg);
+                setTimeout(() => {
+                  this.showDialog = true;
+                },200);
               }
-            };
-            this.publish(msg);
-            this.showDialog = true;
-          }//押金
-        })
+            }//押金
+          })
+        }
       },
       subscribe(topic) {
         this.yunbaSubscribe({
@@ -160,10 +172,10 @@
       publish(msg) {
         this.yunbaPublish({
           info: {
-            'topic': 'orders/' + this.orderId, //orders/{order_id}
+            'topic': 'devices/' + this.deviceId, //orders/{order_id}
             'msg': JSON.stringify(msg)
           },
-          publishCallback: () => console.log('publish', '3074')
+          publishCallback: () => console.log('publish', 'devices/' + this.deviceId)
         })
       },
       resetData() {
@@ -196,7 +208,13 @@
       }
     },
     activated() {
-      if (this.wxPayStatus === 'SUCCESS' || this.wxPayStatus === 'FAILED') {
+      if (this.wxPayStatus === 'SUCCESS') {
+        this.resetData();
+        this.roomFee = 0;
+        this.deposit = 0;
+        this.showDialog = false;
+      }
+      if (this.wxPayStatus === 'FAILED') {
         this.resetData();
         this.showDialog = false;
       }

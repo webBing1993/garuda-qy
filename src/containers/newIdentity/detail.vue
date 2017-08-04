@@ -58,7 +58,7 @@
                 :disabled="isDisabled">
       </x-button>
       <x-button v-if="isWxPayBtnShow" value="微信支付入住" primary
-                @onClick="goto('/new-identity/wxPay/'+identityId + '/devicesId')"></x-button>
+                @onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -180,7 +180,7 @@
     },
     watch: {
       identityId(val){
-        val ? (this.resetFilter(), this.getDetail()) : null
+        val ? this.resetFilter() : null
       },
       days(val, old) {
         if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;//非负整数，数字
