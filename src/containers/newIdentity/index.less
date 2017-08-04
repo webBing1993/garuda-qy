@@ -2,8 +2,9 @@ article {
   width: 100%;
   box-sizing: border-box;
   user-select: none;
-  touch-callout:none;
+  touch-callout: none;
 }
+
 .batch {
   .checker-item {
     &:before {
@@ -239,30 +240,114 @@ footer {
       }
     }
   }
+  .fail-tip {
+    color: #DF4A4A;
+    margin-bottom: 6px;
+  }
 
   .weui-btn {
     width: 100%;
     position: relative;
     z-index: 0;
   }
+  .weui-btn_primary {
+    margin-top: 10px;
+  }
   .error-room-number {
     color: red;
     text-align: right;
   }
 }
+
 .dialog-report-info {
   .report-info {
     margin: 0;
     padding: 0 0 1em 0;
     .search {
       padding: 0;
-      top:30%
+      top: 30%
     }
     .error-room-number {
       text-align: right;
     }
     .search-result {
       text-align: left;
+    }
+  }
+}
+
+.wx-pay-container {
+  margin: 8px 10px 0 10px;
+  padding: 27px 20px 20px 20px;
+  background-color: #ffffff;
+  border: solid 1px #e0e0e0;
+  font-size: 16px;
+  color: #4A4A4A;
+  .pay-list {
+    list-style: none;
+  }
+  .list-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+
+    .item-left {
+      min-width: 3em;
+    }
+    .item-right {
+      flex-grow: 1;
+      &.room-fee, &.deposit {
+        line-height: 43px;
+        border: 1px solid #E6E6E6;
+        border-radius: 4px;
+        outline: none;
+        text-indent: 2em;
+        font-size: 16px;
+      }
+      &.total-fee {
+        font-size: 23px;
+      }
+    }
+    .price-icon {
+      position: absolute;
+      left: 4em;
+    }
+    .total-icon {
+      font-size: 14px;
+    }
+  }
+}
+
+.custom-dialog {
+  .dialog-mask {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .dialog-container {
+    position: fixed;
+    z-index: 5000;
+    width: 80%;
+    max-width: 300px;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    background-color: #FFFFFF;
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+    .dialog-content {
+      padding: 40px 0;
+    }
+    .dialog-btn {
+      height: 50px;
+      line-height: 50px;
+      border-top: 1px solid #DDDDDD;
     }
   }
 }

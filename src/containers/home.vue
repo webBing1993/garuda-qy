@@ -1,5 +1,5 @@
 <template>
-  <!-- <div>
+  <div>
     <router-link to="/examples">components示例</router-link>
 
     <dl>
@@ -68,5 +68,5 @@
         <router-link to="/new-identity/handle/0">身份核验</router-link>
       </dd>
     </dl>
-  </div> -->
+  </div>
 </template>

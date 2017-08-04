@@ -77,6 +77,9 @@ const checkin = [{
     path: 'handle/:tab',
     component: require('./containers/newIdentity/list')
   },{
+    path: 'wxPay/:id/:deviceId',
+    component: require('./containers/newIdentity/wxPay')
+  },{
     path: ':id',
     component: require('./containers/newIdentity/detail')
   }]

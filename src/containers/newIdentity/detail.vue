@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article v-if="detail">
 
     <div class="guestcard">
       <div class="hd">
@@ -50,8 +50,15 @@
         <label class="item-left">离店时间:</label>
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
-      <x-button value="上传旅业系统" @onClick="isDialogShow" v-if="detail.reportInStatus !== 'SUCCESS'"
-                :disabled="isDisabled"></x-button>
+      <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>
+      <p><span style="color: #80C435;" v-if="detail.reportInStatus === 'SUCCESS'">旅业系统上传成功</span></p>
+      <x-button v-if="detail.reportInStatus !== 'SUCCESS'"
+                :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
+                @onClick="isDialogShow"
+                :disabled="isDisabled">
+      </x-button>
+      <x-button v-if="isWxPayBtnShow" value="微信支付入住" primary
+                @onClick="goto('/new-identity/wxPay/'+identityId + '/devicesId')"></x-button>
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -86,7 +93,8 @@
         isDaysListShow: false,
         resultList: [],
         isErrorNumber: false,
-        canSearch: true
+        canSearch: true,
+        isWxPayBtnShow: false,//微信支付入住按钮显示
       }
     },
     computed: {
@@ -100,18 +108,22 @@
       isDisabled(){
         if (this.roomNumberList.length > 0) {
           let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-          return !this.roomNumber ||  (typeof this.days === 'string' &&!this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+          return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
         } else {
-          return !this.roomNumber || (typeof this.days === 'string' &&!this.days ) || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+          return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || this.days < 0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
         }
       }
     },
     methods: {
       ...mapActions([
+        'goto',
         'replaceto',
         'newIdentityDetail',
         'reportLvYe',
         'getRoomNumberList'
+      ]),
+      ...mapMutations([
+        'DEVICEID'
       ]),
       resultPick(item) {
         this.canSearch = false;
@@ -131,12 +143,13 @@
         this.days >= 1 ? this.days = +this.days - 1 : null
       },
       daysAdd() {
-        this.days <=30 ? this.days = +this.days + 1 : null
+        this.days <= 30 ? this.days = +this.days + 1 : null
       },
       resetFilter() {
         this.days = 1;
         this.roomNumber = '';
         this.inTimeFilter = Date.parse(new Date());
+        this.isWxPayBtnShow = false;
       },
       getDetail(){
         this.newIdentityDetail({
@@ -146,6 +159,8 @@
             typeof body.data.nights === 'number' && (this.days = body.data.nights);
             body.data.roomNumber && (this.roomNumber = body.data.roomNumber);
             body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime);
+            if (body.data.roomNumber && (typeof body.data.nights === 'number' && body.data.nights >= 0)) this.isWxPayBtnShow = true;
+            this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
           }
         })
       },
@@ -167,9 +182,9 @@
       identityId(val){
         val ? (this.resetFilter(), this.getDetail()) : null
       },
-      days(val,old) {
-        if(val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;//验证数字
-        if(val >31) this.days = 31;
+      days(val, old) {
+        if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;//非负整数，数字
+        if (val > 31) this.days = 31;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
@@ -186,7 +201,7 @@
         if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-          if (this.resultList.length === 0 ) this.isErrorNumber = true;
+          if (this.resultList.length === 0) this.isErrorNumber = true;
         }
       },
       resultList(val, old) {
