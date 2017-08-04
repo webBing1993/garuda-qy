@@ -152,12 +152,15 @@ const invoice = [{
     template: `<router-view/>`,
   },
   children: [{
-    path: '/',
+    path: ':tab',
     component: require('./containers/invoice/index.vue')
   }, {
-    path: ':id',
+    path: 'detail/:id',
     component: require('./containers/invoice/detail.vue')
-  },]
+  }, {
+    path: 'detail/:id/result',
+    component: require('./containers/invoice/result.vue')
+  }]
 }];
 
 const others = [

@@ -12,11 +12,11 @@
             <span class="cell-key2 cell-value-title">联系人：</span>
             <span class="cell-value">张三</span>
           </p>
-          <p>
+          <p v-if="true">
             <span class="cell-key2 cell-value-title">联系电话：</span>
             <span class="cell-value">18642432834</span>
           </p>
-          <p>
+          <p v-if="true">
             <span class="cell-key2 cell-value-title">备注：</span>
             <span class="cell-value">12:00 领取</span>
           </p>
@@ -58,6 +58,7 @@
         </div>
       </Cell>
     </Group>
+    <p class="tip"><span class="tip-title">已处理：</span>2017/07/31 12:10</p>
     <div class="button-group">
       <XButton value="填充发票信息" default @click.native="submit"></XButton>
     </div>
@@ -73,6 +74,8 @@
 </template>
 
 <script>
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
+
 module.exports = {
   name: 'InvoiceDetail',
   data() {
@@ -81,9 +84,19 @@ module.exports = {
       dialogMsg: '请先打开开票软件的开票页面'
     }
   },
+  computed: {
+    ...mapState([
+      'Interface',
+    ])
+  },
   methods: {
+    ...mapActions([
+      'goto',
+      'replaceto'
+    ]),
     submit() {
-      this.showDialog = true;
+      // this.showDialog = true;
+      this.goto('/invoice/detail/666/result');
     },
     dialogConfirm() {
       this.showDialog = false;
@@ -108,12 +121,23 @@ module.exports = {
 
 .warning {
   display: block;
-  height: 121px;
-  width: 121px;
-  background: url('data:image/svg+xml;charset=utf8,<svg width="121px" height="121px" viewBox="0 0 121 121" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="15.发票" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="填开发票2" transform="translate(-315.000000, -399.000000)"><g id="大图标/警告" transform="translate(310.000000, 394.000000)"><path d="M126,66.2469136 C126,32.0860741 98.9139259,5 64.7530864,5 C32.0860741,5 5,32.0860741 5,66.2469136 C5,98.9139259 32.0860741,126 64.7530864,126 C98.9139259,126 126,98.9139259 126,66.2469136 Z" id="Fill-" fill="#F76260"></path><path d="M61.9973917,37 L67.0026083,37 C68.1041422,37 68.9673817,37.8944904 68.927145,38.9979003 L67.5363356,77.1379999 C67.5163345,77.6864904 67.0564136,78.1344299 66.509222,78.1344299 L62.490778,78.1344299 C61.9509752,78.1344299 61.483732,77.688313 61.4636644,77.1379999 L60.072855,38.9979003 C60.0327246,37.8974059 60.8942627,37 61.9973917,37 Z M64.5,93 C62.0147186,93 60,90.9592514 60,88.4418605 C60,85.9244695 62.0147186,83.8837209 64.5,83.8837209 C66.9852814,83.8837209 69,85.9244695 69,88.4418605 C69,90.9592514 66.9852814,93 64.5,93 Z" id="Path-" fill="#FFFFFF"></path></g></g></g></svg>')
+  height: 60px;
+  width: 60px;
+  background: url('data:image/svg+xml;charset=utf8,<svg width="60px" height="60px" viewBox="0 0 121 121" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="15.发票" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="填开发票2" transform="translate(-315.000000, -399.000000)"><g id="大图标/警告" transform="translate(310.000000, 394.000000)"><path d="M126,66.2469136 C126,32.0860741 98.9139259,5 64.7530864,5 C32.0860741,5 5,32.0860741 5,66.2469136 C5,98.9139259 32.0860741,126 64.7530864,126 C98.9139259,126 126,98.9139259 126,66.2469136 Z" id="Fill-" fill="#F76260"></path><path d="M61.9973917,37 L67.0026083,37 C68.1041422,37 68.9673817,37.8944904 68.927145,38.9979003 L67.5363356,77.1379999 C67.5163345,77.6864904 67.0564136,78.1344299 66.509222,78.1344299 L62.490778,78.1344299 C61.9509752,78.1344299 61.483732,77.688313 61.4636644,77.1379999 L60.072855,38.9979003 C60.0327246,37.8974059 60.8942627,37 61.9973917,37 Z M64.5,93 C62.0147186,93 60,90.9592514 60,88.4418605 C60,85.9244695 62.0147186,83.8837209 64.5,83.8837209 C66.9852814,83.8837209 69,85.9244695 69,88.4418605 C69,90.9592514 66.9852814,93 64.5,93 Z" id="Path-" fill="#FFFFFF"></path></g></g></g></svg>')
 }
 
 .dialog-msg {
   padding: 28px 0;
 }
+
+.tip {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #4A4A4A;
+}
+
+.tip-title {
+  color: #80C435;
+}
+
 </style>
