@@ -18,8 +18,7 @@
         </li>
       </ul>
       <x-button value="确定" primary @onClick="getwxPay"></x-button>
-      <x-button value="订阅" primary @onClick="subscribe"></x-button>
-      <x-button value="发布" primary @onClick="testPublish"></x-button>
+      <!--<x-button value="test确定" primary @onClick="testGetwxPay"></x-button>-->
     </div>
 
     <div class="custom-dialog" v-if="showDialog">
@@ -46,7 +45,7 @@
         deposit: 0,
         publishCbMessage: [],
         showDialog: false,
-        oderId: '',
+        orderId: '',
         cmd: '',
         wxPayStatus: '',
         errCode: ''
@@ -100,7 +99,7 @@
           let msg = {
             "tid": this.getUUID(),
             "sender": 'orders/' + this.orderId,//orders/{order_id}
-            "cmd": '3002', //指令编号 3002 重置魔镜
+            "cmd": '3074', //指令编号
             "code": "0",
             "data": {
               "order_id": this.orderId
@@ -108,9 +107,24 @@
           };
           this.publish(msg);
         } else if (this.wxPayStatus === 'SUCCESS') {
+          this.resetData();
+          this.showDialog = false;
           this.goto('/new-identity/' + this.$route.params.id)
-        } else {
-          this.showDialog = false
+        } else if (this.dialogBtnText === '取消') {
+          let msg = {
+            "tid": this.getUUID(),
+            "sender": 'orders/' + this.orderId,//orders/{order_id}
+            "cmd": '3002', //指令编号 3002 重置魔镜
+            "code": "0",
+            "data": {
+              "order_id": this.orderId
+            }
+          };
+          this.publish(msg);
+          this.showDialog = false;
+        } else if (this.wxPayStatus === 'FAILED') {
+          this.resetData();
+          this.showDialog = false;
         }
       },
       getwxPay() {
@@ -119,7 +133,6 @@
           room_fee: Math.round(this.roomFee * 100),//房费
           deposit: Math.round(this.deposit * 100),
           onsuccess: (body) => {
-            this.showDialog = true;
             this.oderId = body.order_id;
             this.subscribe(this.orderId);
             let msg = {
@@ -136,34 +149,27 @@
           }//押金
         })
       },
-      testPublish(){
-        let msg = {
-          "tid": this.getUUID(),
-          "sender": 'orders/' + this.orderId,//orders/{order_id}
-          "cmd": '', //指令编号 3074 支付订单二维码
-          "code": "0",
-          "data": {
-            "order_id": this.orderId
-          }
-        };
-        this.publish(msg);
-      },
-      subscribe(orderId) {
+      subscribe(topic) {
         this.yunbaSubscribe({
           info: {
-            'topic': 'orders/' + orderId //orders/{order_id}
+            'topic': 'orders/' + this.orderId //orders/{order_id}
           },
-          subscribeCallback: () => console.log('subscribe', 'orders/')
+          subscribeCallback: () => console.log('subscribe', 'lisijing')
         })
       },
       publish(msg) {
         this.yunbaPublish({
           info: {
-            'topic': 'lisijing',
+            'topic': 'orders/' + this.orderId, //orders/{order_id}
             'msg': JSON.stringify(msg)
           },
           publishCallback: () => console.log('publish', '3074')
         })
+      },
+      resetData() {
+        this.cmd = '';
+        this.errCode = '';
+        this.wxPayStatus = '';
       }
     },
     mounted() {
@@ -179,12 +185,20 @@
       yunbaConnected(val) {
         val && this.setPublishCallback({
           onSuccess: (data) => {
+            console.log(data);
+            this.resetData();
             let messageCbInfo = JSON.parse(data.msg);
             if (messageCbInfo.cmd) this.cmd = messageCbInfo.cmd;
             if (messageCbInfo.data.code) this.errCode = messageCbInfo.data.code;
             if (messageCbInfo.data.status) this.wxPayStatus = messageCbInfo.data.status;
           }
         })
+      }
+    },
+    activated() {
+      if (this.wxPayStatus === 'SUCCESS' || this.wxPayStatus === 'FAILED') {
+        this.resetData();
+        this.showDialog = false;
       }
     }
   }

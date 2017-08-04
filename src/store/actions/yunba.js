@@ -3,10 +3,10 @@
  */
 module.exports = {
   yunbaConnect(ctx, param) {
-      ctx.state.yunbaInstance.init((success) => {
+    ctx.state.yunbaInstance.init((success) => {
       if (success) {
         console.log('yunba init');
-        ctx.state.yunbaInstance.connect_by_customid(ctx.state.deviceId,(success) => {
+        ctx.state.yunbaInstance.connect_by_customid(ctx.state.deviceId, (success) => {
           if (success) {
             console.log('yunba connect');
             ctx.commit('ISYUNBACONNECTED', true);
@@ -27,7 +27,7 @@ module.exports = {
   },
   setPublishCallback(ctx, param) {
     ctx.state.yunbaInstance.set_message_cb(function (data) {
-      param.onSuccess ?  param.onSuccess(data) : null
+      param.onSuccess ? param.onSuccess(data) : null
     })
   }
 };
