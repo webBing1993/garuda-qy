@@ -86,24 +86,61 @@ module.exports = {
   },
   computed: {
     ...mapState([
-      'Interface',
+      'yunbaInstance',
+      'yunbaConnected',
+      'AppParams'
     ])
   },
+  watch: {
+      yunbaConnected(val) {
+        val && this.setPublishCallback({
+          onSuccess: (data) => {
+            console.log(data);
+            
+          }
+        })
+      }
+    },
   methods: {
     ...mapActions([
       'goto',
-      'replaceto'
+      'yunbaConnect',
+      'yunbaSubscribe',
+      'yunbaPublish',
+      'setPublishCallback',
     ]),
     submit() {
       // this.showDialog = true;
-      this.goto('/invoice/detail/666/result');
+      // this.goto('/invoice/detail/666/result');
+      let data = {
+        a: 1
+      }
+      this.publish(data);
     },
     dialogConfirm() {
       this.showDialog = false;
-    }
+    },
+    subscribe(topic) {
+      this.yunbaSubscribe({
+        info: {
+          'topic': 'orders/' + topic
+        },
+        subscribeCallback: () => console.log('subscribe', 'lisijing')
+      })
+    },
+    publish(msg) {
+      this.yunbaPublish({
+        info: {
+          'topic': 'orders/' + 666,
+          'msg': JSON.stringify(msg)
+        },
+        publishCallback: () => console.log('publish', '3074')
+      })
+    },
   },
   mounted() {
-
+    // this.yunbaConnect();
+    // this.subscribe(666);
   }
 }
 
