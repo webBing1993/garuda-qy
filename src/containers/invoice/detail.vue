@@ -58,7 +58,7 @@
         </div>
       </Cell>
     </Group>
-    <p v-if="data.status === 1" class="tip"><span class="tip-title">已处理：</span>{{data.update_time}}</p>
+    <p v-if="data.status === 1" class="tip"><span class="tip-title">已处理：</span>{{datetimeparse(data.update_time, 'yy/MM/dd hh:mm')}}</p>
     <div class="button-group">
       <XButton value="填充发票信息" default @click.native="submit"></XButton>
     </div>
@@ -82,25 +82,7 @@ module.exports = {
     return {
       showDialog: false,
       messageId: 1,
-      data: {
-        id: 666,
-        invoice_type: '1',
-        invoice_content: '',
-        room_no: '205,206',
-        contact_name: '张三',
-        contact_phone: '13388889999',
-        remark: '备注',
-        title: '测试',
-        tax_registry_no: '1247474747474747474',
-        address: '上海市杨浦区控江路1690号',
-        phone_number: '13111111111',
-        bank_name: '工商银行',
-        bank_account: 'fortrun',
-        hotel_id : '666',
-        status: 1,
-        create_time: '2017/06/31 12:10',
-        update_time: '2017/07/31 12:10'
-      },
+      data: {},
       dialogMsg: '请先打开开票软件的开票页面'
     }
   },
@@ -157,7 +139,7 @@ module.exports = {
       }
       this.messageId = this.messageId + 1;
       if(this.messageId > 65536) this.messageId = 1;
-      
+
       this.publish(data);
     },
     dialogConfirm() {
@@ -194,8 +176,8 @@ module.exports = {
   },
   mounted() {
     this.getDetail();
-    this.yunbaConnect();
-    this.subscribe(this.$route.params.id);
+    // this.yunbaConnect();
+    // this.subscribe(this.$route.params.id);
   }
 }
 

@@ -24,12 +24,12 @@
         <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
         <Group @click.native="goDetail(item)" v-for="(item,index) in waitList" :key="index">
           <Cell>
-            <p><span class="cell-value">{{item.rooms.join(', ')}}</span><span class="cell-right warn">待处理</span></p>
+            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right warn">待处理</span></p>
           </Cell>
           <Cell link>
             <div class="cell-body">
-              <p><span class="cell-value">联系人：{{item.contact}}</span></p> 
-              <p><span class="cell-value">开票类型：{{item.type}}</span></p> 
+              <p><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
+              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p> 
             </div>
           </Cell>
         </Group>
@@ -47,15 +47,15 @@
               height="-44">
       <div class="scroller-wrap">
         <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in doneList" :key="index" :title="item.date">
+        <Group @click.native="goDetail(item)" v-for="(item,index) in doneList" :key="index" :title="titleFilter(index)">
           <Cell>
-            <p><span class="cell-value">{{item.rooms.join(', ')}}</span><span class="cell-right">{{item.date}}</span></p>
+            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{item.update_time | filterTime}}</span></p>
           </Cell>
           <Cell link>
             <div class="cell-body">
-              <p><span class="cell-value">名称：{{item.name}}</span></p> 
-              <p><span class="cell-value">联系人：{{item.contact}}</span></p> 
-              <p><span class="cell-value">开票类型：{{item.type}}</span></p> 
+              <p><span class="cell-value">名称：{{item.title}}</span></p> 
+              <p><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
+              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p> 
             </div>
           </Cell>
         </Group>
@@ -93,40 +93,8 @@
         page1: 1,
         page2: 1,
         tabmenu: ["待处理", "已处理"],
-        waitList: [
-          {
-            id: 666,
-            status: 0,
-            rooms: [205,206],
-            contact: '张三',
-            type: '单位·增值税专用发票'
-          },
-          {
-            id: 777,
-            status: 0,
-            rooms: [305,306],
-            contact: '王五',
-            type: '单位·增值税专用发票'
-          }
-        ],
-        doneList: [{
-            id: 888,
-            status: 0,
-            date: '2017/04/01 13:11',
-            name: 'fortrun',
-            rooms: [205,206],
-            contact: '张三',
-            type: '单位·增值税专用发票'
-          },
-          {
-            id: 999,
-            status: 0,
-            date: '2017/04/01 13:11',
-            name: '上海复创',
-            rooms: [305,306],
-            contact: '王五',
-            type: '单位·增值税专用发票'
-          }]
+        waitList: [],
+        doneList: []
       }
     },
     computed: {
@@ -145,26 +113,53 @@
         typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     },
+    filters: {
+      filterInvoiceType(v) {
+        let val;
+        switch (v) {
+          case '1': 
+            val = '增值税普通发票';
+            break;
+          case '2': 
+            val = '增值税专用发票';
+            break;
+          case '3': 
+            val = '个人发票';
+            break;
+          default:
+            val = '增值税普通发票';
+        }
+        return val;
+      },
+      filterTime(v) {
+        let date = new Date(+v),
+            hour = date.getHours(),
+            min = date.getMinutes(),
+            hourStr = hour > 9 ? hour : `0${hour}`,
+            minStr = min > 9 ? min : `0${min}`;
+        return `${hourStr}:${minStr}`;
+      }
+    },
     methods: {
       ...mapActions([
         'goto',
         'replaceto',
         'getInvoiceList'
       ]),
+      titleFilter(index){
+        if (this.doneList.length > 0) {
+          return index
+            ? this.datetimeparse(this.doneList[index].update_time) === this.datetimeparse(this.doneList[index - 1].update_time)
+              ? null : this.datetimeparse(this.doneList[index].update_time)
+            : this.datetimeparse(this.doneList[index].update_time)
+        }
+      },
       goDetail(obj) {
         this.goto(`/invoice/detail/${obj.id}`)
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index)
         this.replaceto(newpath)
-      },
-
-      getList(callback) {
-        this.getInvoiceList({
-          scope: this.tabIndex === 0 ? 'TODAY' : 'ALL',
-          invoice_status: 1,
-          onsuccess: callback
-        })
       },
       refresh() {
         let pa = {
@@ -188,59 +183,59 @@
       //     if(body && Array.isArray(body.data) && body.data.length > 0) {
       //       if(param.from == "loadMore") {
       //         if (this.tabIndex) {
-      //           this.page1 = page;
-      //           this.scrollerStatus1.pullupStatus = 'default';
-      //         } else {
-      //           this.page2 = page
+      //           this.page2 = page;
       //           this.scrollerStatus2.pullupStatus = 'default';
+      //         } else {
+      //           this.page1 = page
+      //           this.scrollerStatus1.pullupStatus = 'default';
       //         }
       //       } else {
       //         if (this.tabIndex) {
-      //           this.waitList = [];
-      //           this.page1 = 1
-      //           this.scrollerStatus1.pulldownStatus = 'default';
-      //         } else {
       //           this.doneList = [];
       //           this.page2 = 1
       //           this.scrollerStatus2.pulldownStatus = 'default';
+      //         } else {
+      //           this.waitList = [];
+      //           this.page1 = 1
+      //           this.scrollerStatus1.pulldownStatus = 'default';
       //         }
       //       }
       //       // 是否是最后一页
       //       if (page * size >= total) {
       //         //禁止上拉
-      //         this.tabIndex ? this.scrollerStatus1.pullupStatus = 'disabled' : this.scrollerStatus2.pullupStatus = 'disabled';
+      //         this.tabIndex ? this.scrollerStatus2.pullupStatus = 'disabled' : this.scrollerStatus1.pullupStatus = 'disabled';
       //       }
       //       // 合并数据
-      //       this.tabIndex ? this.waitList = this.waitList.concat(body.data) : this.doneList = this.doneList.concat(body.data)
+      //       this.tabIndex ? this.doneList = this.doneList.concat(body.data) : this.waitList = this.waitList.concat(body.data)
       //     } else {
-      //       if (param.from != "loadMore" && this.tabIndex) {
+      //       if (param.from != "loadMore") {
       //         if (this.tabIndex) {
-      //           this.waitList = body.data;
-      //           this.scrollerStatus1.pulldownStatus = 'default';
-      //           this.scrollerStatus1.pullupStatus = 'disabled';
-      //         } else {
       //           this.doneList = body.data;
       //           this.scrollerStatus2.pulldownStatus = 'default';
       //           this.scrollerStatus2.pullupStatus = 'disabled';
+      //         } else {
+      //           this.waitList = body.data;
+      //           this.scrollerStatus1.pulldownStatus = 'default';
+      //           this.scrollerStatus1.pullupStatus = 'disabled';
       //         }
       //       } else {
       //         if (this.tabIndex) {
-      //           this.scrollerStatus1.pullupStatus = 'default'
-      //           this.scrollerStatus1.pullupStatus = 'disabled'
-      //         } else {
       //           this.scrollerStatus2.pullupStatus = 'default'
       //           this.scrollerStatus2.pullupStatus = 'disabled'
+      //         } else {
+      //           this.scrollerStatus1.pullupStatus = 'default'
+      //           this.scrollerStatus1.pullupStatus = 'disabled'
       //         }
       //       }
       //     }
       //     //更新数据,不然页面容器不够，无法上拉
       //     this.$nextTick(() => {
-      //       this.tabIndex ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
+      //       this.tabIndex ? this.$refs.scroller2.reset() : this.$refs.scroller1.reset();
       //     })
       //   };
 
       //   let errorCallback = (data) => {
-      //     this.tabIndex ? this.scrollerStatus1 = {pullupStatus: 'default',pulldownStatus: 'default'} : this.scrollerStatus2 = {pullupStatus: 'default',pulldownStatus: 'default'}
+      //     this.tabIndex ? this.scrollerStatus2 = {pullupStatus: 'default',pulldownStatus: 'default'} : this.scrollerStatus1 = {pullupStatus: 'default',pulldownStatus: 'default'}
       //   };
 
       //   this.getWaitInvoiceList({
@@ -254,7 +249,7 @@
         this.getInvoiceList({
           status: this.tabIndex,
           onsuccess: body => {
-            this.tabIndex ? this.waitList = body.data : this.doneList = body.data;
+            this.tabIndex ? this.doneList = body.data : this.waitList = body.data;
           }
         })
       },
@@ -263,12 +258,9 @@
           from: 'top',
           page: 1
         }
-        this.getList(pa)
-
-        if (!this.tabIndex && this.waitList.length === 0) {
-          this.getWaitList(pa)
-        } else if (this.tabIndex && this.doneList.length === 0) {
-          this.getDoneList(pa)
+        
+        if ((!this.tabIndex && this.waitList.length === 0) || (this.tabIndex && this.doneList.length === 0) ) {
+          this.getList(pa)
         }
       }
     },
