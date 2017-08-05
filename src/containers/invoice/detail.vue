@@ -60,7 +60,7 @@
     </Group>
     <p v-if="data.status === 1" class="tip"><span class="tip-title">已处理：</span>{{datetimeparse(data.update_time, 'yy/MM/dd hh:mm')}}</p>
     <div class="button-group">
-      <XButton value="填充发票信息" default @click.native="submit"></XButton>
+      <XButton :disabled="btnDisabled" value="填充发票信息" default @click.native="submit"></XButton>
     </div>
     <Dialog v-model="showDialog" confirmVal="确定" @onConfirm="dialogConfirm" confirm>
       <div>
@@ -76,14 +76,18 @@
 <script>
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
+let timeOut = null;
+
 module.exports = {
   name: 'InvoiceDetail',
   data() {
     return {
       showDialog: false,
+      publishing: false,
       messageId: 1,
       data: {},
-      dialogMsg: '请先打开开票软件的开票页面'
+      sender: 'invoices/',
+      dialogMsg: ''
     }
   },
   computed: {
@@ -91,17 +95,35 @@ module.exports = {
       'yunbaInstance',
       'yunbaConnected',
       'AppParams'
-    ])
+    ]),
+    btnDisabled() {
+      return this.publishing;
+      // return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing)
+    }
   },
   watch: {
     yunbaConnected(val) {
-      val && this.setPublishCallback({
-        onSuccess: (data) => {
-          console.log(data);
-          
-        }
-      })
-    }
+        val && this.setPublishCallback({
+          onSuccess: (body) => {
+            this.publishing = false;
+            this.stoploading();
+            clearTimeout(timeOut);
+
+            let msg = JSON.parse(body.msg);
+            let data = msg.data;
+
+            if (data && data.status && data.status === 'SUCCESS') {
+              this.goto('/invoice/detail/${this.$route.params.id}/result');
+            } else if (data && data.status && data.status === 'NOT_TOP') {
+              this.dialogMsg = '请先打开开票软件的开票页面';
+              this.showDialog = true;
+            } else if (data && data.status && data.status === 'FAILED') {
+              this.dialogMsg = '发票填充失败';
+              this.showDialog = true;
+            }
+          }
+        })
+      }
   },
   filters: {
     filterInvoiceType(v) {
@@ -130,17 +152,35 @@ module.exports = {
       'yunbaSubscribe',
       'yunbaPublish',
       'setPublishCallback',
+      'showloading',
+      'stoploading'
     ]),
     submit() {
-      // this.showDialog = true;
-      // this.goto('/invoice/detail/${this.$route.params.id}/result');
+
       let data = {
-        a: 1
+        "invoice_type":"PERSONAL",//发票类型
+        "title":"qqq",//抬头
+        "category":"www",//开票内容
+        "tax_registry_no":"eeee",//税号
+        "address":"rrrrr",//地址
+        "phone_number":"tttt",  //联系电话
+        "bank_name":"yyyy",  //开户行名称
+        "bank_account":"uuuuu"//开户行账号
       }
+
+      let msg = {
+          "tid": this.getUUID(),
+          "sender": this.sender,
+          "cmd":"5101",
+          "code":"0",
+          "sid":"",
+          "data": data
+      };
+      
       this.messageId = this.messageId + 1;
       if(this.messageId > 65536) this.messageId = 1;
 
-      this.publish(data);
+      this.publish(msg);
     },
     dialogConfirm() {
       this.showDialog = false;
@@ -148,15 +188,28 @@ module.exports = {
     subscribe(topic) {
       this.yunbaSubscribe({
         info: {
-          'topic': 'orders/' + topic
+          'topic': topic
         },
-        subscribeCallback: () => console.log('subscribe', 'lisijing')
+        subscribeCallback: () => console.log('subscribe', topic)
       })
     },
     publish(msg) {
+      this.publishing = true;
+
+      timeOut = setTimeout(() => {
+        if (this.publishing) {
+          this.publishing = false;
+          this.stoploading();
+          this.dialogMsg = '未启动闪开发票代理服务';
+          this.showDialog = true;
+        }
+      }, 5000)
+
+      this.showloading();
+
       this.yunbaPublish({
         info: {
-          'topic': 'orders/' + this.$route.params.id,
+          'topic': 'devices/zhouzj01',
           'msg': JSON.stringify(msg),
           'opts': {
               'qos': 1,
@@ -164,20 +217,32 @@ module.exports = {
               'messageId': this.messageId
             }
         },
-        publishCallback: () => console.log('publish', '3074')
+        publishCallback: () => console.log('publish', msg)
       })
     },
     getDetail() {
       this.getInvoiceDetail({
         id: this.$route.params.id,
-        onsuccess: body => this.data = body.data
+        onsuccess: body => {
+          this.data = body.data;
+          if (body.data && body.data.id) {
+            this.sender = `invoices/${body.data.id}`;
+            this.subscribe(this.sender)
+          }
+        }
       })
     }
   },
   mounted() {
-    this.getDetail();
-    // this.yunbaConnect();
-    // this.subscribe(this.$route.params.id);
+    // this.getDetail();
+    this.yunbaConnect();
+
+    //过会删
+    this.sender = 'invoices/abc123';
+    this.subscribe(this.sender);
+  },
+  beforeDestroy() {
+
   }
 }
 

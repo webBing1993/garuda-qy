@@ -37,7 +37,8 @@ let done = {
         hotel_id : '666',
         status: 1,
         create_time: '1501927541049',
-        update_time: '1501927541049'
+        update_time: '1501927541049',
+        devide_id: 'devices/zhouzj01'
       };
 
 let done2 = {
@@ -57,7 +58,7 @@ let done2 = {
         hotel_id : '666',
         status: 1,
         create_time: '1301927541049',
-        update_time: '1301927541049'
+        update_time: '1301927541049',
       };
 
 
