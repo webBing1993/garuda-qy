@@ -20,6 +20,11 @@ module.exports = {
       if (success) param.subscribeCallback ? param.subscribeCallback() : null
     })
   },
+  yunbaUnsubscribe(ctx, param) {
+    ctx.state.yunbaInstance.unsubscribe(param.info, function (success, msg) {
+      if (success) param.unSubscribeCallback ? param.unSubscribeCallback() : null
+    })
+  },
   yunbaPublish(ctx, param) {
     ctx.state.yunbaInstance.publish2(param.info, function (success, msg) {
       if (success) param.publishCallback ? param.publishCallback() : null

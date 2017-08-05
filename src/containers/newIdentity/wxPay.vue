@@ -50,7 +50,8 @@
         wxPayStatus: '',
         errCode: '',
 //        isToastShow: false
-        messageId: 1
+        messageId: 1,
+        ordersSubscribed: false
       }
     },
     computed: {
@@ -92,6 +93,7 @@
         'goto',
         'yunbaConnect',
         'yunbaSubscribe',
+        'yunbaUnsubscribe',
         'yunbaPublish',
         'setPublishCallback',
         'wxPayConfirm'
@@ -107,7 +109,7 @@
           this.messageId = this.messageId +1;
           if(this.messageId > 65536) this.messageId = 1;
           console.log(sender,cmd,data,this.messageId);
-          this.publish(sender,cmd,data);
+          if(this.yunbaConnected) this.publish(sender,cmd,data);
         } else if (this.wxPayStatus === 'SUCCESS') {
           this.resetData();
           this.showDialog = false;
@@ -122,7 +124,7 @@
           if(this.messageId > 65536) this.messageId = 1;
           console.log(sender,cmd,data,this.messageId);
 
-          this.publish(sender,cmd,data);
+          if(this.yunbaConnected) this.publish(sender,cmd,data);
           this.showDialog = false;
         } else if (this.wxPayStatus === 'FAILED') {
           this.resetData();
@@ -141,7 +143,7 @@
               if (body.data) {
                 this.orderId = body.data;
                 console.log(this.orderId);
-                this.subscribe(this.orderId);
+                if(this.yunbaConnected) this.subscribe(this.orderId);
                 let sender = 'orders/' + this.orderId;
                 let cmd = '3074';// 3074 支付订单二维码
                 let data = {
@@ -151,7 +153,7 @@
                 if(this.messageId > 65536) this.messageId = 1;
                 console.log(sender,cmd,data,this.messageId);
 
-                this.publish(sender,cmd,data);
+                if(this.yunbaConnected) this.publish(sender,cmd,data);
                 setTimeout(() => {
                   this.showDialog = true;
                 },200);
@@ -165,7 +167,10 @@
           info: {
             'topic': 'orders/' + this.orderId //orders/{order_id}
           },
-          subscribeCallback: () => console.log('subscribe', 'orders/' + this.orderId)
+          subscribeCallback: () => {
+            this.ordersSubscribed = true;
+            console.log('subscribe', 'orders/' + this.orderId)
+          }
         })
       },
       publish(sender,cmd,data) {
@@ -229,6 +234,21 @@
         this.resetData();
         this.showDialog = false;
       }
+    },
+    deactivated() {
+        this.showDialog = false;
+        if(this.ordersSubscribed) {
+          this.yunbaUnsubscribe({
+            info: {
+              'topic': 'orders/' + this.orderId //orders/{order_id}
+            },
+            unSubscribeCallback: () => {
+              console.log('unsubscribe', 'orders/' + this.orderId);
+              this.ordersSubscribed = false;
+            }
+          })
+        }
+
     }
   }
 </script>
