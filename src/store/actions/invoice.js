@@ -43,7 +43,7 @@ module.exports = {
   getInvoiceList(ctx, param){
     ctx.dispatch('resource', {
       url: '/getInvoiceList',
-      method:'GET',
+      // method:'GET',
       // headers: {
       //   'X-Current-Page': param.page || '1',
       //   'X-Page-Size': param.size || '0'
@@ -62,7 +62,7 @@ module.exports = {
   getInvoiceDetail(ctx, param) {
     ctx.dispatch('resource', {
       url: `/getInvoice`,
-      method:'GET',
+      // method:'GET',
       params: {
         id: param.id
       },
@@ -74,7 +74,7 @@ module.exports = {
   invoiceComplete(ctx, param){
     ctx.dispatch('resource', {
       url: '/udpateStatus',
-      method:'GET',
+      // method:'GET',
       params: {
         id: param.id
       },

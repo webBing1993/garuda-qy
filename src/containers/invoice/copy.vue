@@ -77,15 +77,6 @@
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
 let timeOut = null;
-let timeOutSubscribe = (cb, time, that) => {
-  if (that.yunbaConnected) {
-    cb();
-  } else {
-    setTimeout(() => {
-      timeOutSubscribe(cb, time, that);
-    }, time);
-  }
-}
 
 module.exports = {
   name: 'InvoiceDetail',
@@ -126,15 +117,15 @@ module.exports = {
             let msg = JSON.parse(body.msg);
             let data = msg.data;
 
-            if (data && data.status && data.status === 'SUCCESS') {
-              this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-            } else if (data && data.status && data.status === 'NOT_TOP') {
-              this.dialogMsg = '请先打开开票软件的开票页面';
-              this.showDialog = true;
-            } else if (data && data.status && data.status === 'FAILED') {
-              this.dialogMsg = '发票填充失败';
-              this.showDialog = true;
-            }
+            // if (data && data.status && data.status === 'SUCCESS') {
+            //   this.goto(`/invoice/detail/${this.$route.params.id}/result`);
+            // } else if (data && data.status && data.status === 'NOT_TOP') {
+            //   this.dialogMsg = '请先打开开票软件的开票页面';
+            //   this.showDialog = true;
+            // } else if (data && data.status && data.status === 'FAILED') {
+            //   this.dialogMsg = '发票填充失败';
+            //   this.showDialog = true;
+            // }
           }
         })
       }
@@ -249,17 +240,14 @@ module.exports = {
           this.data = body.data;
           if (body.data && body.data.id) {
             this.sender = `invoices/${body.data.id}`;
-
-            timeOutSubscribe(() => {
-              this.subscribe(this.sender);
-            }, 2000, this)
+            this.subscribe(this.sender)
           }
           if (body.data && body.data.device_id) {
             this.publisher = `devices/${body.data.device_id}`;
           }
         }
       })
-    },
+    }
   },
   mounted() {
     this.getDetail();
