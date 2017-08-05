@@ -26,8 +26,8 @@ module.exports = {
   roomNumberList: [],
   yunbaInstance: new Yunba({
     appkey: '581202f86cf991dc38fd2078',
-    server: 'http://sock.yunba.io',
-    port: '3000'
+    server: 'https://sock.yunba.io',
+    port: '443'
   }),
   yunbaConnected: false,
   deviceId:''

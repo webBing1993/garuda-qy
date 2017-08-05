@@ -77,15 +77,6 @@
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
 let timeOut = null;
-let timeOutSubscribe = (cb, time, that) => {
-  if (that.yunbaConnected) {
-    cb();
-  } else {
-    setTimeout(() => {
-      timeOutSubscribe(cb, time, that);
-    }, time);
-  }
-}
 
 module.exports = {
   name: 'InvoiceDetail',
@@ -97,8 +88,7 @@ module.exports = {
       data: {},
       sender: '',
       publisher: '',
-      dialogMsg: '',
-      ordersSubscribed: false
+      dialogMsg: ''
     }
   },
   computed: {
@@ -108,17 +98,13 @@ module.exports = {
       'AppParams'
     ]),
     btnDisabled() {
-      return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing && this.publisher && this.ordersSubscribed)
+      return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing && this.publisher)
     }
   },
   watch: {
     yunbaConnected(val) {
         val && this.setPublishCallback({
           onSuccess: (body) => {
-
-            console.log('---------  收到云吧消息')
-            console.log(body)
-
             this.publishing = false;
             this.stoploading();
             clearTimeout(timeOut);
@@ -171,8 +157,6 @@ module.exports = {
       'stoploading'
     ]),
     submit() {
-      
-      if (this.btnDisabled) return;
 
       let data = {
         "invoice_type":"PERSONAL",//发票类型
@@ -203,16 +187,11 @@ module.exports = {
       this.showDialog = false;
     },
     subscribe(topic) {
-      console.log('++++++++++++++++')
-      console.log('topic : ', topic)
       this.yunbaSubscribe({
         info: {
           'topic': topic
         },
-        subscribeCallback: () => {
-          this.ordersSubscribed = true;
-          console.log('subscribe', topic)
-        }
+        subscribeCallback: () => console.log('subscribe', topic)
       })
     },
     publish(msg) {
@@ -228,6 +207,7 @@ module.exports = {
       }, 5000)
 
       this.showloading();
+
       this.yunbaPublish({
         info: {
           'topic': this.publisher,
@@ -249,41 +229,34 @@ module.exports = {
           this.data = body.data;
           if (body.data && body.data.id) {
             this.sender = `invoices/${body.data.id}`;
-
-            timeOutSubscribe(() => {
-              this.subscribe(this.sender);
-            }, 2000, this)
+            this.subscribe(this.sender)
           }
           if (body.data && body.data.device_id) {
             this.publisher = `devices/${body.data.device_id}`;
           }
         }
       })
-    },
+    }
   },
   mounted() {
     this.getDetail();
     this.yunbaConnect();
+
+    // //过会删
+    // this.sender = 'invoices/abc123';
+    // this.subscribe(this.sender);
   },
   beforeDestroy() {
-    if (this.ordersSubscribed) {
+    if(this.ordersSubscribed) {
       this.yunbaUnsubscribe({
         info: {
           'topic': this.sender
         },
         unSubscribeCallback: () => {
-          this.ordersSubscribed = false;
           console.log('unsubscribe', this.sender);
+          this.ordersSubscribed = false;
         }
       })
-      // this.yunbaUnsubscribe({
-      //   info: {
-      //     'topic': 'devices/zhouzj01'
-      //   },
-      //   unSubscribeCallback: () => {
-      //     console.log('unsubscribe', 'devices/zhouzj01');
-      //   }
-      // })
     }
   }
 }

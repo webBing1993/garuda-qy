@@ -4,13 +4,17 @@
       <ul class="pay-list">
         <li class="list-item">
           <label class="item-left">房费</label>
-          <span class="price-icon">￥</span>
-          <input class="item-right room-fee" v-model="roomFee"/>
+          <span class="input-wrapper">
+            <span class="price-icon">￥</span>
+            <input class="item-right room-fee" v-model="roomFee"/>
+          </span>
         </li>
         <li class="list-item">
           <label class="item-left">押金</label>
-          <span class="price-icon">￥</span>
-          <input class="item-right deposit" v-model="deposit"/>
+          <span class="input-wrapper">
+            <span class="price-icon">￥</span>
+            <input class="item-right deposit" v-model="deposit"/>
+          </span>
         </li>
         <li class="list-item">
           <span class="item-left">总计：</span>
@@ -213,12 +217,13 @@
       yunbaConnected(val) {
         val && this.setPublishCallback({
           onSuccess: (data) => {
-            console.log(data);
-            this.resetData();
+//            this.resetData();
             let messageCbInfo = JSON.parse(data.msg);
+            console.log(messageCbInfo);
+            if (messageCbInfo.cmd === '3021') return;
             if (messageCbInfo.cmd) this.cmd = messageCbInfo.cmd;
-            if (messageCbInfo.data.code) this.errCode = messageCbInfo.data.code;
-            if (messageCbInfo.data.status) this.wxPayStatus = messageCbInfo.data.status;
+            if (messageCbInfo.data && messageCbInfo.data.code) this.errCode = messageCbInfo.data.code;
+            if (messageCbInfo.data && messageCbInfo.data.status) this.wxPayStatus = messageCbInfo.data.status;
           }
         })
       }
@@ -237,6 +242,8 @@
     },
     deactivated() {
       this.showDialog = false;
+      this.roomFee = 0;
+      this.deposit = 0;
       if (this.ordersSubscribed) {
         this.yunbaUnsubscribe({
           info: {

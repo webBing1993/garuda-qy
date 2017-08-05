@@ -290,28 +290,34 @@ footer {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-    position: relative;
 
     .item-left {
       min-width: 3em;
     }
+    .input-wrapper {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      border: 1px solid #E6E6E6;
+      border-radius: 4px;
+
+    }
     .item-right {
       flex-grow: 1;
       &.room-fee, &.deposit {
+        flex-grow: 1;
         line-height: 43px;
-        border: 1px solid #E6E6E6;
-        border-radius: 4px;
+        height: 43px;
         outline: none;
-        text-indent: 2em;
         font-size: 16px;
+        border: none;
       }
       &.total-fee {
         font-size: 23px;
       }
     }
     .price-icon {
-      position: absolute;
-      left: 4em;
+      margin-left: 15px;
     }
     .total-icon {
       font-size: 14px;
