@@ -42,12 +42,28 @@ module.exports = {
   //闪开发票
   getInvoiceList(ctx, param){
     ctx.dispatch('resource', {
-      url: '/invoice',
+      url: '/getInvoiceList',
+      method:'GET',
+      // headers: {
+      //   'X-Current-Page': param.page || '1',
+      //   'X-Page-Size': param.size || '0'
+      // },
       params: {
-        invoice_status: param.invoice_status,
-        scope: param.scope
+        status: param.status || 0,
       },
-      onSuccess: (body) => {
+      onSuccess: (body, headers) => {
+        param.onsuccess ? param.onsuccess(body, headers) : null
+      },
+      onFail: body => {
+        param.onfail ? param.onfail(body) : null
+      }
+    })
+  },
+  getInvoiceDetail(ctx, param) {
+    ctx.dispatch('resource', {
+      url: `/getInvoice/${param.id}`,
+      method:'GET',
+      onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })

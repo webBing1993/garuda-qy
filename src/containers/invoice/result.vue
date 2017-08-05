@@ -36,7 +36,7 @@ module.exports = {
       'replaceto'
     ]),
     complete() {
-      
+      this.replaceto('/invoice/0')
     }
   },
   mounted() {

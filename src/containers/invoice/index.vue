@@ -11,15 +11,18 @@
       </Tab>
     </header>
 
-    <scroller :pulldown-config="Interface.scroller"
-              :depend="renderList"
-              @on-pulldown-loading="refreshList"
-              lock-x
+    <scroller v-show="tabIndex === 0" lock-x
               use-pulldown
+              ref="scroller1"
+              v-model="scrollerStatus1"
+              :pullup-config="pullupConfig"
+              :pulldown-config="Interface.scroller"
+              @on-pulldown-loading="refresh"
+              @on-pullup-loading="loadMore"
               height="-44">
       <div class="scroller-wrap">
-        <p v-if="(!renderList || renderList.length === 0) && renderPageIndex >0 " class="no-data">暂无数据</p>
-        <Group v-show="tabIndex === 0" @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index">
+        <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
+        <Group @click.native="goDetail(item)" v-for="(item,index) in waitList" :key="index">
           <Cell>
             <p><span class="cell-value">{{item.rooms.join(', ')}}</span><span class="cell-right warn">待处理</span></p>
           </Cell>
@@ -30,7 +33,21 @@
             </div>
           </Cell>
         </Group>
-        <Group v-show="tabIndex === 1" @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="item.date">
+      </div>
+    </scroller>
+
+    <scroller v-show="tabIndex === 1" lock-x
+              use-pulldown
+              ref="scroller2"
+              v-model="scrollerStatus2"
+              :pullup-config="pullupConfig"
+              :pulldown-config="Interface.scroller"
+              @on-pulldown-loading="refresh"
+              @on-pullup-loading="loadMore"
+              height="-44">
+      <div class="scroller-wrap">
+        <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
+        <Group @click.native="goDetail(item)" v-for="(item,index) in doneList" :key="index" :title="item.date">
           <Cell>
             <p><span class="cell-value">{{item.rooms.join(', ')}}</span><span class="cell-right">{{item.date}}</span></p>
           </Cell>
@@ -55,6 +72,26 @@
     name: 'list',
     data(){
       return {
+        scrollerStatus1: {
+          pullupStatus: 'default',
+          pulldownStatus: 'default'
+        },
+        scrollerStatus2: {
+          pullupStatus: 'default',
+          pulldownStatus: 'default'
+        },
+        pullupConfig: {
+          content: '上拉加载更多',
+          pullUpHeight: 60,
+          height: 40,
+          autoRefresh: false,
+          downContent: '松开加载',
+          upContent: '上拉加载更多',
+          loadingContent: '加载中..',
+          clsPrefix: 'xs-plugin-pullup-'
+        },
+        page1: 1,
+        page2: 1,
         tabmenu: ["待处理", "已处理"],
         waitList: [
           {
@@ -89,9 +126,7 @@
             rooms: [305,306],
             contact: '王五',
             type: '单位·增值税专用发票'
-          }],
-        waitPageIndex: 0,
-        donePageIndex: 0
+          }]
       }
     },
     computed: {
@@ -101,12 +136,13 @@
       ]),
       tabIndex() {
         return +this.route.params.tab
-      },
-      renderList() {
-        return this.tabIndex ? this.doneList : this.waitList
-      },
-      renderPageIndex(){
-        return this.tabIndex ? this.donePageIndex : this.waitPageIndex
+      }
+    },
+    watch: {
+      tabIndex(val) {
+        val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
+
+        typeof val === 'number' && !isNaN(val) ? this.initList() : null
       }
     },
     methods: {
@@ -118,6 +154,11 @@
       goDetail(obj) {
         this.goto(`/invoice/detail/${obj.id}`)
       },
+      toggleTab(index){
+        let newpath = this.route.path.replace(this.route.params.tab, index)
+        this.replaceto(newpath)
+      },
+
       getList(callback) {
         this.getInvoiceList({
           scope: this.tabIndex === 0 ? 'TODAY' : 'ALL',
@@ -125,27 +166,120 @@
           onsuccess: callback
         })
       },
-      initList(){
-        if ((!this.tabIndex && this.waitList.length === 0) || (this.tabIndex && this.doneList.length === 0)) {
-          this.getList(body => (this[this.tabIndex ? 'doneList' : 'waitList'] = [...body.data], this.tabIndex ? this.donePageIndex++ : this.waitPageIndex++))
+      refresh() {
+        let pa = {
+          from: "top",
+          page: 1
         }
+        this.getList(pa)
       },
-      refreshList(){
-        this.getList(body => this[this.tabIndex ? 'doneList' : 'waitList'] = [...body.data])
+      loadMore() {
+        let page;
+        this.tabIndex ? page = ++this.page1 : page = ++this.page2;
+        let pa = {
+          from: "loadMore",
+          page: page
+        }
+        this.getList(pa)
       },
-      toggleTab(index){
-        let newpath = this.route.path.replace(this.route.params.tab, index)
-        this.replaceto(newpath)
+      // getList(param) {
+      //   let successCallback = (body, headers) => {
+      //     let page = +headers['x-current-page'],size = +headers['x-page-size'],total = +headers['x-total'];
+      //     if(body && Array.isArray(body.data) && body.data.length > 0) {
+      //       if(param.from == "loadMore") {
+      //         if (this.tabIndex) {
+      //           this.page1 = page;
+      //           this.scrollerStatus1.pullupStatus = 'default';
+      //         } else {
+      //           this.page2 = page
+      //           this.scrollerStatus2.pullupStatus = 'default';
+      //         }
+      //       } else {
+      //         if (this.tabIndex) {
+      //           this.waitList = [];
+      //           this.page1 = 1
+      //           this.scrollerStatus1.pulldownStatus = 'default';
+      //         } else {
+      //           this.doneList = [];
+      //           this.page2 = 1
+      //           this.scrollerStatus2.pulldownStatus = 'default';
+      //         }
+      //       }
+      //       // 是否是最后一页
+      //       if (page * size >= total) {
+      //         //禁止上拉
+      //         this.tabIndex ? this.scrollerStatus1.pullupStatus = 'disabled' : this.scrollerStatus2.pullupStatus = 'disabled';
+      //       }
+      //       // 合并数据
+      //       this.tabIndex ? this.waitList = this.waitList.concat(body.data) : this.doneList = this.doneList.concat(body.data)
+      //     } else {
+      //       if (param.from != "loadMore" && this.tabIndex) {
+      //         if (this.tabIndex) {
+      //           this.waitList = body.data;
+      //           this.scrollerStatus1.pulldownStatus = 'default';
+      //           this.scrollerStatus1.pullupStatus = 'disabled';
+      //         } else {
+      //           this.doneList = body.data;
+      //           this.scrollerStatus2.pulldownStatus = 'default';
+      //           this.scrollerStatus2.pullupStatus = 'disabled';
+      //         }
+      //       } else {
+      //         if (this.tabIndex) {
+      //           this.scrollerStatus1.pullupStatus = 'default'
+      //           this.scrollerStatus1.pullupStatus = 'disabled'
+      //         } else {
+      //           this.scrollerStatus2.pullupStatus = 'default'
+      //           this.scrollerStatus2.pullupStatus = 'disabled'
+      //         }
+      //       }
+      //     }
+      //     //更新数据,不然页面容器不够，无法上拉
+      //     this.$nextTick(() => {
+      //       this.tabIndex ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
+      //     })
+      //   };
+
+      //   let errorCallback = (data) => {
+      //     this.tabIndex ? this.scrollerStatus1 = {pullupStatus: 'default',pulldownStatus: 'default'} : this.scrollerStatus2 = {pullupStatus: 'default',pulldownStatus: 'default'}
+      //   };
+
+      //   this.getWaitInvoiceList({
+      //     page: +this.page,
+      //     status: this.tabIndex,
+      //     onsuccess: successCallback,
+      //     onfail: errorCallback
+      //   })
+      // },
+      getList() {
+        this.getInvoiceList({
+          status: this.tabIndex,
+          onsuccess: body => {
+            this.tabIndex ? this.waitList = body.data : this.doneList = body.data;
+          }
+        })
       },
-    },
-    watch: {
-      tabIndex(val) {
-        typeof val === 'number' && !isNaN(val) ? this.initList() : null
+      initList() {
+        let pa = {
+          from: 'top',
+          page: 1
+        }
+        this.getList(pa)
+
+        if (!this.tabIndex && this.waitList.length === 0) {
+          this.getWaitList(pa)
+        } else if (this.tabIndex && this.doneList.length === 0) {
+          this.getDoneList(pa)
+        }
       }
     },
     mounted(){
-      // this.initList();
+      this.initList();
     }
   }
 
 </script>
+<style lang="less" scoped>
+  .scroller-wrap {
+    padding-bottom: 0;
+  }
+</style>

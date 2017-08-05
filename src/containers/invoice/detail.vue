@@ -6,19 +6,19 @@
         <div class="cell-body">
           <p>
             <span class="cell-key2 cell-value-title">房间号：</span>
-            <span class="cell-value">201,202</span>
+            <span class="cell-value">{{data.room_no}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">联系人：</span>
-            <span class="cell-value">张三</span>
+            <span class="cell-value">{{data.contact_name}}</span>
           </p>
           <p v-if="true">
             <span class="cell-key2 cell-value-title">联系电话：</span>
-            <span class="cell-value">18642432834</span>
+            <span class="cell-value">{{data.contact_phone}}</span>
           </p>
           <p v-if="true">
             <span class="cell-key2 cell-value-title">备注：</span>
-            <span class="cell-value">12:00 领取</span>
+            <span class="cell-value">{{data.remark}}</span>
           </p>
         </div>
       </Cell>
@@ -29,36 +29,36 @@
         <div class="cell-body">
           <p>
             <span class="cell-key2 cell-value-title">类型：</span>
-            <span class="cell-value">单位·增值税专用发票</span>
+            <span class="cell-value">{{data.invoice_type | filterInvoiceType}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">名称：</span>
-            <span class="cell-value">测试</span>
+            <span class="cell-value">{{data.title}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">税号：</span>
-            <span class="cell-value">1247474747474747474</span>
+            <span class="cell-value">{{data.tax_registry_no}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">单位地址：</span>
-            <span class="cell-value">上海市杨浦区控江路1690号</span>
+            <span class="cell-value">{{data.address}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">电话号码：</span>
-            <span class="cell-value">45464897</span>
+            <span class="cell-value">{{data.phone_number}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">开户银行：</span>
-            <span class="cell-value">工商银行</span>
+            <span class="cell-value">{{data.bank_name}}</span>
           </p>
           <p>
             <span class="cell-key2 cell-value-title">银行账户：</span>
-            <span class="cell-value">fortrun1</span>
+            <span class="cell-value">{{data.bank_account}}</span>
           </p>
         </div>
       </Cell>
     </Group>
-    <p class="tip"><span class="tip-title">已处理：</span>2017/07/31 12:10</p>
+    <p v-if="data.status === 1" class="tip"><span class="tip-title">已处理：</span>{{data.update_time}}</p>
     <div class="button-group">
       <XButton value="填充发票信息" default @click.native="submit"></XButton>
     </div>
@@ -81,6 +81,25 @@ module.exports = {
   data() {
     return {
       showDialog: false,
+      data: {
+        id: 666,
+        invoice_type: '1',
+        invoice_content: '',
+        room_no: '205,206',
+        contact_name: '张三',
+        contact_phone: '13388889999',
+        remark: '备注',
+        title: '测试',
+        tax_registry_no: '1247474747474747474',
+        address: '上海市杨浦区控江路1690号',
+        phone_number: '13111111111',
+        bank_name: '工商银行',
+        bank_account: 'fortrun',
+        hotel_id : '666',
+        status: 1,
+        create_time: '2017/06/31 12:10',
+        update_time: '2017/07/31 12:10'
+      },
       dialogMsg: '请先打开开票软件的开票页面'
     }
   },
@@ -92,18 +111,38 @@ module.exports = {
     ])
   },
   watch: {
-      yunbaConnected(val) {
-        val && this.setPublishCallback({
-          onSuccess: (data) => {
-            console.log(data);
-            
-          }
-        })
+    yunbaConnected(val) {
+      val && this.setPublishCallback({
+        onSuccess: (data) => {
+          console.log(data);
+          
+        }
+      })
+    }
+  },
+  filters: {
+    filterInvoiceType(v) {
+      let val;
+      switch (v) {
+        case '1': 
+          val = '增值税普通发票';
+          break;
+        case '2': 
+          val = '增值税专用发票';
+          break;
+        case '3': 
+          val = '个人发票';
+          break;
+        default:
+          val = '增值税普通发票';
       }
-    },
+      return val;
+    }
+  },
   methods: {
     ...mapActions([
       'goto',
+      'getInvoiceDetail',
       'yunbaConnect',
       'yunbaSubscribe',
       'yunbaPublish',
@@ -111,7 +150,7 @@ module.exports = {
     ]),
     submit() {
       // this.showDialog = true;
-      // this.goto('/invoice/detail/666/result');
+      // this.goto('/invoice/detail/${this.$route.params.id}/result');
       let data = {
         a: 1
       }
@@ -131,16 +170,23 @@ module.exports = {
     publish(msg) {
       this.yunbaPublish({
         info: {
-          'topic': 'orders/' + 666,
+          'topic': 'orders/' + this.$route.params.id,
           'msg': JSON.stringify(msg)
         },
         publishCallback: () => console.log('publish', '3074')
       })
     },
+    getDetail() {
+      this.getInvoiceDetail({
+        id: this.$route.params.id,
+        onsuccess: body => this.data = body.data
+      })
+    }
   },
   mounted() {
-    // this.yunbaConnect();
-    // this.subscribe(666);
+    this.getDetail();
+    this.yunbaConnect();
+    this.subscribe(this.$route.params.id);
   }
 }
 
