@@ -4,13 +4,17 @@
       <ul class="pay-list">
         <li class="list-item">
           <label class="item-left">房费</label>
-          <span class="price-icon">￥</span>
-          <input class="item-right room-fee" v-model="roomFee"/>
+          <span class="input-wrapper">
+            <span class="price-icon">￥</span>
+            <input class="item-right room-fee" v-model="roomFee"/>
+          </span>
         </li>
         <li class="list-item">
           <label class="item-left">押金</label>
-          <span class="price-icon">￥</span>
-          <input class="item-right deposit" v-model="deposit"/>
+          <span class="input-wrapper">
+            <span class="price-icon">￥</span>
+            <input class="item-right deposit" v-model="deposit"/>
+          </span>
         </li>
         <li class="list-item">
           <span class="item-left">总计：</span>
