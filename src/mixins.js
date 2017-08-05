@@ -98,5 +98,13 @@ Vue.mixin({
             ? '退款失败' : null
         : null
     },
+    getUUID() {
+      let randomness = Math.round(Math.random() * 1e16) % Math.pow(2, 23);
+      randomness = randomness.toString(2).length > 23
+        ? (randomness >>> (randomness.toString(2).length - 23)).toString(2)
+        : (randomness << (23 - randomness.toString(2).length)).toString(2);
+      let timestamp = (new Date().getTime()).toString(2);
+      return parseInt(timestamp, 2).toString() + parseInt(randomness, 2).toString();
+    }
   }
 })

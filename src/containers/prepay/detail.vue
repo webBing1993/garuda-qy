@@ -101,7 +101,7 @@
         let staff_prepay = 0;
         if (this.dialogStatus === 2) {
           this.batchlist.some(i => i === 'otherPrice')
-            ? staff_prepay = this.inputValue ? this.inputValue * 100 : this.orderdetail.payinfo.total_roomfee
+            ? staff_prepay = this.inputValue ? Math.round(this.inputValue * 100) : this.orderdetail.payinfo.total_roomfee
             : staff_prepay = this.orderdetail.payinfo.total_roomfee
         }
         return {

@@ -77,6 +77,9 @@ const checkin = [{
     path: 'handle/:tab',
     component: require('./containers/newIdentity/list')
   },{
+    path: 'wxPay/:identityId',
+    component: require('./containers/newIdentity/wxPay')
+  },{
     path: ':id',
     component: require('./containers/newIdentity/detail')
   }]
@@ -128,6 +131,23 @@ const refund = [{
     }]
 }];
 
+//ljs的老版发票
+// const invoice = [{
+//   path: '/invoice',
+//   component: {
+//     name: "invoice",
+//     template: `<router-view/>`,
+//   },
+//   children: [{
+//     path: ':tab',
+//     component: require('./containers/invoice.vue')
+//   }, {
+//     path: 'detail/:id',
+//     component: require('./containers/detail.vue')
+//   },]
+// }];
+
+//闪开发票
 const invoice = [{
   path: '/invoice',
   component: {
@@ -136,11 +156,14 @@ const invoice = [{
   },
   children: [{
     path: ':tab',
-    component: require('./containers/invoice.vue')
+    component: require('./containers/invoice/index.vue')
   }, {
     path: 'detail/:id',
-    component: require('./containers/detail.vue')
-  },]
+    component: require('./containers/invoice/detail.vue')
+  }, {
+    path: 'detail/:id/result',
+    component: require('./containers/invoice/result.vue')
+  }]
 }];
 
 const others = [

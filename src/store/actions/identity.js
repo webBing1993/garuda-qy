@@ -85,7 +85,7 @@ module.exports = {
         outTime: param.outTime,//离店时间
       },
       onSuccess: body => {
-        ctx.dispatch('showtoast','提交成功');
+        ctx.dispatch('showtoast', '提交成功');
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
@@ -95,6 +95,19 @@ module.exports = {
       url: '/room/numberList',
       onSuccess: body => ctx.commit('ROOMNUMBERLIST', body.data)
     })
+  },
+  wxPayConfirm(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/order/pay',
+      method: 'POST',
+      body: {
+        identity_id: param.identity_id,//设备ID
+        room_fee: param.room_fee,//房费
+        deposit: param.deposit//押金
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
   }
-
-}
+};
