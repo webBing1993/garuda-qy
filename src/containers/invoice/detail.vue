@@ -58,7 +58,7 @@
         </div>
       </Cell>
     </Group>
-    <p v-if="data.status === 1" class="tip"><span class="tip-title">已处理：</span>{{datetimeparse(data.update_time, 'yy/MM/dd hh:mm')}}</p>
+    <p v-if="data.status === '1'" class="tip"><span class="tip-title">已处理：</span>{{datetimeparse(data.update_time, 'yy/MM/dd hh:mm')}}</p>
     <div class="button-group">
       <XButton :disabled="btnDisabled" value="填充发票信息" default @click.native="submit"></XButton>
     </div>
@@ -86,7 +86,8 @@ module.exports = {
       publishing: false,
       messageId: 1,
       data: {},
-      sender: 'invoices/',
+      sender: '',
+      publisher: '',
       dialogMsg: ''
     }
   },
@@ -97,8 +98,7 @@ module.exports = {
       'AppParams'
     ]),
     btnDisabled() {
-      return this.publishing;
-      // return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing)
+      return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing && this.publisher)
     }
   },
   watch: {
@@ -210,7 +210,8 @@ module.exports = {
 
       this.yunbaPublish({
         info: {
-          'topic': 'devices/zhouzj01',
+          'topic': this.publisher,
+          // 'topic': 'devices/zhouzj01',
           'msg': JSON.stringify(msg),
           'opts': {
               'qos': 1,
@@ -230,17 +231,20 @@ module.exports = {
             this.sender = `invoices/${body.data.id}`;
             this.subscribe(this.sender)
           }
+          if (body.data && body.data.device_id) {
+            this.publisher = `devices/${body.data.device_id}`;
+          }
         }
       })
     }
   },
   mounted() {
-    // this.getDetail();
+    this.getDetail();
     this.yunbaConnect();
 
-    //过会删
-    this.sender = 'invoices/abc123';
-    this.subscribe(this.sender);
+    // //过会删
+    // this.sender = 'invoices/abc123';
+    // this.subscribe(this.sender);
   },
   beforeDestroy() {
     if(this.ordersSubscribed) {

@@ -61,8 +61,11 @@ module.exports = {
   },
   getInvoiceDetail(ctx, param) {
     ctx.dispatch('resource', {
-      url: `/getInvoice/${param.id}`,
+      url: `/getInvoice`,
       method:'GET',
+      params: {
+        id: param.id
+      },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
@@ -71,8 +74,8 @@ module.exports = {
   invoiceComplete(ctx, param){
     ctx.dispatch('resource', {
       url: '/udpateStatus',
-      method:'POST',
-      body: {
+      method:'GET',
+      params: {
         id: param.id
       },
       onSuccess: body => {
