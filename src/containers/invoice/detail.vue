@@ -81,6 +81,7 @@ module.exports = {
   data() {
     return {
       showDialog: false,
+      messageId: 1,
       data: {
         id: 666,
         invoice_type: '1',
@@ -154,6 +155,9 @@ module.exports = {
       let data = {
         a: 1
       }
+      this.messageId = this.messageId + 1;
+      if(this.messageId > 65536) this.messageId = 1;
+      
       this.publish(data);
     },
     dialogConfirm() {
@@ -171,7 +175,12 @@ module.exports = {
       this.yunbaPublish({
         info: {
           'topic': 'orders/' + this.$route.params.id,
-          'msg': JSON.stringify(msg)
+          'msg': JSON.stringify(msg),
+          'opts': {
+              'qos': 1,
+              'time_to_live': 5,
+              'messageId': this.messageId
+            }
         },
         publishCallback: () => console.log('publish', '3074')
       })
