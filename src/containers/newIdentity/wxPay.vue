@@ -18,7 +18,6 @@
         </li>
       </ul>
       <x-button value="确定" primary @onClick="getwxPay"></x-button>
-      <!--<x-button value="test确定" primary @onClick="testGetwxPay"></x-button>-->
     </div>
 
     <div class="custom-dialog" v-if="showDialog">
@@ -26,13 +25,13 @@
       <div class="dialog-container">
         <p class="dialog-content" v-if="!(wxPayStatus == 'SUCCESS' || wxPayStatus == 'FAILED' || errCode == '403')">
           等待支付......</p>
-        <p v-if="wxPayStatus == 'SUCCESS'" class="dialog-content" style="color: #80C435;">支付成功</p>
-        <p v-if="wxPayStatus == 'FAILED'" class="dialog-content">支付失败</p>
-        <p v-if="errCode == '403'" class="dialog-content">设备被占用, 请重试</p>
+        <p v-if="cmd == '5001' && wxPayStatus == 'SUCCESS'" class="dialog-content" style="color: #80C435;">支付成功</p>
+        <p v-if="cmd == '5001' && wxPayStatus == 'FAILED'" class="dialog-content">支付失败</p>
+        <p v-if="cmd == '4000' && errCode == '403'" class="dialog-content">设备被占用, 请重试</p>
         <p class="dialog-btn" @click="dialogBtnClick">{{dialogBtnText}}</p>
       </div>
     </div>
-    <Toast v-model="isToastShow" title="操作成功" timer='100'/>
+    <!--<Toast v-model="isToastShow" title="操作成功" timer='100'/>-->
   </article>
 </template>
 
@@ -50,7 +49,8 @@
         cmd: '',
         wxPayStatus: '',
         errCode: '',
-        isToastShow: false
+//        isToastShow: false
+        messageId: 1
       }
     },
     computed: {
@@ -99,31 +99,30 @@
       dialogBtnClick() {
         if (this.dialogBtnText === '重试') {
           this.cmd = '';
-          let msg = {
-            "tid": this.getUUID(),
-            "sender": 'orders/' + this.orderId,//orders/{order_id}
-            "cmd": '3074', //指令编号
-            "code": "0",
-            "data": {
-              "order_id": this.orderId
-            }
+          let sender = 'orders/' + this.orderId;
+          let cmd = '3074';// 3074 支付订单二维码
+          let data = {
+            "order_id": this.orderId
           };
-          this.publish(msg);
+          this.messageId = this.messageId +1;
+          if(this.messageId > 65536) this.messageId = 1;
+          console.log(sender,cmd,data,this.messageId);
+          this.publish(sender,cmd,data);
         } else if (this.wxPayStatus === 'SUCCESS') {
           this.resetData();
           this.showDialog = false;
-          this.goto('/new-identity/' + this.$route.params.id)
+          this.goto('/new-identity/handle/1'); //成功后跳转列表页
         } else if (this.dialogBtnText === '取消') {
-          let msg = {
-            "tid": this.getUUID(),
-            "sender": 'orders/' + this.orderId,//orders/{order_id}
-            "cmd": '3002', //指令编号 3002 重置魔镜
-            "code": "0",
-            "data": {
-              "order_id": this.orderId
-            }
+          let sender = 'orders/' + this.orderId;
+          let cmd = '3002';//重置魔镜
+          let data = {
+            "order_id": this.orderId
           };
-          this.publish(msg);
+          this.messageId = this.messageId +1;
+          if(this.messageId > 65536) this.messageId = 1;
+          console.log(sender,cmd,data,this.messageId);
+
+          this.publish(sender,cmd,data);
           this.showDialog = false;
         } else if (this.wxPayStatus === 'FAILED') {
           this.resetData();
@@ -140,19 +139,19 @@
             onsuccess: (body) => {
                 console.log(body);
               if (body.data) {
-                this.isToastShow = true;
-                this.oderId = body.order_id;
+                this.orderId = body.data;
+                console.log(this.orderId);
                 this.subscribe(this.orderId);
-                let msg = {
-                  "tid": this.getUUID(),
-                  "sender": 'orders/' + this.orderId,//orders/{order_id}
-                  "cmd": '3074', //指令编号 3074 支付订单二维码
-                  "code": "0",
-                  "data": {
-                    "order_id": this.orderId
-                  }
+                let sender = 'orders/' + this.orderId;
+                let cmd = '3074';// 3074 支付订单二维码
+                let data = {
+                  "order_id": this.orderId
                 };
-                this.publish(msg);
+                this.messageId = this.messageId +1;
+                if(this.messageId > 65536) this.messageId = 1;
+                console.log(sender,cmd,data,this.messageId);
+
+                this.publish(sender,cmd,data);
                 setTimeout(() => {
                   this.showDialog = true;
                 },200);
@@ -166,16 +165,28 @@
           info: {
             'topic': 'orders/' + this.orderId //orders/{order_id}
           },
-          subscribeCallback: () => console.log('subscribe', 'lisijing')
+          subscribeCallback: () => console.log('subscribe', 'orders/' + this.orderId)
         })
       },
-      publish(msg) {
+      publish(sender,cmd,data) {
+        let msg = {
+          "tid": this.getUUID(),
+          "sender": sender,//orders/{order_id}
+          "cmd": cmd, //指令编号
+          "code": "0",
+          "data": data
+        };
         this.yunbaPublish({
           info: {
-            'topic': 'devices/' + this.deviceId, //orders/{order_id}
-            'msg': JSON.stringify(msg)
+            'topic': 'devices/' + this.deviceId,
+            'msg': JSON.stringify(msg),
+            'opts': {
+              'qos': 1,
+              'time_to_live': 5,
+              'messageId': this.messageId
+            }
           },
-          publishCallback: () => console.log('publish', 'devices/' + this.deviceId)
+          publishCallback: () => console.log('publish', msg)
         })
       },
       resetData() {
@@ -189,10 +200,10 @@
     },
     watch: {
       roomFee(val, oldVal) {
-        if (val && val.split().some(i => !(/^[0-9]*$/.test(val) || /\./.test(i)))) this.roomFee = +oldVal
+        if (isNaN(val)) this.roomFee = oldVal
       },
       deposit(val, oldVal) {
-        if (val && val.split().some(i => !(/^[0-9]*$/.test(val) || /\./.test(i)))) this.roomFee = +oldVal
+        if (isNaN(val)) this.roomFee = oldVal
       },
       yunbaConnected(val) {
         val && this.setPublishCallback({
