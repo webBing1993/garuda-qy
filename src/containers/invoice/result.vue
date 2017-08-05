@@ -33,10 +33,14 @@ module.exports = {
   methods: {
     ...mapActions([
       'goto',
-      'replaceto'
+      'replaceto',
+      'invoiceComplete'
     ]),
     complete() {
-      this.replaceto('/invoice/0')
+      this.invoiceComplete({
+        id: this.$route.params.id,
+        onsuccess: body => this.replaceto('/invoice/0')
+      })
     }
   },
   mounted() {

@@ -68,4 +68,16 @@ module.exports = {
       }
     })
   },
+  invoiceComplete(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/udpateStatus',
+      method:'POST',
+      body: {
+        id: param.id
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
 }

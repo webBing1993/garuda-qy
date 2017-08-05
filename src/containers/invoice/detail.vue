@@ -113,7 +113,7 @@ module.exports = {
             let data = msg.data;
 
             if (data && data.status && data.status === 'SUCCESS') {
-              this.goto('/invoice/detail/${this.$route.params.id}/result');
+              this.goto(`/invoice/detail/${this.$route.params.id}/result`);
             } else if (data && data.status && data.status === 'NOT_TOP') {
               this.dialogMsg = '请先打开开票软件的开票页面';
               this.showDialog = true;
@@ -150,6 +150,7 @@ module.exports = {
       'getInvoiceDetail',
       'yunbaConnect',
       'yunbaSubscribe',
+      'yunbaUnsubscribe',
       'yunbaPublish',
       'setPublishCallback',
       'showloading',
@@ -242,7 +243,17 @@ module.exports = {
     this.subscribe(this.sender);
   },
   beforeDestroy() {
-
+    if(this.ordersSubscribed) {
+      this.yunbaUnsubscribe({
+        info: {
+          'topic': this.sender
+        },
+        unSubscribeCallback: () => {
+          console.log('unsubscribe', this.sender);
+          this.ordersSubscribed = false;
+        }
+      })
+    }
   }
 }
 
