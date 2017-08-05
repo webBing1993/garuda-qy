@@ -21,7 +21,7 @@ module.exports = {
     })
   },
   yunbaPublish(ctx, param) {
-    ctx.state.yunbaInstance.publish(param.info, function (success, msg) {
+    ctx.state.yunbaInstance.publish2(param.info, function (success, msg) {
       if (success) param.publishCallback ? param.publishCallback() : null
     })
   },

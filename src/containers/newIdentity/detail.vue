@@ -51,7 +51,7 @@
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
       <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>
-      <p><span style="color: #80C435;" v-if="detail.reportInStatus === 'SUCCESS'">旅业系统上传成功</span></p>
+      <p><span style="color: #80C435;padding-right: 10px" v-if="detail.reportInStatus === 'SUCCESS'">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
       <x-button v-if="detail.reportInStatus !== 'SUCCESS'"
                 :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
                 @onClick="isDialogShow"

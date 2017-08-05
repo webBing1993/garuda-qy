@@ -34,7 +34,7 @@ module.exports = {
       emulateJSON: false,
     }).then(
       response => {
-        if (+response.body.errcode === 0) {
+        if (response.body.errcode && +response.body.errcode === 0) {
           param.method && !param.url.match(/precheckin/) && !param.url.match(/login/)&& !param.url.match(/refund_apply_list/) && !param.url.match(/searchLvyeReportInfo/)&& !param.url.match(/lvyeReport/)&& !param.url.match(/order\/pay/) ? ctx.dispatch('showtoast') : null
           param.onSuccess ? param.onSuccess(response.body) : null
         } else {
