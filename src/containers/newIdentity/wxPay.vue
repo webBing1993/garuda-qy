@@ -106,10 +106,10 @@
           let data = {
             "order_id": this.orderId
           };
-          this.messageId = this.messageId +1;
-          if(this.messageId > 65536) this.messageId = 1;
-          console.log(sender,cmd,data,this.messageId);
-          if(this.yunbaConnected) this.publish(sender,cmd,data);
+          this.messageId = this.messageId + 1;
+          if (this.messageId > 65536) this.messageId = 1;
+          console.log(sender, cmd, data, this.messageId);
+          if (this.yunbaConnected) this.publish(sender, cmd, data);
         } else if (this.wxPayStatus === 'SUCCESS') {
           this.resetData();
           this.showDialog = false;
@@ -120,11 +120,11 @@
           let data = {
             "order_id": this.orderId
           };
-          this.messageId = this.messageId +1;
-          if(this.messageId > 65536) this.messageId = 1;
-          console.log(sender,cmd,data,this.messageId);
+          this.messageId = this.messageId + 1;
+          if (this.messageId > 65536) this.messageId = 1;
+          console.log(sender, cmd, data, this.messageId);
 
-          if(this.yunbaConnected) this.publish(sender,cmd,data);
+          if (this.yunbaConnected) this.publish(sender, cmd, data);
           this.showDialog = false;
         } else if (this.wxPayStatus === 'FAILED') {
           this.resetData();
@@ -139,24 +139,24 @@
             room_fee: Math.round(this.roomFee * 100),//房费
             deposit: Math.round(this.deposit * 100),
             onsuccess: (body) => {
-                console.log(body);
+              console.log(body);
               if (body.data) {
                 this.orderId = body.data;
                 console.log(this.orderId);
-                if(this.yunbaConnected) this.subscribe(this.orderId);
+                if (this.yunbaConnected) this.subscribe(this.orderId);
                 let sender = 'orders/' + this.orderId;
                 let cmd = '3074';// 3074 支付订单二维码
                 let data = {
                   "order_id": this.orderId
                 };
-                this.messageId = this.messageId +1;
-                if(this.messageId > 65536) this.messageId = 1;
-                console.log(sender,cmd,data,this.messageId);
+                this.messageId = this.messageId + 1;
+                if (this.messageId > 65536) this.messageId = 1;
+                console.log(sender, cmd, data, this.messageId);
 
-                if(this.yunbaConnected) this.publish(sender,cmd,data);
+                if (this.yunbaConnected) this.publish(sender, cmd, data);
                 setTimeout(() => {
                   this.showDialog = true;
-                },200);
+                }, 200);
               }
             }//押金
           })
@@ -173,7 +173,7 @@
           }
         })
       },
-      publish(sender,cmd,data) {
+      publish(sender, cmd, data) {
         let msg = {
           "tid": this.getUUID(),
           "sender": sender,//orders/{order_id}
@@ -236,18 +236,18 @@
       }
     },
     deactivated() {
-        this.showDialog = false;
-        if(this.ordersSubscribed) {
-          this.yunbaUnsubscribe({
-            info: {
-              'topic': 'orders/' + this.orderId //orders/{order_id}
-            },
-            unSubscribeCallback: () => {
-              console.log('unsubscribe', 'orders/' + this.orderId);
-              this.ordersSubscribed = false;
-            }
-          })
-        }
+      this.showDialog = false;
+      if (this.ordersSubscribed) {
+        this.yunbaUnsubscribe({
+          info: {
+            'topic': 'orders/' + this.orderId //orders/{order_id}
+          },
+          unSubscribeCallback: () => {
+            console.log('unsubscribe', 'orders/' + this.orderId);
+            this.ordersSubscribed = false;
+          }
+        })
+      }
 
     }
   }

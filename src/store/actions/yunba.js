@@ -15,6 +15,15 @@ module.exports = {
       }
     })
   },
+  yunbaDisconnect(ctx){
+    ctx.state.yunbaInstance.disconnect(function (success, msg) {
+      if (success) {
+        console.log('yunba disconnect',success);
+      } else {
+        console.log(msg);
+      }
+    })
+  },
   yunbaSubscribe(ctx, param) {
     ctx.state.yunbaInstance.subscribe(param.info, function (success, msg) {
       if (success) param.subscribeCallback ? param.subscribeCallback() : null
