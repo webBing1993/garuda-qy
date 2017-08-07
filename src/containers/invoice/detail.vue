@@ -4,19 +4,19 @@
       <Cell title="房间信息" />
       <Cell>
         <div class="cell-body">
-          <p>
+          <p v-if="data.room_no">
             <span class="cell-key2 cell-value-title">房间号：</span>
             <span class="cell-value">{{data.room_no}}</span>
           </p>
-          <p>
+          <p v-if="data.contact_name">
             <span class="cell-key2 cell-value-title">联系人：</span>
             <span class="cell-value">{{data.contact_name}}</span>
           </p>
-          <p v-if="true">
+          <p v-if="data.contact_phone">
             <span class="cell-key2 cell-value-title">联系电话：</span>
             <span class="cell-value">{{data.contact_phone}}</span>
           </p>
-          <p v-if="true">
+          <p v-if="data.remark">
             <span class="cell-key2 cell-value-title">备注：</span>
             <span class="cell-value">{{data.remark}}</span>
           </p>
@@ -27,31 +27,31 @@
       <Cell title="发票抬头" />
       <Cell>
         <div class="cell-body">
-          <p>
+          <p v-if="data.invoice_type">
             <span class="cell-key2 cell-value-title">类型：</span>
             <span class="cell-value">{{data.invoice_type | filterInvoiceType}}</span>
           </p>
-          <p>
+          <p v-if="data.title">
             <span class="cell-key2 cell-value-title">名称：</span>
             <span class="cell-value">{{data.title}}</span>
           </p>
-          <p>
+          <p v-if="data.tax_registry_no">
             <span class="cell-key2 cell-value-title">税号：</span>
             <span class="cell-value">{{data.tax_registry_no}}</span>
           </p>
-          <p>
+          <p v-if="data.address">
             <span class="cell-key2 cell-value-title">单位地址：</span>
             <span class="cell-value">{{data.address}}</span>
           </p>
-          <p>
+          <p v-if="data.phone_number">
             <span class="cell-key2 cell-value-title">电话号码：</span>
             <span class="cell-value">{{data.phone_number}}</span>
           </p>
-          <p>
+          <p v-if="data.bank_name">
             <span class="cell-key2 cell-value-title">开户银行：</span>
             <span class="cell-value">{{data.bank_name}}</span>
           </p>
-          <p>
+          <p v-if="data.bank_account">
             <span class="cell-key2 cell-value-title">银行账户：</span>
             <span class="cell-value">{{data.bank_account}}</span>
           </p>
