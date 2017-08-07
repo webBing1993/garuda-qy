@@ -126,15 +126,36 @@ module.exports = {
             let msg = JSON.parse(body.msg);
             let data = msg.data;
 
-            if (data && data.status && data.status === 'SUCCESS') {
-              this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-            } else if (data && data.status && data.status === 'NOT_TOP') {
-              this.dialogMsg = '请先打开开票软件的开票页面';
-              this.showDialog = true;
-            } else if (data && data.status && data.status === 'FAILED') {
-              this.dialogMsg = '发票填充失败';
-              this.showDialog = true;
+            if (!data && !data.status)  return;
+
+            switch (data.status) {
+              case 'SUCCESS':
+                this.goto(`/invoice/detail/${this.$route.params.id}/result`);
+                break;
+              case true:
+                this.showDialog = true;
+              case 'NOT_TOP':
+                this.dialogMsg = '请先打开开票软件的开票页面';
+                break;
+              case 'FAILED':
+                this.dialogMsg = '发票填充失败';
+                break;
+              case 'REPEATED':
+                this.dialogMsg = '同一个税务发票界面重复请求操作';
+                break;
+              case 'BUSY':
+                this.dialogMsg = '插件正在工作';
+                break;
+              case 'DATAERROR':
+                this.dialogMsg = '发票填充失败';
+                break;
+              case 'SYSERROR':
+                this.dialogMsg = '发票填充失败';
+                break;
+              default:
+                this.dialogMsg = '发票填充失败';
             }
+            // this.showDialog = true;
           }
         })
       }
@@ -174,15 +195,30 @@ module.exports = {
       
       if (this.btnDisabled) return;
 
+      let invoiceType;
+      switch (data.invoice_type) {
+        case '1': 
+          invoiceType = 'GENERAL';
+          break;
+        case '1': 
+          invoiceType = 'VAT';
+          break;
+        case '1': 
+          invoiceType = 'PERSONAL';
+          break;
+        default:
+          invoiceType = 'GENERAL';
+      }
+
       let data = {
-        "invoice_type":"PERSONAL",//发票类型
-        "title":"qqq",//抬头
-        "category":"www",//开票内容
-        "tax_registry_no":"eeee",//税号
-        "address":"rrrrr",//地址
-        "phone_number":"tttt",  //联系电话
-        "bank_name":"yyyy",  //开户行名称
-        "bank_account":"uuuuu"//开户行账号
+        "invoice_type": invoiceType,//发票类型
+        "title": data.title,//抬头
+        "category": "",//开票内容
+        "tax_registry_no": data.tax_registry_no,//税号
+        "address": data.address,//地址
+        "phone_number": data.phone_number,  //联系电话
+        "bank_name": data.bank_name,  //开户行名称
+        "bank_account": data.bank_account//开户行账号
       }
 
       let msg = {
@@ -203,8 +239,6 @@ module.exports = {
       this.showDialog = false;
     },
     subscribe(topic) {
-      console.log('++++++++++++++++')
-      console.log('topic : ', topic)
       this.yunbaSubscribe({
         info: {
           'topic': topic
