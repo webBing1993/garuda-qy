@@ -126,7 +126,7 @@ module.exports = {
             let msg = JSON.parse(body.msg);
             let data = msg.data;
 
-            if (!data && !data.status)  return;
+            if (msg.cmd !== '5002' || !data || !data.status)  return;
 
             switch (data.status) {
               case 'SUCCESS':
@@ -194,9 +194,9 @@ module.exports = {
     submit() {
       
       if (this.btnDisabled) return;
-
+      
       let invoiceType;
-      switch (data.invoice_type) {
+      switch (this.data.invoice_type) {
         case '1': 
           invoiceType = 'GENERAL';
           break;
@@ -212,13 +212,13 @@ module.exports = {
 
       let data = {
         "invoice_type": invoiceType,//发票类型
-        "title": data.title,//抬头
+        "title": this.data.title,//抬头
         "category": "",//开票内容
-        "tax_registry_no": data.tax_registry_no,//税号
-        "address": data.address,//地址
-        "phone_number": data.phone_number,  //联系电话
-        "bank_name": data.bank_name,  //开户行名称
-        "bank_account": data.bank_account//开户行账号
+        "tax_registry_no": this.data.tax_registry_no,//税号
+        "address": this.data.address,//地址
+        "phone_number": this.data.phone_number,  //联系电话
+        "bank_name": this.data.bank_name,  //开户行名称
+        "bank_account": this.data.bank_account//开户行账号
       }
 
       let msg = {
