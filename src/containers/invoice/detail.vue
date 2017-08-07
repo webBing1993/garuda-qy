@@ -60,7 +60,7 @@
     </Group>
     <p v-if="data.status === '1'" class="tip"><span class="tip-title">已处理：</span>{{datetimeparse(data.update_time, 'yy/MM/dd hh:mm')}}</p>
     <div class="button-group">
-      <XButton :disabled="btnDisabled" value="填充发票信息" default @click.native="submit"></XButton>
+      <XButton :disabled="btnDisabled" :value="btnTitle" default @click.native="submit"></XButton>
     </div>
     <Dialog v-model="showDialog" confirmVal="确定" @onConfirm="dialogConfirm" confirm>
       <div>
@@ -98,7 +98,8 @@ module.exports = {
       sender: '',
       publisher: '',
       dialogMsg: '',
-      ordersSubscribed: false
+      ordersSubscribed: false,
+      btnTitle: '请稍后...'
     }
   },
   computed: {
@@ -158,6 +159,9 @@ module.exports = {
             // this.showDialog = true;
           }
         })
+      },
+      btnDisabled(v) {
+        !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍后...'
       }
   },
   filters: {
@@ -259,7 +263,7 @@ module.exports = {
           this.dialogMsg = '未启动闪开发票代理服务';
           this.showDialog = true;
         }
-      }, 5000)
+      }, 10000)
 
       this.showloading();
       this.yunbaPublish({
