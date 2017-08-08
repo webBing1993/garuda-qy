@@ -109,7 +109,7 @@ module.exports = {
       'AppParams'
     ]),
     btnDisabled() {
-      return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing && this.publisher && this.ordersSubscribed)
+      return !(this.data.invoice_type && this.data.title && !this.publishing && this.publisher && this.ordersSubscribed)
     }
   },
   watch: {
