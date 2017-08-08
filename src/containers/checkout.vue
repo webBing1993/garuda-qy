@@ -13,7 +13,7 @@
 
     <div class="list-wrapper">
       <p class="synchronize">
-        上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
+        上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
         <x-button mini value="同步" @onClick="syncTime"/>
       </p>
       <div v-show="(!renderList||renderList.length === 0)&& renderPageIndex> 0" class="no-data">暂无数据</div>
