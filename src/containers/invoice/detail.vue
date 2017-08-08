@@ -99,7 +99,7 @@ module.exports = {
       publisher: '',
       dialogMsg: '',
       ordersSubscribed: false,
-      btnTitle: '请稍后...'
+      btnTitle: '请稍候...'
     }
   },
   computed: {
