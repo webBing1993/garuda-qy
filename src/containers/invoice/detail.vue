@@ -4,19 +4,19 @@
       <Cell title="房间信息" />
       <Cell>
         <div class="cell-body">
-          <p>
+          <p v-if="data.room_no">
             <span class="cell-key2 cell-value-title">房间号：</span>
             <span class="cell-value">{{data.room_no}}</span>
           </p>
-          <p>
+          <p v-if="data.contact_name">
             <span class="cell-key2 cell-value-title">联系人：</span>
             <span class="cell-value">{{data.contact_name}}</span>
           </p>
-          <p v-if="true">
+          <p v-if="data.contact_phone">
             <span class="cell-key2 cell-value-title">联系电话：</span>
             <span class="cell-value">{{data.contact_phone}}</span>
           </p>
-          <p v-if="true">
+          <p v-if="data.remark">
             <span class="cell-key2 cell-value-title">备注：</span>
             <span class="cell-value">{{data.remark}}</span>
           </p>
@@ -27,31 +27,31 @@
       <Cell title="发票抬头" />
       <Cell>
         <div class="cell-body">
-          <p>
+          <p v-if="data.invoice_type">
             <span class="cell-key2 cell-value-title">类型：</span>
             <span class="cell-value">{{data.invoice_type | filterInvoiceType}}</span>
           </p>
-          <p>
+          <p v-if="data.title">
             <span class="cell-key2 cell-value-title">名称：</span>
             <span class="cell-value">{{data.title}}</span>
           </p>
-          <p>
+          <p v-if="data.tax_registry_no">
             <span class="cell-key2 cell-value-title">税号：</span>
             <span class="cell-value">{{data.tax_registry_no}}</span>
           </p>
-          <p>
+          <p v-if="data.address">
             <span class="cell-key2 cell-value-title">单位地址：</span>
             <span class="cell-value">{{data.address}}</span>
           </p>
-          <p>
+          <p v-if="data.phone_number">
             <span class="cell-key2 cell-value-title">电话号码：</span>
             <span class="cell-value">{{data.phone_number}}</span>
           </p>
-          <p>
+          <p v-if="data.bank_name">
             <span class="cell-key2 cell-value-title">开户银行：</span>
             <span class="cell-value">{{data.bank_name}}</span>
           </p>
-          <p>
+          <p v-if="data.bank_account">
             <span class="cell-key2 cell-value-title">银行账户：</span>
             <span class="cell-value">{{data.bank_account}}</span>
           </p>
@@ -60,7 +60,7 @@
     </Group>
     <p v-if="data.status === '1'" class="tip"><span class="tip-title">已处理：</span>{{datetimeparse(data.update_time, 'yy/MM/dd hh:mm')}}</p>
     <div class="button-group">
-      <XButton :disabled="btnDisabled" value="填充发票信息" default @click.native="submit"></XButton>
+      <XButton :disabled="btnDisabled" :value="btnTitle" default @click.native="submit"></XButton>
     </div>
     <Dialog v-model="showDialog" confirmVal="确定" @onConfirm="dialogConfirm" confirm>
       <div>
@@ -98,7 +98,8 @@ module.exports = {
       sender: '',
       publisher: '',
       dialogMsg: '',
-      ordersSubscribed: false
+      ordersSubscribed: false,
+      btnTitle: '请稍后...'
     }
   },
   computed: {
@@ -108,7 +109,7 @@ module.exports = {
       'AppParams'
     ]),
     btnDisabled() {
-      return !(this.data.invoice_type && this.data.title && this.data.tax_registry_no && !this.publishing && this.publisher && this.ordersSubscribed)
+      return !(this.data.invoice_type && this.data.title && !this.publishing && this.publisher && this.ordersSubscribed)
     }
   },
   watch: {
@@ -126,17 +127,41 @@ module.exports = {
             let msg = JSON.parse(body.msg);
             let data = msg.data;
 
-            if (data && data.status && data.status === 'SUCCESS') {
-              this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-            } else if (data && data.status && data.status === 'NOT_TOP') {
-              this.dialogMsg = '请先打开开票软件的开票页面';
-              this.showDialog = true;
-            } else if (data && data.status && data.status === 'FAILED') {
-              this.dialogMsg = '发票填充失败';
-              this.showDialog = true;
+            if (msg.cmd !== '5002' || !data || !data.status)  return;
+
+            switch (data.status) {
+              case 'SUCCESS':
+                this.goto(`/invoice/detail/${this.$route.params.id}/result`);
+                break;
+              case true:
+                this.showDialog = true;
+              case 'NOT_TOP':
+                this.dialogMsg = '请先打开开票软件的开票页面';
+                break;
+              case 'FAILED':
+                this.dialogMsg = '发票填充失败';
+                break;
+              case 'REPEATED':
+                this.dialogMsg = '同一个税务发票界面重复请求操作';
+                break;
+              case 'BUSY':
+                this.dialogMsg = '插件正在工作';
+                break;
+              case 'DATAERROR':
+                this.dialogMsg = '发票填充失败';
+                break;
+              case 'SYSERROR':
+                this.dialogMsg = '发票填充失败';
+                break;
+              default:
+                this.dialogMsg = '发票填充失败';
             }
+            // this.showDialog = true;
           }
         })
+      },
+      btnDisabled(v) {
+        !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍后...'
       }
   },
   filters: {
@@ -173,16 +198,31 @@ module.exports = {
     submit() {
       
       if (this.btnDisabled) return;
+      
+      let invoiceType;
+      switch (this.data.invoice_type) {
+        case '1': 
+          invoiceType = 'GENERAL';
+          break;
+        case '1': 
+          invoiceType = 'VAT';
+          break;
+        case '1': 
+          invoiceType = 'PERSONAL';
+          break;
+        default:
+          invoiceType = 'GENERAL';
+      }
 
       let data = {
-        "invoice_type":"PERSONAL",//发票类型
-        "title":"qqq",//抬头
-        "category":"www",//开票内容
-        "tax_registry_no":"eeee",//税号
-        "address":"rrrrr",//地址
-        "phone_number":"tttt",  //联系电话
-        "bank_name":"yyyy",  //开户行名称
-        "bank_account":"uuuuu"//开户行账号
+        "invoice_type": invoiceType,//发票类型
+        "title": this.data.title,//抬头
+        "category": "",//开票内容
+        "tax_registry_no": this.data.tax_registry_no,//税号
+        "address": this.data.address,//地址
+        "phone_number": this.data.phone_number,  //联系电话
+        "bank_name": this.data.bank_name,  //开户行名称
+        "bank_account": this.data.bank_account//开户行账号
       }
 
       let msg = {
@@ -203,8 +243,6 @@ module.exports = {
       this.showDialog = false;
     },
     subscribe(topic) {
-      console.log('++++++++++++++++')
-      console.log('topic : ', topic)
       this.yunbaSubscribe({
         info: {
           'topic': topic
@@ -225,7 +263,7 @@ module.exports = {
           this.dialogMsg = '未启动闪开发票代理服务';
           this.showDialog = true;
         }
-      }, 5000)
+      }, 10000)
 
       this.showloading();
       this.yunbaPublish({
