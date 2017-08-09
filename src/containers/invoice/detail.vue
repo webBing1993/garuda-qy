@@ -142,6 +142,7 @@ module.exports = {
   methods: {
     ...mapActions([
       'goto',
+      'showtoast',
       'getInvoiceDetail',
       'yunbaConnect',
       'yunbaSubscribe',
@@ -240,16 +241,20 @@ module.exports = {
       this.getInvoiceDetail({
         id: this.$route.params.id,
         onsuccess: body => {
-          this.data = body.data;
-          if (body.data && body.data.id) {
-            this.sender = `invoices/${body.data.id}`;
+          if (body.data) {
+            this.data = body.data;
+            if (body.data.id) {
+              this.sender = `invoices/${body.data.id}`;
 
-            timeOutSubscribe(() => {
-              this.subscribe(this.sender);
-            }, 2000, this)
-          }
-          if (body.data && body.data.device_id) {
-            this.publisher = `devices/${body.data.device_id}`;
+              timeOutSubscribe(() => {
+                this.subscribe(this.sender);
+              }, 2000, this)
+            }
+            if (body.data.device_id) {
+              this.publisher = `devices/${body.data.device_id}`;
+            }
+          } else {
+            this.showtoast('详情为空!')
           }
         }
       })
@@ -273,9 +278,7 @@ module.exports = {
           switch (data.status) {
             case 'SUCCESS':
               this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-              break;
-            case true:
-              this.showDialog = true;
+              return;
             case 'NOT_TOP':
               this.dialogMsg = '请先打开开票软件的开票页面';
               break;
@@ -297,7 +300,7 @@ module.exports = {
             default:
               this.dialogMsg = '发票填充失败';
           }
-          // this.showDialog = true;
+          this.showDialog = true;
         }
       })
     }
