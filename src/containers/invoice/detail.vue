@@ -142,6 +142,7 @@ module.exports = {
   methods: {
     ...mapActions([
       'goto',
+      'showtoast',
       'getInvoiceDetail',
       'yunbaConnect',
       'yunbaSubscribe',
@@ -240,16 +241,20 @@ module.exports = {
       this.getInvoiceDetail({
         id: this.$route.params.id,
         onsuccess: body => {
-          this.data = body.data;
-          if (body.data && body.data.id) {
-            this.sender = `invoices/${body.data.id}`;
+          if (body.data) {
+            this.data = body.data;
+            if (body.data.id) {
+              this.sender = `invoices/${body.data.id}`;
 
-            timeOutSubscribe(() => {
-              this.subscribe(this.sender);
-            }, 2000, this)
-          }
-          if (body.data && body.data.device_id) {
-            this.publisher = `devices/${body.data.device_id}`;
+              timeOutSubscribe(() => {
+                this.subscribe(this.sender);
+              }, 2000, this)
+            }
+            if (body.data.device_id) {
+              this.publisher = `devices/${body.data.device_id}`;
+            }
+          } else {
+            this.showtoast('详情为空!')
           }
         }
       })
