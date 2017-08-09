@@ -99,7 +99,7 @@ module.exports = {
       publisher: '',
       dialogMsg: '',
       ordersSubscribed: false,
-      btnTitle: '请稍后...'
+      btnTitle: '请稍候...'
     }
   },
   computed: {
@@ -109,60 +109,16 @@ module.exports = {
       'AppParams'
     ]),
     btnDisabled() {
-      return !(this.data.invoice_type && this.data.title && !this.publishing && this.publisher && this.ordersSubscribed)
+      return !(!this.publishing && this.publisher && this.ordersSubscribed)
     }
   },
   watch: {
     yunbaConnected(val) {
-        val && this.setPublishCallback({
-          onSuccess: (body) => {
-
-            console.log('---------  收到云吧消息')
-            console.log(body)
-
-            this.publishing = false;
-            this.stoploading();
-            clearTimeout(timeOut);
-
-            let msg = JSON.parse(body.msg);
-            let data = msg.data;
-
-            if (msg.cmd !== '5002' || !data || !data.status)  return;
-
-            switch (data.status) {
-              case 'SUCCESS':
-                this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-                break;
-              case true:
-                this.showDialog = true;
-              case 'NOT_TOP':
-                this.dialogMsg = '请先打开开票软件的开票页面';
-                break;
-              case 'FAILED':
-                this.dialogMsg = '发票填充失败';
-                break;
-              case 'REPEATED':
-                this.dialogMsg = '同一个税务发票界面重复请求操作';
-                break;
-              case 'BUSY':
-                this.dialogMsg = '插件正在工作';
-                break;
-              case 'DATAERROR':
-                this.dialogMsg = '发票填充失败';
-                break;
-              case 'SYSERROR':
-                this.dialogMsg = '发票填充失败';
-                break;
-              default:
-                this.dialogMsg = '发票填充失败';
-            }
-            // this.showDialog = true;
-          }
-        })
-      },
-      btnDisabled(v) {
-        !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍后...'
-      }
+      val && this.publishCallback()
+    },
+    btnDisabled(v) {
+      !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍后...'
+    }
   },
   filters: {
     filterInvoiceType(v) {
@@ -298,10 +254,62 @@ module.exports = {
         }
       })
     },
+    publishCallback() {
+      this.setPublishCallback({
+        onSuccess: (body) => {
+
+          console.log('---------  收到云吧消息')
+          console.log(body)
+
+          this.publishing = false;
+          this.stoploading();
+          clearTimeout(timeOut);
+
+          let msg = JSON.parse(body.msg);
+          let data = msg.data;
+
+          if (msg.cmd !== '5002' || !data || !data.status)  return;
+
+          switch (data.status) {
+            case 'SUCCESS':
+              this.goto(`/invoice/detail/${this.$route.params.id}/result`);
+              break;
+            case true:
+              this.showDialog = true;
+            case 'NOT_TOP':
+              this.dialogMsg = '请先打开开票软件的开票页面';
+              break;
+            case 'FAILED':
+              this.dialogMsg = '发票填充失败';
+              break;
+            case 'REPEATED':
+              this.dialogMsg = '同一个税务发票界面重复请求操作';
+              break;
+            case 'BUSY':
+              this.dialogMsg = '插件正在工作';
+              break;
+            case 'DATAERROR':
+              this.dialogMsg = '发票填充失败';
+              break;
+            case 'SYSERROR':
+              this.dialogMsg = '发票填充失败';
+              break;
+            default:
+              this.dialogMsg = '发票填充失败';
+          }
+          // this.showDialog = true;
+        }
+      })
+    }
   },
   mounted() {
     this.getDetail();
-    this.yunbaConnect();
+
+    if (!this.yunbaConnected) {
+      this.yunbaConnect();
+    } else {
+      this.publishCallback()
+    }
   },
   beforeDestroy() {
     if (this.ordersSubscribed) {
@@ -314,14 +322,6 @@ module.exports = {
           console.log('unsubscribe', this.sender);
         }
       })
-      // this.yunbaUnsubscribe({
-      //   info: {
-      //     'topic': 'devices/zhouzj01'
-      //   },
-      //   unSubscribeCallback: () => {
-      //     console.log('unsubscribe', 'devices/zhouzj01');
-      //   }
-      // })
     }
   }
 }
