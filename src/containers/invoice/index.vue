@@ -11,7 +11,7 @@
       </Tab>
     </header>
 
-    <scroller v-show="tabIndex === 0" lock-x
+    <scroller :depend="waitList" v-show="tabIndex === 0" lock-x
               use-pulldown
               ref="scroller1"
               v-model="scrollerStatus1"
@@ -36,7 +36,7 @@
       </div>
     </scroller>
 
-    <scroller v-show="tabIndex === 1" lock-x
+    <scroller :depend="doneList" v-show="tabIndex === 1" lock-x
               use-pulldown
               ref="scroller2"
               v-model="scrollerStatus2"

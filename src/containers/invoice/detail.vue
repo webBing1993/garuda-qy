@@ -117,7 +117,7 @@ module.exports = {
       val && this.publishCallback()
     },
     btnDisabled(v) {
-      !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍后...'
+      !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍候...'
     }
   },
   filters: {
