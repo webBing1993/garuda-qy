@@ -278,9 +278,7 @@ module.exports = {
           switch (data.status) {
             case 'SUCCESS':
               this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-              break;
-            case true:
-              this.showDialog = true;
+              return;
             case 'NOT_TOP':
               this.dialogMsg = '请先打开开票软件的开票页面';
               break;
@@ -302,7 +300,7 @@ module.exports = {
             default:
               this.dialogMsg = '发票填充失败';
           }
-          // this.showDialog = true;
+          this.showDialog = true;
         }
       })
     }
