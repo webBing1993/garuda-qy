@@ -76,10 +76,12 @@ const checkin = [{
   children: [{
     path: 'handle/:tab',
     component: require('./containers/newIdentity/list')
-  },{
-    path: 'wxPay/:identityId',
-    component: require('./containers/newIdentity/wxPay')
-  },{
+  },
+  // {
+  //   path: 'wxPay/:identityId',
+  //   component: require('./containers/newIdentity/wxPay')
+  // },
+  {
     path: ':id',
     component: require('./containers/newIdentity/detail')
   }]
