@@ -11,4 +11,5 @@ module.exports = {
   ...require('./hotel'),
   ...require('./checkout'),
   ...require('./refund'),
+  ...require('./yunba'),
 };

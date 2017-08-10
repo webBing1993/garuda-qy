@@ -108,6 +108,7 @@
         path.match(/identity\/history/) ? title = '历史验证' : null
         path.match(/identity\/todo/) ? title = '待验证' : null
         path.match(/new-identity\/handle/) ? title = '身份验证' : null
+        path.match(/new-identity\/wxPay/) ? title = '微信支付入住' : null
         path.match(/livein\/./) ? title = '入住单详情' : null
         path.match(/livein\/today/) ? title = '当日入住' : null
         path.match(/livein\/all/) ? title = '全部在住' : null

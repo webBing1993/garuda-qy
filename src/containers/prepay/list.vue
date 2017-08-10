@@ -16,7 +16,7 @@
 
     <div class="list-wrapper">
       <p class="synchronize">
-        上次同步PMS时间: {{datetimeparse(hotel.order_update_time, 'MMDDhhmm')}}
+        上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
       </p>
 

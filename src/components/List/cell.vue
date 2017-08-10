@@ -12,6 +12,7 @@
         <span style="vertical-align: middle" v-html="title"></span>
         <span v-if="badge && !desc" class="weui-badge" style="margin-left: 5px;">{{badge}}</span>
       </p>
+      <slot></slot>
       <p v-if="desc" style="font-size: 13px;color: #888888;" v-html="desc"></p>
     </div>
     <div class="weui-cell__ft">
