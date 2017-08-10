@@ -52,18 +52,18 @@
       </div>
       <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>
       <p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
-      <p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">
-        <span style="color: #80C435;padding-right:10px;">支付成功</span>
-        <span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>
-        <span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>
-      </p>
+      <!--<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">-->
+        <!--<span style="color: #80C435;padding-right:10px;">支付成功</span>-->
+        <!--<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>-->
+        <!--<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>-->
+      <!--</p>-->
       <x-button v-if="detail.reportInStatus !== 'SUCCESS'"
                 :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
                 @onClick="isDialogShow"
                 :disabled="isDisabled">
       </x-button>
-      <x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary
-                @onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>
+      <!--<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary-->
+                <!--@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>-->
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -103,6 +103,7 @@
       }
     },
     computed: {
+        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
         'route',
         'roomNumberList'
