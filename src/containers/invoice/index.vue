@@ -28,7 +28,7 @@
           </Cell>
           <Cell link>
             <div class="cell-body">
-              <p><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
+              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
               <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p> 
             </div>
           </Cell>
@@ -54,7 +54,7 @@
           <Cell link>
             <div class="cell-body">
               <p><span class="cell-value">名称：{{item.title}}</span></p> 
-              <p><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
+              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
               <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p> 
             </div>
           </Cell>
