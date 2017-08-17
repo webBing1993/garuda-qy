@@ -68,6 +68,9 @@ module.exports = {
       },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
+      },
+      onFail: err => {
+        param.onfail ? param.onfail(err) : null
       }
     })
   },
