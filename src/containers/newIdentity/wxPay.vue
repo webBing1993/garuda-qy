@@ -86,7 +86,7 @@
         if (this.wxPayStatus === 'SUCCESS' || this.wxPayStatus === 'FAILED') {
           return '确定'
         } else if (this.errCode == 403) {
-          return '重试'
+          return '重试';
         } else {
           return '取消'
         }
