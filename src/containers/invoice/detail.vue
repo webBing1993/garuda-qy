@@ -77,10 +77,18 @@
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
 let timeOut = null;
+
+let subscribeCount = 0;
 let timeOutSubscribe = (cb, time, that) => {
-  if (that.yunbaConnected) {
+  console.log('------ ordersSubscribed... ----------')
+
+  if (that.yunbaConnected && !that.ordersSubscribed) {
     cb();
+  } else if (subscribeCount >= 5) {
+    that.dialogMsg = '网络连接异常，请重试';
+    that.showDialog = true;
   } else {
+    subscribeCount++;
     setTimeout(() => {
       timeOutSubscribe(cb, time, that);
     }, time);
@@ -198,6 +206,9 @@ module.exports = {
     },
     dialogConfirm() {
       this.showDialog = false;
+
+      (!this.publisher || !this.ordersSubscribed) && this.goto(0)
+
     },
     subscribe(topic) {
       this.yunbaSubscribe({
@@ -248,7 +259,7 @@ module.exports = {
 
               timeOutSubscribe(() => {
                 this.subscribe(this.sender);
-              }, 2000, this)
+              }, 1000, this)
             }
             if (body.data.device_id) {
               this.publisher = `devices/${body.data.device_id}`;
@@ -256,6 +267,10 @@ module.exports = {
           } else {
             this.showtoast('详情为空!')
           }
+        },
+        onfail: err => {
+          this.dialogMsg = '获取发票详情失败，请重新获取';
+          this.showDialog = true;
         }
       })
     },
@@ -303,16 +318,21 @@ module.exports = {
           this.showDialog = true;
         }
       })
+    },
+    init() {
+      subscribeCount = 0;
+
+      this.getDetail();
+
+      if (!this.yunbaConnected) {
+        this.yunbaConnect();
+      } else {
+        this.publishCallback()
+      }
     }
   },
   mounted() {
-    this.getDetail();
-
-    if (!this.yunbaConnected) {
-      this.yunbaConnect();
-    } else {
-      this.publishCallback()
-    }
+    this.init();
   },
   beforeDestroy() {
     if (this.ordersSubscribed) {
