@@ -101,7 +101,7 @@
         let paystatusdom = ``
         if (paystatus) {
           paystatusdom = paystatus === 1
-            ? `<span class="cell-right other">其他 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+            ? `<span class="cell-right other">现付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
             : paystatus === 2
               ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
               : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
