@@ -88,8 +88,8 @@
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="开户银行" :value="detail.invoice.bank_name"></Cell>
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="银行账号" :value="detail.invoice.bank_account"></Cell>
 
-        <div class="button-group" v-if="isShowInvoiceBtn && detail.invoice.invoice_status === 1">
-          <XButton value="登记开票" default @onClick="showDialog = true"></XButton>
+        <div class="button-group" v-if="isShowInvoiceBtn">
+          <XButton value="登记开票" default @onClick="showDialog = true" v-if="detail.invoice.invoice_status === 1"></XButton>
           <p v-if="detail.invoice.invoice_status === 2" class="tips">已确认开票。</p>
         </div>
       </Group>
