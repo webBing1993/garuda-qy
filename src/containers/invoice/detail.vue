@@ -263,6 +263,8 @@ module.exports = {
             }
             if (body.data.device_id) {
               this.publisher = `devices/${body.data.device_id}`;
+            } else {
+              this.showtoast('微前台插件未注册!')
             }
           } else {
             this.showtoast('详情为空!')
