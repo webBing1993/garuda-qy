@@ -6,7 +6,7 @@
                  :key="index"
                  :class="{'vux-1px-r': index===0}"
                  :selected="currentTab === index"
-                 @click.native="replaceto('/precheckin/prepay/'+index)">{{item}}</TabItem>
+                 @click.native="replaceto('/prepay/'+index)">{{item}}</TabItem>
       </Tab>
       <div class="batchbar" v-if="batch">
         <span class="allpick" :class="{batch:batchlist.length === tobeconfirmed.length}" @click="allPick">全选</span>
@@ -16,8 +16,8 @@
 
     <div class="list-wrapper">
       <p class="synchronize">
-        上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
         <x-button mini value="同步" @onClick="syncTime"></x-button>
+        上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
       </p>
 
       <div v-show="!currentTab" :class="{batch}">
@@ -161,7 +161,7 @@
         //非批量模式下点击订单跳转至详情页面
         if (!this.batch) {
           this.batchlist = []
-          this.goto('/precheckin/prepay/detail/' + orderId)
+          this.goto('/prepay/detail/' + orderId)
         }
       },
       setMultiConfirm() {

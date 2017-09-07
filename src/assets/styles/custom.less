@@ -175,6 +175,10 @@ iframe {
   z-index: 22;
   height: 45px;
   width: 100%;
+
+  .vux-tab .vux-tab-item {
+    color: #AFAFAF;
+  }
 }
 
 .sortmenu {
@@ -196,14 +200,20 @@ iframe {
 
 .synchronize {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin: 7.5px 15px -2.5px 15px;
   color: #2B2B2B;
   font-size: 14px;
   box-sizing: border-box;
+  .weui-btn {
+    margin-left: 0;
+  }
+  .weui-btn_default{
+    background-color: #5077AA;
+  }
   .weui-btn_mini {
-    margin-right: 0;
+    margin-right: 10px;
     padding: 0 30px;
     line-height: 2.7;
   }

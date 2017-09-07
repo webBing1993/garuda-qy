@@ -119,8 +119,8 @@
     },
     watch: {
       $route(val){
-        const path = val.fullPath
-        let title = '加载中...'
+        const path = val.fullPath;
+        let title = '微前台';
         path.match(/record/) ? title = '录入修改' : null
         path.match(/roommanager/) ? title = '房态管理' : null
         path.match(/prepay/) ? title = '预付款确认' : null
@@ -139,6 +139,10 @@
         path.match(/invoice/) ? title = '待开发票' : null
         path.match(/checkout/) ? title = '退房申请' : null;
         path.match(/refund/) ? title = '退款' : null;
+        path.match(/receive\/precheckin/) ? title = '预登记' : null;
+        path.match(/receive\/livein/) ? title = '在住' : null;
+        path.match(/receive\/checkout/) ? title = '已离店' : null;
+        path.match(/receive\/checkout-application/) ? title = '退房申请' : null;
         this.settitle(title)
       },
       sessionId(val){
