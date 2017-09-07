@@ -1,7 +1,7 @@
 <template>
   <article>
     <header class="tab-wrapper">
-      <Tab active-color="#373946">
+      <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabmenu"
                  :key="index"
                  :class="{'vux-1px-r': index===0}"

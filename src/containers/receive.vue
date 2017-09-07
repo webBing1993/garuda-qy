@@ -17,16 +17,26 @@
         上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
       </p>
 
-      <!--<div v-show="(!renderList||renderList.length === 0)&& renderPageIndex>0" class="no-data">暂无数据</div>-->
+      <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
 
       <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="preCheckInCellTitle(item)"/>
-        <Cell :title="preCheckInCellBody(item)" link @onClick="goto('/precheckin/order/detail/' + item.order_id)"/>
+        <Cell :title="preCheckInCellBody(item)" link @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
       </Group>
 
-      <Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">
+      <Group v-else-if="tempPage == '在住'" v-for="(item,index) in liveInList" :key="index">
         <Cell :title="liveInCellTitle(item)"/>
-        <Cell :title="liveInGuestItem(item)" link @onClick="goto('/livein/'+item.order_id)"/>
+        <Cell :title="liveInGuestItem(item)" link @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
+      </Group>
+
+      <Group v-else-if="tempPage == '退房申请'" v-for="(item,index) in checkOutApplicationList" :key="index" :title="titleFilter(index)">
+        <Cell :title="checkoutCellTitle(item)"/>
+        <Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+      </Group>
+
+      <Group v-else-if="tempPage == '已离店'" v-for="(item,index) in checkOutList" :key="index" :title="titleFilter(index)">
+        <Cell :title="checkoutCellTitle(item)"/>
+        <Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
       </Group>
     </div>
 
@@ -44,7 +54,11 @@
         preCheckInList: [],
         liveInList: [],
         checkOutApplicationList: [],
-        checkOutList: []
+        checkOutList: [],
+        preCheckInPageIndex: 0,
+        liveInPageIndex: 0,
+        checkOutApplicationPageIndex: 0,
+        checkoutPageIndex: 0,
       }
     },
     computed: {
@@ -72,26 +86,45 @@
         return tempRoute
       },
       renderList() {
-        let tempList = [];
-        switch (this.tempPage) {
-          case '预登记':
-            tempList = this.preCheckInList;
-            break;
-          case '在住':
-            tempList = this.liveInList;
-            break;
-          case '退房申请':
-            tempList = this.checkOutApplicationList;
-            break;
-          case '已离店':
-            tempList = this.checkOutList;
-            break;
+        if (this.tempPage == '预登记') {
+          return this.preCheckInList;
+        } else if (this.tempPage == '在住') {
+          return this.liveInList;
+        } else if (this.tempPage == '退房申请') {
+          return this.checkOutApplicationList;
+        } else if (this.tempPage == '已离店') {
+          return this.checkOutList;
         }
-        return tempList;
       },
+      renderPageIndex(){
+        if (this.tempPage == '预登记') {
+          return this.preCheckInPageIndex;
+        } else if (this.tempPage == '在住') {
+          return this.liveInPageIndex;
+        } else if (this.tempPage == '退房申请') {
+          return this.checkOutApplicationPageIndex;
+        } else if (this.tempPage == '已离店') {
+          return this.checkoutPageIndex;
+        }
+      },
+      unionTag() {
+        let totalList = [...this.renderList];
+        let tagList = [];
+        totalList.forEach(item => {
+            if (item.union_tag) {
+              let tagIndex = tagList.findIndex(i => i.tag === item.union_tag);
+              tagIndex === -1
+                ? tagList.push({tag: item.union_tag, room_number: [item.room_number]})
+                : tagList[tagIndex].room_number = [...tagList[tagIndex].room_number, item.room_number]
+            }
+          }
+        );
+        return tagList;
+      }
     },
     methods: {
       ...mapActions([
+          'goto',
         'replaceto',
         'hotelrefresh',
         'gettodaylist',
@@ -146,24 +179,38 @@
 
         return dom
       },
+      checkoutCellTitle(item){
+        let tag = this.getUnionTag(item.union_tag, item.room_number);
+        return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
+      },
+      getUnionTag(tag, tempRoom){
+        return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
+      },
+
+      titleFilter(index){
+        return index
+          ? this.datetimeparse(this.renderList[index].created_time) === this.datetimeparse(this.renderList[index - 1].created_time)
+            ? null : this.datetimeparse(this.renderList[index].created_time)
+          : this.datetimeparse(this.renderList[index].created_time)
+      },
       syncTime() {
         this.hotelrefresh({
           onsuccess: (body) => this.refreshList()
         })
       },
-      getPreCheckInList(){
+      getPreCheckInList(callback){
         this.gettodaylist({
           is_cancelled: 1,
           is_sequence: 0,
-          onsuccess: body => this.preCheckInList = [...body.data]
+          onsuccess: callback
         })
       },
-      getLiveInList(){
+      getLiveInList(callback){
         this.getTodaySuborder({
-          onsuccess: body => this.liveInList = [...body.data]
+          onsuccess: callback
         })
       },
-      getCheckOutList() {
+      getCheckOutList(callback) {
         let tempStatus = '';
         if (this.tempPage == '退房申请') {
           tempStatus = 'PENDING'
@@ -174,38 +221,30 @@
           status: tempStatus,
 //          start_time: this.periodFilter[0],
 //          end_time: this.periodFilter[1],
-          onsuccess: body => {
-            if (this.tempPage == '退房申请') {
-              this.checkOutApplicationList = [...body.data]
-            } else if (this.tempPage == '已离店') {
-              this.checkOutList = [...body.data]
-            }
-          }
+          onsuccess: callback
         });
       },
       getList(){
-        switch (this.tempPage) {
-          case '预登记':
-            this.getPreCheckInList();
-            break;
-          case '在住':
-            this.getLiveInList();
-            break;
-          case '退房申请':
-            this.getCheckOutList();
-            break;
-          case '已离店':
-            this.getCheckOutList();
-            break;
+        if (this.tempPage == '预登记') {
+          this.getPreCheckInList(body => (this.preCheckInList = [...body.data], this.preCheckInPageIndex++));
+        } else if (this.tempPage == '在住') {
+          this.getLiveInList(body => (this.liveInList = [...body.data], this.liveInPageIndex++));
+        } else if (this.tempPage == '退房申请') {
+          this.getCheckOutList(body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++));
+        } else if (this.tempPage == '已离店') {
+          this.getCheckOutList(body => (this.checkOutList = [...body.data], this.checkoutPageIndex++));
         }
       },
+      initList() {
+        if(this.renderPageIndex === 0 || this.renderList.length == 0) this.getList();
+      }
     },
     mounted(){
-      this.getList();
+      this.initList();
     },
     watch: {
       tempPage(val) {
-        this.getList();
+        this.initList();
       }
     }
   }

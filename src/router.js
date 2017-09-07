@@ -37,16 +37,16 @@ const receive = [{
     path: 'checkout',
     component: require('./containers/receive.vue')
   }, {
-    path: 'precheckin/:id',
+    path: 'precheckin-detail/:id',
     component: require('./containers/detail.vue')
   }, {
-    path: 'livein/:id',
+    path: 'livein-detail/:id',
     component: require('./containers/detail.vue')
   }, {
-    path: 'checkout-application/:id',
+    path: 'checkout-application-detail/:id',
     component: require('./containers/detail.vue')
   }, {
-    path: 'checkout/:id',
+    path: 'checkout-detail/:id',
     component: require('./containers/detail.vue')
   }]
 }];

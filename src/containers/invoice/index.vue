@@ -1,7 +1,7 @@
 <template>
   <article>
     <header>
-      <Tab active-color="#373946">
+      <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabmenu"
                  :key="'tabmenu'+index"
                  :class="{'vux-1px-r': index===0}"
@@ -28,8 +28,8 @@
           </Cell>
           <Cell link>
             <div class="cell-body">
-              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
-              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p> 
+              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
+              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
             </div>
           </Cell>
         </Group>
@@ -53,9 +53,9 @@
           </Cell>
           <Cell link>
             <div class="cell-body">
-              <p><span class="cell-value">名称：{{item.title}}</span></p> 
-              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p> 
-              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p> 
+              <p><span class="cell-value">名称：{{item.title}}</span></p>
+              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
+              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
             </div>
           </Cell>
         </Group>
@@ -117,13 +117,13 @@
       filterInvoiceType(v) {
         let val;
         switch (v) {
-          case '1': 
+          case '1':
             val = '增值税普通发票';
             break;
-          case '2': 
+          case '2':
             val = '增值税专用发票';
             break;
-          case '3': 
+          case '3':
             val = '个人发票';
             break;
           default:
@@ -258,7 +258,7 @@
           from: 'top',
           page: 1
         }
-        
+
         if ((!this.tabIndex && this.waitList.length === 0) || (this.tabIndex && this.doneList.length === 0) ) {
           this.getList(pa)
         }
