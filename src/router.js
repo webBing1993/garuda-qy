@@ -149,6 +149,9 @@ const others = [
   {
     path: '/',
     component: require('./containers/home/home.vue')
+  },{
+    path: '/home',
+    component: require('./containers/home/home.vue')
   }, {
     path: '/examples',
     component: require('./containers/examples.vue')

@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
 
-    <Group title="待办事项">
+    <Group title="待办事项" v-if="isHaveTodoList">
       <Cell icon="../../../static/icon/ic_prepay_confirm.png" title="待预付款确认" link badge="2"
             @onClick="goto('prepay/0')"></Cell>
       <Cell icon="../../../static/icon/ic_police.png" title="您有一条公安验证待处理" link badge="2"
@@ -13,6 +13,11 @@
       <Cell icon="../../../static/icon/ic_checkout.png" title="待操作离店" link badge="2"
             @onClick="goto('receive/checkout-application')"></Cell>
     </Group>
+
+    <div v-else class="none-list-container">
+      <img src="../../../static/icon/no_todo_list.png" alt="">
+      <span>暂无待办事项</span>
+    </div>
 
     <Group title="应用">
       <ul class="app-container">
@@ -47,6 +52,9 @@
       </ul>
     </Group>
 
+    <audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>
+    <button @click="setPlay">播放</button>
+    <XButton value="播放" @onClick="setPlay"></XButton>
   </div>
 </template>
 
@@ -56,12 +64,17 @@
   export default {
     name: 'home',
     data() {
-      return {}
+      return {
+        isHaveTodoList: true
+      }
     },
     methods: {
       ...mapActions([
         'goto'
-      ])
+      ]),
+      setPlay(){
+        document.querySelector('#audio').play();
+      }
     }
   }
 </script>
