@@ -5,9 +5,9 @@
       <Cell icon="../../../static/icon/ic_prepay_confirm.png" title="待预付款确认" link badge="2"
             @onClick="goto('prepay/0')"></Cell>
       <Cell icon="../../../static/icon/ic_police.png" title="您有一条公安验证待处理" link badge="2"
-            @onClick="goto('identity/today/0')"></Cell>
+            @onClick="goto('policeIdentity/today/0')"></Cell>
       <Cell icon="../../../static/icon/ic_lvye.png" title="待手动输入，旅业上传" link badge="2"
-            @onClick="goto('policeIdentity/handle/0')"></Cell>
+            @onClick="goto('identity/handle/0')"></Cell>
       <Cell icon="../../../static/icon/ic_invoice.png" title="待提前开具发票" link badge="2"
             @onClick="goto('invoice/0')"></Cell>
       <Cell icon="../../../static/icon/ic_checkout.png" title="待操作离店" link badge="2"
@@ -52,9 +52,9 @@
       </ul>
     </Group>
 
-    <audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>
-    <button @click="setPlay">播放</button>
-    <XButton value="播放" @onClick="setPlay"></XButton>
+    <!--<audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>-->
+    <!--<button @click="setPlay">播放</button>-->
+    <!--<XButton value="播放" @onClick="setPlay"></XButton>-->
   </div>
 </template>
 

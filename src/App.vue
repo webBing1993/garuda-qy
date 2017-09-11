@@ -58,13 +58,13 @@
               path = '/roommanager'
               break;
             case 'verification':
-              path = '/new-identity/handle/0'
+              path = '/new-policeIdentity/handle/0'
               break;
-            case 'identity-today':
-              path = '/identity/today/0'
+            case 'policeIdentity-today':
+              path = '/policeIdentity/today/0'
               break;
-            case 'identity-history':
-              path = '/identity/history/0'
+            case 'policeIdentity-history':
+              path = '/policeIdentity/history/0'
               break;
             case 'livein-today':
               path = '/livein/today'
@@ -134,7 +134,7 @@
         path.match(/policeIdentity\/./) ? title = '验证详情' : null
         path.match(/policeIdentity\/handle/) ? title = '身份验证' : null
 
-//        path.match(/new-identity\/wxPay/) ? title = '微信支付入住' : null
+//        path.match(/new-policeIdentity\/wxPay/) ? title = '微信支付入住' : null
         path.match(/livein\/./) ? title = '入住单详情' : null
         path.match(/livein\/today/) ? title = '当日入住' : null
         path.match(/livein\/all/) ? title = '全部在住' : null

@@ -105,6 +105,9 @@ Vue.mixin({
         : (randomness << (23 - randomness.toString(2).length)).toString(2);
       let timestamp = (new Date().getTime()).toString(2);
       return parseInt(timestamp, 2).toString() + parseInt(randomness, 2).toString();
+    },
+    sortByTime(list,timeTag) {
+      return list.sort((a, b) => b.timeTag - a.timeTag);
     }
   }
 })
