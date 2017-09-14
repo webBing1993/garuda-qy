@@ -3,12 +3,20 @@ import data from './data';
 
 //退款申请列表
 Mock.mock(
-  // data.prefix + '/refund_apply_list',
    /\/refund_apply_list/,
   {
     errcode: "0",
     errmsg: "ok",
     data: data.refundList
+  }
+);
+
+Mock.mock(
+  /\/pay_apply_list/,
+  {
+    errcode: "0",
+    errmsg: "ok",
+    data: data.receiptList
   }
 );
 

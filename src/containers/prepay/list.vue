@@ -2,11 +2,12 @@
   <article>
     <header class="tab-wrapper">
       <Tab active-color="#5077AA">
-        <TabItem v-for="(item,index) in tabmenu"
+        <TabItem v-for="(item,index) in tabMenu"
                  :key="index"
                  :class="{'vux-1px-r': index===0}"
                  :selected="currentTab === index"
-                 @click.native="replaceto('/prepay/'+index)">{{item}}</TabItem>
+                 @click.native="replaceto('/prepay/'+index)">{{item}}
+        </TabItem>
       </Tab>
       <div class="batchbar" v-if="batch">
         <span class="allpick" :class="{batch:batchlist.length === tobeconfirmed.length}" @click="allPick">全选</span>
@@ -60,7 +61,7 @@
     name: "prepay",
     data(){
       return {
-        tabmenu: ["待确认", "已确认"],
+//        tabmenu: ["待确认", "已确认"],
         batch: false,
         batchlist: [],
         tobeconfirmed: [],
@@ -81,7 +82,12 @@
       renderList(){
         return this.currentTab ? this.confirmed : this.tobeconfirmed
       },
-
+      tabMenu() {
+        let menu = [];
+        menu[0] = `待确认(${this.tobeconfirmed.length})`;
+        menu[1] = `已确认(${this.confirmed.length})`;
+        return menu;
+      }
     },
     methods: {
       ...mapActions([
@@ -189,12 +195,14 @@
     },
     watch: {
       currentTab: function (val, oldval) {
-        this.cancelPick()
-        typeof val === 'number' && !isNaN(val) ? this.initList() : null
+        this.cancelPick();
+        typeof val === 'number' && !isNaN(val)
+          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList(): this.getList()
+          :null;
       }
     },
     activated(){
-      this.initList();
+      this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList(): this.getList()
     }
   }
 </script>

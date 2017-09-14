@@ -118,7 +118,7 @@ module.exports = {
           ],
           in_time: null, //办理入住时间
           out_time: null, //离店时间
-          identity_id: "", //身份验证记录ID:null,
+          identity_id: "2304204024024012", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           pmscheckout_status: "FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
@@ -875,53 +875,76 @@ module.exports = {
   ],
   newIdentityList: [
     {
+      lvyeReportRecordId: 'id002',//旅业上报记录ID
+      identityId: 'id002',  //身份验证记录ID
+      identityGuestId: "001",  //用户身份验证ID
+      inTime: '1491384458000',
+      outTime: '1491384458000',
+      roomNumber: "201",
+      name: "李思静", //姓名
+      sex: "女", //性别
+      ethnicity: "汉", //民族
+      dateOfBirth: "1491384458000", //生日
+      address: "定好纷纷为", //住址
+      idCard: "360124199501280100", //身份证号码
+      photo: "", //身份证照片url
+      livePhoto: "", //现在抓拍的照片url
+      similarity: "85", //相似度65"
+      identityStatus: "", //身份状态
+      createdTime: '1471082458000', //验证时间
+      reportInStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
+      reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
+      reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
+
+    },
+    {
       lvyeReportRecordId: 'id001',//旅业上报记录ID
       identityId: 'id001',  //身份验证记录ID
-      identityGuestId:"001",  //用户身份验证ID
+      identityGuestId: "001",  //用户身份验证ID
       inTime: '1491384458000',
-      outTime:'1491384458000',
-      roomNumber:"201",
-      name:"李思静", //姓名
-      sex:"女", //性别
-      ethnicity:"汉", //民族
-      dateOfBirth:"1491384458000", //生日
-      address:"定好纷纷为", //住址
-      idCard:"360124199501280100", //身份证号码
-      photo:"", //身份证照片url
-      livePhoto:"", //现在抓拍的照片url
-      similarity:"85", //相似度65"
-      identityStatus:"", //身份状态
-      createdTime:'', //验证时间
-      reportInStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      outTime: '1491384458000',
+      roomNumber: "201",
+      name: "李思静", //姓名
+      sex: "女", //性别
+      ethnicity: "汉", //民族
+      dateOfBirth: "1491384458000", //生日
+      address: "定好纷纷为", //住址
+      idCard: "360124199501280100", //身份证号码
+      photo: "", //身份证照片url
+      livePhoto: "", //现在抓拍的照片url
+      similarity: "85", //相似度65"
+      identityStatus: "", //身份状态
+      createdTime: '1490284458000', //验证时间
+      reportInStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
-      reportOutStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
-      reportOutTime:'1491384458000'//成功上传旅业系统的时间时间戳
-
+      reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
+      reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
     },
     {
       lvyeReportRecordId: 'id002',//旅业上报记录ID
       identityId: 'id002',  //身份验证记录ID
-      identityGuestId:"001",  //用户身份验证ID
+      identityGuestId: "001",  //用户身份验证ID
       inTime: '1491384458000',
-      outTime:'1491384458000',
-      roomNumber:"201",
-      name:"李思静", //姓名
-      sex:"女", //性别
-      ethnicity:"汉", //民族
-      dateOfBirth:"1491384458000", //生日
-      address:"定好纷纷为", //住址
-      idCard:"360124199501280100", //身份证号码
-      photo:"", //身份证照片url
-      livePhoto:"", //现在抓拍的照片url
-      similarity:"85", //相似度65"
-      identityStatus:"", //身份状态
-      createdTime:'', //验证时间
-      reportInStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      outTime: '1491384458000',
+      roomNumber: "201",
+      name: "李思静", //姓名
+      sex: "女", //性别
+      ethnicity: "汉", //民族
+      dateOfBirth: "1491384458000", //生日
+      address: "定好纷纷为", //住址
+      idCard: "360124199501280100", //身份证号码
+      photo: "", //身份证照片url
+      livePhoto: "", //现在抓拍的照片url
+      similarity: "85", //相似度65"
+      identityStatus: "", //身份状态
+      createdTime: '1491082458000', //验证时间
+      reportInStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
-      reportOutStatus:"NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
-      reportOutTime:'1491384458000'//成功上传旅业系统的时间时间戳
+      reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
+      reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
+    },
 
-    }
   ],
   newIdentityDetail: {
     address: "重庆市永川区红炉镇红庆村代家桥村民小组12号",
@@ -944,8 +967,8 @@ module.exports = {
     reportOutStatus: "NONE",
     reportOutTime: null,
     roomNumber: "1024",
-    sex:"男",
-    similarity:96
+    sex: "男",
+    similarity: 96
   },
   // ===============================================================
   // 退房
@@ -1054,5 +1077,55 @@ module.exports = {
       created_time: "1495419805000",  //申请时间
       status: 'REFUNDED'
     },
+  ],
+
+  hotelTodoList: [
+    {
+      "total": 1,
+      "type": "PREPAY" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
+    },
+    {
+      "total": 0,
+      "type": "IDENTITY" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
+    },
+    {
+      "total": 0,
+      "type": "LVYE" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
+    },
+    {
+      "total": 0,
+      "type": "INVOICE" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
+    },
+    {
+      "total": 0,
+      "type": "CHECKOUT" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
+    },
+  ],
+
+  receiptList: [
+    {
+      name: "张三",    //客人姓名
+      room_numbers: ["203",'204'], //房号,多个房号用逗号隔开
+      pay_fee: 50000,  //支付金额元
+      pay_way: "微信支付",     //支付方式
+      pay_time: '1495419805000',       //支付时间
+      out_trade_no: "230420402402401"    //订单号
+    },
+    {
+      name: "张三",    //客人姓名
+      room_numbers: ["203"], //房号,多个房号用逗号隔开
+      pay_fee: 50000,  //支付金额元
+      pay_way: "微信支付",     //支付方式
+      pay_time: '1495419805000',       //支付时间
+      out_trade_no: "230420402402402"    //订单号
+    },
+    {
+      name: "张三",    //客人姓名
+      room_numbers: ["203"], //房号,多个房号用逗号隔开
+      pay_fee: 50000,  //支付金额元
+      pay_way: "微信支付",     //支付方式
+      pay_time: '1495419805000',       //支付时间
+      out_trade_no: "230420402402403"    //订单号
+    }
   ]
 };

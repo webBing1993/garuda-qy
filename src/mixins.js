@@ -107,7 +107,7 @@ Vue.mixin({
       return parseInt(timestamp, 2).toString() + parseInt(randomness, 2).toString();
     },
     sortByTime(list,timeTag) {
-      return list.sort((a, b) => b.timeTag - a.timeTag);
+      return timeTag ? list.sort((a, b) => b[timeTag] - a[timeTag]) : list.sort();
     }
   }
 })

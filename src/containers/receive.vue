@@ -5,7 +5,7 @@
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
                  :key="'tabMenu'+index"
-                 :selected="tempPage == item"
+                 :selected="tempPage == item.split('(')[0]"
                  @on-item-click="toggleTab(item)">{{item}}
         </TabItem>
       </Tab>
@@ -65,7 +65,7 @@
     name: 'receive',
     data() {
       return {
-        tabMenu: ['预登记', '在住', '退房申请', '已离店'],
+//        tabMenu: ['预登记(888)', '在住(11)', '退房申请(11)', '已离店(11)'],
         preCheckInList: [],
         liveInList: [],
         checkOutApplicationList: [],
@@ -83,6 +83,14 @@
         'route',
         'hotel'
       ]),
+      tabMenu() {
+        let menu = [];
+        menu[0] = `预登记(${this.preCheckInList.length})`;
+        menu[1] = `在住(${this.liveInList.length})`;
+        menu[2] = `退房申请(${this.checkOutApplicationList.length})`;
+        menu[3] = `已离店(${this.checkOutList.length})`;
+        return menu;
+      },
       tempPage(){
         let tempRoute = this.route.path.split('/')[2];
         switch (tempRoute) {
@@ -151,7 +159,8 @@
         'getcheckoutlist'
       ]),
       toggleTab(item){
-        switch (item) {
+          let tempItem = item.split('(')[0];
+        switch (tempItem) {
           case '预登记':
             this.replaceto('/receive/precheckin');
             break;
@@ -293,7 +302,7 @@
     watch: {
       tempPage(val) {
         this.periodFilter = [null, null];
-        this.initList();
+        this.renderList.length == 0 ? this.initList() : this.refreshList();
       },
       periodFilter() {
         this.refreshList();

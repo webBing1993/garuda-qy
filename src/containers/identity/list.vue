@@ -6,7 +6,7 @@
                :class="{'vux-1px-r': index===0}"
                :selected="route.params.tab == index"
                @on-item-click="toggleTab(index)">{{item}}
-        </TabItem>
+      </TabItem>
     </Tab>
 
     <scroller lock-x :scrollbar-x=false
@@ -19,7 +19,7 @@
         <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
-                :value="datetimeparse(item.created_time,isToday ?'hhmm' : 'MMDDhhmm')"
+                :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"
                 @onClick="goto('/identity/' + item.identity_id)"></cell>
           <cell :title="getGuestItem(item)"
                 @onClick="goto('/identity/' + item.identity_id)"
@@ -28,7 +28,7 @@
       </div>
     </scroller>
 
-    <footer v-if="!isToday">
+    <footer>
       <div class="listFilter">
         <span class="filter" @click="isCalendarShow = true">
           <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
@@ -68,9 +68,9 @@
         'Interface',
         'route'
       ]),
-      isToday(){
-        return !!this.$route.path.match(/today/)
-      },
+//      isToday(){
+//        return !!this.$route.path.match(/today/)
+//      },
       tabIndex(){
         return +this.route.params.tab
       },
@@ -110,7 +110,7 @@
       },
       getList(callback){
         this.getIdentities({
-          scope: this.isToday ? 'TODAY' : 'HISTORY',
+          scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
           status: this.tabIndex ? 'REFUSED' : 'AGREED',
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1],
@@ -126,8 +126,8 @@
         this.getList(body => this[this.tabIndex ? 'refusedIdentities' : 'agreedIdentities'] = [...body.data])
       },
       resetList(){
-        this.agreedIdentities = []
-        this.refusedIdentities = []
+        this.agreedIdentities = [];
+        this.refusedIdentities = [];
       },
       resetFilter() {
         this.periodFilter = [null, null]
@@ -138,14 +138,14 @@
     },
     watch: {
       tabIndex(val) {
-        typeof val === 'number' && !isNaN(val) ? this.initList() : null
+        this.periodFilter = [null, null];
+        typeof val === 'number' && !isNaN(val)
+          ? this.renderList.length == 0 ? this.initList() : this.refreshList()
+          : null
       },
-      periodFilter(){
-        this.refreshList()
+      periodFilter(val){
+        val[0] && val[1] && this.refreshList()
       }
-    },
-    activated(){
-      this.refreshList();
     }
   }
 </script>

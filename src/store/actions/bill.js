@@ -13,6 +13,18 @@ module.exports = {
       }
     })
   },
+  getreceiptlist(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/pay_apply_list',
+      params:{
+        start_time: param.start_time,
+        end_time: param.end_time,
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
   //退款申请
   refundapply(ctx, param){
     ctx.dispatch('resource', {

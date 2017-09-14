@@ -2,15 +2,16 @@
   <div class="home-container">
 
     <Group title="待办事项" v-if="isHaveTodoList">
-      <Cell icon="../../../static/icon/ic_prepay_confirm.png" title="待预付款确认" link badge="2"
+
+      <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="待预付款确认" link :badge="prepayTodoNum"
             @onClick="goto('prepay/0')"></Cell>
-      <Cell icon="../../../static/icon/ic_police.png" title="您有一条公安验证待处理" link badge="2"
-            @onClick="goto('policeIdentity/today/0')"></Cell>
-      <Cell icon="../../../static/icon/ic_lvye.png" title="待手动输入，旅业上传" link badge="2"
-            @onClick="goto('identity/handle/0')"></Cell>
-      <Cell icon="../../../static/icon/ic_invoice.png" title="待提前开具发票" link badge="2"
+      <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_police.png" title="您有一条公安验证待处理" link :badge="identityNum"
+            @onClick="goto('/identity/0')"></Cell>
+      <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_lvye.png" title="待手动输入，旅业上传" link :badge="policeIdentityNum"
+            @onClick="goto('policeIdentity/handle/0')"></Cell>
+      <Cell v-if="invoiceNum > 0" icon="../../../static/icon/ic_invoice.png" title="待提前开具发票" link :badge="invoiceNum"
             @onClick="goto('invoice/0')"></Cell>
-      <Cell icon="../../../static/icon/ic_checkout.png" title="待操作离店" link badge="2"
+      <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="待操作离店" link :badge="checkoutApplicationNum"
             @onClick="goto('receive/checkout-application')"></Cell>
     </Group>
 
@@ -24,16 +25,16 @@
         <li class="app-item" @click="goto('prepay/0')">
           <img src="../../../static/icon/ic_prepay_confirm.png" alt="订单中心">
           <span class="app-title">订单中心</span>
-          <div class="warn">
-            <span class="warn-dot"></span>
-            <span>异常</span>
-          </div>
+          <!--<div class="warn">-->
+            <!--<span class="warn-dot"></span>-->
+            <!--<span>异常</span>-->
+          <!--</div>-->
         </li>
         <li class="app-item" @click="goto('receive/precheckin')">
           <img src="../../../static/icon/ic_checkout.png" alt="接待服务">
           <span class="app-title">接待服务</span>
         </li>
-        <li class="app-item" @click="goto('/identity/today/0')">
+        <li class="app-item" @click="goto('/identity/0')">
           <img src="../../../static/icon/ic_police.png" alt="公安验证">
           <span class="app-title">公安验证</span>
         </li>
@@ -45,16 +46,14 @@
           <img src="../../../static/icon/ic_invoice.png" alt="闪开发票">
           <span class="app-title">闪开发票</span>
         </li>
-        <li class="app-item" @click="goto('/refund')">
+        <li class="app-item" @click="goto('/bill/0')">
           <img src="../../../static/icon/ic_bill.png" alt="账务管理">
           <span class="app-title">账务管理</span>
         </li>
       </ul>
     </Group>
 
-    <!--<audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>-->
-    <!--<button @click="setPlay">播放</button>-->
-    <!--<XButton value="播放" @onClick="setPlay"></XButton>-->
+    <audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>
   </div>
 </template>
 
@@ -65,15 +64,99 @@
     name: 'home',
     data() {
       return {
-        isHaveTodoList: true
+        List: [],
+        prepayTodoNum: 0,
+        identityNum: 0,
+        policeIdentityNum: 0,
+        invoiceNum: 0,
+        checkoutApplicationNum: 0,
+      }
+    },
+    computed: {
+      ...mapState([
+        'hotel',
+        'yunbaInstance',
+        'yunbaConnected',
+      ]),
+      isHaveTodoList() {
+        return this.prepayTodoNum > 0 || this.identityNum > 0 || this.policeIdentityNum > 0 || this.invoiceNum > 0 || this.checkoutApplicationNum > 0
       }
     },
     methods: {
       ...mapActions([
-        'goto'
+        'goto',
+        'hoteltodolist',
+        'yunbaConnect',
+        'yunbaSubscribe',
+        'yunbaUnsubscribe',
+        'yunbaPublish',
+        'setPublishCallback',
       ]),
       setPlay(){
         document.querySelector('#audio').play();
+      },
+      getTodoList() {
+        this.hoteltodolist({
+          onsuccess: body => {
+            let list = body.data;
+            list.forEach(i => {
+                if(i.type == 'PREPAY') this.prepayTodoNum = i.total;
+                if(i.type == 'IDENTITY') this.identityNum = i.total;
+                if(i.type == 'LVYE') this.policeIdentityNum = i.total;
+                if(i.type == 'INVOICE') this.invoiceNum = i.total;
+                if(i.type == 'CHECKOUT') this.checkoutApplicationNum = i.total;
+            })
+          }
+        })
+      },
+      subscribe() {
+        this.yunbaSubscribe({
+          info: {
+            'topic': `hotels/${this.hotel.hotel_id}/todo`
+          },
+          subscribeCallback: () => {
+            console.log('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
+            this.publishCallback();
+          }
+        })
+      },
+      publishCallback() {
+        this.setPublishCallback({
+          onSuccess: (body) => {
+            console.log('---------  收到云吧消息',JSON.parse(body.msg));
+            let data = JSON.parse(body.msg);
+            this.setPlay();
+            if(data.type == 'PREPAY') this.prepayTodoNum = data.total;
+            if(data.type == 'IDENTITY') this.identityNum = data.total;
+            if(data.type == 'LVYE') this.policeIdentityNum = data.total;
+            if(data.type == 'INVOICE') this.invoiceNum = data.total;
+            if(data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
+          }
+        })
+      },
+      init() {
+        this.getTodoList();
+        if (!this.yunbaConnected) {
+//          this.yunbaConnect();
+        }
+      }
+    },
+    mounted(){
+      this.init();
+    },
+    watch: {
+      yunbaConnected(val) {
+        val && this.subscribe()
+      }
+    },
+    beforeDestroy() {
+      if (this.yunbaConnected) {
+        this.yunbaDisconnect({
+          disconnectCallback: () => {
+            console.log('unsubscribe');
+            this.$store.commit('ISYUNBACONNECTED', false);
+          }
+        })
       }
     }
   }

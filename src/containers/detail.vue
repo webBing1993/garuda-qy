@@ -3,7 +3,7 @@
     <div v-if="detail">
       <p class="synchronize">上次同步PMS时间: {{datetimeparse(detail.update_time, 'MMDDhhmm')}}</p>
       <div class="synchronize" v-if="isPreCheckin && detail.status && !detail.status.is_recording_success">
-        入账失败
+        <span class="record-tip">入账失败</span>
         <XButton value="已手工入账" warn @onClick="confirmPmsResult"></XButton>
       </div>
 
@@ -43,7 +43,8 @@
         <div class="button-group" style="padding-top: 0" v-if="isRefund">
           <p style="color: #DF4A4A;" v-if="detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'">
             微信退款失败</p>
-          <x-button value="微信退款" v-if="isRefund && detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'" @onClick="showRefundDialog = true"/>
+          <x-button value="微信退款" v-if="isRefund && detail.bill.refund && detail.bill.refund.refund_status === 'FAILED'"
+                    @onClick="showRefundDialog = true"/>
         </div>
       </Group>
 
@@ -67,7 +68,8 @@
           <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
           <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
-          <XButton value="一键退房" v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
+          <XButton value="一键退房"
+                   v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
                    @onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>
         </div>
         <div class="button-group" style="padding-top: 0" v-if="isCheckout && item.lvye_report_status === 'FAILED'">
@@ -89,7 +91,8 @@
         <Cell v-if="detail.invoice.type === 'VAT'" class="key" title="银行账号" :value="detail.invoice.bank_account"></Cell>
 
         <div class="button-group" v-if="isShowInvoiceBtn">
-          <XButton value="登记开票" default @onClick="showDialog = true" v-if="detail.invoice.invoice_status === 1"></XButton>
+          <XButton value="登记开票" default @onClick="showDialog = true"
+                   v-if="detail.invoice.invoice_status === 1"></XButton>
           <p v-if="detail.invoice.invoice_status === 2" class="tips">已确认开票。</p>
         </div>
       </Group>
@@ -125,7 +128,7 @@
         showCheckoutDialog: false,
         showRefundDialog: false,
         refundValue: null,
-        pmsCheckoutId:'',
+        pmsCheckoutId: '',
       }
     },
     computed: {
@@ -145,7 +148,7 @@
         return /checkout/.test(this.$route.path)
       },
       isRefund(){
-        return /refund/.test(this.$route.path)
+        return /bill/.test(this.$route.path)
       },
       isShowInvoiceBtn(){
         return this.isInvoice || this.isCheckout || this.isRefund
@@ -212,7 +215,9 @@
           invoice: 1,
           log: 1,
           bill: 1,
-          onsuccess: body => this.detail = body.data
+          onsuccess: body => {
+            this.detail = body.data
+          }
         })
       },
     },

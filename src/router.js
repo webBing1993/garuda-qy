@@ -78,10 +78,7 @@ const identity = [{
     template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: 'today/:tab',
-    component: require('./containers/identity/list')
-  }, {
-    path: 'history/:tab',
+    path: ':tab',
     component: require('./containers/identity/list')
   }, {
     path: ':id',
@@ -89,18 +86,18 @@ const identity = [{
   }]
 }];
 
-const refund = [{
-  path: '/refund',
+const bill = [{
+  path: '/bill',
   component: {
-    name: "refund",
+    name: "bill",
     template: `<keep-alive><router-view/></keep-alive>`,
   },
   children: [{
-    path: '/',
-    component: require('./containers/refund.vue')
+    path: ':tab',
+    component: require('./containers/bill.vue')
   },
     {
-      path: ':id',
+      path: 'detail/:id',
       component: require('./containers/detail.vue')
     }]
 }];
@@ -166,7 +163,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...refund, ...others]
+  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill, ...others]
 })
 
 // const precheckin = [{

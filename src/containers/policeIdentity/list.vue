@@ -40,7 +40,7 @@
       <div class="scroller-wrap">
         <div v-show="currentTab">
           <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-          <group v-for="(item,index) in handled" :key="index" :title="titleFilter(index)">
+          <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
             <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
                   :value="datetimeparse(item.createdTime,'hhmm')"></cell>
             <cell :title="handledItem(item,item.inTime,item.outTime)"
@@ -169,7 +169,7 @@
         return parseInt(this.route.params.tab)
       },
       renderList(){
-        return this.currentTab ? this.handled : this.tobeHandled
+        return this.currentTab ? this.sortByTime(this.handled,'createdTime'): this.tobeHandled
       },
       renderPageIndex(){
         return this.currentTab ? this.handledPageIndex : this.tobeHandledPageIndex
@@ -318,7 +318,9 @@
     },
     watch: {
       currentTab(val) {
-        typeof val === 'number' && !isNaN(val) ? this.initList() : null
+        typeof val === 'number' && !isNaN(val)
+          ? this.renderList.length == 0 ? this.initList() : this.refreshList()
+          : null
       },
       periodFilter(){
         this.refreshList();

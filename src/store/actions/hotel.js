@@ -15,5 +15,13 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
+  },
+  hoteltodolist(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/todolist',
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
   }
-}
+};

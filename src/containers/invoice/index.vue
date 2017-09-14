@@ -47,7 +47,7 @@
               height="-44">
       <div class="scroller-wrap">
         <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in doneList" :key="index" :title="titleFilter(index)">
+        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
           <Cell>
             <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{item.update_time | filterTime}}</span></p>
           </Cell>
@@ -104,6 +104,9 @@
       ]),
       tabIndex() {
         return +this.route.params.tab
+      },
+      renderList() {
+          return this.tabIndex ? this.sortByTime(this.doneList,'update_time'): this.waitList
       }
     },
     watch: {
