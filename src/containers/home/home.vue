@@ -53,7 +53,7 @@
       </ul>
     </Group>
 
-    <audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>
+
   </div>
 </template>
 
@@ -137,7 +137,7 @@
       init() {
         this.getTodoList();
         if (!this.yunbaConnected) {
-//          this.yunbaConnect();
+          this.yunbaConnect();
         }
       }
     },

@@ -3,6 +3,7 @@
     <router-view></router-view>
     <Toast v-model="Interface.toast.show" :title="Interface.toast.text"/>
     <Toast v-model="Interface.loading.show" loading/>
+    <audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>
   </div>
 </template>
 
@@ -127,10 +128,11 @@
         path.match(/order\/today/) ? title = '当日登记' : null
         path.match(/order\/history/) ? title = '历史登记' : null
         path.match(/order\/detail/) ? title = '预登记订单详情' : null
-        path.match(/identity\/./) ? title = '验证详情' : null
-        path.match(/identity\/today/) ? title = '当日验证' : null
-        path.match(/identity\/history/) ? title = '历史验证' : null
-        path.match(/identity\/todo/) ? title = '待验证' : null
+        path.match(/identity\/\d+/) ? title = '公安验证' : null
+        path.match(/identity\/detail/) ? title = '验证详情' : null
+//        path.match(/identity\/today/) ? title = '当日验证' : null
+//        path.match(/identity\/history/) ? title = '历史验证' : null
+//        path.match(/identity\/todo/) ? title = '待验证' : null
         path.match(/policeIdentity\/./) ? title = '验证详情' : null
         path.match(/policeIdentity\/handle/) ? title = '身份验证' : null
 
@@ -140,7 +142,7 @@
         path.match(/livein\/all/) ? title = '全部在住' : null
         path.match(/invoice/) ? title = '闪开发票' : null
         path.match(/checkout/) ? title = '退房申请' : null;
-        path.match(/refund/) ? title = '账务管理' : null;
+        path.match(/bill/) ? title = '账务管理' : null;
         path.match(/receive\/precheckin/) ? title = '预登记' : null;
         path.match(/receive\/livein/) ? title = '在住' : null;
         path.match(/receive\/checkout/) ? title = '已离店' : null;

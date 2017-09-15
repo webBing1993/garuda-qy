@@ -20,9 +20,9 @@
         <group v-for="(item,index) in renderList" :key="index">
           <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
                 :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"
-                @onClick="goto('/identity/' + item.identity_id)"></cell>
+                @onClick="goto('/identity/detail/' + item.identity_id)"></cell>
           <cell :title="getGuestItem(item)"
-                @onClick="goto('/identity/' + item.identity_id)"
+                @onClick="goto('/identity/detail/' + item.identity_id)"
                 link></cell>
         </group>
       </div>
