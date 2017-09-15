@@ -53,7 +53,7 @@
     name: 'List',
     data(){
       return {
-        tabMenu: ['已通过', '未通过'],
+//        tabMenu: ['已通过', '未通过'],
         selectedTab: '已通过',
         agreedIdentities: [],
         refusedIdentities: [],
@@ -71,6 +71,12 @@
 //      isToday(){
 //        return !!this.$route.path.match(/today/)
 //      },
+      tabMenu() {
+        let menu = [];
+        menu[0] = `已通过(${this.agreedIdentities.length})`;
+        menu[1] = `未通过(${this.refusedIdentities.length})`;
+        return menu;
+      },
       tabIndex(){
         return +this.route.params.tab
       },

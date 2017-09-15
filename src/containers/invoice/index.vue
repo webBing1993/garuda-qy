@@ -2,7 +2,7 @@
   <article>
     <header>
       <Tab active-color="#5077AA">
-        <TabItem v-for="(item,index) in tabmenu"
+        <TabItem v-for="(item,index) in tabMenu"
                  :key="'tabmenu'+index"
                  :class="{'vux-1px-r': index===0}"
                  :selected="route.params.tab == index"
@@ -92,7 +92,7 @@
         },
         page1: 1,
         page2: 1,
-        tabmenu: ["待处理", "已处理"],
+//        tabmenu: ["待处理", "已处理"],
         waitList: [],
         doneList: []
       }
@@ -104,6 +104,12 @@
       ]),
       tabIndex() {
         return +this.route.params.tab
+      },
+      tabMenu() {
+        let menu = [];
+        menu[0] = `待处理(${this.waitList.length})`;
+        menu[1] = `已处理(${this.doneList.length})`;
+        return menu;
       },
       renderList() {
           return this.tabIndex ? this.sortByTime(this.doneList,'update_time'): this.waitList

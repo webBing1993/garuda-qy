@@ -138,7 +138,7 @@
     name: 'List',
     data(){
       return {
-        tabMenu: ['待办理', '已办理'],
+//        tabMenu: ['待办理', '已办理'],
         tobeHandled: [],
         handled: [],
         batch: false,
@@ -167,6 +167,12 @@
       ]),
       currentTab(){
         return parseInt(this.route.params.tab)
+      },
+      tabMenu() {
+        let menu = [];
+        menu[0] = `待办理(${this.tobeHandled.length})`;
+        menu[1] = `已办理(${this.handled.length})`;
+        return menu;
       },
       renderList(){
         return this.currentTab ? this.sortByTime(this.handled,'createdTime'): this.tobeHandled

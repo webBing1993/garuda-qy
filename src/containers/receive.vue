@@ -65,7 +65,7 @@
     name: 'receive',
     data() {
       return {
-//        tabMenu: ['预登记(888)', '在住(11)', '退房申请(11)', '已离店(11)'],
+//        tabMenu: ['预登记', '在住', '退房申请', '已离店'],
         preCheckInList: [],
         liveInList: [],
         checkOutApplicationList: [],
@@ -159,7 +159,7 @@
         'getcheckoutlist'
       ]),
       toggleTab(item){
-          let tempItem = item.split('(')[0];
+        let tempItem = item.split('(')[0];
         switch (tempItem) {
           case '预登记':
             this.replaceto('/receive/precheckin');
@@ -304,8 +304,8 @@
         this.periodFilter = [null, null];
         this.renderList.length == 0 ? this.initList() : this.refreshList();
       },
-      periodFilter() {
-        this.refreshList();
+      periodFilter(val) {
+        val[0] && val[1] && this.refreshList();
         this.isCalendarShow = false;
       }
     }
