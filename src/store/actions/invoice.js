@@ -25,14 +25,14 @@ module.exports = {
   //     onFail: () => console.log('发票请求失败')
   //   })
   // },
-  confirmInvoice(ctx,param) {
+  confirmInvoice(ctx, param) {
     ctx.dispatch('resource', {
-      url: '/invoice_apply/'+ param.invoice_apply_id + '/invoice_status',
-      method:'PATCH',
+      url: '/invoice_apply/' + param.invoice_apply_id + '/invoice_status',
+      method: 'PATCH',
       body: {
-        invoice_status:param.invoice_status
+        invoice_status: param.invoice_status
       },
-      onSuccess:(body) => {
+      onSuccess: (body) => {
         ctx.dispatch('showtoast');
         param.onsuccess ? param.onsuccess(body) : null
       }
@@ -50,6 +50,8 @@ module.exports = {
       // },
       params: {
         status: param.status || 0,
+        start_time: param.start_time,
+        end_time: param.end_time
       },
       onSuccess: (body, headers) => {
         param.onsuccess ? param.onsuccess(body, headers) : null

@@ -145,7 +145,7 @@ const unchained = [{
 const others = [
   {
     path: '/',
-    component: require('./containers/home/home.vue')
+    component: require('./containers/default.vue')
   },{
     path: '/home',
     component: require('./containers/home/home.vue')

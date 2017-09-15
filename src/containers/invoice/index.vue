@@ -22,9 +22,9 @@
               height="-44">
       <div class="scroller-wrap">
         <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in waitList" :key="index">
+        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
           <Cell>
-            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right warn">待处理</span></p>
+            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{datetimeparse(item.create_time,'YYMMDD hhmm')}}</span></p>
           </Cell>
           <Cell link>
             <div class="cell-body">
@@ -62,6 +62,19 @@
       </div>
     </scroller>
 
+    <footer v-if="tabIndex">
+      <div class="listFilter">
+        <span class="filter" @click="isCalendarShow = true">
+          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
+          <abbr v-else>筛选</abbr>
+        </span>
+      </div>
+    </footer>
+
+    <popup v-model="isCalendarShow">
+      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+    </popup>
+
   </article>
 </template>
 
@@ -94,7 +107,10 @@
         page2: 1,
 //        tabmenu: ["待处理", "已处理"],
         waitList: [],
-        doneList: []
+        doneList: [],
+        isCalendarShow: false,
+        periodFilter: [null,null],
+
       }
     },
     computed: {
@@ -112,14 +128,19 @@
         return menu;
       },
       renderList() {
-          return this.tabIndex ? this.sortByTime(this.doneList,'update_time'): this.waitList
+          return this.tabIndex ? this.sortByTime(this.doneList,'update_time'): this.sortByTime(this.waitList,'out_time')
       }
     },
     watch: {
       tabIndex(val) {
+          this.resetFilter();
         val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
 
         typeof val === 'number' && !isNaN(val) ? this.initList() : null
+      },
+      periodFilter(val) {
+        val[0] && val[1] && this.refresh();
+        this.isCalendarShow = false;
       }
     },
     filters: {
@@ -156,11 +177,11 @@
         'getInvoiceList'
       ]),
       titleFilter(index){
-        if (this.doneList.length > 0) {
+        if (this.renderList.length > 0) {
           return index
-            ? this.datetimeparse(this.doneList[index].update_time) === this.datetimeparse(this.doneList[index - 1].update_time)
-              ? null : this.datetimeparse(this.doneList[index].update_time)
-            : this.datetimeparse(this.doneList[index].update_time)
+            ? this.datetimeparse(this.renderList[index].update_time) === this.datetimeparse(this.renderList[index - 1].update_time)
+              ? null : this.datetimeparse(this.renderList[index].update_time)
+            : this.datetimeparse(this.renderList[index].update_time)
         }
       },
       goDetail(obj) {
@@ -169,6 +190,10 @@
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index)
         this.replaceto(newpath)
+      },
+      resetFilter() {
+        console.log('resetFilter');
+        this.periodFilter = [null, null]
       },
       refresh() {
         let pa = {
@@ -257,7 +282,10 @@
       getList() {
         this.getInvoiceList({
           status: this.tabIndex,
+          start_time:this.periodFilter[0],
+          end_time: this.periodFilter[1],
           onsuccess: body => {
+              console.log(body)
             this.tabIndex ? this.doneList = body.data : this.waitList = body.data;
           }
         })

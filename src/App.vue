@@ -85,6 +85,9 @@
             case 'setting':
               path = '/setting'
               break;
+            case 'wqt':
+              path = '/home'
+              break;
           }
           this.replaceto(path)
         }

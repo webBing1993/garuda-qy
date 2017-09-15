@@ -16,7 +16,6 @@ module.exports = {
           console.log('LOGIN: ', body.data.session_id, body.data.hotel_id)
           sessionStorage.session_id = body.data.session_id
           ctx.commit('SESSION', body.data.session_id);
-          console.log(typeof body.data.hotel_id)
           if (typeof body.data.hotel_id === 'string') {
             sessionStorage.hotel_id = body.data.hotel_id
             ctx.commit('HOTEL', {'hotel_id': body.data.hotel_id});
