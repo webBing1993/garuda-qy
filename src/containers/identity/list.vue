@@ -1,32 +1,35 @@
 <template>
   <article>
-    <Tab active-color="#5077AA">
-      <TabItem v-for="(item,index) in tabMenu"
-               :key="'tabmenu'+index"
-               :class="{'vux-1px-r': index===0}"
-               :selected="route.params.tab == index"
-               @on-item-click="toggleTab(index)">{{item}}
-      </TabItem>
-    </Tab>
 
-    <scroller lock-x :scrollbar-x=false
-              :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="refreshList"
-              :depend="renderList"
-              height="-45"
-              use-pulldown>
-      <div class="scroller-wrap">
-        <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
-        <group v-for="(item,index) in renderList" :key="index">
-          <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
-                :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"
-                @onClick="goto('/identity/detail/' + item.identity_id)"></cell>
-          <cell :title="getGuestItem(item)"
-                @onClick="goto('/identity/detail/' + item.identity_id)"
-                link></cell>
-        </group>
-      </div>
-    </scroller>
+    <header class="tab-wrapper">
+      <Tab active-color="#5077AA">
+        <TabItem v-for="(item,index) in tabMenu"
+                 :key="'tabmenu'+index"
+                 :class="{'vux-1px-r': index===0}"
+                 :selected="route.params.tab == index"
+                 @on-item-click="toggleTab(index)">{{item}}
+        </TabItem>
+      </Tab>
+    </header>
+
+    <!--<scroller lock-x :scrollbar-x=false-->
+    <!--:pulldown-config="Interface.scroller"-->
+    <!--@on-pulldown-loading="refreshList"-->
+    <!--:depend="renderList"-->
+    <!--height="-45"-->
+    <!--use-pulldown>-->
+    <div class="list-wrapper">
+      <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
+      <group v-for="(item,index) in renderList" :key="index">
+        <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
+              :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"
+              @onClick="goto('/identity/detail/' + item.identity_id)"></cell>
+        <cell :title="getGuestItem(item)"
+              @onClick="goto('/identity/detail/' + item.identity_id)"
+              link></cell>
+      </group>
+    </div>
+    <!--</scroller>-->
 
     <footer>
       <div class="listFilter">
@@ -73,18 +76,18 @@
 //      },
       tabMenu() {
         let menu = [];
-        menu[0] = `已通过(${this.agreedIdentities.length})`;
-        menu[1] = `未通过(${this.refusedIdentities.length})`;
+        menu[0] = `未通过(${this.refusedIdentities.length})`;
+        menu[1] = `已通过(${this.agreedIdentities.length})`;
         return menu;
       },
       tabIndex(){
         return +this.route.params.tab
       },
       renderList(){
-        return this.tabIndex ? this.refusedIdentities : this.agreedIdentities
+        return this.tabIndex ? this.agreedIdentities : this.refusedIdentities
       },
       renderPageIndex(){
-        return this.tabIndex ? this.refusedPageIndex : this.agreedPageIndex
+        return this.tabIndex ? this.agreedPageIndex :  this.refusedPageIndex
       }
     },
     methods: {
@@ -117,19 +120,19 @@
       getList(callback){
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
-          status: this.tabIndex ? 'REFUSED' : 'AGREED',
+          status: this.tabIndex ? 'AGREED' : 'REFUSED',
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1],
           onsuccess: callback
         })
       },
       initList(){
-        if ((this.tabIndex && !this.refusedIdentities.length) || (!this.tabIndex && !this.agreedIdentities.length)) {
-          this.getList(body => (this[this.tabIndex ? 'refusedIdentities' : 'agreedIdentities'] = [...body.data], this.tabIndex ? this.refusedPageIndex++ : this.agreedPageIndex++))
+        if ((this.tabIndex && !this.agreedIdentities.length) || (!this.tabIndex && !this.refusedIdentities.length)) {
+          this.getList(body => (this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data], this.tabIndex ? this.agreedPageIndex++ : this.refusedPageIndex++))
         }
       },
       refreshList(){
-        this.getList(body => this[this.tabIndex ? 'refusedIdentities' : 'agreedIdentities'] = [...body.data])
+        this.getList(body => this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data])
       },
       resetList(){
         this.agreedIdentities = [];

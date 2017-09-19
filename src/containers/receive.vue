@@ -12,10 +12,10 @@
     </header>
 
     <div class="list-wrapper">
-      <p class="synchronize">
-        <x-button mini value="同步" @onClick="syncTime"></x-button>
-        上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
-      </p>
+      <!--<p class="synchronize">-->
+        <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
+        <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
+      <!--</p>-->
 
       <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
 
@@ -224,11 +224,11 @@
             ? null : this.datetimeparse(this.renderList[index].created_time)
           : this.datetimeparse(this.renderList[index].created_time)
       },
-      syncTime() {
-        this.hotelrefresh({
-          onsuccess: (body) => this.refreshList()
-        })
-      },
+//      syncTime() {
+//        this.hotelrefresh({
+//          onsuccess: (body) => this.refreshList()
+//        })
+//      },
       getList(callback){
         if (this.tempPage == '预登记') {
           this.gettodaylist({

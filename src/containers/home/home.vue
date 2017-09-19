@@ -3,15 +3,15 @@
 
     <Group title="待办事项" v-if="isHaveTodoList">
 
-      <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="待预付款确认" link :badge="prepayTodoNum"
+      <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="订单金额待确认" link :badge="prepayTodoNum"
             @onClick="goto('prepay/0')"></Cell>
       <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_police.png" title="您有一条公安验证待处理" link :badge="identityNum"
             @onClick="goto('/identity/0')"></Cell>
-      <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_lvye.png" title="待手动输入，旅业上传" link :badge="policeIdentityNum"
+      <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_lvye.png" title="旅业信息待上传" link :badge="policeIdentityNum"
             @onClick="goto('policeIdentity/handle/0')"></Cell>
-      <Cell v-if="invoiceNum > 0" icon="../../../static/icon/ic_invoice.png" title="待提前开具发票" link :badge="invoiceNum"
+      <Cell v-if="invoiceNum > 0" icon="../../../static/icon/ic_invoice.png" title="开票申请待处理" link :badge="invoiceNum"
             @onClick="goto('invoice/0')"></Cell>
-      <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="待操作离店" link :badge="checkoutApplicationNum"
+      <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="离店申请待处理" link :badge="checkoutApplicationNum"
             @onClick="goto('receive/checkout-application')"></Cell>
     </Group>
 
@@ -32,19 +32,19 @@
         </li>
         <li class="app-item" @click="goto('receive/precheckin')">
           <img src="../../../static/icon/ic_checkout.png" alt="接待服务">
-          <span class="app-title">接待服务</span>
+          <span class="app-title">住离信息</span>
         </li>
         <li class="app-item" @click="goto('/identity/0')">
           <img src="../../../static/icon/ic_police.png" alt="公安验证">
-          <span class="app-title">公安验证</span>
+          <span class="app-title">入住核验</span>
         </li>
         <li class="app-item" @click="goto('/policeIdentity/handle/0')">
           <img src="../../../static/icon/ic_lvye.png" alt="身份核验">
-          <span class="app-title">身份核验</span>
+          <span class="app-title">设备核验</span>
         </li>
         <li class="app-item" @click="goto('/invoice/0')">
           <img src="../../../static/icon/ic_invoice.png" alt="闪开发票">
-          <span class="app-title">闪开发票</span>
+          <span class="app-title">发票中心</span>
         </li>
         <li class="app-item" @click="goto('/bill/0')">
           <img src="../../../static/icon/ic_bill.png" alt="账务管理">

@@ -1,6 +1,6 @@
 <template>
   <article>
-    <header>
+    <header class="tab-wrapper">
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
                  :key="'tabmenu'+index"
@@ -11,16 +11,17 @@
       </Tab>
     </header>
 
-    <scroller :depend="waitList" v-show="tabIndex === 0" lock-x
-              use-pulldown
-              ref="scroller1"
-              v-model="scrollerStatus1"
-              :pullup-config="pullupConfig"
-              :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="refresh"
-              @on-pullup-loading="loadMore"
-              height="-44">
-      <div class="scroller-wrap">
+    <!--<scroller :depend="waitList" v-show="tabIndex === 0" lock-x-->
+              <!--use-pulldown-->
+              <!--ref="scroller1"-->
+              <!--v-model="scrollerStatus1"-->
+              <!--:pullup-config="pullupConfig"-->
+              <!--:pulldown-config="Interface.scroller"-->
+              <!--@on-pulldown-loading="refresh"-->
+              <!--@on-pullup-loading="loadMore"-->
+              <!--height="-44">-->
+    <div class="list-wrapper" >
+      <div  v-show="tabIndex === 0">
         <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
         <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
           <Cell>
@@ -34,18 +35,7 @@
           </Cell>
         </Group>
       </div>
-    </scroller>
-
-    <scroller :depend="doneList" v-show="tabIndex === 1" lock-x
-              use-pulldown
-              ref="scroller2"
-              v-model="scrollerStatus2"
-              :pullup-config="pullupConfig"
-              :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="refresh"
-              @on-pullup-loading="loadMore"
-              height="-44">
-      <div class="scroller-wrap">
+      <div v-show="tabIndex === 1">
         <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
         <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
           <Cell>
@@ -60,7 +50,21 @@
           </Cell>
         </Group>
       </div>
-    </scroller>
+    </div>
+
+    <!--</scroller>-->
+
+    <!--<scroller :depend="doneList" v-show="tabIndex === 1" lock-x-->
+              <!--use-pulldown-->
+              <!--ref="scroller2"-->
+              <!--v-model="scrollerStatus2"-->
+              <!--:pullup-config="pullupConfig"-->
+              <!--:pulldown-config="Interface.scroller"-->
+              <!--@on-pulldown-loading="refresh"-->
+              <!--@on-pullup-loading="loadMore"-->
+              <!--height="-44">-->
+      <!---->
+    <!--</scroller>-->
 
     <footer v-if="tabIndex">
       <div class="listFilter">
@@ -134,9 +138,10 @@
     watch: {
       tabIndex(val) {
           this.resetFilter();
-        val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
+//        val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
 
-        typeof val === 'number' && !isNaN(val) ? this.initList() : null
+        typeof val === 'number' && !isNaN(val)
+          ? this.renderList.length == 0 ? this.initList() : this.refresh() : null
       },
       periodFilter(val) {
         val[0] && val[1] && this.refresh();

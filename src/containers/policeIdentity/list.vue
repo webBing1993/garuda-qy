@@ -1,22 +1,25 @@
 <template>
   <article>
-    <Tab active-color="#5077AA">
-      <TabItem v-for="(item,index) in tabMenu"
-               :key="index"
-               :class="{'vux-1px-r': index===0}"
-               :selected="currentTab === index"
-               @on-item-click="toggleTab(index)">{{item}}
-      </TabItem>
-    </Tab>
+    <header class="tab-wrapper">
+      <Tab active-color="#5077AA">
+        <TabItem v-for="(item,index) in tabMenu"
+                 :key="index"
+                 :class="{'vux-1px-r': index===0}"
+                 :selected="currentTab === index"
+                 @on-item-click="toggleTab(index)">{{item}}
+        </TabItem>
+      </Tab>
+    </header>
 
-    <scroller lock-x :scrollbar-x=false
-              :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="refreshList"
-              :depend="tobeHandled"
-              height="-45"
-              use-pulldown
-              v-show="!currentTab">
-      <div class="scroller-wrap">
+    <!--<scroller lock-x :scrollbar-x=false-->
+              <!--:pulldown-config="Interface.scroller"-->
+              <!--@on-pulldown-loading="refreshList"-->
+              <!--:depend="tobeHandled"-->
+              <!--height="-45"-->
+              <!--use-pulldown-->
+              <!--v-show="!currentTab">-->
+      <div class="list-wrapper">
+
         <div v-show="!currentTab" :class="{batch}">
           <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
           <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
@@ -27,17 +30,7 @@
             </checker-item>
           </checker>
         </div>
-      </div>
-    </scroller>
 
-    <scroller lock-x :scrollbar-x=false
-              :pulldown-config="Interface.scroller"
-              @on-pulldown-loading="refreshList"
-              :depend="handled"
-              height="-45"
-              use-pulldown
-              v-show="currentTab">
-      <div class="scroller-wrap">
         <div v-show="currentTab">
           <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
           <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
@@ -48,8 +41,7 @@
           </group>
         </div>
       </div>
-    </scroller>
-
+    <!--</scroller>-->
 
     <footer v-show="route.params.tab == 0 && tobeHandled.length !== 0 && tobeHandledPageIndex > 0">
       <div class="button-group">
@@ -175,7 +167,7 @@
         return menu;
       },
       renderList(){
-        return this.currentTab ? this.sortByTime(this.handled,'createdTime'): this.tobeHandled
+        return this.currentTab ? this.sortByTime(this.handled, 'createdTime') : this.tobeHandled
       },
       renderPageIndex(){
         return this.currentTab ? this.handledPageIndex : this.tobeHandledPageIndex
@@ -191,9 +183,9 @@
       isDisabled(){
         if (this.roomNumberList.length > 0) {
           let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-          return !this.roomNumber ||  (typeof this.days === 'string' &&!this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+          return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
         } else {
-          return !this.roomNumber || (typeof this.days === 'string' &&!this.days ) || this.days<0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+          return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || this.days < 0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
         }
       }
     },
@@ -228,7 +220,7 @@
         this.days >= 1 ? this.days = +this.days - 1 : null
       },
       daysAdd() {
-        this.days <=30 ? this.days = +this.days + 1 : null
+        this.days <= 30 ? this.days = +this.days + 1 : null
       },
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
@@ -260,7 +252,7 @@
         }
       },
       setMultiConfirm() {
-        if (this.batchlist.length !== 0 && this.roomNumber && +this.days>=0 && this.inTimeFilter && this.outTimeFilter) {
+        if (this.batchlist.length !== 0 && this.roomNumber && +this.days >= 0 && this.inTimeFilter && this.outTimeFilter) {
           this.reportLvYe({
             lvyeReportRecordIds: this.batchlist,
             roomNumber: this.roomNumber, //房间号码
@@ -331,9 +323,9 @@
       periodFilter(){
         this.refreshList();
       },
-      days(val,old) {
-        if(val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;
-        if(val >31) this.days = 0;
+      days(val, old) {
+        if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;
+        if (val > 31) this.days = 0;
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
@@ -350,7 +342,7 @@
         if (this.roomNumberList.length > 0 && val) {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-          if (this.resultList.length === 0 ) this.isErrorNumber = true;
+          if (this.resultList.length === 0) this.isErrorNumber = true;
         }
       },
       resultList(val, old) {
