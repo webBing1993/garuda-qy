@@ -95,9 +95,11 @@ const bill = [{
   children: [{
     path: ':tab',
     component: require('./containers/bill.vue')
-  },
-    {
-      path: 'detail/:id',
+  }, {
+      path: 'receipt/detail/:id',
+      component: require('./containers/detail.vue')
+    }, {
+      path: 'refund/detail/:id',
       component: require('./containers/detail.vue')
     }]
 }];

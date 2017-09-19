@@ -30,7 +30,7 @@
               :value="datetimeparse(detail.bill.payment && detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
       </Group>
 
-      <Group title="退款信息" v-if="detail.bill">
+      <Group title="退款信息" v-if="detail.bill && isRefund">
         <Cell class="key" title="消费金额"
               :value="cashHandling(detail.bill.refund && detail.bill.refund.need_pay_fee)"></Cell>
         <Cell class="key" title="退款金额"
@@ -148,7 +148,10 @@
         return /checkout/.test(this.$route.path)
       },
       isRefund(){
-        return /bill/.test(this.$route.path)
+        return /refund/.test(this.$route.path)
+      },
+      isReceipt(){
+        return /receipt/.test(this.$route.path)
       },
       isShowInvoiceBtn(){
         return this.isInvoice || this.isCheckout || this.isRefund

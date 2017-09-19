@@ -17,7 +17,7 @@
                v-for="(item,index) in renderList"
                :key="index"
                :title="titleFilter(index)">
-          <Cell :title="getReceiptBody(item)" link @onClick="goto('/bill/detail/'+item.order_id)"/>
+          <Cell :title="getReceiptBody(item)" link @onClick="goto('/bill/receipt/detail/'+item.order_id)"/>
         </Group>
 
         <Group v-if="currentTab"
@@ -25,7 +25,7 @@
                :key="index"
                :title="titleFilter(index)">
           <Cell :title="getCellTitle(item)"/>
-          <Cell :title="getCellBody(item)" link @onClick="goto('/bill/detail/'+item.order_id)"/>
+          <Cell :title="getCellBody(item)" link @onClick="goto('/bill/refund/detail/'+item.order_id)"/>
         </Group>
 
       </div>
@@ -125,13 +125,13 @@
           ?
           this.getrefundlist({
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1],
+            end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
             onsuccess: callback
           })
           :
           this.getreceiptlist({
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1],
+            end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
             onsuccess: callback
           })
       },

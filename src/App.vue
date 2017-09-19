@@ -143,7 +143,7 @@
         path.match(/livein\/./) ? title = '入住单详情' : null
         path.match(/livein\/today/) ? title = '当日入住' : null
         path.match(/livein\/all/) ? title = '全部在住' : null
-        path.match(/invoice/) ? title = '闪开发票' : null
+        path.match(/invoice/) ? title = '发票中心' : null
         path.match(/checkout/) ? title = '退房申请' : null;
         path.match(/bill/) ? title = '账务管理' : null;
         path.match(/receive\/precheckin/) ? title = '预登记' : null;

@@ -288,7 +288,7 @@
       getList(callback){
         this.newIdentityList({
           startTime: this.periodFilter ? this.periodFilter[0] : '',
-          endTime: this.periodFilter ? this.periodFilter[1] : '',
+          endTime: this.periodFilter ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
           reportInStatuses: this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'],//需要的入住上报旅业状态
           onsuccess: callback
         })
