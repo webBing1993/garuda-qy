@@ -125,7 +125,7 @@
           onSuccess: (body) => {
             console.log('---------  收到云吧消息',JSON.parse(body.msg));
             let data = JSON.parse(body.msg);
-//            this.setPlay();
+            this.setPlay();
             if(data.type == 'PREPAY') this.prepayTodoNum = data.total;
             if(data.type == 'IDENTITY') this.identityNum = data.total;
             if(data.type == 'LVYE') this.policeIdentityNum = data.total;
