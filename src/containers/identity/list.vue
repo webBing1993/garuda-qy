@@ -117,22 +117,23 @@
 
         return dom
       },
-      getList(callback){
+      getList(callback,status){
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
-          status: this.tabIndex ? 'AGREED' : 'REFUSED',
+          status: status ,
           start_time: this.periodFilter[0],
-          end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
+          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] :'',
           onsuccess: callback
         })
       },
       initList(){
-        if ((this.tabIndex && !this.agreedIdentities.length) || (!this.tabIndex && !this.refusedIdentities.length)) {
-          this.getList(body => (this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data], this.tabIndex ? this.agreedPageIndex++ : this.refusedPageIndex++))
+        if (this.renderList.length == 0) {
+          this.getList(body => (this.refusedIdentities = [...body.data],  this.refusedPageIndex++),'REFUSED')
+          this.getList(body => (this.agreedIdentities = [...body.data], this.agreedPageIndex++),'AGREED')
         }
       },
       refreshList(){
-        this.getList(body => this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data])
+        this.getList(body => this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data],this.tabIndex ? 'AGREED':'REFUSED')
       },
       resetList(){
         this.agreedIdentities = [];

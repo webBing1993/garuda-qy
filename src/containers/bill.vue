@@ -78,7 +78,7 @@
         return menu;
       },
       renderList() {
-        return this.currentTab ? this.sortByTime(this.refundList,'created_time') : this.sortByTime(this.receiptList,'created_time')
+        return this.currentTab ? this.sortByTime(this.refundList, 'created_time') : this.sortByTime(this.receiptList, 'created_time')
       },
       renderPageIndex() {
         return this.currentTab ? this.refundPageIndex : this.receiptPageIndex
@@ -146,16 +146,24 @@
         this.refundList = [];
       },
       initList(){
-        this.renderList.length === 0 && this.getList(body => {
-          this.currentTab
-            ? (this.refundList = [...body.data], this.refundPageIndex++)
-            : (this.receiptList = [...body.data], this.receiptPageIndex++)
-        });
+        if (this.renderList.length === 0) {
+          this.getreceiptlist({
+            start_time: this.periodFilter[0],
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+            onsuccess: body => (this.receiptList = [...body.data], this.receiptPageIndex++)
+          });
+          this.getrefundlist({
+            start_time: this.periodFilter[0],
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+            onsuccess: body => (this.refundList = [...body.data], this.refundPageIndex++)
+          });
+
+        }
       }
     },
     watch: {
       periodFilter(val) {
-        if(val[0] && val[1]) this.refreshList();
+        if (val[0] && val[1]) this.refreshList();
         this.resetList = [];
         this.isCalendarShow = false;
       },

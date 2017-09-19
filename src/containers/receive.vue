@@ -232,7 +232,7 @@
       getList(callback){
         if (this.tempPage == '预登记') {
           this.gettodaylist({
-            is_cancelled: 1,
+            is_cancelled: 0,
             is_sequence: 0,
             onsuccess: callback
           })
@@ -258,15 +258,26 @@
       },
       initList() {
         if (this.renderPageIndex === 0 || this.renderList.length == 0) {
-          if (this.tempPage == '预登记') {
-            this.getList(body => (this.preCheckInList = [...body.data], this.preCheckInPageIndex++));
-          } else if (this.tempPage == '在住') {
-            this.getList(body => (this.liveInList = [...body.data], this.liveInPageIndex++));
-          } else if (this.tempPage == '退房申请') {
-            this.getList(body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++));
-          } else if (this.tempPage == '已离店') {
-            this.getList(body => (this.checkOutList = [...body.data], this.checkoutPageIndex++));
-          }
+          this.gettodaylist({
+            is_cancelled: 0,
+            is_sequence: 0,
+            onsuccess: body => (this.preCheckInList = [...body.data], this.preCheckInPageIndex++)
+          });
+          this.getTodaySuborder({
+            onsuccess: body => (this.liveInList = [...body.data], this.liveInPageIndex++)
+          });
+          this.getcheckoutlist({
+            status: 'PENDING',
+            start_time: this.periodFilter[0],
+            end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
+            onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
+          });
+          this.getcheckoutlist({
+            status: 'DONE',
+            start_time: this.periodFilter[0],
+            end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
+            onsuccess: body => (this.checkOutList = [...body.data], this.checkoutPageIndex++)
+          });
         }
       },
       refreshList(){

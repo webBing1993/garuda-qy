@@ -128,20 +128,6 @@
       getCellFooter(item){
         return `<p><span class="cell-key">备注：</span><span class="cell-value">${item.remark}</span></p>`
       },
-      getList(callback){
-        this.getconfirmelist({
-          status: this.currentTab,
-          onsuccess: callback
-        })
-      },
-      initList(){
-        if ((!this.currentTab && this.tobeconfirmed.length === 0) || (this.currentTab && this.confirmed.length === 0)) {
-          this.getList(body => (this[this.currentTab ? 'confirmed' : 'tobeconfirmed'] = [...body.data], this.currentTab ? this.confirmedPageIndex++ : this.tobeConfirmedPageIndex++))
-        }
-      },
-      refreshList(){
-        this.getList(body => this[this.currentTab ? 'confirmed' : 'tobeconfirmed'] = [...body.data])
-      },
       goPick(){
         // 批量选择
         this.batchlist = []
@@ -191,18 +177,33 @@
         this.hotelrefresh({
           onsuccess: (body) => this.refreshList()
         })
+      },
+      getList(status,callback){
+        this.getconfirmelist({
+          status: status,
+          onsuccess: callback
+        })
+      },
+      initList(){
+        if(this.renderList.length === 0) {
+          this.getList(0,body => (this.tobeconfirmed = [...body.data],this.tobeConfirmedPageIndex++))
+          this.getList(1,body => (this.confirmed = [...body.data],this.confirmedPageIndex++))
+        }
+      },
+      refreshList(){
+        this.getList(this.currentTab,body => this.currentTab ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
       }
     },
     watch: {
       currentTab: function (val, oldval) {
         this.cancelPick();
         typeof val === 'number' && !isNaN(val)
-          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList(): this.getList()
+          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList(): this.refreshList()
           :null;
       }
     },
-    activated(){
-      this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList(): this.getList()
+    mounted(){
+      this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList(): this.refreshList()
     }
   }
 </script>

@@ -12,35 +12,35 @@
     </header>
 
     <!--<scroller lock-x :scrollbar-x=false-->
-              <!--:pulldown-config="Interface.scroller"-->
-              <!--@on-pulldown-loading="refreshList"-->
-              <!--:depend="tobeHandled"-->
-              <!--height="-45"-->
-              <!--use-pulldown-->
-              <!--v-show="!currentTab">-->
-      <div class="list-wrapper">
+    <!--:pulldown-config="Interface.scroller"-->
+    <!--@on-pulldown-loading="refreshList"-->
+    <!--:depend="tobeHandled"-->
+    <!--height="-45"-->
+    <!--use-pulldown-->
+    <!--v-show="!currentTab">-->
+    <div class="list-wrapper">
 
-        <div v-show="!currentTab" :class="{batch}">
-          <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
-          <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
-            <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
-              <group>
-                <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
-              </group>
-            </checker-item>
-          </checker>
-        </div>
-
-        <div v-show="currentTab">
-          <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-          <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
-            <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-            <cell :title="handledItem(item,item.inTime,item.outTime)"
-                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
-          </group>
-        </div>
+      <div v-show="!currentTab" :class="{batch}">
+        <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
+        <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
+          <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
+            <group>
+              <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
+            </group>
+          </checker-item>
+        </checker>
       </div>
+
+      <div v-show="currentTab">
+        <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
+        <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
+          <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
+                :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+          <cell :title="handledItem(item,item.inTime,item.outTime)"
+                @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+        </group>
+      </div>
+    </div>
     <!--</scroller>-->
 
     <footer v-show="route.params.tab == 0 && tobeHandled.length !== 0 && tobeHandledPageIndex > 0">
@@ -285,17 +285,18 @@
           `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span></p>` +
           `</div>`
       },
-      getList(callback){
+      getList(callback,status){
         this.newIdentityList({
           startTime: this.periodFilter ? this.periodFilter[0] : '',
           endTime: this.periodFilter ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          reportInStatuses: this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'],//需要的入住上报旅业状态
+          reportInStatuses: status,//需要的入住上报旅业状态
           onsuccess: callback
         })
       },
       initList(){
-        if ((this.currentTab && !this.handled.length) || (!this.currentTab && !this.tobeHandled.length)) {
-          this.getList(body => (this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? this.handledPageIndex++ : this.tobeHandledPageIndex++))
+        if (this.renderList.length === 0) {
+          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++),['NONE', 'FAILED'])
+          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++),['SUCCESS'] )
         }
       },
       refreshList(){

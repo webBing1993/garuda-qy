@@ -3,7 +3,7 @@
     <router-view></router-view>
     <Toast v-model="Interface.toast.show" :title="Interface.toast.text"/>
     <Toast v-model="Interface.loading.show" loading/>
-    <audio id="audio" hidden src="../../../static/4182.wav" ref="audio"></audio>
+    <audio id="audio" hidden src="/static/4182.wav" ref="audio"></audio>
   </div>
 </template>
 
@@ -127,17 +127,17 @@
         let title = '微前台';
         path.match(/record/) ? title = '录入修改' : null
         path.match(/roommanager/) ? title = '房态管理' : null
-        path.match(/prepay/) ? title = '预付款确认' : null
-        path.match(/order\/today/) ? title = '当日登记' : null
-        path.match(/order\/history/) ? title = '历史登记' : null
-        path.match(/order\/detail/) ? title = '预登记订单详情' : null
-        path.match(/identity\/\d+/) ? title = '公安验证' : null
+        path.match(/prepay/) ? title = '订单中心' : null
+//        path.match(/order\/today/) ? title = '当日登记' : null
+//        path.match(/order\/history/) ? title = '历史登记' : null
+//        path.match(/order\/detail/) ? title = '预登记订单详情' : null
+        path.match(/identity\/\d+/) ? title = '入住验证' : null
         path.match(/identity\/detail/) ? title = '验证详情' : null
 //        path.match(/identity\/today/) ? title = '当日验证' : null
 //        path.match(/identity\/history/) ? title = '历史验证' : null
 //        path.match(/identity\/todo/) ? title = '待验证' : null
         path.match(/policeIdentity\/./) ? title = '验证详情' : null
-        path.match(/policeIdentity\/handle/) ? title = '身份验证' : null
+        path.match(/policeIdentity\/handle/) ? title = '设备验证' : null
 
 //        path.match(/new-policeIdentity\/wxPay/) ? title = '微信支付入住' : null
         path.match(/livein\/./) ? title = '入住单详情' : null
@@ -146,10 +146,11 @@
         path.match(/invoice/) ? title = '发票中心' : null
         path.match(/checkout/) ? title = '退房申请' : null;
         path.match(/bill/) ? title = '账务管理' : null;
-        path.match(/receive\/precheckin/) ? title = '预登记' : null;
-        path.match(/receive\/livein/) ? title = '在住' : null;
-        path.match(/receive\/checkout/) ? title = '已离店' : null;
-        path.match(/receive\/checkout-application/) ? title = '退房申请' : null;
+        path.match(/receive/) ? title = '住离信息' : null;
+//        path.match(/receive\/precheckin/) ? title = '预登记' : null;
+//        path.match(/receive\/livein/) ? title = '在住' : null;
+//        path.match(/receive\/checkout/) ? title = '已离店' : null;
+//        path.match(/receive\/checkout-application/) ? title = '退房申请' : null;
         this.settitle(title)
       },
       sessionId(val){

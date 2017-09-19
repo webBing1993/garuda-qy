@@ -65,13 +65,13 @@
       },
       lvyeUploadSuccess(){
 //        return this.detail.lvye_report_status !== 'FAILED'
-        return this.detail.lvye_report_status === 'SUCCESS'
+        return this.detail.lvye_report_status == 'FORBID' || this.detail.lvye_report_status === 'SUCCESS'
       },
       btnPresent(){
         return {
           status: this.lvyeUploadSuccess,
           hasNext: !!this.detail.next_identity_id,
-          callback: () => this.lvyeUploadSuccess ? this.replaceto('/identity/' + this.detail.next_identity_id) : this.setuploadstatus()
+          callback: () => this.lvyeUploadSuccess ? this.replaceto('/identity/detail/' + this.detail.next_identity_id) : this.setuploadstatus()
         }
       },
       lvyeStatusName(){
@@ -81,7 +81,7 @@
           return '上传旅业系统失败'
         } else if (!this.detail.lvye_report_status || this.detail.lvye_report_status === 'NONE') {
           return '未上传旅业系统'
-        } else {
+        } else if(this.detail.lvye_report_status === 'SUCCESS'){
           return '已成功上传旅业系统。' + this.datetimeparse(this.detail.lvye_report_time, 'YYMMDD hhmm')
         }
 //        return this.detail.lvye_report_status === 'SUBMITTED' || this.detail.lvye_report_status === 'PENDING'

@@ -12,20 +12,22 @@
     </header>
 
     <!--<scroller :depend="waitList" v-show="tabIndex === 0" lock-x-->
-              <!--use-pulldown-->
-              <!--ref="scroller1"-->
-              <!--v-model="scrollerStatus1"-->
-              <!--:pullup-config="pullupConfig"-->
-              <!--:pulldown-config="Interface.scroller"-->
-              <!--@on-pulldown-loading="refresh"-->
-              <!--@on-pullup-loading="loadMore"-->
-              <!--height="-44">-->
-    <div class="list-wrapper" >
-      <div  v-show="tabIndex === 0">
+    <!--use-pulldown-->
+    <!--ref="scroller1"-->
+    <!--v-model="scrollerStatus1"-->
+    <!--:pullup-config="pullupConfig"-->
+    <!--:pulldown-config="Interface.scroller"-->
+    <!--@on-pulldown-loading="refresh"-->
+    <!--@on-pullup-loading="loadMore"-->
+    <!--height="-44">-->
+    <div class="list-wrapper">
+      <div v-show="tabIndex === 0">
         <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
+        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
+               :title="titleFilter(index)">
           <Cell>
-            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{datetimeparse(item.create_time,'YYMMDD hhmm')}}</span></p>
+            <p><span class="cell-value">{{item.room_no}}</span><span
+              class="cell-right">{{datetimeparse(item.create_time, 'YYMMDD hhmm')}}</span></p>
           </Cell>
           <Cell link>
             <div class="cell-body">
@@ -37,9 +39,11 @@
       </div>
       <div v-show="tabIndex === 1">
         <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
+        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
+               :title="titleFilter(index)">
           <Cell>
-            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{item.update_time | filterTime}}</span></p>
+            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{item.update_time | filterTime}}</span>
+            </p>
           </Cell>
           <Cell link>
             <div class="cell-body">
@@ -55,15 +59,15 @@
     <!--</scroller>-->
 
     <!--<scroller :depend="doneList" v-show="tabIndex === 1" lock-x-->
-              <!--use-pulldown-->
-              <!--ref="scroller2"-->
-              <!--v-model="scrollerStatus2"-->
-              <!--:pullup-config="pullupConfig"-->
-              <!--:pulldown-config="Interface.scroller"-->
-              <!--@on-pulldown-loading="refresh"-->
-              <!--@on-pullup-loading="loadMore"-->
-              <!--height="-44">-->
-      <!---->
+    <!--use-pulldown-->
+    <!--ref="scroller2"-->
+    <!--v-model="scrollerStatus2"-->
+    <!--:pullup-config="pullupConfig"-->
+    <!--:pulldown-config="Interface.scroller"-->
+    <!--@on-pulldown-loading="refresh"-->
+    <!--@on-pullup-loading="loadMore"-->
+    <!--height="-44">-->
+    <!---->
     <!--</scroller>-->
 
     <footer v-if="tabIndex">
@@ -113,7 +117,7 @@
         waitList: [],
         doneList: [],
         isCalendarShow: false,
-        periodFilter: [null,null],
+        periodFilter: [null, null],
 
       }
     },
@@ -132,12 +136,12 @@
         return menu;
       },
       renderList() {
-          return this.tabIndex ? this.sortByTime(this.doneList,'update_time'): this.sortByTime(this.waitList,'out_time')
+        return this.tabIndex ? this.sortByTime(this.doneList, 'update_time') : this.sortByTime(this.waitList, 'out_time')
       }
     },
     watch: {
       tabIndex(val) {
-          this.resetFilter();
+        this.resetFilter();
 //        val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
 
         typeof val === 'number' && !isNaN(val)
@@ -168,10 +172,10 @@
       },
       filterTime(v) {
         let date = new Date(+v),
-            hour = date.getHours(),
-            min = date.getMinutes(),
-            hourStr = hour > 9 ? hour : `0${hour}`,
-            minStr = min > 9 ? min : `0${min}`;
+          hour = date.getHours(),
+          min = date.getMinutes(),
+          hourStr = hour > 9 ? hour : `0${hour}`,
+          minStr = min > 9 ? min : `0${min}`;
         return `${hourStr}:${minStr}`;
       }
     },
@@ -205,7 +209,7 @@
           from: "top",
           page: 1
         }
-        this.getList(pa)
+        this.getList( this.tabIndex, body =>this.tabIndex ? this.doneList = [...body.data] : this.wait = [...body.data], pa)
       },
       loadMore() {
         let page;
@@ -284,15 +288,12 @@
       //     onfail: errorCallback
       //   })
       // },
-      getList() {
+      getList(status, callback) {
         this.getInvoiceList({
-          status: this.tabIndex,
-          start_time:this.periodFilter[0],
-          end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
-          onsuccess: body => {
-              console.log(body)
-            this.tabIndex ? this.doneList = body.data : this.waitList = body.data;
-          }
+          status: status,
+          start_time: this.periodFilter[0],
+          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          onsuccess: callback
         })
       },
       initList() {
@@ -301,8 +302,9 @@
           page: 1
         }
 
-        if ((!this.tabIndex && this.waitList.length === 0) || (this.tabIndex && this.doneList.length === 0) ) {
-          this.getList(pa)
+        if (this.renderList.length === 0) {
+          this.getList(0, body => this.waitList = [...body.data], pa);
+          this.getList(1, body => this.doneList = [...body.data], pa);
         }
       }
     },
