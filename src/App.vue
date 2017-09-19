@@ -131,7 +131,7 @@
 //        path.match(/order\/today/) ? title = '当日登记' : null
 //        path.match(/order\/history/) ? title = '历史登记' : null
 //        path.match(/order\/detail/) ? title = '预登记订单详情' : null
-        path.match(/identity\/\d+/) ? title = '入住验证' : null
+        path.match(/identity\/\d+/) ? title = '入住核验' : null
         path.match(/identity\/detail/) ? title = '验证详情' : null
 //        path.match(/identity\/today/) ? title = '当日验证' : null
 //        path.match(/identity\/history/) ? title = '历史验证' : null
