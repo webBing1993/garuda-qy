@@ -38,7 +38,7 @@ module.exports = {
           param.method && !param.url.match(/precheckin/) && !param.url.match(/login/)&& !param.url.match(/refund_apply_list/) && !param.url.match(/searchLvyeReportInfo/)&& !param.url.match(/lvyeReport/)&& !param.url.match(/order\/pay/) ? ctx.dispatch('showtoast') : null
           param.onSuccess ? param.onSuccess(response.body) : null
         } else {
-          ctx.dispatch('showtoast', 'errcode:' + response.body.errcode + ';\n errmsg:' + response.body.errmsg);
+          ctx.dispatch('showtoast', response.body.errmsg);
           param.onFail ? param.onFail(response.body) : null
         }
       }
