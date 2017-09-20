@@ -269,13 +269,13 @@
           this.getcheckoutlist({
             status: 'PENDING',
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
             onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
           });
           this.getcheckoutlist({
             status: 'DONE',
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1],
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] :'',
             onsuccess: body => (this.checkOutList = [...body.data], this.checkoutPageIndex++)
           });
         }
