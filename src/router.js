@@ -81,6 +81,9 @@ const identity = [{
     path: ':tab',
     component: require('./containers/identity/list')
   }, {
+    path: 'todo/:id',
+    component: require('./containers/identity/todo')
+  },{
     path: 'detail/:id',
     component: require('./containers/identity/detail')
   }]

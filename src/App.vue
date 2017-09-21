@@ -135,7 +135,7 @@
         path.match(/identity\/detail/) ? title = '核验详情' : null
 //        path.match(/identity\/today/) ? title = '当日验证' : null
 //        path.match(/identity\/history/) ? title = '历史验证' : null
-//        path.match(/identity\/todo/) ? title = '待验证' : null
+        path.match(/identity\/todo/) ? title = '待核验' : null
         path.match(/policeIdentity\/./) ? title = '核验详情' : null
         path.match(/policeIdentity\/handle/) ? title = '设备核验' : null
 
