@@ -111,7 +111,7 @@
       getList(callback){
         this.getIdentities({
           scope: this.isToday ? 'TODAY' : 'HISTORY',
-          status: this.tabIndex ? "['REFUSED','PENDING','AUTO_REFUSED']" :  "['AGREED','AUTO_AGREED']",
+          status: this.tabIndex ? "REFUSED,PENDING,AUTO_REFUSED" :  "AGREED,AUTO_AGREED",
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1],
           onsuccess: callback
