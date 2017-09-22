@@ -3,6 +3,7 @@
     <router-view></router-view>
     <Toast v-model="Interface.toast.show" :title="Interface.toast.text"/>
     <Toast v-model="Interface.loading.show" loading/>
+    <Progress v-model="Interface.progress.show" :isOk="Interface.progress.isOk"></Progress>
   </div>
 </template>
 

@@ -7,6 +7,14 @@ module.exports = {
       }
     )
   },
+  showprogress(ctx, param){
+    ctx.commit('PROGRESS',
+      {
+        show: param.show,
+        isOk: param.isOk
+      }
+    )
+  },
   showloading(ctx, text){
     ctx.commit('LOADING', 1)
   },

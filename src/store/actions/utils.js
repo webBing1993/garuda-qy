@@ -19,7 +19,9 @@ module.exports = {
     ctx.commit('URLQUERY', o)
   },
   resource: (ctx, param) => {
-    ctx.commit('LOADING', 1)
+    // console.log('start',/hotel\/.+\/refresh/.test(param.url));
+    let isRefresh = /hotel\/.+\/refresh/.test(param.url);
+    isRefresh ? ctx.dispatch('showprogress', {show:true,isOk:false}): ctx.commit('LOADING', 1);
     Vue.http({
       url: '/gemini' + param.url,
       body: param.body || null,
@@ -35,7 +37,8 @@ module.exports = {
     }).then(
       response => {
         if (response.body.errcode && +response.body.errcode === 0) {
-          param.method && !param.url.match(/precheckin/) && !param.url.match(/login/)&& !param.url.match(/refund_apply_list/) && !param.url.match(/searchLvyeReportInfo/)&& !param.url.match(/lvyeReport/)&& !param.url.match(/order\/pay/) ? ctx.dispatch('showtoast') : null
+          let isShowToast = param.url.match(/precheckin/) || param.url.match(/login/) || param.url.match(/refund_apply_list/) || param.url.match(/searchLvyeReportInfo/) || param.url.match(/lvyeReport/) || param.url.match(/order\/pay/)|| param.url.match(/hotel\/.+\/refresh/)
+          param.method &&  !isShowToast ? ctx.dispatch('showtoast') : null;
           param.onSuccess ? param.onSuccess(response.body) : null
         } else {
           ctx.dispatch('showtoast', 'errcode:' + response.body.errcode + ';\n errmsg:' + response.body.errmsg);
@@ -45,12 +48,22 @@ module.exports = {
     ).catch(
       error => {
         //ErrorCallback
-        ctx.dispatch('showtoast', error.status === 401 ? '登录失效!' : 'Request Error');
+        console.log(error);
+        let hint = '';
+        if (error.status === 401) {
+          hint = '登录失效!'
+        } else if (error.status === 1) {
+          hint = '请求超时!';
+        } else {
+          hint = 'Request Error'
+        }
+        ctx.dispatch('showtoast', hint);
       }
     ).finally(
       final => {
         //FinalCallback
-        ctx.commit('LOADING')
+        // console.log('finish',isRefresh)
+        isRefresh ? ctx.dispatch('showprogress',{show:false,isOk:true}):ctx.commit('LOADING');
       }
     )
   },

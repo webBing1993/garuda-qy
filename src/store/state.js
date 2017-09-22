@@ -18,6 +18,10 @@ module.exports = {
     },
     loading: {
       show: false
+    },
+    progress: {
+      show: false,
+      isOk:false
     }
   },
   hotel: {
