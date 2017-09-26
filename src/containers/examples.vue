@@ -1,6 +1,7 @@
 <template>
   <div>
     <scroller lock-x :scrollbar-x=false use-pulldown>
+      <!--<Progress v-model="showProgress"></Progress>-->
       <div>
         <Search v-model="searchValue" :results="searchResult" @on-result-click="resultClick" @on-change="getResult"></Search>
         <h1>Forms</h1>
@@ -74,9 +75,13 @@
         </Group>
 
         <h1>Display</h1>
-        <XButton value="Vue2" primary warn/>
+        <XButton value="Vue2" primary warn @onClick="showProgress = true"/>
       </div>
     </scroller>
+
+
+
+
 
     <Actionsheet v-model="showAction"/>
     <Dialog v-model="showDialog" confirm title="弹窗呀呀呀呀"/>
@@ -90,6 +95,7 @@
     name: "examples",
     data(){
       return {
+//        showProgress:true,
         showDialog: false,
         showAction: false,
         showToast: false,

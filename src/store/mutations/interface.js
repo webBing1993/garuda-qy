@@ -4,5 +4,8 @@ module.exports = {
   },
   LOADING(state, payload){
     state.Interface.loading.show = !!payload
+  },
+  PROGRESS(state,payload) {
+    state.Interface.progress = {...state.Interface.progress, ...payload}
   }
 }

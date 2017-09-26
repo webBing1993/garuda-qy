@@ -121,6 +121,8 @@
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
           status: status ,
+//          scope: this.isToday ? 'TODAY' : 'HISTORY',
+//          status: this.tabIndex ? "REFUSED,PENDING,AUTO_REFUSED" :  "AGREED,AUTO_AGREED",
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] :'',
           onsuccess: callback
@@ -128,12 +130,12 @@
       },
       initList(){
         if (this.renderList.length == 0) {
-          this.getList(body => (this.refusedIdentities = [...body.data],  this.refusedPageIndex++),'REFUSED')
-          this.getList(body => (this.agreedIdentities = [...body.data], this.agreedPageIndex++),'AGREED')
+          this.getList(body => (this.refusedIdentities = [...body.data],  this.refusedPageIndex++),'REFUSED,PENDING,AUTO_REFUSED')
+          this.getList(body => (this.agreedIdentities = [...body.data], this.agreedPageIndex++),'AGREED,AUTO_AGREED')
         }
       },
       refreshList(){
-        this.getList(body => this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data],this.tabIndex ? 'AGREED':'REFUSED')
+        this.getList(body => this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data],this.tabIndex ? 'AGREED,AUTO_AGREED':'REFUSED,PENDING,AUTO_REFUSED')
       },
       resetList(){
         this.agreedIdentities = [];
