@@ -100,15 +100,15 @@ module.exports = {
     })
   },
 
-  // 营业员确认PMS同步结果
+  // 营业员确认PMS同步结果（手工入账）
   conformPmsSync(ctx, param){
     ctx.dispatch('resource', {
-      url: '/order/conform_pms_sync',
-      method: 'POST',
-      body: {
-        order_id: param.order_id,
-        action: param.action
-      },
+      url: '/order/recover/' + param.order_id,
+      method: 'PUT',
+      // body: {
+      //   order_id: param.order_id,
+      //   action: param.action
+      // },
       onSuccess: body => {
         ctx.dispatch('showtoast');
         param.onsuccess ? param.onsuccess(body) : null

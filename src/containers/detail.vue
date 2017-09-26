@@ -175,8 +175,11 @@
       confirmPmsResult() {
         this.conformPmsSync({
           order_id: this.routeId,
-          action: 'SETACCOUNT',
-          onsuccess: body => this.detail.status.is_recording_success = true
+//          action: 'SETACCOUNT',
+          onsuccess: body => {
+            this.detail.status.is_recording_success = true;
+            this.getDetail()
+          }
         })
       },
       //退款申请
