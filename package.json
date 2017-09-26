@@ -13,6 +13,7 @@
     "stg": "node build/build.js"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "raven-js": "^3.17.0",
     "vue": "^2.2.2",
     "vue-resource": "^1.2.1",
