@@ -20,38 +20,41 @@
       <span>暂无待办事项</span>
     </div>
 
-    <Group title="应用">
-      <ul class="app-container">
-        <li class="app-item" @click="goto('prepay/0')">
-          <img src="../../../static/icon/ic_prepay_confirm.png" alt="订单中心">
-          <span class="app-title">订单中心</span>
-          <!--<div class="warn">-->
+    <div class="app">
+      <Group title="应用">
+        <ul class="app-container">
+          <li class="app-item" @click="goto('prepay/0')">
+            <img src="../../../static/icon/ic_prepay_confirm.png" alt="订单中心">
+            <span class="app-title">订单中心</span>
+            <!--<div class="warn">-->
             <!--<span class="warn-dot"></span>-->
             <!--<span>异常</span>-->
-          <!--</div>-->
-        </li>
-        <li class="app-item" @click="goto('receive/precheckin')">
-          <img src="../../../static/icon/ic_checkout.png" alt="接待服务">
-          <span class="app-title">住离信息</span>
-        </li>
-        <li class="app-item" @click="goto('/identity/0')">
-          <img src="../../../static/icon/ic_police.png" alt="公安验证">
-          <span class="app-title">入住核验</span>
-        </li>
-        <li class="app-item" @click="goto('/policeIdentity/handle/0')">
-          <img src="../../../static/icon/ic_lvye.png" alt="身份核验">
-          <span class="app-title">设备核验</span>
-        </li>
-        <li class="app-item" @click="goto('/invoice/0')">
-          <img src="../../../static/icon/ic_invoice.png" alt="闪开发票">
-          <span class="app-title">发票中心</span>
-        </li>
-        <li class="app-item" @click="goto('/bill/0')">
-          <img src="../../../static/icon/ic_bill.png" alt="账务管理">
-          <span class="app-title">账务管理</span>
-        </li>
-      </ul>
-    </Group>
+            <!--</div>-->
+          </li>
+          <li class="app-item" @click="goto('receive/precheckin')">
+            <img src="../../../static/icon/ic_checkout.png" alt="接待服务">
+            <span class="app-title">住离信息</span>
+          </li>
+          <li class="app-item" @click="goto('/identity/0')">
+            <img src="../../../static/icon/ic_police.png" alt="公安验证">
+            <span class="app-title">入住核验</span>
+          </li>
+          <li class="app-item" @click="goto('/policeIdentity/handle/0')">
+            <img src="../../../static/icon/ic_lvye.png" alt="身份核验">
+            <span class="app-title">设备核验</span>
+          </li>
+          <li class="app-item" @click="goto('/invoice/0')">
+            <img src="../../../static/icon/ic_invoice.png" alt="闪开发票">
+            <span class="app-title">发票中心</span>
+          </li>
+          <li class="app-item" @click="goto('/bill/0')">
+            <img src="../../../static/icon/ic_bill.png" alt="账务管理">
+            <span class="app-title">账务管理</span>
+          </li>
+        </ul>
+      </Group>
+    </div>
+
 
 
   </div>
