@@ -87,6 +87,9 @@ module.exports = {
       onSuccess: body => {
         ctx.dispatch('showtoast', '提交成功');
         param.onsuccess ? param.onsuccess(body) : null
+      },
+      onFail: body => {
+        param.onfail ? param.onfail(body) : null
       }
     })
   },

@@ -242,7 +242,9 @@
       cancelPick(){
         // 退出批量选择
         this.batchlist = [];
-        this.batch ? this.batch = false : null
+        this.batch ? this.batch = false : null;
+        this.select = true;
+        this.roomNumber = '';
       },
       orderClick: function (orderId) {
         //非批量模式下点击订单跳转至详情页面
@@ -267,6 +269,10 @@
                   : null
               });
               this.cancelPick()
+            },
+            onfail: (body) => {
+              this.showDialog = false;
+              this.select = true;
             }
           })
         }
@@ -285,7 +291,7 @@
           `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span></p>` +
           `</div>`
       },
-      getList(callback,status){
+      getList(callback, status){
         this.newIdentityList({
           startTime: this.periodFilter ? this.periodFilter[0] : '',
           endTime: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
@@ -295,12 +301,12 @@
       },
       initList(){
         if (this.renderList.length === 0) {
-          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++),['NONE', 'FAILED'])
-          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++),['SUCCESS'] )
+          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++), ['NONE', 'FAILED'])
+          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++), ['SUCCESS'])
         }
       },
       refreshList(){
-        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data],this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
+        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
       },
       resetList(){
         this.handled = [];

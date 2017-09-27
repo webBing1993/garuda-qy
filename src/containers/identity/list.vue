@@ -5,7 +5,6 @@
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
                  :key="'tabmenu'+index"
-                 :class="{'vux-1px-r': index===0}"
                  :selected="route.params.tab == index"
                  @on-item-click="toggleTab(index)">{{item}}
         </TabItem>
@@ -22,16 +21,15 @@
       <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
       <group v-for="(item,index) in renderList" :key="index">
         <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
-              :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"
-              @onClick="goto('/identity/detail/' + item.identity_id)"></cell>
+              :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"></cell>
         <cell :title="getGuestItem(item)"
-              @onClick="goto('/identity/detail/' + item.identity_id)"
+              @onClick="toDetail(item.identity_id)"
               link></cell>
       </group>
     </div>
     <!--</scroller>-->
 
-    <footer>
+    <footer v-if="tabIndex">
       <div class="listFilter">
         <span class="filter" @click="isCalendarShow = true">
           <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
@@ -57,9 +55,10 @@
     data(){
       return {
 //        tabMenu: ['已通过', '未通过'],
-        selectedTab: '已通过',
-        agreedIdentities: [],
-        refusedIdentities: [],
+        pendingList: [],//待处理
+        agreedIdentities: [],//已通过
+        refusedIdentities: [],//未通过
+        pendingPageIndex: 0,
         agreedPageIndex: 0,
         refusedPageIndex: 0,
         periodFilter: [null, null],
@@ -76,18 +75,37 @@
 //      },
       tabMenu() {
         let menu = [];
-        menu[0] = `未通过(${this.refusedIdentities.length})`;
-        menu[1] = `已通过(${this.agreedIdentities.length})`;
+        menu[0] = `待办理(${this.pendingList.length})`;
+        menu[1] = `未通过(${this.refusedIdentities.length})`;
+        menu[2] = `已通过(${this.agreedIdentities.length})`;
         return menu;
       },
       tabIndex(){
         return +this.route.params.tab
       },
       renderList(){
-        return this.tabIndex ? this.agreedIdentities : this.refusedIdentities
+        switch (this.tabIndex) {
+          case 0:
+            return this.pendingList;
+            break;
+          case 1:
+            return this.refusedIdentities;
+            break;
+          case 2:
+            return this.agreedIdentities
+        }
       },
       renderPageIndex(){
-        return this.tabIndex ? this.agreedPageIndex :  this.refusedPageIndex
+        switch (this.tabIndex) {
+          case 0:
+            return this.pendingPageIndex;
+            break;
+          case 1:
+            return this.refusedPageIndex;
+            break;
+          case 2:
+            return this.agreedPageIndex
+        }
       }
     },
     methods: {
@@ -97,8 +115,11 @@
         'goto'
       ]),
       toggleTab(index){
-        let newpath = this.route.path.replace(this.route.params.tab, index)
+        let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
+      },
+      toDetail(identity_id){
+        this.tabIndex === 0 ? this.goto(`/identity/todo/${identity_id}`) : this.goto(`/identity/detail/${identity_id}`)
       },
       getGuestItem(item){
         let dom = ``;
@@ -117,27 +138,49 @@
 
         return dom
       },
-      getList(callback,status){
+      getList(callback, status){
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
-          status: status ,
-//          scope: this.isToday ? 'TODAY' : 'HISTORY',
-//          status: this.tabIndex ? "REFUSED,PENDING,AUTO_REFUSED" :  "AGREED,AUTO_AGREED",
+          status: status,
           start_time: this.periodFilter[0],
-          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] :'',
+          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
           onsuccess: callback
         })
       },
       initList(){
-        if (this.renderList.length == 0) {
-          this.getList(body => (this.refusedIdentities = [...body.data],  this.refusedPageIndex++),'REFUSED,PENDING,AUTO_REFUSED')
-          this.getList(body => (this.agreedIdentities = [...body.data], this.agreedPageIndex++),'AGREED,AUTO_AGREED')
+        if (this.renderList.length === 0) {
+          this.getList(body => (this.pendingList = [...body.data], this.pendingPageIndex++), 'PENDING');
+          this.getList(body => (this.refusedIdentities = [...body.data], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
+          this.getList(body => (this.agreedIdentities = [...body.data], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
         }
       },
       refreshList(){
-        this.getList(body => this[this.tabIndex ? 'agreedIdentities' : 'refusedIdentities'] = [...body.data],this.tabIndex ? 'AGREED,AUTO_AGREED':'REFUSED,PENDING,AUTO_REFUSED')
+        let tempStatus = '';
+        switch (this.tabIndex) {
+          case 0:
+            tempStatus = 'PENDING';
+            break;
+          case 1:
+            tempStatus = 'REFUSED,AUTO_REFUSED';
+            break;
+          case 2:
+            tempStatus = 'AGREED,AUTO_AGREED';
+        }
+        let tempList = '';
+        switch (this.tabIndex) {
+          case 0:
+            tempList = 'pendingList';
+            break;
+          case 1:
+            tempList = 'refusedIdentities';
+            break;
+          case 2:
+            tempList = 'agreedIdentities';
+        }
+        this.getList(body => this[tempList] = [...body.data], tempStatus)
       },
       resetList(){
+        this.pendingList = [];
         this.agreedIdentities = [];
         this.refusedIdentities = [];
       },
@@ -152,7 +195,7 @@
       tabIndex(val) {
         this.periodFilter = [null, null];
         typeof val === 'number' && !isNaN(val)
-          ? this.renderList.length == 0 ? this.initList() : this.refreshList()
+          ? this.renderPageIndex === 0 ? this.initList() : this.refreshList()
           : null
       },
       periodFilter(val){
