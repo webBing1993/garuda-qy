@@ -987,7 +987,12 @@ module.exports = {
         name: "Ted",  //姓名
         idcard: "360123183892123456"  //身份证号码
       }],
-      created_time: "1495419805000"  //申请时间
+      created_time: "1495419805000",  //申请时间
+      status: {
+        checkout_success: false, //退房成功状态
+        refund_success: true, //退款成功状态
+        lvye_checkout_success: false, //旅业退房成功状态
+      }
     }, {
       order_id: "230420402402402",    //主订单ID
       suborder_id: "230420402402402",  //子订单ID
@@ -1001,7 +1006,12 @@ module.exports = {
         name: "Ted",  //姓名
         idcard: "360123183892123456"  //身份证号码
       }],
-      created_time: "1495419805000"  //申请时间
+      created_time: "1495419805000",  //申请时间
+      status: {
+        checkout_success: true, //退房成功状态
+        refund_success: true, //退款成功状态
+        lvye_checkout_success: true, //旅业退房成功状态
+      }
     }
   ],
   // ===============================================================
@@ -1105,7 +1115,7 @@ module.exports = {
   receiptList: [
     {
       name: "张三",    //客人姓名
-      room_numbers: ["203",'204'], //房号,多个房号用逗号隔开
+      room_numbers: ["203", '204'], //房号,多个房号用逗号隔开
       pay_fee: 50000,  //支付金额元
       pay_way: "微信支付",     //支付方式
       pay_time: '1495419805000',       //支付时间

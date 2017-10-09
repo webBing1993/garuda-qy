@@ -13,8 +13,8 @@
 
     <div class="list-wrapper">
       <!--<p class="synchronize">-->
-        <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
-        <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
+      <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
+      <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
       <!--</p>-->
 
       <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
@@ -32,7 +32,8 @@
       <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item)"/>
-        <Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+        <Cell :title="getCheckoutGuestItem(item)" link
+              @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
       </Group>
 
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
@@ -211,6 +212,28 @@
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
       },
+      getCheckoutGuestItem(item){
+        let dom = ``;
+        if (item.guests) {
+          item.guests.length > 0
+            ? item.guests.forEach(i => {
+            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+          })
+            : dom += `<div>无入住人</div>`
+        } else {
+          dom += `<div>无入住人</div>`
+        }
+        if(item.status) {
+          if(!(item.status.checkout_success && item.status.refund_success && item.status.lvye_checkout_success)){
+            dom += `<div style="display: flex;color: #DF4A4A;line-height: 2;justify-content: flex-start">`;
+            if (!item.status.checkout_success) dom += `<span style="margin-right:10px">退房失败</span>`;
+            if (!item.status.refund_success) dom += `<span style="margin-right:10px">退款失败</span>`;
+            if (!item.status.lvye_checkout_success) dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
+            dom += `</div>`;
+          }
+        }
+        return dom
+      },
       getUnionTag(tag, tempRoom){
         return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
       },
@@ -251,7 +274,7 @@
           this.getcheckoutlist({
             status: 'DONE',
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
             onsuccess: callback
           });
         }
@@ -269,13 +292,13 @@
           this.getcheckoutlist({
             status: 'PENDING',
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
             onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
           });
           this.getcheckoutlist({
             status: 'DONE',
             start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] :'',
+            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
             onsuccess: body => (this.checkOutList = [...body.data], this.checkoutPageIndex++)
           });
         }
