@@ -116,8 +116,10 @@ module.exports = {
               idcard: "343245623456728199"
             }
           ],
-          in_time: null, //办理入住时间
-          out_time: null, //离店时间
+          in_time: 1490976000000, //办理入住时间
+          // in_time: null, //办理入住时间
+          // out_time: null, //离店时间
+          out_time: 1490976000000, //离店时间
           identity_id: "2304204024024012", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
@@ -153,8 +155,9 @@ module.exports = {
               idcard: "343245623456728199"
             }
           ],
-          in_time: null, //办理入住时间
-          out_time: null, //离店时间
+          // in_time: null, //办理入住时间
+          in_time: 1490976000000, //办理入住时间
+          out_time: 1490976000000, //离店时间
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
