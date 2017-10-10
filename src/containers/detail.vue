@@ -64,16 +64,21 @@
              @click="goto('/identity/' + item.identity_id)">上传旅业系统</a>
         </p>-->
         <p style="font-size: 13px;box-sizing:border-box;/*background-color: #EAEDF0;*/">
-          <span v-if="item.in_time && item.out_time" style="float: right;margin-right: 15px;margin-bottom: 5px"><b style="color:#9A9A9A;margin-right: 5px;letter-spacing: 1px">入离时间:</b>{{datetimeparse(item.in_time,'YYMMDD')}} - {{datetimeparse(item.out_time,'YYMMDD')}}</span>
+          <span v-if="item.in_time && item.out_time" style="float: right;margin-right: 15px;margin-bottom: 5px"><b
+            style="color:#9A9A9A;margin-right: 5px;letter-spacing: 1px">入离时间:</b>{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
         </p>
         <div style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;"
-           v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
+             v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
           <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'FAILED' ">旅业系统上传失败</span>
           <div class="button-group" style="padding: 10px 0px">
-            <x-button v-if="item.lvye_report_status !== 'SUCCESS'"
+            <x-button v-if="item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "
                       :value="item.lvye_report_status && item.lvye_report_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
-                      @onClick="setuploadstatus"
-                      :disabled="isDisabled">
+                      @onClick="setuploadstatus(index)">
+            </x-button>
+            <x-button v-if="item.lvye_report_status == 'PENDING'"
+                      value="上传中"
+                      plain
+                      disabled>
             </x-button>
           </div>
         </div>
@@ -133,9 +138,10 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
+
   module.exports = {
     name: 'detail',
-    data(){
+    data() {
       return {
         detail: {},
         showDialog: false,
@@ -149,25 +155,25 @@
       routeId() {
         return this.$route.params.id
       },
-      isPreCheckin(){
+      isPreCheckin() {
         return /precheckin/.test(this.$route.path)
       },
-      isLivein(){
+      isLivein() {
         return /livein/.test(this.$route.path)
       },
-      isInvoice(){
+      isInvoice() {
         return /invoice/.test(this.$route.path)
       },
-      isCheckout(){
+      isCheckout() {
         return /checkout/.test(this.$route.path)
       },
-      isRefund(){
+      isRefund() {
         return /refund/.test(this.$route.path)
       },
-      isReceipt(){
+      isReceipt() {
         return /receipt/.test(this.$route.path)
       },
-      isShowInvoiceBtn(){
+      isShowInvoiceBtn() {
         return this.isInvoice || this.isCheckout || this.isRefund
       },
     },
@@ -181,16 +187,16 @@
         'refundapply',
         'setUploadStatus'
       ]),
-      setuploadstatus(){
+      setuploadstatus() {
         this.setUploadStatus({
           identity_id: this.identityId,
           onsuccess: body => {
-            this.getDetail()
+            this.getDetail();
 
           }
         })
       },
-      isShowCheckoutDialog(id){
+      isShowCheckoutDialog(id) {
         this.showCheckoutDialog = true;
         this.pmsCheckoutId = id;
       },
@@ -206,7 +212,7 @@
         })
       },
       //退款申请
-      refundApply(){
+      refundApply() {
         this.refundapply({
           orderId: this.routeId,
           onsuccess: body => {
@@ -215,7 +221,7 @@
         })
       },
       //确认开票
-      setInvoiceConfirm () {
+      setInvoiceConfirm() {
         this.confirmInvoice({
           invoice_apply_id: this.detail.invoice.id,
           invoice_status: 2,
@@ -223,14 +229,14 @@
         })
       },
       //手动上传旅业系统
-      setLvYeStatus(suborderId){
+      setLvYeStatus(suborderId) {
         this.setUploadStatus({
           identity_id: suborderId,
           onsuccess: body => this.getDetail()
         })
       },
       //退房申请
-      pmsCheckout(){
+      pmsCheckout() {
         this.pmscheckout({
           id: this.pmsCheckoutId,
           onsuccess: body => this.getDetail()
