@@ -61,7 +61,7 @@
            v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
           当前入住房间信息尚未上传旅业系统，您可以前往‘入住核验’已通过列表进行旅业系统上传；或点击该链接进行操作。
           <a v-if="item.identity_id" style="color: #25B8F1; border-bottom: 1px solid #25B8F1"
-             @click="goto('/identity/' + item.identity_id)">去上传</a>
+             @click="goto('/identity/detail/' + item.identity_id)">去上传</a>
         </p>
         <!--<p style="font-size: 13px;box-sizing:border-box;/*background-color: #EAEDF0;*/">
           <span v-if="item.in_time && item.out_time" style="float: right;margin-right: 15px;margin-bottom: 5px"><b
