@@ -895,7 +895,7 @@ module.exports = {
       similarity: "85", //相似度65"
       identityStatus: "", //身份状态
       createdTime: '1471082458000', //验证时间
-      reportInStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInStatus: "SUCCESS", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
       reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
       reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
@@ -919,7 +919,7 @@ module.exports = {
       similarity: "85", //相似度65"
       identityStatus: "", //身份状态
       createdTime: '1490284458000', //验证时间
-      reportInStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInStatus: "SUCCESS", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
       reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
       reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
@@ -942,7 +942,7 @@ module.exports = {
       similarity: "85", //相似度65"
       identityStatus: "", //身份状态
       createdTime: '1491082458000', //验证时间
-      reportInStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInStatus: "SUCCESS", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
       reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
       reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳

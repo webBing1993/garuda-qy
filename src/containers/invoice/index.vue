@@ -136,7 +136,8 @@
         return menu;
       },
       renderList() {
-        return this.tabIndex ? this.sortByTime(this.doneList, 'update_time') : this.sortByTime(this.waitList, 'out_time')
+//        return this.tabIndex ? this.sortByTime(this.doneList, 'update_time') : this.sortByTime(this.waitList, 'out_time')
+        return this.tabIndex ? this.sortByTime(this.doneList, 'create_time') : this.sortByTime(this.waitList, 'out_time')
       }
     },
     watch: {

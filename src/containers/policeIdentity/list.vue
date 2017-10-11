@@ -23,7 +23,7 @@
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
         <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
-          <checker-item v-for="(item,index) in renderList" :key="index" :value="item.lvyeReportRecordId">
+          <checker-item v-for="(item,index) in renderTodoHandelList" :key="index" :value="item.lvyeReportRecordId">
             <group>
               <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
             </group>
@@ -33,7 +33,7 @@
 
       <div v-show="currentTab">
         <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-        <group v-for="(item,index) in renderList" :key="index" :title="titleFilter(index)">
+        <group v-for="(item,index) in renderHandelList" :key="index" :title="titleFilter(index)">
           <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
                 :value="datetimeparse(item.createdTime,'hhmm')"></cell>
           <cell :title="handledItem(item,item.inTime,item.outTime)"
@@ -133,6 +133,7 @@
 //        tabMenu: ['待办理', '已办理'],
         tobeHandled: [],
         handled: [],
+        mylist:[],
         batch: false,
         batchlist: [],
         tobeHandledPageIndex: 0,
@@ -166,8 +167,15 @@
         menu[1] = `已办理(${this.handled.length})`;
         return menu;
       },
+      renderTodoHandelList(){
+         return this.tobeHandled
+      },
+      renderHandelList(){
+        return this.handled;
+      },
       renderList(){
         return this.currentTab ? this.sortByTime(this.handled, 'createdTime') : this.tobeHandled
+
       },
       renderPageIndex(){
         return this.currentTab ? this.handledPageIndex : this.tobeHandledPageIndex
@@ -225,6 +233,7 @@
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
+        this.refreshList()
       },
       titleFilter(index){
         if (this.handled.length > 0) {
@@ -299,14 +308,21 @@
           onsuccess: callback
         })
       },
+
       initList(){
         if (this.renderList.length === 0) {
-          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++), ['NONE', 'FAILED'])
+//          this.getList(body => (this.mylist = [...body.data]));
           this.getList(body => (this.handled = [...body.data], this.handledPageIndex++), ['SUCCESS'])
+          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++), ['NONE', 'FAILED'])
         }
       },
       refreshList(){
-        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
+//        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
+        if (this.currentTab === 1) {
+          this.getList(body => this.handled = [...body.data], ['SUCCESS'])
+        } else if (this.currentTab === 0) {
+          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'])
+        }
       },
       resetList(){
         this.handled = [];
