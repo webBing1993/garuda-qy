@@ -55,7 +55,8 @@ module.exports = {
         } else if (error.status === 1) {
           hint = '请求超时!';
         } else {
-          hint = 'Request Error'
+          // hint = 'Request Error'
+          hint = '请求失败'
         }
         ctx.dispatch('showtoast', hint);
       }

@@ -158,7 +158,7 @@
         'roomNumberList'
       ]),
       currentTab(){
-        return parseInt(this.route.params.tab)
+        return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
         let menu = [];
