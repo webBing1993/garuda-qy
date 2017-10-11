@@ -305,16 +305,16 @@
       },
       refreshList(){
         if (this.tempPage == '预登记') {
-          this.resetList();
+//          this.resetList();
           this.getList(body => this.preCheckInList = [...body.data]);
         } else if (this.tempPage == '在住') {
-          this.resetList();
+//          this.resetList();
           this.getList(body => this.liveInList = [...body.data]);
         } else if (this.tempPage == '退房申请') {
-          this.resetList();
+//          this.resetList();
           this.getList(body => this.checkOutApplicationList = [...body.data]);
         } else if (this.tempPage == '已离店') {
-          this.resetList();
+//          this.resetList();
           this.getList(body => this.checkOutList = [...body.data]);
         }
       },
