@@ -592,10 +592,10 @@ module.exports = {
       }],
       guests: [
         {
-          name: "李四",
+          name: "李四1",
           idcard: "343245623456728199"
         }, {
-          name: "李四",
+          name: "李四2",
           idcard: "343245623456728199"
         }
       ],
@@ -628,13 +628,13 @@ module.exports = {
         price: '3333',
       }],
       guests: [
-        // {
-        //   name: "李四",
-        //   idcard: "343245623456728199"
-        // }, {
-        //   name: "李四",
-        //   idcard: "343245623456728199"
-        // }
+        {
+          name: "张四1",
+          idcard: "343245623456728199"
+        }, {
+          name: "李四22",
+          idcard: "343245623456728199"
+        }
       ],
       in_time: null, //办理入住时间
       out_time: null, //离店时间
@@ -942,7 +942,7 @@ module.exports = {
       similarity: "85", //相似度65"
       identityStatus: "", //身份状态
       createdTime: '1491082458000', //验证时间
-      reportInStatus: "SUCCESS", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
+      reportInStatus: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。入住上报公安状态
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
       reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
       reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
@@ -996,7 +996,8 @@ module.exports = {
         refund_success: true, //退款成功状态
         lvye_checkout_success: false, //旅业退房成功状态
       }
-    }, {
+    },
+    {
       order_id: "230420402402402",    //主订单ID
       suborder_id: "230420402402402",  //子订单ID
       room_type_name: "大床房",  //房型名称

@@ -34,6 +34,7 @@ module.exports = {
       }
     })
   },
+  // 离店
   setUploadStatus(ctx, param){
     ctx.dispatch('resource', {
       url: '/identities/lvye_report',
@@ -44,6 +45,19 @@ module.exports = {
         days: param.days, //入住几晚
         in_time: param.in_time, //入住几晚
         out_time: param.out_time, //入住几晚
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  // 退房退房退房
+  setLeaveStatus(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/checkout/lvye/'+param.suborder_Id,
+      method: 'PUT',
+      body: {
+        suborder_Id: param.suborder_id,
       },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null

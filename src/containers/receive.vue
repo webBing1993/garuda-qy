@@ -39,7 +39,8 @@
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item,index)"/>
-        <Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
+        <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
+        <Cell :title="getLeaveItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
       </Group>
     </div>
 
@@ -231,6 +232,26 @@
             if (!item.status.lvye_checkout_success) dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
             dom += `</div>`;
           }
+        }
+        return dom
+      },
+      getLeaveItem(item){
+        let dom = ``;
+        if (item.guests) {
+          item.guests.length > 0
+            ? item.guests.forEach(i => {
+            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+          })
+            : dom += `<div>无入住人</div>`
+        } else {
+          dom += `<div>无入住人</div>`
+        }
+        if(item.status) {
+            dom += `<div style="display: flex;color: #DF4A4A;line-height: 2;justify-content: flex-start">`;
+            if (item.status.lvye_checkout_status ==='NONE') dom += `<span style="margin-right:10px">未上传旅业系统</span>`;
+            if (item.status.lvye_checkout_status ==='FAILED') dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
+            dom += `</div>`;
+
         }
         return dom
       },
