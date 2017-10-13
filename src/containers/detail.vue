@@ -75,7 +75,7 @@
           <div v-if="isLivein" class="button-group" style="padding: 10px 0px">
             <x-button v-if="item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "
                       :value="item.lvye_report_status && item.lvye_report_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
-                      @onClick="setuploadstatus(item.suborder_id)">
+                      @onClick="setuploadstatus(item.identity_id)">
             </x-button>
             <x-button v-if="item.lvye_report_status == 'PENDING'"
                       value="上传中"
