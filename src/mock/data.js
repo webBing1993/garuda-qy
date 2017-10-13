@@ -197,7 +197,7 @@ module.exports = {
           out_time: null, //离店时间
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-          lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           pmscheckout_status: "SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         }]
     },
@@ -603,7 +603,7 @@ module.exports = {
       out_time: null, //离店时间
       identity_id: "", //身份验证记录ID:null,
       lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
     },
     {
       suborder_id: "2304204024024011",
