@@ -74,6 +74,7 @@
 //        return !!this.$route.path.match(/today/)
 //      },
       tabMenu() {
+          this.initList();
         let menu = [];
         menu[0] = `待办理(${this.pendingList.length})`;
         menu[1] = `未通过(${this.refusedIdentities.length})`;

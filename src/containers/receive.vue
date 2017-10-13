@@ -187,7 +187,11 @@
         let time = this.datetimeparse(item.timeline.precheckin_done, this.isToday ? 'hhmm' : 'MMddhhmm');
         return `<div class="cell-body">` +
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
-          `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span><span class="cell-key cell-right">${time}</span></p>` +
+          `<p>
+              <span class="cell-key">房型：</span>
+              <span class="cell-value">${roomtypewords}</span>
+              <!--<span class="cell-key cell-right">${time}</span>-->
+          </p>` +
           `</div>`
       },
       liveInCellTitle(item){
@@ -224,8 +228,8 @@
         } else {
           dom += `<div>无入住人</div>`
         }
-        if(item.status) {
-          if(!(item.status.checkout_success && item.status.refund_success && item.status.lvye_checkout_success)){
+        if (item.status) {
+          if (!(item.status.checkout_success && item.status.refund_success && item.status.lvye_checkout_success)) {
             dom += `<div style="display: flex;color: #DF4A4A;line-height: 2;justify-content: flex-start">`;
             if (!item.status.checkout_success) dom += `<span style="margin-right:10px">退房失败</span>`;
             if (!item.status.refund_success) dom += `<span style="margin-right:10px">退款失败</span>`;
@@ -246,11 +250,11 @@
         } else {
           dom += `<div>无入住人</div>`
         }
-        if(item.status) {
-            dom += `<div style="display: flex;color: #DF4A4A;line-height: 2;justify-content: flex-start">`;
-            if (item.status.lvye_checkout_status ==='NONE') dom += `<span style="margin-right:10px">未上传旅业系统</span>`;
-            if (item.status.lvye_checkout_status ==='FAILED') dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
-            dom += `</div>`;
+        if (item.status) {
+          dom += `<div style="display: flex;color: #DF4A4A;line-height: 2;justify-content: flex-start">`;
+          if (item.status.lvye_checkout_status === 'NONE') dom += `<span style="margin-right:10px">未上传旅业系统</span>`;
+          if (item.status.lvye_checkout_status === 'FAILED') dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
+          dom += `</div>`;
 
         }
         return dom

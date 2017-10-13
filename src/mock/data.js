@@ -123,8 +123,10 @@ module.exports = {
           identity_id: "2304204024024012", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-          pmscheckout_status: "FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
-        }, {
+          pmscheckout_status: "SUCCESS",//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          lvye_checkout_status:"SUCCESS"
+        },
+        {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
           order_pmsid: '2304204024024011',
@@ -161,8 +163,10 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-          pmscheckout_status: "PENDING"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
-        }, {
+          pmscheckout_status: "FAILED",//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          lvye_checkout_status:'PENDING'
+        },
+        {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
           order_pmsid: '2304204024024011',
@@ -198,7 +202,47 @@ module.exports = {
           identity_id: "", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-          pmscheckout_status: "SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          pmscheckout_status: "SUCCESS",//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          lvye_checkout_status:'NONE'
+        },
+        {
+          suborder_id: "2304204024024011",
+          order_id: '2304204024024011',
+          order_pmsid: '2304204024024011',
+          union_tag: '023jatrtgfs00001',
+          status: {
+            is_cancelled: false, //是否已取消
+            is_checkin: false, //是否入住
+            is_checkout: false, //是否离店
+          },
+          breakfast: 0,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+          room_number: "203",
+          room_tags: ["靠南", "带窗"],
+          room_type_id: "DCF",
+          room_type_name: "大床房",
+          room_price: [{
+            date: 1490976000000,
+            price: '2222',
+          }, {
+            date: 1490976000000 + 86400000,
+            price: '3333',
+          }],
+          guests: [
+            {
+              name: "李四",
+              idcard: "343245623456728199"
+            }, {
+              name: "李四",
+              idcard: "343245623456728199"
+            }
+          ],
+          in_time: null, //办理入住时间
+          out_time: null, //离店时间
+          identity_id: "", //身份验证记录ID:null,
+          lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          pmscheckout_status: "SUCCESS",//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          lvye_checkout_status:'FAILED'
         }]
     },
     {

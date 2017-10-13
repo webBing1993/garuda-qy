@@ -162,6 +162,7 @@
         return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
+        this.initList();
         let menu = [];
         menu[0] = `待办理(${this.tobeHandled.length})`;
         menu[1] = `已办理(${this.handled.length})`;

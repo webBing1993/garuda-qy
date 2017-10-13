@@ -86,8 +86,8 @@
         </div>
         <div class="button-group" style="padding-top: 0" v-if="isCheckout">
           <p v-if="item.pmscheckout_status === 'FAILED'" style="color: #DF4A4A">PMS退房失败</p>
-          <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
-          <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
+          <p v-else-if="item.pmscheckout_status === 'PENDING'" style="color: #DF4A4A">退房中</p>
+          <p v-show="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
           <XButton value="一键退房"
                    v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
@@ -114,6 +114,7 @@
           <XButton v-if="item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
                    :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
                    v-show="isCheckout && !isCheckoutApplication"
+                   v-hide="detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
                    @onClick="setLeavestatus(item.suborder_id)"/>
 
         </div>
