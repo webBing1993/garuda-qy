@@ -70,7 +70,8 @@
         </p>
         <div style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;"
              v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
-          <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'FAILED' ">旅业系统上传失败</span>
+          <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'FAILED' ">入住信息上传旅业失败</span>
+          <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'NONE' ">未上传旅业系统</span>
           <!--在住按钮-->
           <div v-if="isLivein" class="button-group" style="padding: 10px 0px">
             <x-button v-if="item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "
