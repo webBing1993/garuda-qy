@@ -112,6 +112,7 @@
         console.log(tempRoute);
         return tempRoute
       },
+//      离店信息上传失败----》入住信息上传旅业失败
       renderList() {
         if (this.tempPage == '预登记') {
           return this.sortByTime(this.preCheckInList, 'in_time');
