@@ -106,12 +106,12 @@
           <!-- <x-button
                      @onClick="setLeavestatus(item.suborder_id)">
            </x-button>-->
-          <XButton v-if="item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
+          <XButton v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
                    :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
                    v-show="isCheckoutApplication"
                    @onClick="setLeavestatus(item.suborder_id)"/>
 
-          <XButton v-if="item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
+          <XButton v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
                    :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
                    v-show="isCheckout && !isCheckoutApplication"
                    v-hide="detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
