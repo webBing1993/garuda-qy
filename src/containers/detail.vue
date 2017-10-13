@@ -75,7 +75,7 @@
           <div v-if="isLivein" class="button-group" style="padding: 10px 0px">
             <x-button v-if="item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "
                       :value="item.lvye_report_status && item.lvye_report_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
-                      @onClick="setuploadstatus()">
+                      @onClick="setuploadstatus(item.suborder_id)">
             </x-button>
             <x-button v-if="item.lvye_report_status == 'PENDING'"
                       value="上传中"
@@ -93,8 +93,9 @@
                    v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
                    @onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>
         </div>
+
         <!--已离店按钮-->
-        <div class="button-group" style="padding-top: 0">
+        <div class="button-group" style="padding-top: 0" v-if="!isLivein">
           <p v-if="item.lvye_checkout_status !=='SUCCESS'
                 && item.lvye_checkout_status!=='PENDING'
                 && item.lvye_checkout_status !=='NONE'
@@ -228,9 +229,10 @@
           onsuccess: body => this.getDetail()
         })
       },
-      setuploadstatus() {
+//      在住点击提交上传按钮
+      setuploadstatus(suborderId) {
         this.setUploadStatus({
-          identity_id: this.identityId,
+          identity_id: suborderId,
           onsuccess: body => {
             this.getDetail();
 
