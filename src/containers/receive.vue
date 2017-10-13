@@ -210,8 +210,8 @@
         } else {
           dom += `<div>无入住人</div>`
         }
+        !item.lvye_report_status || item.lvye_report_status === 'FAILED' ? dom += `<p style="color:#DF4A4A;">入住信息上传旅业失败</p>` : null
         !item.lvye_report_status || item.lvye_report_status === 'NONE' ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null
-
         return dom
       },
       checkoutCellTitle(item){
