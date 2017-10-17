@@ -194,6 +194,7 @@
               <!--<span class="cell-key cell-right">${time}</span>-->
           </p>` +
           `</div>`
+          `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` + `</div>`
       },
       liveInCellTitle(item){
         let tag = this.getUnionTag(item.union_tag, item.room_number);

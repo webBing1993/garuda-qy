@@ -604,7 +604,7 @@ module.exports = {
       out_time: null, //离店时间
       identity_id: "", //身份验证记录ID:null,
       lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
     },
     {
       suborder_id: "2304204024024011",
@@ -642,6 +642,80 @@ module.exports = {
       identity_id: "", //身份验证记录ID:null,
       lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
       lvye_report_status: 'NONE', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+    },
+    {
+      suborder_id: "2304204024024011",
+      order_id: '230420402402402',
+      order_pmsid: '2304204024024011',
+      union_tag: '023jatrtgfs00001',
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      breakfast: 1,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "DCF",
+      room_type_name: "大床房",
+      room_price: [{
+        date: 1490976000000,
+        price: '2222',
+      }, {
+        date: 1490976000000 + 86400000,
+        price: '3333',
+      }],
+      guests: [
+        {
+          name: "张四1",
+          idcard: "343245623456728199"
+        }, {
+          name: "李四22",
+          idcard: "343245623456728199"
+        }
+      ],
+      in_time: null, //办理入住时间
+      out_time: null, //离店时间
+      identity_id: "", //身份验证记录ID:null,
+      lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+      lvye_report_status: 'NONE', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+    },
+    {
+      suborder_id: "2304204024024011",
+      order_id: '230420402402402',
+      order_pmsid: '2304204024024011',
+      union_tag: '023jatrtgfs00001',
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      breakfast: 1,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "DCF",
+      room_type_name: "大床房",
+      room_price: [{
+        date: 1490976000000,
+        price: '2222',
+      }, {
+        date: 1490976000000 + 86400000,
+        price: '3333',
+      }],
+      guests: [
+        {
+          name: "张四1",
+          idcard: "343245623456728199"
+        }, {
+          name: "李四22",
+          idcard: "343245623456728199"
+        }
+      ],
+      in_time: null, //办理入住时间
+      out_time: null, //离店时间
+      identity_id: "", //身份验证记录ID:null,
+      lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+      lvye_report_status: 'PENDING', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
     }
   ],
   // ===============================================================
@@ -722,7 +796,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: false, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0003',
@@ -760,7 +834,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: false, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0004',
@@ -836,7 +910,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: true, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0006',
@@ -874,7 +948,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: true, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
   ],
   newIdentityList: [
