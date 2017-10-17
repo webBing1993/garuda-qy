@@ -187,10 +187,10 @@ module.exports = {
           }],
           guests: [
             {
-              name: "李四",
+              name: "四",
               idcard: "343245623456728199"
             }, {
-              name: "李四",
+              name: "四",
               idcard: "343245623456728199"
             }
           ],
