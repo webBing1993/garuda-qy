@@ -50,21 +50,22 @@
       </Group>
 
 
+      <!--<Group title="房间信息"-->
+             <!--v-for="(item,index) in detail.suborders"-->
+             <!--v-if="item.guests.length">-->
+        <!--<Cell-->
+          <!--:title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>-->
+        <!--<Cell :title="getNOGuestItem"/>-->
+        <!--<Cell>{{typeof item.guests.length}}</Cell>-->
+      <!--</Group>-->
+      <!--:title="index === roomInfoTitleIndex(detail) ? '房间信息':null"-->
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             v-hide="item.guests && item.guests.length > 0">
-        <Cell
-          :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
-        <Cell :title="getNOGuestItem"/>
-      </Group>
-
-      <Group :title="index === roomInfoTitleIndex(detail) ? '房间信息':null"
-             v-for="(item,index) in detail.suborders"
-             v-if="item.guests && item.guests.length > 0"
              :key="'guests'+index">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
-        <Cell :title="getGuestItem(item)"/>
+        <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
+        <Cell :title="getNOGuestItem" v-if="!item.guests"/>
         <!--<p style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;background-color: #EAEDF0;"
            v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
           当前入住房间信息尚未上传旅业系统，您可以前往‘入住核验’已通过列表进行旅业系统上传；或点击该链接进行操作。
@@ -235,6 +236,9 @@
         'setUploadStatus',
         'setLeaveStatus'
       ]),
+      roomInfoTitleIndex(detail){
+        return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
+      },
       setLeavestatus(suborderId){
         this.setLeaveStatus({
           suborder_Id: suborderId,
