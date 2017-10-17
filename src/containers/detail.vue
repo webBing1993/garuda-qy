@@ -97,7 +97,7 @@
 
         <!--已离店按钮-->
         <div class="button-group" style="padding-top: 0" v-if="!isLivein">
-          <p v-if="item.lvye_checkout_status !=='SUCCESS'
+          <p v-if="!isPreCheckin && item.lvye_checkout_status !=='SUCCESS'
                 && item.lvye_checkout_status!=='PENDING'
                 && item.lvye_checkout_status !=='NONE'
                 && item.lvye_checkout_status !=='UNREPORTED'"
@@ -108,15 +108,17 @@
           <!-- <x-button
                      @onClick="setLeavestatus(item.suborder_id)">
            </x-button>-->
-          <XButton v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
-                   :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
-                   v-show="isCheckoutApplication"
-                   @onClick="setLeavestatus(item.suborder_id)"/>
+          <XButton
+            v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
+            :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
+            v-show="isCheckoutApplication"
+            @onClick="setLeavestatus(item.suborder_id)"/>
 
-          <XButton v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
-                   :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
-                   v-show="item.pmscheckout_status === 'SUCCESS' && isCheckout && !isCheckoutApplication"
-                   @onClick="setLeavestatus(item.suborder_id)"/>
+          <XButton
+            v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
+            :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
+            v-show="item.pmscheckout_status === 'SUCCESS' && isCheckout && !isCheckoutApplication"
+            @onClick="setLeavestatus(item.suborder_id)"/>
 
         </div>
         <!--退房上传按钮-->

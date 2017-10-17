@@ -124,7 +124,8 @@ module.exports = {
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           pmscheckout_status: "FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
-        }, {
+        },
+        {
           suborder_id: "2304204024024011",
           order_id: '2304204024024011',
           order_pmsid: '2304204024024011',
