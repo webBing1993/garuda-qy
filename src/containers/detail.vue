@@ -51,12 +51,12 @@
 
 
       <!--<Group title="房间信息"-->
-             <!--v-for="(item,index) in detail.suborders"-->
-             <!--v-if="item.guests.length">-->
-        <!--<Cell-->
-          <!--:title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>-->
-        <!--<Cell :title="getNOGuestItem"/>-->
-        <!--<Cell>{{typeof item.guests.length}}</Cell>-->
+      <!--v-for="(item,index) in detail.suborders"-->
+      <!--v-if="item.guests.length">-->
+      <!--<Cell-->
+      <!--:title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>-->
+      <!--<Cell :title="getNOGuestItem"/>-->
+      <!--<Cell>{{typeof item.guests.length}}</Cell>-->
       <!--</Group>-->
       <!--:title="index === roomInfoTitleIndex(detail) ? '房间信息':null"-->
       <Group title="房间信息"
@@ -83,9 +83,10 @@
           <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'NONE' ">未上传旅业系统</span>
           <!--在住按钮-->
           <div v-if="isLivein && item.lvye_report_status" class="button-group" style="padding: 10px 0px">
-            <x-button v-if="item.lvye_report_status && item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "
-                      :value="item.lvye_report_status && item.lvye_report_status === 'FAILED' ? '重新上传旅业系统1' : '上传旅业系统1'"
-                      @onClick="setuploadstatus(item.identity_id)">
+            <x-button
+              v-if="item.lvye_report_status && item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "
+              :value="item.lvye_report_status && item.lvye_report_status === 'FAILED' ? '重新上传旅业系统1' : '上传旅业系统1'"
+              @onClick="setuploadstatus(item.identity_id)">
             </x-button>
             <x-button v-if="item.lvye_report_status == 'PENDING'"
                       value="上传中"
@@ -106,7 +107,9 @@
 
         <!--已离店按钮-->
         <div class="button-group" style="padding-top: 0" v-if="!isLivein">
-          <p v-if="!isPreCheckin && item.lvye_checkout_status !=='SUCCESS'
+          <p v-if="!isPreCheckin
+                && item.lvye_checkout_status
+                && item.lvye_checkout_status !=='SUCCESS'
                 && item.lvye_checkout_status!=='PENDING'
                 && item.lvye_checkout_status !=='NONE'
                 && item.lvye_checkout_status !=='UNREPORTED'"
