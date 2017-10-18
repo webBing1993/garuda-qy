@@ -21,26 +21,26 @@
 
       <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="preCheckInCellTitle(item)"/>
-        <Cell :title="preCheckInCellBody(item)" link @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
+        <Cell :title="preCheckInCellBody(item)" link @onClick="goto('/receive/precheckin-detail/' + item.order_id+'/'+getParameter)"/>
       </Group>
 
       <Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="liveInCellTitle(item)"/>
-        <Cell :title="liveInGuestItem(item)" link @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
+        <Cell :title="liveInGuestItem(item)" link @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+getParameter)"/>
       </Group>
 
       <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item)"/>
         <Cell :title="getCheckoutGuestItem(item)" link
-              @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+              @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+getParameter)"/>
       </Group>
 
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item,index)"/>
         <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
-        <Cell :title="getLeaveItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
+        <Cell :title="getLeaveItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+getParameter)"/>
       </Group>
     </div>
 
@@ -92,6 +92,10 @@
         menu[2] = `退房申请(${this.checkOutApplicationList.length})`;
         menu[3] = `已离店(${this.checkOutList.length})`;
         return menu;
+      },
+      getParameter(){
+        let tempRoute = this.route.path.split('/')[2];
+        return tempRoute
       },
       tempPage(){
         let tempRoute = this.route.path.split('/')[2];
