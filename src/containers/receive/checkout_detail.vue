@@ -143,6 +143,9 @@
       routeId() {
         return this.$route.params.id
       },
+      routeParameter(){
+        return this.$route.params.parameter
+      },
       getPath(){
         return this.$route.path.split('/')[2];
       },
@@ -250,6 +253,7 @@
       getDetail() {
         this.getorderdetail({
           order_id: this.routeId,
+          newAddParameter:this.routeParameter,
           roomfee: 0,
           suborder: 1,
           invoice: 1,
