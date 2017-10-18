@@ -796,7 +796,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: false, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0003',
@@ -834,7 +834,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: false, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0004',
@@ -910,7 +910,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: true, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
     {
       identity_id: 'id0006',
@@ -948,7 +948,7 @@ module.exports = {
       status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
       is_upload_success: true, //上传旅业系统是否成功
       lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
     },
   ],
   newIdentityList: [
