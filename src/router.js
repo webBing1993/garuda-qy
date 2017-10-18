@@ -26,28 +26,32 @@ const receive = [{
   },
   children: [{
     path: 'precheckin',
-    component: require('./containers/receive.vue')
+    component: require('./containers/receive/receive.vue')
   }, {
     path: 'livein',
-    component: require('./containers/receive.vue')
+    component: require('./containers/receive/receive.vue')
   }, {
     path: 'checkout-application',
-    component: require('./containers/receive.vue')
+    component: require('./containers/receive/receive.vue')
   }, {
     path: 'checkout',
-    component: require('./containers/receive.vue')
+    component: require('./containers/receive/receive.vue')
   }, {
     path: 'precheckin-detail/:id/:parameter',
-    component: require('./containers/detail.vue')
+    // component: require('./containers/detail.vue')
+    component: require('./containers/receive/prereg_detail.vue')
   }, {
     path: 'livein-detail/:id/:parameter',
-    component: require('./containers/detail.vue')
+    // component: require('./containers/detail.vue')
+    component: require('./containers/receive/livein_detail.vue')
   }, {
     path: 'checkout-application-detail/:id/:parameter',
-    component: require('./containers/detail.vue')
+    // component: require('./containers/detail.vue')
+    component: require('./containers/receive/check_appli_detail.vue')
   }, {
     path: 'checkout-detail/:id/:parameter',
-    component: require('./containers/detail.vue')
+    // component: require('./containers/detail.vue')
+    component: require('./containers/receive/checkout_detail.vue')
   }]
 }];
 
