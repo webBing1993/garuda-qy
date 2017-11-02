@@ -21,12 +21,14 @@
 
       <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="preCheckInCellTitle(item)"/>
-        <Cell :title="preCheckInCellBody(item)" link @onClick="goto('/receive/precheckin-detail/' + item.order_id+'/'+getParameter)"/>
+        <Cell :title="preCheckInCellBody(item)" link
+              @onClick="goto('/receive/precheckin-detail/' + item.order_id+'/'+getParameter)"/>
       </Group>
 
       <Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="liveInCellTitle(item)"/>
-        <Cell :title="liveInGuestItem(item)" link @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+getParameter)"/>
+        <Cell :title="liveInGuestItem(item)"
+              @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+getParameter)"/>
       </Group>
 
       <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
@@ -40,7 +42,8 @@
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item,index)"/>
         <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
-        <Cell :title="getLeaveItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+getParameter)"/>
+        <Cell :title="getLeaveItem(item)" link
+              @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+getParameter)"/>
       </Group>
     </div>
 
@@ -113,7 +116,6 @@
             tempRoute = '已离店';
             break;
         }
-        console.log(tempRoute);
         return tempRoute
       },
 //      离店信息上传失败----》入住信息上传旅业失败
@@ -198,19 +200,43 @@
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
+//      liveInGuestItem(item){
+//        let dom = ``;
+//        if (item.guests) {
+//          item.guests.length > 0
+//            ? item.guests.forEach(i => {
+//            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+//          })
+//            : dom += `<div>无入住人</div>`
+//        } else {
+//          dom += `<div>无入住人</div>`
+//        }
+//        !item.lvye_report_status || item.lvye_report_status === 'FAILED' ? dom += `<p style="color:#DF4A4A;">入住信息上传旅业失败</p>` : null
+//        !item.lvye_report_status || item.lvye_report_status === 'NONE' ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null
+//        return dom
+//      },
       liveInGuestItem(item){
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+            dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
+                    <p><span style="color:  #8A8A8A">入住人</span>`
+            item.lvye_report_status && item.lvye_report_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
+            item.lvye_report_status && item.lvye_report_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
+            item.checkin_status && item.checkin_status === 'I' ? dom += ` <span style="float:right;margin-left:5px;">(未到店)</span>` : null
+            dom += `<span style="float: right">${i.name}</span>`;
+            dom += `</p></div>`
           })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
         }
-        !item.lvye_report_status || item.lvye_report_status === 'FAILED' ? dom += `<p style="color:#DF4A4A;">入住信息上传旅业失败</p>` : null
-        !item.lvye_report_status || item.lvye_report_status === 'NONE' ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null
+        dom += `<p>
+                 <span style="color:  #8A8A8A">入离时间</span>
+                 <span style="float: right">2017/04/03 ~ 2017/04/03</span>
+               </p>`
+
         return dom
       },
       checkoutCellTitle(item){
@@ -252,8 +278,8 @@
         }
         if (item.status) {
           dom += `<div style="display: flex;color: #DF4A4A;line-height: 2;justify-content: flex-start">`;
-          if (item.status.lvye_checkout_status === 'NONE') dom += `<span style="margin-right:10px">未上传旅业系统</span>`;
-          if (item.status.lvye_checkout_status === 'FAILED') dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
+          if (item.status.lvye_checkout_status && item.status.lvye_checkout_status === 'NONE') dom += `<span style="margin-right:10px">未上传旅业系统</span>`;
+          if (item.status.lvye_checkout_status && item.status.lvye_checkout_status === 'FAILED') dom += `<span style="margin-right:10px">旅业系统上传失败</span>`;
           dom += `</div>`;
 
         }

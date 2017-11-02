@@ -1,3 +1,4 @@
+<!--设备核验-->
 <template>
   <article>
     <header class="tab-wrapper">

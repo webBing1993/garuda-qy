@@ -1,7 +1,22 @@
 module.exports = {
+  // getIdentities(ctx, param){
+  //   ctx.dispatch('resource', {
+  //     url: '/identities',
+  //     params: {
+  //       status: param.status,
+  //       scope: param.scope,
+  //       start_time: param.start_time,
+  //       end_time: param.end_time
+  //     },
+  //     onSuccess: body => {
+  //       param.onsuccess ? param.onsuccess(body) : null
+  //     },
+  //   })
+  // },
   getIdentities(ctx, param){
     ctx.dispatch('resource', {
-      url: '/identities',
+      url: '/identities/guests',
+      method: 'POST',
       params: {
         status: param.status,
         scope: param.scope,
@@ -13,9 +28,18 @@ module.exports = {
       },
     })
   },
+  // getIdentity(ctx, param){
+  //   ctx.dispatch('resource', {
+  //     url: '/identities/' + param.identity_id,
+  //     onSuccess: body => {
+  //       param.onsuccess ? param.onsuccess(body) : null
+  //     }
+  //   })
+  // },
   getIdentity(ctx, param){
     ctx.dispatch('resource', {
-      url: '/identities/' + param.identity_id,
+      url: '/identities/guest/' + param.identityGuestId,
+      method: 'GET',
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
