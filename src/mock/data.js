@@ -110,7 +110,8 @@ module.exports = {
           guests: [
             {
               name: "李四",
-              idcard: "343245623456728199"
+              idcard: "343245623456728199",
+              status:'I',//R（预定）I(在住)
             }, {
               name: "李四",
               idcard: "343245623456728199"
@@ -122,7 +123,7 @@ module.exports = {
           out_time: 1490976000000, //离店时间
           identity_id: "2304204024024012", //身份验证记录ID:null,
           lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-          lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           pmscheckout_status: "FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
         },
         {
@@ -566,6 +567,7 @@ module.exports = {
     }
   ],
   // ===============================================================
+
   // 子单列表
   // ===============================================================
   suborders: [
@@ -594,17 +596,29 @@ module.exports = {
       guests: [
         {
           name: "李四1",
-          idcard: "343245623456728199"
-        }, {
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+        },
+        {
           name: "李四2",
-          idcard: "343245623456728199"
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
         }
       ],
       in_time: null, //办理入住时间
       out_time: null, //离店时间
       identity_id: "", //身份验证记录ID:null,
       lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "NONE", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
     },
     {
       suborder_id: "2304204024024011",
@@ -631,10 +645,71 @@ module.exports = {
       guests: [
         {
           name: "张四1",
-          idcard: "343245623456728199"
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
         }, {
           name: "李四22",
-          idcard: "343245623456728199"
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
+        }
+      ],
+      in_time: null, //办理入住时间
+      out_time: null, //离店时间
+      identity_id: "", //身份验证记录ID:null,
+      lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+      lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+    },
+    {
+      suborder_id: "2304204024024011",
+      order_id: '230420402402402',
+      order_pmsid: '2304204024024011',
+      union_tag: '023jatrtgfs00001',
+      status: {
+        is_cancelled: false, //是否已取消
+        is_checkin: false, //是否入住
+        is_checkout: false, //是否离店
+      },
+      breakfast: 1,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+      room_number: "203",
+      room_tags: ["靠南", "带窗"],
+      room_type_id: "DCF",
+      room_type_name: "大床房",
+      room_price: [{
+        date: 1490976000000,
+        price: '2222',
+      }, {
+        date: 1490976000000 + 86400000,
+        price: '3333',
+      }],
+      guests: [
+        {
+          name: "李四22",
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
+        }, {
+          name: "李四22",
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
         }
       ],
       in_time: null, //办理入住时间
@@ -668,47 +743,22 @@ module.exports = {
       guests: [
         {
           name: "张四1",
-          idcard: "343245623456728199"
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
         }, {
           name: "李四22",
-          idcard: "343245623456728199"
-        }
-      ],
-      in_time: null, //办理入住时间
-      out_time: null, //离店时间
-      identity_id: "", //身份验证记录ID:null,
-      lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
-      lvye_report_status: 'NONE', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-    },
-    {
-      suborder_id: "2304204024024011",
-      order_id: '230420402402402',
-      order_pmsid: '2304204024024011',
-      union_tag: '023jatrtgfs00001',
-      status: {
-        is_cancelled: false, //是否已取消
-        is_checkin: false, //是否入住
-        is_checkout: false, //是否离店
-      },
-      breakfast: 1,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
-      room_number: "203",
-      room_tags: ["靠南", "带窗"],
-      room_type_id: "DCF",
-      room_type_name: "大床房",
-      room_price: [{
-        date: 1490976000000,
-        price: '2222',
-      }, {
-        date: 1490976000000 + 86400000,
-        price: '3333',
-      }],
-      guests: [
-        {
-          name: "张四1",
-          idcard: "343245623456728199"
-        }, {
-          name: "李四22",
-          idcard: "343245623456728199"
+          idcard: "343245623456728199",
+          checkin_status:'I',
+          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
+          lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
         }
       ],
       in_time: null, //办理入住时间
@@ -721,236 +771,263 @@ module.exports = {
   // ===============================================================
   // 公安验证
   // ===============================================================
-  identityList: [
-    {
-      identity_id: 'id0001',
-      suborder_id: '',
-      owner: "ted",
-      phone_number: "15300686661",
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      room: {
-        room_type_name: "大床房",
-        room_number: "201",
+  // identityList: [
+  //   {
+  //     identity_id: 'id0001',
+  //     suborder_id: '',
+  //     owner: "ted",
+  //     phone_number: "15300686661",
+  //     in_time: '1491384458000',
+  //     out_time: '1491384458000',
+  //     room: {
+  //       room_type_name: "大床房",
+  //       room_number: "201",
+  //     },
+  //     guests: [{
+  //       name: "张三", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }, {
+  //       name: "李四", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }],
+  //     created_time: "1491384458000", //验证时间
+  //     status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
+  //     is_upload_success: true, //上传旅业系统是否成功
+  //     lvye_report_time: null, //成功上传旅业系统的时间时间戳
+  //     lvye_report_status: null, //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+  //   },
+  //   {
+  //     identity_id: 'id0002',
+  //     suborder_id: '',
+  //     owner: "ted",
+  //     phone_number: "15300686661",
+  //     in_time: '1491384458000',
+  //     out_time: '1491384458000',
+  //     room: {
+  //       room_type_name: "大床房",
+  //       room_number: "202",
+  //     },
+  //     guests: [{
+  //       name: "张三", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }],
+  //     created_time: "1491384458000", //验证时间
+  //     status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
+  //     is_upload_success: false, //上传旅业系统是否成功
+  //     lvye_report_time: null, //成功上传旅业系统的时间时间戳
+  //     lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+  //   },
+  //   {
+  //     identity_id: 'id0003',
+  //     suborder_id: '',
+  //     owner: "ted",
+  //     phone_number: "15300686661",
+  //     in_time: '1491384458000',
+  //     out_time: '1491384458000',
+  //     room: {
+  //       room_type_name: "大床房",
+  //       room_number: "203",
+  //     },
+  //     guests: [{
+  //       name: "张三", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }, {
+  //       name: "李四", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }],
+  //     created_time: "1491384458000", //验证时间
+  //     status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
+  //     is_upload_success: false, //上传旅业系统是否成功
+  //     lvye_report_time: null, //成功上传旅业系统的时间时间戳
+  //     lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+  //   },
+  //   {
+  //     identity_id: 'id0004',
+  //     suborder_id: '',
+  //     owner: "ted",
+  //     phone_number: "15300686661",
+  //     in_time: '1491384458000',
+  //     out_time: '1491384458000',
+  //     room: {
+  //       room_type_name: "大床房",
+  //       room_number: "204",
+  //     },
+  //     guests: [{
+  //       name: "张三", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }, {
+  //       name: "李四", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }],
+  //     created_time: "1491384458000", //验证时间
+  //     status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
+  //     is_upload_success: false, //上传旅业系统是否成功
+  //     upload_time: null, //成功上传旅业系统的时间
+  //     next_identity_id: '' //下一个待处理的验证id
+  //   },
+  //   {
+  //     identity_id: 'id0005',
+  //     suborder_id: '',
+  //     owner: "ted",
+  //     phone_number: "15300686661",
+  //     in_time: '1491384458000',
+  //     out_time: '1491384458000',
+  //     room: {
+  //       room_type_name: "大床房",
+  //       room_number: "205",
+  //     },
+  //     guests: [{
+  //       name: "张三", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }, {
+  //       name: "李四", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }],
+  //     created_time: "1491384458000", //验证时间
+  //     status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
+  //     is_upload_success: true, //上传旅业系统是否成功
+  //     lvye_report_time: null, //成功上传旅业系统的时间时间戳
+  //     lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+  //   },
+  //   {
+  //     identity_id: 'id0006',
+  //     suborder_id: '',
+  //     owner: "ted",
+  //     phone_number: "15300686661",
+  //     in_time: '1491384458000',
+  //     out_time: '1491384458000',
+  //     room: {
+  //       room_type_name: "大床房",
+  //       room_number: "201",
+  //     },
+  //     guests: [{
+  //       name: "张三", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }, {
+  //       name: "李四", //姓名
+  //       sex: "男", //性别
+  //       ethnicity: "汉族", //民族
+  //       date_of_birth: "19681010", //生日
+  //       address: "上海市控江路1680号", //住址
+  //       idcard: "23042040242420", //身份证号码
+  //       photo: "", //身份证照片url
+  //       curr_photo: "", //现在抓拍的照片url
+  //       similarity: "70" //相似度65"
+  //     }],
+  //     created_time: "1491384458000", //验证时间
+  //     status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
+  //     is_upload_success: true, //上传旅业系统是否成功
+  //     lvye_report_time: null, //成功上传旅业系统的时间时间戳
+  //     lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+  //   },
+  // ],
+  identityList: {
+    rows: [
+      {
+        identity_guest_id: "1010000",//入住人身份验证记录ID
+        identity_id: "id0006",//身份验证记录ID
+        suborder_id: "",//子订单ID
+        room_number: "1701",//房间号
+        name: "孙仙女", //姓名
+        live_photo: "", //现在抓拍的照片url
+        similarity: "22", //相似度65"
+        identity_status: "PENDING", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
+        identity_check_time: "2017/09/22" //验证时间
       },
-      guests: [{
-        name: "张三", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }, {
-        name: "李四", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }],
-      created_time: "1491384458000", //验证时间
-      status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
-      is_upload_success: true, //上传旅业系统是否成功
-      lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: null, //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
-    },
-    {
-      identity_id: 'id0002',
-      suborder_id: '',
-      owner: "ted",
-      phone_number: "15300686661",
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      room: {
-        room_type_name: "大床房",
-        room_number: "201",
+      {
+        identity_guest_id: "1010000",//入住人身份验证记录ID
+        identity_id: "id0005",//身份验证记录ID
+        suborder_id: "",//子订单ID
+        room_number: "1701",//房间号
+        name: "孙仙女2", //姓名
+        live_photo: "", //现在抓拍的照片url
+        similarity: "77", //相似度65"
+        identity_status: "AGREED", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
+        identity_check_time: "2017/09/22" //验证时间
       },
-      guests: [{
-        name: "张三", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }, {
-        name: "李四", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }],
-      created_time: "1491384458000", //验证时间
-      status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
-      is_upload_success: false, //上传旅业系统是否成功
-      lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
-    },
-    {
-      identity_id: 'id0003',
-      suborder_id: '',
-      owner: "ted",
-      phone_number: "15300686661",
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      room: {
-        room_type_name: "大床房",
-        room_number: "201",
-      },
-      guests: [{
-        name: "张三", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }, {
-        name: "李四", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }],
-      created_time: "1491384458000", //验证时间
-      status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
-      is_upload_success: false, //上传旅业系统是否成功
-      lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
-    },
-    {
-      identity_id: 'id0004',
-      suborder_id: '',
-      owner: "ted",
-      phone_number: "15300686661",
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      room: {
-        room_type_name: "大床房",
-        room_number: "201",
-      },
-      guests: [{
-        name: "张三", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }, {
-        name: "李四", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }],
-      created_time: "1491384458000", //验证时间
-      status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
-      is_upload_success: false, //上传旅业系统是否成功
-      upload_time: null, //成功上传旅业系统的时间
-      next_identity_id: '' //下一个待处理的验证id
-    },
-    {
-      identity_id: 'id0005',
-      suborder_id: '',
-      owner: "ted",
-      phone_number: "15300686661",
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      room: {
-        room_type_name: "大床房",
-        room_number: "201",
-      },
-      guests: [{
-        name: "张三", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }, {
-        name: "李四", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }],
-      created_time: "1491384458000", //验证时间
-      status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
-      is_upload_success: true, //上传旅业系统是否成功
-      lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
-    },
-    {
-      identity_id: 'id0006',
-      suborder_id: '',
-      owner: "ted",
-      phone_number: "15300686661",
-      in_time: '1491384458000',
-      out_time: '1491384458000',
-      room: {
-        room_type_name: "大床房",
-        room_number: "201",
-      },
-      guests: [{
-        name: "张三", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }, {
-        name: "李四", //姓名
-        sex: "男", //性别
-        ethnicity: "汉族", //民族
-        date_of_birth: "19681010", //生日
-        address: "上海市控江路1680号", //住址
-        idcard: "23042040242420", //身份证号码
-        photo: "", //身份证照片url
-        curr_photo: "", //现在抓拍的照片url
-        similarity: "70" //相似度65"
-      }],
-      created_time: "1491384458000", //验证时间
-      status: "PASSED", //PENDING待审核、PASSED通过、REJECTED拒绝
-      is_upload_success: true, //上传旅业系统是否成功
-      lvye_report_time: null, //成功上传旅业系统的时间时间戳
-      lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
-    },
-  ],
+      {
+        identity_guest_id: "1010000",//入住人身份验证记录ID
+        identity_id: "id0004",//身份验证记录ID
+        suborder_id: "",//子订单ID
+        room_number: "1701",//房间号
+        name: "孙仙女3", //姓名
+        live_photo: "", //现在抓拍的照片url
+        similarity: "33", //相似度65"
+        identity_status: "AUTO_AGREED", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
+        identity_check_time: "2017/09/22" //验证时间
+      }
+    ]
+  },
   newIdentityList: [
     {
       lvyeReportRecordId: 'id002',//旅业上报记录ID
@@ -1048,7 +1125,31 @@ module.exports = {
     sex: "男",
     similarity: 96
   },
-  // ===============================================================
+  // newIdentityDetail:{
+  //   config:{
+  //     identity_check_channel:"SHENFENBAO" // SHENFENBAO(厦门身份宝)/YOUTU(腾讯优图)
+  //   },
+  //   identity_guest_id:"as1234454",//入住人身份验证记录ID
+  //   identity_id:"41272811111",//身份验证记录ID
+  //   suborder_id:"110",//子订单ID
+  //   room_number:"201",//房间号
+  //   name:"孙书敬", //姓名
+  //   sex:"女", //性别
+  //   ethnicity:"汗", //民族
+  //   date_of_birth:"7月15", //生日
+  //   address:"仙人胡同", //住址
+  //   idcard:"41272811111", //身份证号码
+  //   photo:"http://img01.taopic.com/141025/234987-1410250J11189.jpg", //身份证照片url
+  //   live_photo:"http://img01.taopic.com/141025/234987-1410250J11189.jpg", //现在抓拍的照片url
+  //   similarity:"70", //相似度65"
+  //   identity_status:"PENDING", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
+  //   created_time:"", //验证时间
+  //   lvye_report_in_status:"", //NONE未上传，SUCCESS成功，FAILED失败。上传旅业系统状态。
+  //   lvye_report_in_time:null, //成功上传旅业系统的时间时间戳
+  // },
+
+
+// ===============================================================
   // 退房
   // ===============================================================
   checkoutList: [

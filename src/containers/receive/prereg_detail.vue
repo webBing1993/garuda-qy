@@ -100,6 +100,9 @@
       getPath(){
         return this.$route.path.split('/')[2];
       },
+      isLivein() {//在住
+        return /livein/.test(this.$route.path)
+      },
       isPreCheckin() {//预登记
         return /precheckin/.test(this.$route.path)
       },
@@ -159,6 +162,21 @@
           bill: 1,
           onsuccess: body => {
             this.detail = body.data
+          }
+        })
+      },
+      pmsCheckout() {
+        this.pmscheckout({
+          id: this.pmsCheckoutId,
+          onsuccess: body => this.getDetail()
+        })
+      },
+      //退款申请
+      refundApply() {
+        this.refundapply({
+          orderId: this.routeId,
+          onsuccess: body => {
+            this.getDetail();
           }
         })
       },

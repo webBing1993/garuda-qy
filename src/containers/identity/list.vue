@@ -1,6 +1,6 @@
+<!--入住核验-->
 <template>
   <article>
-
     <header class="tab-wrapper">
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
@@ -10,7 +10,6 @@
         </TabItem>
       </Tab>
     </header>
-
     <!--<scroller lock-x :scrollbar-x=false-->
     <!--:pulldown-config="Interface.scroller"-->
     <!--@on-pulldown-loading="refreshList"-->
@@ -19,11 +18,36 @@
     <!--use-pulldown>-->
     <div class="list-wrapper">
       <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
-      <group v-for="(item,index) in renderList" :key="index">
-        <cell :title="item.room.room_number + ' '+ item.room.room_type_name"
-              :value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"></cell>
-        <cell :title="getGuestItem(item)"
-              @onClick="toDetail(item.identity_id)"
+      <!--<group v-for="(item,index) in renderList" :key="index">-->
+      <!--<cell :title="item.room.room_number + ' '+ item.room.room_type_name"-->
+      <!--:value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"></cell>-->
+      <!--<cell :title="getGuestItem(item)"-->
+      <!--@onClick="toDetail(item.identity_id)"-->
+      <!--link></cell>-->
+      <!--</group>-->
+
+      <group v-if="tabIndex===0" v-for="(item,index) in renderList" :key="index">
+        <cell title="住客身份核验"
+              :value="datetimeparse(item.created_time,'YYMMDDhhmm')"></cell>
+        <cell :title="getGuestToDoItem(item,index)"></cell>
+        <cell title="查看详情"
+              @onClick="toDetail(item.identity_guest_id)"
+              link></cell>
+      </group>
+      <group v-if="tabIndex===1" v-for="(item,index) in renderList" :key="index">
+        <cell title="住客身份核验"
+              :value="datetimeparse(item.created_time,'YYMMDDhhmm')"></cell>
+        <cell :title="getGuestPassItem(item,index)"></cell>
+        <cell title="查看详情"
+              @onClick="toDetail(item.identity_guest_id)"
+              link></cell>
+      </group>
+      <group v-if="tabIndex===2" v-for="(item,index) in renderList" :key="index">
+        <cell title="住客身份核验"
+              :value="datetimeparse(item.created_time,'YYMMDDhhmm')"></cell>
+        <cell :title="getGuestRejectItem(item,index)"></cell>
+        <cell title="查看详情"
+              @onClick="toDetail(item.identity_guest_id)"
               link></cell>
       </group>
     </div>
@@ -45,6 +69,7 @@
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
+
 </template>
 
 <script>
@@ -76,8 +101,8 @@
       tabMenu() {
         let menu = [];
         menu[0] = `待办理(${this.pendingList.length})`;
-        menu[1] = `未通过(${this.refusedIdentities.length})`;
-        menu[2] = `已通过(${this.agreedIdentities.length})`;
+        menu[1] = `已通过(${this.agreedIdentities.length})`;
+        menu[2] = `未通过(${this.refusedIdentities.length})`;
         return menu;
       },
       tabIndex(){
@@ -89,10 +114,11 @@
             return this.pendingList;
             break;
           case 1:
-            return this.refusedIdentities;
+            return this.agreedIdentities
             break;
           case 2:
-            return this.agreedIdentities
+            return this.refusedIdentities;
+
         }
       },
       renderPageIndex(){
@@ -101,10 +127,11 @@
             return this.pendingPageIndex;
             break;
           case 1:
-            return this.refusedPageIndex;
+            return this.agreedPageIndex
             break;
           case 2:
-            return this.agreedPageIndex
+            return this.refusedPageIndex;
+
         }
       }
     },
@@ -118,24 +145,54 @@
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
       },
-      toDetail(identity_id){
-        this.tabIndex === 0 ? this.goto(`/identity/todo/${identity_id}`) : this.goto(`/identity/detail/${identity_id}`)
+      toDetail(identity_guest_id){
+        this.tabIndex === 0 ? this.goto(`/identity/todo/${identity_guest_id}`) : this.goto(`/identity/detail/${identity_guest_id}`)
       },
-      getGuestItem(item){
+//      getGuestItem(item){
+//        let dom = ``;
+//        item.guests.forEach(i => {
+//          dom += `<div style="display: flex;justify-content: space-between;line-height: 2;color:#4a4a4a;">
+//                    <span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
+//                  </div>`
+//        });
+//        if (item.lvye_report_status === 'SUBMITTED' || item.lvye_report_status === 'PENDING') {
+//          dom += `<p style="color:#999999;">正在上传旅业系统</p>`
+//        } else if (item.lvye_report_status === 'FAILED') {
+//          dom += `<p style="color:#DF4A4A;">上传旅业系统失败</p>`
+//        } else if (!item.lvye_report_status || item.lvye_report_status === 'NONE') {
+//          dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>`
+//        }
+//
+//        return dom
+//      },
+      getGuestToDoItem(item, index){
         let dom = ``;
-        item.guests.forEach(i => {
-          dom += `<div style="display: flex;justify-content: space-between;line-height: 2;color:#4a4a4a;">
-                    <span>${i.name + this.idnumber(i.idcard)}</span><span>相似度 ${i.similarity}%</span>
-                  </div>`
-        });
-        if (item.lvye_report_status === 'SUBMITTED' || item.lvye_report_status === 'PENDING') {
-          dom += `<p style="color:#999999;">正在上传旅业系统</p>`
-        } else if (item.lvye_report_status === 'FAILED') {
-          dom += `<p style="color:#DF4A4A;">上传旅业系统失败</p>`
-        } else if (!item.lvye_report_status || item.lvye_report_status === 'NONE') {
-          dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>`
-        }
-
+//        let len = item.guests.length
+        dom += `<div style="text-align: center;color: #8A8A8A">入住房间</div><div style="text-align: center;font-size: 24px">${item.room_number}</div>`;
+        dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
+            <p>${item.name}</p>
+           </div>`
+        dom += ` <p style="color: #ffb01f">人脸识别度低于预设值，请进行人工核验</p>`;
+        return dom
+      },
+      getGuestPassItem(item, index){
+        let dom = ``;
+        dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
+            <span>房间号:</span><span>${item.room_number}</span>
+            <p></p>
+            <span>入住人：</span><span>${item.name}</span>
+            <p style="color: #86e85e">人脸识别度大于预设值，已自动通过</p>
+          </div>`
+        return dom
+      },
+      getGuestRejectItem(item, index){
+        let dom = ``;
+        dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
+            <span>房间号:</span><span>${item.room_number}</span>
+            <p></p>
+            <span>入住人：</span><span>${item.name}</span>
+            <p style="color: #e51324">人脸识别度低于预设值，已自动拒绝</p>
+          </div>`
         return dom
       },
       getList(callback, status){
@@ -149,36 +206,36 @@
       },
       initList(){
         if (this.renderList.length === 0) {
-          this.getList(body => (this.pendingList = [...body.data], this.pendingPageIndex++), 'PENDING');
-          this.getList(body => (this.refusedIdentities = [...body.data], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
-          this.getList(body => (this.agreedIdentities = [...body.data], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
+          this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
+          this.getList(body => (this.refusedIdentities = [...body.data.rows], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
+          this.getList(body => (this.agreedIdentities = [...body.data.rows], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
         }
       },
-      refreshList(){
-        let tempStatus = '';
-        switch (this.tabIndex) {
-          case 0:
-            tempStatus = 'PENDING';
-            break;
-          case 1:
-            tempStatus = 'REFUSED,AUTO_REFUSED';
-            break;
-          case 2:
-            tempStatus = 'AGREED,AUTO_AGREED';
-        }
-        let tempList = '';
-        switch (this.tabIndex) {
-          case 0:
-            tempList = 'pendingList';
-            break;
-          case 1:
-            tempList = 'refusedIdentities';
-            break;
-          case 2:
-            tempList = 'agreedIdentities';
-        }
-        this.getList(body => this[tempList] = [...body.data], tempStatus)
-      },
+//      refreshList(){
+//        let tempStatus = '';
+//        switch (this.tabIndex) {
+//          case 0:
+//            tempStatus = 'PENDING';
+//            break;
+//          case 1:
+//            tempStatus = 'REFUSED,AUTO_REFUSED';
+//            break;
+//          case 2:
+//            tempStatus = 'AGREED,AUTO_AGREED';
+//        }
+//        let tempList = '';
+//        switch (this.tabIndex) {
+//          case 0:
+//            tempList = 'pendingList';
+//            break;
+//          case 1:
+//            tempList = 'refusedIdentities';
+//            break;
+//          case 2:
+//            tempList = 'agreedIdentities';
+//        }
+//        this.getList(body => this[tempList] = [...body.data], tempStatus)
+//      },
       resetList(){
         this.pendingList = [];
         this.agreedIdentities = [];
@@ -189,13 +246,14 @@
       }
     },
     mounted(){
-      this.initList()
+      this.initList();
     },
     watch: {
       tabIndex(val) {
         this.periodFilter = [null, null];
         typeof val === 'number' && !isNaN(val)
-          ? this.renderPageIndex === 0 ? this.initList() : this.refreshList()
+          //          ? this.renderPageIndex === 0 ? this.initList() : this.refreshList()
+          ? this.renderPageIndex === 0 ? this.initList() : this.initList()
           : null
       },
       periodFilter(val){
@@ -207,4 +265,5 @@
 
 <style scoped lang="less">
   @import "index.less";
+
 </style>
