@@ -216,14 +216,14 @@
         }
       },
       getPendingList(){
-        this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
+        this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), ['PENDING']);
       },
       getAgreedIdentities(){
 
-        this.getList(body => (this.agreedIdentities = [...body.data.rows], this.refusedPageIndex++), 'AGREED,AUTO_AGREED');
+        this.getList(body => (this.agreedIdentities = [...body.data.rows], this.refusedPageIndex++), ['AGREED','AUTO_AGREED']);
       },
       getRefusedIdentities(){
-        this.getList(body => (this.refusedIdentities = [...body.data.rows], this.agreedPageIndex++), 'REFUSED,AUTO_REFUSED');
+        this.getList(body => (this.refusedIdentities = [...body.data.rows], this.agreedPageIndex++), ['REFUSED','AUTO_REFUSED']);
       },
       refreshList(){
         let tempStatus = '';

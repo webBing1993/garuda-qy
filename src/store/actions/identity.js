@@ -17,7 +17,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/identities/guests',
       method: 'POST',
-      params: {
+      body: {
         status: param.status,
         scope: param.scope,
         start_time: param.start_time,
