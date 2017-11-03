@@ -1002,7 +1002,7 @@ module.exports = {
         live_photo: "", //现在抓拍的照片url
         similarity: "22", //相似度65"
         identity_status: "PENDING", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
-        identity_check_time: "2017/09/22" //验证时间
+        identity_check_time: "1491384458000" //验证时间
       },
       {
         identity_guest_id: "1010000",//入住人身份验证记录ID
@@ -1013,7 +1013,7 @@ module.exports = {
         live_photo: "", //现在抓拍的照片url
         similarity: "77", //相似度65"
         identity_status: "AGREED", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
-        identity_check_time: "2017/09/22" //验证时间
+        identity_check_time: "1491384458000" //验证时间
       },
       {
         identity_guest_id: "1010000",//入住人身份验证记录ID
@@ -1024,7 +1024,7 @@ module.exports = {
         live_photo: "", //现在抓拍的照片url
         similarity: "33", //相似度65"
         identity_status: "AUTO_AGREED", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
-        identity_check_time: "2017/09/22" //验证时间
+        identity_check_time: "1491384458000" //验证时间
       }
     ]
   },

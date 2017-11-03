@@ -28,7 +28,7 @@
 
       <group v-if="tabIndex===0" v-for="(item,index) in renderList" :key="index">
         <cell title="住客身份核验"
-              :value="datetimeparse(item.created_time,'YYMMDDhhmm')"></cell>
+              :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
         <cell :title="getGuestToDoItem(item,index)"></cell>
         <cell title="查看详情"
               @onClick="toDetail(item.identity_guest_id)"
@@ -36,7 +36,7 @@
       </group>
       <group v-if="tabIndex===1" v-for="(item,index) in renderList" :key="index">
         <cell title="住客身份核验"
-              :value="datetimeparse(item.created_time,'YYMMDDhhmm')"></cell>
+              :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
         <cell :title="getGuestPassItem(item,index)"></cell>
         <cell title="查看详情"
               @onClick="toDetail(item.identity_guest_id)"
@@ -44,7 +44,7 @@
       </group>
       <group v-if="tabIndex===2" v-for="(item,index) in renderList" :key="index">
         <cell title="住客身份核验"
-              :value="datetimeparse(item.created_time,'YYMMDDhhmm')"></cell>
+              :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
         <cell :title="getGuestRejectItem(item,index)"></cell>
         <cell title="查看详情"
               @onClick="toDetail(item.identity_guest_id)"
@@ -99,7 +99,7 @@
 //        return !!this.$route.path.match(/today/)
 //      },
       tabMenu() {
-          this.initList();
+//          this.initList();
         let menu = [];
         menu[0] = `待办理(${this.pendingList.length})`;
         menu[1] = `已通过(${this.agreedIdentities.length})`;
@@ -207,36 +207,49 @@
       },
       initList(){
         if (this.renderList.length === 0) {
-          this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
-          this.getList(body => (this.refusedIdentities = [...body.data.rows], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
-          this.getList(body => (this.agreedIdentities = [...body.data.rows], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
+//          this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
+//          this.getList(body => (this.refusedIdentities = [...body.data.rows], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
+//          this.getList(body => (this.agreedIdentities = [...body.data.rows], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
+          this.getPendingList();
+          this.getAgreedIdentities();
+          this.getRefusedIdentities();
         }
       },
-//      refreshList(){
-//        let tempStatus = '';
-//        switch (this.tabIndex) {
-//          case 0:
-//            tempStatus = 'PENDING';
-//            break;
-//          case 1:
-//            tempStatus = 'REFUSED,AUTO_REFUSED';
-//            break;
-//          case 2:
-//            tempStatus = 'AGREED,AUTO_AGREED';
-//        }
-//        let tempList = '';
-//        switch (this.tabIndex) {
-//          case 0:
-//            tempList = 'pendingList';
-//            break;
-//          case 1:
-//            tempList = 'refusedIdentities';
-//            break;
-//          case 2:
-//            tempList = 'agreedIdentities';
-//        }
-//        this.getList(body => this[tempList] = [...body.data], tempStatus)
-//      },
+      getPendingList(){
+        this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
+      },
+      getAgreedIdentities(){
+
+        this.getList(body => (this.agreedIdentities = [...body.data.rows], this.refusedPageIndex++), 'AGREED,AUTO_AGREED');
+      },
+      getRefusedIdentities(){
+        this.getList(body => (this.refusedIdentities = [...body.data.rows], this.agreedPageIndex++), 'REFUSED,AUTO_REFUSED');
+      },
+      refreshList(){
+        let tempStatus = '';
+        switch (this.tabIndex) {
+          case 0:
+            tempStatus = 'PENDING';
+            break;
+          case 1:
+            tempStatus = 'REFUSED,AUTO_REFUSED';
+            break;
+          case 2:
+            tempStatus = 'AGREED,AUTO_AGREED';
+        }
+        let tempList = '';
+        switch (this.tabIndex) {
+          case 0:
+            tempList = 'pendingList';
+            break;
+          case 1:
+            tempList = 'refusedIdentities';
+            break;
+          case 2:
+            tempList = 'agreedIdentities';
+        }
+        this.getList(body => this[tempList] = [...body.data], tempStatus)
+      },
       resetList(){
         this.pendingList = [];
         this.agreedIdentities = [];
@@ -251,15 +264,23 @@
     },
     watch: {
       tabIndex(val) {
-        this.periodFilter = [null, null];
-        typeof val === 'number' && !isNaN(val)
-          //          ? this.renderPageIndex === 0 ? this.initList() : this.refreshList()
-          ? this.renderPageIndex === 0 ? this.initList() : this.initList()
-          : null
+        if (val === 0) {
+          this.getPendingList();
+        } else if (val === 1) {
+          this.getAgreedIdentities();
+        } else if (val === 2) {
+          this.getRefusedIdentities();
+        }
+//        this.periodFilter = [null, null];
+//        typeof val === 'number' && !isNaN(val)
+//          ? this.renderPageIndex === 0 ? this.initList() : this.refreshList()
+//          //          ? this.renderPageIndex === 0 ? this.initList() : this.initList()
+//          : null
       },
-      periodFilter(val){
-        val[0] && val[1] && this.refreshList()
-      }
+//      periodFilter(val){
+//        val[0] && val[1] && this.refreshList()
+////        val[0] && val[1] && this.initList()
+//      }
     }
   }
 </script>
