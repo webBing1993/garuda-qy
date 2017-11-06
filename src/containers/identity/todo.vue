@@ -84,7 +84,10 @@
           identity_id: this.identityId,
           suborder_id: this.suborderId,
           status: val ? 'AGREED' : 'REFUSED',
-          onsuccess: body => this.detail.status = val ? 'AGREED' : 'REFUSED'
+          onsuccess: body => {
+            this.getDetail();
+            this.detail.status = val ? 'AGREED' : 'REFUSED'
+          }
         })
       }
     },

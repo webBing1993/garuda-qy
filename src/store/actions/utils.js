@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+
 Vue.use(VueResource)
 
 import router from '../../router.js'
@@ -21,7 +22,7 @@ module.exports = {
   resource: (ctx, param) => {
     // console.log('start',/hotel\/.+\/refresh/.test(param.url));
     let isRefresh = /hotel\/.+\/refresh/.test(param.url);
-    isRefresh ? ctx.dispatch('showprogress', {show:true,isOk:false}): ctx.commit('LOADING', 1);
+    isRefresh ? ctx.dispatch('showprogress', {show: true, isOk: false}) : ctx.commit('LOADING', 1);
     Vue.http({
       url: '/gemini' + param.url,
       body: param.body || null,
@@ -37,8 +38,8 @@ module.exports = {
     }).then(
       response => {
         if (response.body.errcode && +response.body.errcode === 0) {
-          let isShowToast = param.url.match(/precheckin/) || param.url.match(/login/) || param.url.match(/refund_apply_list/) || param.url.match(/searchLvyeReportInfo/) || param.url.match(/lvyeReport/) || param.url.match(/order\/pay/)|| param.url.match(/hotel\/.+\/refresh/)
-          param.method &&  !isShowToast ? ctx.dispatch('showtoast') : null;
+          let isShowToast = param.url.match(/identities/) || param.url.match(/precheckin/) || param.url.match(/login/) || param.url.match(/refund_apply_list/) || param.url.match(/searchLvyeReportInfo/) || param.url.match(/lvyeReport/) || param.url.match(/order\/pay/) || param.url.match(/hotel\/.+\/refresh/)
+          param.method && !isShowToast ? ctx.dispatch('showtoast') : null;
           param.onSuccess ? param.onSuccess(response.body) : null
         } else {
           ctx.dispatch('showtoast', response.body.errmsg);
@@ -64,7 +65,7 @@ module.exports = {
       final => {
         //FinalCallback
         // console.log('finish',isRefresh)
-        isRefresh ? ctx.dispatch('showprogress',{show:false,isOk:true}):ctx.commit('LOADING');
+        isRefresh ? ctx.dispatch('showprogress', {show: false, isOk: true}) : ctx.commit('LOADING');
       }
     )
   },

@@ -171,7 +171,7 @@
 //        let len = item.guests.length
         dom += `<div style="text-align: center;color: #8A8A8A">入住房间</div><div style="text-align: center;font-size: 24px">${item.room_number}</div>`;
         dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
-            <p>${item.name}</p>
+            <p><span>入住人：</span>${item.name}</p>
            </div>`
         dom += ` <p style="color: #ffb01f">人脸识别度低于预设值，请进行人工核验</p>`;
         return dom
