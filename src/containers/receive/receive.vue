@@ -96,11 +96,11 @@
         menu[3] = `已离店(${this.checkOutList.length})`;
         return menu;
       },
-      getParameter(){
+      getParameter() {
         let tempRoute = this.route.path.split('/')[2];
         return tempRoute
       },
-      tempPage(){
+      tempPage() {
         let tempRoute = this.route.path.split('/')[2];
         switch (tempRoute) {
           case 'precheckin':
@@ -132,7 +132,7 @@
           return this.sortByTime(this.checkOutList, 'created_time');
         }
       },
-      renderPageIndex(){
+      renderPageIndex() {
         if (this.tempPage == '预登记') {
           return this.preCheckInPageIndex;
         } else if (this.tempPage == '在住') {
@@ -167,7 +167,7 @@
         'getTodaySuborder',
         'getcheckoutlist'
       ]),
-      toggleTab(item){
+      toggleTab(item) {
         let tempItem = item.split('(')[0];
         switch (tempItem) {
           case '预登记':
@@ -184,11 +184,11 @@
             break;
         }
       },
-      preCheckInCellTitle(item){
+      preCheckInCellTitle(item) {
         let alertdom = item.status.is_recording_success ? `` : `<span class="cell-right warn">入账失败</span>`;
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${alertdom}</p>`
       },
-      preCheckInCellBody(item){
+      preCheckInCellBody(item) {
         let roomtypewords = '';
         item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count));
         let time = this.datetimeparse(item.timeline.precheckin_done, this.isToday ? 'hhmm' : 'MMddhhmm');
@@ -196,7 +196,7 @@
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
           `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` + `</div>`
       },
-      liveInCellTitle(item){
+      liveInCellTitle(item) {
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
@@ -215,19 +215,22 @@
 //        !item.lvye_report_status || item.lvye_report_status === 'NONE' ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null
 //        return dom
 //      },
-      liveInGuestItem(item){
+      liveInGuestItem(item) {
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-            dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
+              dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
                     <p><span style="color:  #8A8A8A">入住人</span>`
-            item.lvye_report_status && item.lvye_report_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
-            item.lvye_report_status && item.lvye_report_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
-            item.checkin_status && item.checkin_status === 'I' ? dom += ` <span style="float:right;margin-left:5px;">(未到店)</span>` : null
-            dom += `<span style="float: right">${i.name}</span>`;
-            dom += `</p></div>`
-          })
+              item.checkin_status && item.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(未到店)</span>` : null
+
+//              if (item.checkin_status && item.checkin_status === 'I') {
+//                item.lvye_report_in_status && item.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
+//                item.lvye_report_in_status && item.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
+//              }
+              dom += `<span style="float: right">${i.name}</span>`;
+              dom += `</p></div>`
+            })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -239,17 +242,17 @@
 
         return dom
       },
-      checkoutCellTitle(item){
+      checkoutCellTitle(item) {
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
       },
-      getCheckoutGuestItem(item){
+      getCheckoutGuestItem(item) {
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
-          })
+              dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+            })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -265,13 +268,13 @@
         }
         return dom
       },
-      getLeaveItem(item){
+      getLeaveItem(item) {
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
-          })
+              dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+            })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -285,14 +288,14 @@
         }
         return dom
       },
-      getUnionTag(tag, tempRoom){
+      getUnionTag(tag, tempRoom) {
         return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
       },
       resetFilter() {
         console.log('resetFilter');
         this.periodFilter = [null, null]
       },
-      titleFilter(index){
+      titleFilter(index) {
         return index
           ? this.datetimeparse(this.renderList[index].created_time) === this.datetimeparse(this.renderList[index - 1].created_time)
             ? null : this.datetimeparse(this.renderList[index].created_time)
@@ -303,7 +306,7 @@
 //          onsuccess: (body) => this.refreshList()
 //        })
 //      },
-      getList(callback){
+      getList(callback) {
         if (this.tempPage == '预登记') {
           this.gettodaylist({
             is_cancelled: 0,
@@ -354,7 +357,7 @@
           });
         }
       },
-      refreshList(){
+      refreshList() {
         if (this.tempPage == '预登记') {
 //          this.resetList();
           this.getList(body => this.preCheckInList = [...body.data]);
@@ -381,7 +384,7 @@
         }
       }
     },
-    mounted(){
+    mounted() {
       this.initList();
     },
     watch: {

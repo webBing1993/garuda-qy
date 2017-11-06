@@ -595,9 +595,9 @@ module.exports = {
       }],
       guests: [
         {
-          name: "李四1",
+          name: "李222",
           idcard: "343245623456728199",
-          checkin_status:'I',
+          checkin_status:'R',
           lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
@@ -607,7 +607,7 @@ module.exports = {
           name: "李四2",
           idcard: "343245623456728199",
           checkin_status:'I',
-          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          lvye_report_in_status:"SUCCESS", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
@@ -619,6 +619,7 @@ module.exports = {
       identity_id: "", //身份验证记录ID:null,
       lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
       lvye_report_status: "FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+
     },
     {
       suborder_id: "2304204024024011",
@@ -646,7 +647,7 @@ module.exports = {
         {
           name: "张四1",
           idcard: "343245623456728199",
-          checkin_status:'I',
+          checkin_status:'R',
           lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
@@ -655,8 +656,8 @@ module.exports = {
         }, {
           name: "李四22",
           idcard: "343245623456728199",
-          checkin_status:'I',
-          lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          checkin_status:'R',
+          lvye_report_in_status:"SUCCESS", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
           lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
@@ -693,7 +694,7 @@ module.exports = {
       }],
       guests: [
         {
-          name: "李四22",
+          name: "李四11",
           idcard: "343245623456728199",
           checkin_status:'I',
           lvye_report_in_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
@@ -709,6 +710,7 @@ module.exports = {
           lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          checkin_status:'R'
 
         }
       ],
@@ -758,7 +760,6 @@ module.exports = {
           lvye_report_in_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_time: 1490976000000, //成功上传旅业系统的时间时间戳
           lvye_report_out_status:"FAILED", //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
-
         }
       ],
       in_time: null, //办理入住时间
