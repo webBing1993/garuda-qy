@@ -235,13 +235,13 @@
         }
         dom += `<p>
                  <span style="color:  #8A8A8A">入离时间</span>
-                 <span style="float: right">2017/04/03 ~ 2017/04/03</span>
+                 <span style="float: right">${this.datetimeparse(item.in_time, 'YYMMDD')} - ${this.datetimeparse(item.out_time, 'YYMMDD')}</span>
                </p>`
 
         return dom
       },
       checkoutCellTitle(item) {
-        let tag = this.getUnionTag(item.union_tag, item.room_number);
+        let tag = this.getUnionTag(item.union_tag, item.room_number);ZAA
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
       },
       getCheckoutGuestItem(item) {
