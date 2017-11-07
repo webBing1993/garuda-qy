@@ -77,7 +77,7 @@
           <p style="color: #DF4A4A;"></p>
           <XButton
             v-if="item.pmscheckout_status === 'SUCCESS' && item.lvye_checkout_status !=='SUCCESS' && item.lvye_checkout_status!=='PENDING' && item.lvye_checkout_status !=='UNREPORTED'"
-            :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统2' : '上传旅业系统2'"
+            :value="item.lvye_checkout_status && item.llvye_checkout_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
             @onClick="setLeavestatus(item.suborder_id)"/>
 
         </div>

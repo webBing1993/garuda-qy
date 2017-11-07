@@ -141,7 +141,7 @@
       init() {
         this.getTodoList();
         if (!this.yunbaConnected) {
-          this.yunbaConnect();
+//          this.yunbaConnect();
         }
       }
     },

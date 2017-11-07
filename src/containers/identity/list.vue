@@ -43,8 +43,8 @@
               link></cell>
       </group>
       <group v-if="tabIndex===2" v-for="(item,index) in renderList" :key="index">
-        <cell title="住客身份核验"
-              :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
+        < title="住客身份核验cell"
+        :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
         <cell :title="getGuestRejectItem(item,index)"></cell>
         <cell title="查看详情"
               @onClick="toDetail(item.identity_guest_id)"
@@ -77,7 +77,7 @@
 
   module.exports = {
     name: 'List',
-    data(){
+    data() {
       return {
 //        tabMenu: ['已通过', '未通过'],
         pendingList: [],//待处理
@@ -106,10 +106,10 @@
         menu[2] = `未通过(${this.refusedIdentities.length})`;
         return menu;
       },
-      tabIndex(){
+      tabIndex() {
         return +this.route.params.tab
       },
-      renderList(){
+      renderList() {
         switch (this.tabIndex) {
           case 0:
             return this.pendingList;
@@ -122,7 +122,7 @@
 
         }
       },
-      renderPageIndex(){
+      renderPageIndex() {
         switch (this.tabIndex) {
           case 0:
             return this.pendingPageIndex;
@@ -142,11 +142,11 @@
         'replaceto',
         'goto'
       ]),
-      toggleTab(index){
+      toggleTab(index) {
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
       },
-      toDetail(identity_guest_id){
+      toDetail(identity_guest_id) {
         this.tabIndex === 0 ? this.goto(`/identity/todo/${identity_guest_id}`) : this.goto(`/identity/detail/${identity_guest_id}`)
       },
 //      getGuestItem(item){
@@ -166,7 +166,7 @@
 //
 //        return dom
 //      },
-      getGuestToDoItem(item, index){
+      getGuestToDoItem(item, index) {
         let dom = ``;
 //        let len = item.guests.length
         dom += `<div style="text-align: center;color: #8A8A8A">入住房间</div><div style="text-align: center;font-size: 24px">${item.room_number}</div>`;
@@ -176,27 +176,29 @@
         dom += ` <p style="color: #ffb01f">人脸识别度低于预设值，请进行人工核验</p>`;
         return dom
       },
-      getGuestPassItem(item, index){
+      getGuestPassItem(item, index) {
         let dom = ``;
         dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
             <span>房间号:</span><span>${item.room_number}</span>
             <p></p>
-            <span>入住人：</span><span>${item.name}</span>
-            <p style="color: #86e85e">人脸识别度大于预设值，已自动通过</p>
-          </div>`
+            <span>入住人：</span><span>${item.name}</span>`;
+        item.identity_status && item.identity_status === 'AUTO_AGREED' ? dom += `<p style="color: #86e85e">人脸识别度大于预设值，已自动通过</p>` : '';
+        item.identity_status && item.identity_status === 'AGREED' ? dom += `<p style="color: #86e85e">人脸识别度低于预设值，人工核验通过</p>` : '';
+        dom += `</div>`
         return dom
       },
-      getGuestRejectItem(item, index){
+      getGuestRejectItem(item, index) {
         let dom = ``;
         dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
             <span>房间号:</span><span>${item.room_number}</span>
             <p></p>
-            <span>入住人：</span><span>${item.name}</span>
-            <p style="color: #e51324">人脸识别度低于预设值，已自动拒绝</p>
-          </div>`
-        return dom
+            <span>入住人：</span><span>${item.name}</span>`;
+        item.identity_status && item.identity_status === 'AUTO_REFUSED' ? dom += `<p style="color: #e51324">人脸识别度低于预设值，已自动拒绝</p>` :'';
+        item.identity_status && item.identity_status === 'REFUSED' ? dom += `<p style="color: #e51324">人脸识别度低于预设值，人工核验拒绝</p>` :'';
+        dom +=`</div>`
+        return dom;
       },
-      getList(callback, status){
+      getList(callback, status) {
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
           status: status,
@@ -205,7 +207,7 @@
           onsuccess: callback
         })
       },
-      initList(){
+      initList() {
         if (this.renderList.length === 0) {
 //          this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
 //          this.getList(body => (this.refusedIdentities = [...body.data.rows], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
@@ -215,17 +217,17 @@
           this.getRefusedIdentities();
         }
       },
-      getPendingList(){
+      getPendingList() {
         this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), ['PENDING']);
       },
-      getAgreedIdentities(){
+      getAgreedIdentities() {
 
-        this.getList(body => (this.agreedIdentities = [...body.data.rows], this.refusedPageIndex++), ['AGREED','AUTO_AGREED']);
+        this.getList(body => (this.agreedIdentities = [...body.data.rows], this.refusedPageIndex++), ['AGREED', 'AUTO_AGREED']);
       },
-      getRefusedIdentities(){
-        this.getList(body => (this.refusedIdentities = [...body.data.rows], this.agreedPageIndex++), ['REFUSED','AUTO_REFUSED']);
+      getRefusedIdentities() {
+        this.getList(body => (this.refusedIdentities = [...body.data.rows], this.agreedPageIndex++), ['REFUSED', 'AUTO_REFUSED']);
       },
-      refreshList(){
+      refreshList() {
         let tempStatus = '';
         switch (this.tabIndex) {
           case 0:
@@ -250,7 +252,7 @@
         }
         this.getList(body => this[tempList] = [...body.data], tempStatus)
       },
-      resetList(){
+      resetList() {
         this.pendingList = [];
         this.agreedIdentities = [];
         this.refusedIdentities = [];
@@ -259,7 +261,7 @@
         this.periodFilter = [null, null]
       }
     },
-    mounted(){
+    mounted() {
       this.initList();
     },
     watch: {
