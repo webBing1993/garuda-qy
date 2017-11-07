@@ -163,7 +163,7 @@
         return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
-        this.initList();
+//        this.initList();
         let menu = [];
         menu[0] = `待办理(${this.tobeHandled.length})`;
         menu[1] = `已办理(${this.handled.length})`;
@@ -310,13 +310,23 @@
           onsuccess: callback
         })
       },
-
-      initList(){
+      getTobeHandled(){
         if (this.renderList.length === 0) {
-//          this.getList(body => (this.mylist = [...body.data]));
-          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++), ['SUCCESS'])
           this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++), ['NONE', 'FAILED'])
         }
+      },
+      getHandled(){
+        if (this.renderList.length === 0) {
+          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++), ['SUCCESS'])
+        }
+      },
+      initList(){
+//        if (this.renderList.length === 0) {
+//          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++), ['SUCCESS'])
+//          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++), ['NONE', 'FAILED'])
+//        }
+        this.getTobeHandled();
+        this.getHandled()
       },
       refreshList(){
 //        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
@@ -345,6 +355,13 @@
           ? this.renderList.length == 0 ? this.initList() : this.refreshList()
           : null
       },
+//      currentTab(val) {
+//        if (val === 0) {
+//          this.getTobeHandled();
+//        }else {
+//          this.getHandled()
+//        }
+//      },
       periodFilter(){
         this.refreshList();
       },

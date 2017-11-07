@@ -237,7 +237,6 @@
                  <span style="color:  #8A8A8A">入离时间</span>
                  <span style="float: right">2017/04/03 ~ 2017/04/03</span>
                </p>`
-
         return dom
       },
       checkoutCellTitle(item) {
