@@ -43,8 +43,8 @@
               link></cell>
       </group>
       <group v-if="tabIndex===2" v-for="(item,index) in renderList" :key="index">
-        < title="住客身份核验cell"
-        :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
+        <cell title="住客身份核验"
+              :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
         <cell :title="getGuestRejectItem(item,index)"></cell>
         <cell title="查看详情"
               @onClick="toDetail(item.identity_guest_id)"
@@ -181,9 +181,10 @@
         dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
             <span>房间号:</span><span>${item.room_number}</span>
             <p></p>
-            <span>入住人：</span><span>${item.name}</span>`;
-        item.identity_status && item.identity_status === 'AUTO_AGREED' ? dom += `<p style="color: #86e85e">人脸识别度大于预设值，已自动通过</p>` : '';
-        item.identity_status && item.identity_status === 'AGREED' ? dom += `<p style="color: #86e85e">人脸识别度低于预设值，人工核验通过</p>` : '';
+            <span>入住人：</span><span>${item.name}</span>`
+
+        item.identity_status && item.identity_status === 'AUTO_AGREED' ? dom += `<p style = "color: #86e85e" > 人脸识别度大于预设值，已自动通过 </p >` : null
+        item.identity_status && item.identity_status === 'AGREED' ? dom += `<p style = "color: #86e85e" > 人脸识别度大于预设值，人工核验通过 </p >` : null
         dom += `</div>`
         return dom
       },
@@ -192,13 +193,15 @@
         dom += `<div style="justify-content: space-between;line-height: 2;color:#4a4a4a;">
             <span>房间号:</span><span>${item.room_number}</span>
             <p></p>
-            <span>入住人：</span><span>${item.name}</span>`;
-        item.identity_status && item.identity_status === 'AUTO_REFUSED' ? dom += `<p style="color: #e51324">人脸识别度低于预设值，已自动拒绝</p>` :'';
-        item.identity_status && item.identity_status === 'REFUSED' ? dom += `<p style="color: #e51324">人脸识别度低于预设值，人工核验拒绝</p>` :'';
-        dom +=`</div>`
-        return dom;
+            <span>入住人：</span><span>${item.name}</span>`
+        item.identity_status && item.identity_status === 'AUTO_REFUSED' ? dom += `<p style="color: #e51324">人脸识别度低于预设值，已自动拒绝</p>` : null
+        item.identity_status && item.identity_status === 'REFUSED' ? dom += `<p style="color: #e51324">人脸识别度低于预设值，人工核验拒绝</p>` : null
+        dom += `</div>`
+        return dom
       },
-      getList(callback, status) {
+//      identity_status: "PENDING", //身份状态：PENDING待审核、AGREED人工同意、REFUSED人工拒绝、AUTO_AGREED自核同意、AUTO_REFUSED自核拒绝
+
+      getList(callback, status){
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
           status: status,

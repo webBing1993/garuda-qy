@@ -237,7 +237,6 @@
                  <span style="color:  #8A8A8A">入离时间</span>
                  <span style="float: right">${this.datetimeparse(item.in_time, 'YYMMDD')} - ${this.datetimeparse(item.out_time, 'YYMMDD')}</span>
                </p>`
-
         return dom
       },
       checkoutCellTitle(item) {
