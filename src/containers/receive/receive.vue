@@ -1,3 +1,4 @@
+<!--住离信息列表-->
 <template>
   <article>
 
@@ -222,7 +223,7 @@
             ? item.guests.forEach(i => {
               dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
                     <p><span style="color:  #8A8A8A">入住人</span>`
-              i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(未到店)</span>` : null
+              i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
               i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">()</span>` : null
               i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
               i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
@@ -240,7 +241,7 @@
         return dom
       },
       checkoutCellTitle(item) {
-        let tag = this.getUnionTag(item.union_tag, item.room_number);ZAA
+        let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
       },
       getCheckoutGuestItem(item) {
