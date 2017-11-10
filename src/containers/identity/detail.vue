@@ -5,7 +5,7 @@
       <Cell title="手机号" :value="detail.order.phone_number"></Cell>
       <Cell title="入离日期" :value="datetimeparse(detail.order.in_time) +'-' +datetimeparse(detail.order.out_time)"></Cell>
       <Cell title="房间" v-if="detail.room" :value="detail.room.room_type_name + detail.room.room_number"></Cell>
-      <Cell title="验证时间" :value="detail.guest.identity_check_time"></Cell>
+      <Cell title="验证时间" :value="datetimeparse(detail.guest.identity_check_time)"></Cell>
     </Group>
 
     <!--<div class="guestcard" v-for="item in detail.guests">-->
