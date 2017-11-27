@@ -19,8 +19,9 @@ module.exports = {
   hoteltodolist(ctx, param){
     ctx.dispatch('resource', {
       url: '/todolist',
-      onSuccess: body => {
-        param.onsuccess ? param.onsuccess(body) : null
+      onSuccess: function (body)
+      {
+       return param.onsuccess ? param.onsuccess(body) : null
       }
     })
   }

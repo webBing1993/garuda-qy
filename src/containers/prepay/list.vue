@@ -28,7 +28,7 @@
                  default-item-class="checker-item" selected-item-class="selected">
           <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
             <Group>
-              <Cell :title="getCellTitle(item)"/>
+              <Cell :title="getCellTitle(item)"></Cell>
               <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
               <Cell v-if="item.remark" :title="getCellFooter(item)"/>
             </Group>
@@ -113,7 +113,6 @@
               ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
               : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
         }
-
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
       },
       getCellBody(item){
@@ -168,7 +167,6 @@
                   ? this.tobeconfirmed.splice(tempIndex, 1)
                   : null
               });
-
               this.cancelPick()
             }
           })

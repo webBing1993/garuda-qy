@@ -13,6 +13,8 @@
             @onClick="goto('invoice/0')"></Cell>
       <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="离店申请待处理" link :badge="checkoutApplicationNum"
             @onClick="goto('receive/checkout-application')"></Cell>
+      <Cell v-if="abnormalNoticeNum > 0" icon="../../../static/icon/ic_abnormity_notice.png" title="异常提醒" link :badge="abnormalNoticeNum"
+            @onClick="goto('abnormalNotice/listDetail')"></Cell>
     </Group>
 
     <div v-else class="none-list-container">
@@ -26,10 +28,6 @@
           <li class="app-item" @click="goto('prepay/0')">
             <img src="../../../static/icon/ic_prepay_confirm.png" alt="订单中心">
             <span class="app-title">订单中心</span>
-            <!--<div class="warn">-->
-            <!--<span class="warn-dot"></span>-->
-            <!--<span>异常</span>-->
-            <!--</div>-->
           </li>
           <li class="app-item" @click="goto('receive/precheckin')">
             <img src="../../../static/icon/ic_checkout.png" alt="接待服务">
@@ -56,7 +54,6 @@
     </div>
 
 
-
   </div>
 </template>
 
@@ -73,6 +70,7 @@
         policeIdentityNum: 0,
         invoiceNum: 0,
         checkoutApplicationNum: 0,
+        abnormalNoticeNum:2
       }
     },
     computed: {
@@ -82,7 +80,7 @@
         'yunbaConnected',
       ]),
       isHaveTodoList() {
-        return this.prepayTodoNum > 0 || this.identityNum > 0 || this.policeIdentityNum > 0 || this.invoiceNum > 0 || this.checkoutApplicationNum > 0
+        return this.prepayTodoNum > 0 || this.identityNum > 0 || this.policeIdentityNum > 0 || this.invoiceNum > 0 || this.checkoutApplicationNum > 0||this.abnormalNoticeNum > 0
       }
     },
     methods: {
@@ -98,6 +96,7 @@
       setPlay(){
         document.querySelector('#audio').play();
       },
+      //获取待办事项列表
       getTodoList() {
         this.hoteltodolist({
           onsuccess: body => {
@@ -108,6 +107,7 @@
                 if(i.type == 'LVYE') this.policeIdentityNum = i.total;
                 if(i.type == 'INVOICE') this.invoiceNum = i.total;
                 if(i.type == 'CHECKOUT') this.checkoutApplicationNum = i.total;
+                if(i.type == 'EXCEPTION') this.abnormalNoticeNum=i.total;
             })
           }
         })
@@ -134,6 +134,7 @@
             if(data.type == 'LVYE') this.policeIdentityNum = data.total;
             if(data.type == 'INVOICE') this.invoiceNum = data.total;
             if(data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
+            if(data.type == 'ABNORMAL') this.abnormalNoticeNum = data.total;
           }
         })
       },
@@ -141,7 +142,7 @@
       init() {
         this.getTodoList();
         if (!this.yunbaConnected) {
-          this.yunbaConnect();
+//          this.yunbaConnect();
         }
       }
     },

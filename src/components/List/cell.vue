@@ -10,7 +10,6 @@
     <div class="weui-cell__bd">
       <p>
         <span style="vertical-align: middle" v-html="title"></span>
-
       </p>
       <slot></slot>
       <p v-if="desc" style="font-size: 13px;color: #888888;" v-html="desc"></p>

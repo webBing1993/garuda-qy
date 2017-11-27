@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
-
+//订单列表
 const prepay = [{
   path: '/prepay',
   component: {
@@ -18,6 +18,7 @@ const prepay = [{
   }]
 }];
 
+//住离信息
 const receive = [{
   path: '/receive',
   component: {
@@ -55,6 +56,7 @@ const receive = [{
   }]
 }];
 
+//设备核验
 const policeIdentity = [{
   path: '/policeIdentity',
   component: {
@@ -75,6 +77,20 @@ const policeIdentity = [{
     }]
 }];
 
+//异常提醒列表
+　const abnormalNotice=[{
+    path:'/abnormalNotice',
+    component: {
+       name: 'abnormalNotice',
+       template: `<keep-alive><router-view/></keep-alive>`,
+     },
+    children:[{
+      path:'listDetail',
+      component:require('./containers/abnormalNotice/listDetail')
+    }]
+ }];
+
+//身份核验
 const identity = [{
   path: '/identity',
   component: {
@@ -172,7 +188,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill, ...others]
+  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice, ...others]
 })
 
 // const precheckin = [{
@@ -183,7 +199,7 @@ export default new VueRouter({
 //   },
 //   children: [{
 //     path: 'prepay/:tab',
-//     component: require('./containers/prepay/list.vue')
+//     component: require('./containers/prepay/listDetail.vue')
 //   }, {
 //     path: 'prepay/detail/:id',
 //     component: require('./containers/prepay/detail.vue')

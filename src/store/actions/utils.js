@@ -19,8 +19,8 @@ module.exports = {
     decodeURIComponent(window.location.search).split('&').forEach(i => i ? o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1] : null)
     ctx.commit('URLQUERY', o)
   },
+  //服务器请求
   resource: (ctx, param) => {
-    // console.log('start',/hotel\/.+\/refresh/.test(param.url));
     let isRefresh = /hotel\/.+\/refresh/.test(param.url);
     isRefresh ? ctx.dispatch('showprogress', {show: true, isOk: false}) : ctx.commit('LOADING', 1);
     Vue.http({
