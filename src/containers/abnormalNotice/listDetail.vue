@@ -54,7 +54,7 @@
           </div>
           <div v-if="detailItem.notice_type=='RULVYE'||detailItem.notice_type=='LILVYE'">
             <ul>
-              <li v-for="i in detailItem.lvye_data"><span><abbr>{{i.room}}房间：</abbr><abbr v-for="m in i.names">{{m}}， </abbr></span></li>
+              <li v-for="i in detailItem.lvye_data"><span><abbr>{{i.room}} 房间：</abbr><abbr>{{i.names|showRoomNum}}</abbr></span></li>
               <li><span><abbr>时间：</abbr>{{datetimeparse(detailItem.lvye_time,'YYYYMMDD hhmm')}}</span></li>
             </ul>
           </div>
