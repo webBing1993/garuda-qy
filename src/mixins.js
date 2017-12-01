@@ -108,6 +108,9 @@ Vue.mixin({
     },
     sortByTime(list,timeTag) {
       return timeTag ? list.sort((a, b) => b[timeTag] - a[timeTag]) : list.sort();
+    },
+    showArrVal(arr){
+      return arr.join(',')
     }
   }
 })

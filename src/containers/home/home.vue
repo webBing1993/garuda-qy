@@ -49,11 +49,13 @@
             <img src="../../../static/icon/ic_bill.png" alt="账务管理">
             <span class="app-title">账务管理</span>
           </li>
+          <li class="app-item" @click="goto('abnormalNotice/listDetail')">
+            <img src="../../../static/icon/ic_abnormity_notice.png" alt="异常提醒">
+            <span class="app-title">异常提醒</span>
+          </li>
         </ul>
       </Group>
     </div>
-
-
   </div>
 </template>
 
@@ -70,7 +72,7 @@
         policeIdentityNum: 0,
         invoiceNum: 0,
         checkoutApplicationNum: 0,
-        abnormalNoticeNum:2
+        abnormalNoticeNum: 0
       }
     },
     computed: {
@@ -134,7 +136,8 @@
             if(data.type == 'LVYE') this.policeIdentityNum = data.total;
             if(data.type == 'INVOICE') this.invoiceNum = data.total;
             if(data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
-            if(data.type == 'ABNORMAL') this.abnormalNoticeNum = data.total;
+            if(data.type == 'EXCEPITON') this.abnormalNoticeNum = data.total;
+           console.log(this.abnormalNoticeNum)
           }
         })
       },
@@ -142,7 +145,7 @@
       init() {
         this.getTodoList();
         if (!this.yunbaConnected) {
-//          this.yunbaConnect();
+          this.yunbaConnect();
         }
       }
     },

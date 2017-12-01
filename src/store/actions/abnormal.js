@@ -4,13 +4,15 @@
 
 module.exports = {
   //获取异常提醒详情列表
-  getAbnormallist(ctx, param) {
+  getAbnormalList(ctx, param) {
     ctx.dispatch('resource', {
       url: '/exceptionsList',
-      params:{
+      body:{
         is_history:param.is_history
       },
+      method:"POST",
       headers:{
+        Session: sessionStorage.session_id,
         "X-Current-Page":"1",
         "X-Page-Size":"10"
       },
@@ -23,6 +25,7 @@ module.exports = {
   exceptionsHandel(ctx,param){
     ctx.dispatch('resource',{
       url:'/exceptions/'+param.exception_id,
+      method:"PATCH",
       onSuccess:()=>{
         param.onsuccess ? param.onsuccess() : null
       }

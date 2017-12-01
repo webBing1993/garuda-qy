@@ -18,14 +18,6 @@
     <!--use-pulldown>-->
     <div class="list-wrapper">
       <p v-if="(!renderList || renderList.length === 0) && renderPageIndex > 0" class="no-data">暂无数据</p>
-      <!--<group v-for="(item,index) in renderList" :key="index">-->
-      <!--<cell :title="item.room.room_number + ' '+ item.room.room_type_name"-->
-      <!--:value="datetimeparse(item.created_time,tabIndex ?'MMDDhhmm' : 'hhmm')"></cell>-->
-      <!--<cell :title="getGuestItem(item)"-->
-      <!--@onClick="toDetail(item.identity_id)"-->
-      <!--link></cell>-->
-      <!--</group>-->
-
       <group v-if="tabIndex===0" v-for="(item,index) in renderList" :key="index">
         <cell title="住客身份核验"
               :value="datetimeparse(item.identity_check_time,'YYMMDDhhmm')"></cell>
