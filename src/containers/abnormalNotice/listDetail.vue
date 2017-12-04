@@ -1,7 +1,7 @@
 <template>
   <article>
+    <p v-if="!abnormalList || abnormalList.length === 0" class="no-data">暂无数据</p>
     <div class="list_wrap" v-for="detailItem in abnormalList">
-      <p v-if="!abnormalList || abnormalList.length === 0" class="no-data">暂无数据</p>
       <group>
         <cell :title="setTitle(detailItem.notice_type)"></cell>
         <div class="cellBox">
@@ -81,7 +81,7 @@
             <img v-if="detailItem.notice_type=='回收卡槽已满'||detailItem.notice_type=='设备缺卡'" class= deviceImg src="../../../static/icon/device2.png" alt="">
             <img v-if="detailItem.notice_type=='设备无卡'" class= deviceImg src="../../../static/icon/device1.png" alt="">
           </div>
-          <p class="abnormalReason">{{detailItem.exception_errcode}}</p>
+          <p class="abnormalReason">{{detailItem.exception_errcode|filter_reason}}</p>
           <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
           <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='ZHIFURUZHANG'">支付码 : {{detailItem.pay_code}} ( {{detailItem.pay_name}} )</h5>
           <div style="height:4rem">
@@ -96,7 +96,7 @@
         </div>
       </group>
     </div>
-    <h4 class="abnormalRecord" @click="showRecords" v-if="isShowRecord"><span>查看本周异常历史记录</span></h4>
+    <h4 class="abnormalRecord "  @click="showRecords" v-if="isShowRecord"><div :class="{'abnormalRecord_2':changeSty}" style="border-bottom: 1px solid #5077AA;width: 9rem;margin: auto;">查看本周异常历史记录</div></h4>
   </article>
 
 </template>
@@ -104,6 +104,7 @@
 
   import {Group, Cell} from 'vux'
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+  import Divider from "../../../node_modules/vux/src/components/divider/index.vue";
 
   const enumWarnType={
     refundWarn:`退款异常`,
@@ -121,6 +122,7 @@
 
   export default{
     components: {
+      Divider,
       Group,
       Cell
     },
@@ -128,13 +130,101 @@
     data(){
       return {
         abnormalList:[],
-        isShowRecord:false
+        isShowRecord:false,
+        changeSty:true
       }
     },
     filters:{
       showRoomNum:function (val) {
         if(val) {
           return val.join(',')
+        }
+      },
+      filter_reason:function (val) {
+        switch (val) {
+          case '161001' :
+            return '该订单已经退过款';
+            break;
+          case '161002' :
+            return '退款失败';
+            break;
+          case '161003' :
+            return '退款订单不存在';
+            break;
+          case '161004' :
+            return '余额不足';
+            break;
+          case '161005' :
+            return '特约子商户商户号未授权服务商的产品权限';
+            break;
+          case '161006' :
+            return '服务异常';
+            break;
+          case 'pms_110101' :
+            return '脏房不能入住';
+            break;
+          case 'pms_130101' :
+            return '账务不平';
+            break;
+          case 'pms_130102'  :
+            return '时间不对';
+            break;
+          case 'pms_110103' :
+            return '入住时间大于离店时间';
+            break;
+          case 'pms_140101' :
+            return '入住人已经登记到其他房间';
+            break;
+          case 'pms_120101' :
+            return '支付入账异常';
+            break;
+          case 'pms_110102' :
+            return '入住人已经登记到其他房间';
+            break;
+          case 'pms_120102' :
+            return '退款入账异常';
+            break;
+          case 'pms_140102' :
+            return '入住房间不存在';
+            break;
+          case 'pms_100101' :
+            return '不能分脏房';
+            break;
+          case 'pms_100102' :
+            return '房间被占用';
+            break;
+          case '190134' :
+            return '人脸识别失败';
+            break;
+          case '190125' :
+            return '旅业入住上报 - 上报失败';
+            break;
+          case '230119' :
+            return '旅业离店上报 - 未找到对应身份验证信息';
+            break;
+          case '230120' :
+            return '旅业离店上报 - 入住未上报旅业系统';
+            break;
+          case '230121' :
+            return '旅业离店上报 - 上报失败';
+            break;
+          case '190135' :
+            return '底座发卡失败';
+            break;
+          case '230108' :
+            return 'PMS退房失败';
+            break;
+          case '190133' :
+            return '回收卡槽满';
+            break;
+          case '190131' :
+            return '设备发卡槽无剩余门卡';
+            break;
+          case '190132' :
+            return '设备房卡剩余量过低';
+            break;
+          default:
+            return null
         }
       }
     },
@@ -231,6 +321,9 @@
     mounted()
     {
       this.getList(false);
+      if(!this.abnormalList || this.abnormalList.length==0){
+           this.changeSty=false;
+      }
     }
   }
 </script>

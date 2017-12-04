@@ -107,7 +107,7 @@
             return this.pendingList;
             break;
           case 1:
-            return this.agreedIdentities
+            return this.agreedIdentities;
             break;
           case 2:
             return this.refusedIdentities;
