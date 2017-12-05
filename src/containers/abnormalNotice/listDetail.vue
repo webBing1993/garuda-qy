@@ -96,7 +96,7 @@
         </div>
       </group>
     </div>
-    <h4 class="abnormalRecord "  @click="showRecords" v-if="isShowRecord"><div :class="{'abnormalRecord_2':changeSty}" style="border-bottom: 1px solid #5077AA;width: 9rem;margin: auto;">查看本周异常历史记录</div></h4>
+    <h4 class="abnormalRecord "  @click="showRecords" v-if="isShowRecord"><div :class="{'abnormalRecord_2':right}" style="border-bottom: 1px solid #5077AA;width: 9rem;margin: auto;">查看本周异常历史记录</div></h4>
   </article>
 
 </template>
@@ -131,7 +131,7 @@
       return {
         abnormalList:[],
         isShowRecord:false,
-        changeSty:true
+        right:false
       }
     },
     filters:{
@@ -321,8 +321,8 @@
     mounted()
     {
       this.getList(false);
-      if(!this.abnormalList || this.abnormalList.length==0){
-           this.changeSty=false;
+      if(this.abnormalList || this.abnormalList.length>0){
+           this.right=true;
       }
     }
   }
