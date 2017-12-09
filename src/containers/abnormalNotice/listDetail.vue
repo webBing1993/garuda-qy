@@ -301,7 +301,7 @@
           exception_id:item.exception_id,
           onsuccess:() => {
             let _time=new Date();
-            item.confirmTime=_time.getTime();
+            item.confirm_time=_time.getTime();
             if(item.notice_type=='RENLIAN'){
                 this.goto(`/identity/todo/${item.identity_guest_id}`)
             }
