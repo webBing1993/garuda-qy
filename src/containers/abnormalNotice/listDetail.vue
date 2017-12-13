@@ -87,8 +87,8 @@
             </ul>
           </div>
           <div v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'||detailItem.notice_type=='WUKA'">
-            <img v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
-            <img v-if="detailItem.notice_type=='WUKA'" class= deviceImg src="../../../static/icon/device1.png" alt="">
+            <img v-if="detailItem.notice_type=='WUKA'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
+            <img v-if="detailItem.notice_type=='HUISHOU'" class= deviceImg src="../../../static/icon/device1.png" alt="">
           </div>
           <p class="abnormalReason">{{detailItem.exception_errcode|filter_reason}}</p>
           <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
@@ -137,7 +137,6 @@
       return {
         abnormalList:[],
         isShowRecord:false,
-        right:false,
         abPage:1,
         pageIndex1:1,
         pageIndex2:1,
@@ -369,6 +368,7 @@
       //显示异常列表
       showRecords()
       {
+        this.renderList=[];
         this.getList(true,this.pageIndex2);
         this.scrollerStatus.pullupStatus = 'enabled';
       }
@@ -376,9 +376,6 @@
     mounted()
     {
       this.getList(false,this.pageIndex1);
-      if(this.abnormalList || this.abnormalList.length>0){
-           this.right=true;
-      }
     }
   }
 </script>
