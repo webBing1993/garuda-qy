@@ -292,8 +292,8 @@
             return enumWarnType.noCardWarn;
             break;
           case "QUEKA":
-            break;
             return enumWarnType.cardUnenoughWarn;
+            break;
         }
       },
       //异常列表数据
