@@ -13,7 +13,7 @@ module.exports = {
       method:"POST",
       headers:{
         Session: sessionStorage.session_id,
-        "X-Current-Page":"1",
+        "X-Current-Page":param.currentPage.toString(),
         "X-Page-Size":"10"
       },
       onSuccess: (body) => {

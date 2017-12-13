@@ -35,6 +35,7 @@
   }
 
   export default {
+    name: 'scroller',
     props: {
       depend: null,
       value: {
@@ -136,6 +137,7 @@
         this.pullup.complete()
         this.reset()
         this.currentValue.pullupStatus = 'default'
+        console.log(this.currentValue.pullupStatus)
       },
       getStyles () {
         let height = this.height
@@ -196,12 +198,14 @@
         handler: function (val) {
           if (val.pullupStatus === 'default' && this.currentValue.pullupStatus !== 'default') {
             this.donePullup()
+            console.log(33333)
           }
           if (val.pulldownStatus === 'default' && this.currentValue.pulldownStatus !== 'default') {
             this.donePulldown()
           }
           if (val.pullupStatus === 'disabled' && this.currentValue.pullupStatus !== 'disabled') {
             this.disablePullup()
+            console.log(22222)
           }
           if (val.pullupStatus === 'enabled' && this.currentValue.pullupStatus === 'disabled') {
             this.enablePullup()
@@ -238,11 +242,26 @@
           stopPropagation: this.stopPropagation
         })
 
+//        this._xscroll.on('scroll', () => {
+//          this.$emit('on-scroll', {
+//            top: this._xscroll.getScrollTop(),
+//            left: this._xscroll.getScrollLeft()
+//          })
+//        })
+
         this._xscroll.on('scroll', () => {
-          this.$emit('on-scroll', {
-            top: this._xscroll.getScrollTop(),
-            left: this._xscroll.getScrollLeft()
-          })
+          if (this._xscroll) {
+            const top = this._xscroll.getScrollTop()
+            this.$emit('on-scroll', {
+              top: top,
+              left: this._xscroll.getScrollLeft()
+            })
+            const containerHeight = this._xscroll.containerHeight
+            const scrollHeight = this._xscroll.height
+            if (top >= containerHeight - scrollHeight - this.scrollBottomOffset) {
+              this.$emit('on-scroll-bottom')
+            }
+          }
         })
 
         if (this.usePulldown) {

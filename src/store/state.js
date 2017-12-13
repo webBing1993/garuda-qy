@@ -13,6 +13,16 @@ module.exports = {
       loadingContent: '加载中...',
       clsPrefix: 'xs-plugin-pulldown-'
     },
+    scrollerUp: {
+      content: '数据加载完成',
+      pullUpHeight: 100,
+      height: 40,
+      autoRefresh: true,
+      downContent: '释放刷新',
+      upContent: '上拉获取更多数据',
+      loadingContent: '加载中...',
+      clsPrefix: 'xs-plugin-pullup-'
+    },
     toast: {
       show: false,
       text: '操作成功'

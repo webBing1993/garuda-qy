@@ -28,7 +28,8 @@
       },
       sessionId(){
         return this.AppParams.session
-      }
+      },
+
     },
     methods: {
       ...mapActions([
@@ -148,10 +149,7 @@
         path.match(/checkout/) ? title = '退房申请' : null;
         path.match(/bill/) ? title = '账务管理' : null;
         path.match(/receive/) ? title = '住离信息' : null;
-//        path.match(/receive\/precheckin/) ? title = '预登记' : null;
-//        path.match(/receive\/livein/) ? title = '在住' : null;
-//        path.match(/receive\/checkout/) ? title = '已离店' : null;
-//        path.match(/receive\/checkout-application/) ? title = '退房申请' : null;
+        path.match(/abnormalNotice\/listDetail/) ? title = '异常提醒' : null;
         this.settitle(title)
       },
       sessionId(val){

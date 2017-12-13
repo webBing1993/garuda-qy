@@ -46,7 +46,7 @@ Vue.component('Tab', require('./components/Layouts/tab/tab.vue'))
 Vue.component('TabItem', require('./components/Layouts/tab/tabItem.vue'))
 Vue.component('Scroller', require('./components/Layouts/scroller.vue'))
 Vue.component('XButton', require('./components/Displays/button.vue'))
-Vue.component('calendar', require('./components/Functional/calendar'))
+Vue.component('Calendar', require('./components/Functional/calendar'))
 Vue.component('Checker', require('./components/Functional/checker/checker.vue'));
 Vue.component('CheckerItem', require('./components/Functional/checker/checker-item.vue'));
 Vue.component('Search', require('./components/Functional/search'));

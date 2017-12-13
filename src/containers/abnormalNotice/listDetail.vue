@@ -1,7 +1,16 @@
 <template>
-  <article>
-    <p v-if="!abnormalList || abnormalList.length === 0" class="no-data">暂无数据</p>
-    <div class="list_wrap" v-for="detailItem in abnormalList">
+  <div>
+  <scroller :pullup-config="Interface.scrollerUp"
+            @on-pullup-loading="refreshList"
+            lock-x
+            use-pullup
+            height="-40"
+            v-model="scrollerStatus"
+            scrollbarY bounce ref="scrollerBottom">
+    <div class="scroller-wrap">
+    <article>
+     <p v-if="!renderHandelList || renderHandelList.length === 0" class="no-data">暂无数据</p>
+     <div class="list_wrap" v-for="detailItem in renderHandelList">
       <group>
         <cell :title="setTitle(detailItem.notice_type)"></cell>
         <div class="cellBox">
@@ -78,8 +87,8 @@
             </ul>
           </div>
           <div v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'||detailItem.notice_type=='WUKA'">
-            <img v-if="detailItem.notice_type=='回收卡槽已满'||detailItem.notice_type=='设备缺卡'" class= deviceImg src="../../../static/icon/device2.png" alt="">
-            <img v-if="detailItem.notice_type=='设备无卡'" class= deviceImg src="../../../static/icon/device1.png" alt="">
+            <img v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
+            <img v-if="detailItem.notice_type=='WUKA'" class= deviceImg src="../../../static/icon/device1.png" alt="">
           </div>
           <p class="abnormalReason">{{detailItem.exception_errcode|filter_reason}}</p>
           <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
@@ -98,14 +107,15 @@
     </div>
     <h4 class="abnormalRecord "  @click="showRecords" v-if="isShowRecord"><div class="abnormalRecord2">查看本周异常历史记录</div></h4>
   </article>
-
+    </div>
+  </scroller>
+  </div>
 </template>
 <script>
 
-  import {Group, Cell} from 'vux'
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
   import Divider from "../../../node_modules/vux/src/components/divider/index.vue";
-
+  import { Scroller } from 'vux'
   const enumWarnType={
     refundWarn:`退款异常`,
     refundEnCountWarn:'退款入账异常',
@@ -121,17 +131,21 @@
   }
 
   export default{
-    components: {
-      Divider,
-      Group,
-      Cell
-    },
     name: "abnormalNotice",
+    components: {Scroller},
     data(){
       return {
         abnormalList:[],
         isShowRecord:false,
-        right:false
+        right:false,
+        abPage:1,
+        pageIndex1:1,
+        pageIndex2:1,
+        renderList:[],
+        scrollerStatus: {
+          pullupStatus: 'default',
+          pulldownStatus: 'default'
+        },
       }
     },
     filters:{
@@ -230,8 +244,12 @@
     },
     computed:{
       ...mapState([
-        'hotel'
-      ])
+        'hotel',
+        'Interface'
+      ]),
+      renderHandelList(){
+        return this.renderList;
+      }
     },
     methods:{
       ...mapActions([
@@ -279,17 +297,28 @@
         }
       },
       //异常列表数据
-      getList(isHistory)
+      getList(isHistory,page)
       {
         this.getAbnormalList({
           is_history:isHistory,
+          currentPage:page,
           onsuccess:body => {
             this.abnormalList = body.data.list;
+            console.log('长度：'+this.abnormalList.length)
+            this.renderList=[...this.renderList,...this.abnormalList];
             if(body.data.record){
               this.isShowRecord=body.data.record;
             };
+            //判断请求的是异常页面还是历史记录页面
             if(isHistory){
               this.isShowRecord=false;
+              this.abPage=2;
+            }else if(!isHistory){
+              this.abPage=1;
+            };
+            if(this.abnormalList.length==0){
+              this.scrollerStatus.pullupStatus = 'disabled';
+              return;
             }
           }
         })
@@ -312,15 +341,39 @@
           }
         })
       },
+      refreshList(){
+        if (this.onFetching) {
+          // do nothing
+          return;
+        }else{
+          this.onFetching = true;
+          setTimeout(() => {
+              if(this.abPage===2){
+                this.pageIndex2++;
+                this.getList(true,this.pageIndex2);
+              }else if(this.abPage===1){
+                this.pageIndex1++;
+                this.getList(false,this.pageIndex1);
+              };
+              console.log('第'+this.pageIndex2+'页');
+              this.scrollerStatus.pullupStatus = 'default';
+              this.$nextTick(() => {
+                this.$refs.scrollerBottom.reset();
+              });
+              this.onFetching = false
+          }, 500);
+        }
+      },
       //显示异常列表
       showRecords()
       {
-        this.getList(true)
+        this.getList(true,this.pageIndex2);
+        this.scrollerStatus.pullupStatus = 'enabled';
       }
     },
     mounted()
     {
-      this.getList(false);
+      this.getList(false,this.pageIndex1);
       if(this.abnormalList || this.abnormalList.length>0){
            this.right=true;
       }
