@@ -341,6 +341,7 @@
           }
         })
       },
+      //下拉刷新列表，按需加载
       refreshList(){
         if (this.onFetching) {
           // do nothing
@@ -357,6 +358,7 @@
               };
               console.log('第'+this.pageIndex2+'页');
               this.scrollerStatus.pullupStatus = 'default';
+              //$nextTick是为了数据改变了等待dom渲染后使用
               this.$nextTick(() => {
                 this.$refs.scrollerBottom.reset();
               });
