@@ -8,105 +8,105 @@
             v-model="scrollerStatus"
             scrollbarY bounce ref="scrollerBottom">
     <div class="scroller-wrap">
-    <article>
-     <p v-if="!renderHandelList || renderHandelList.length === 0" class="no-data">暂无数据</p>
-     <div class="list_wrap" v-for="detailItem in renderHandelList">
-      <group>
-        <cell :title="setTitle(detailItem.notice_type)"></cell>
-        <div class="cellBox">
-          <div v-if="detailItem.notice_type=='TUIKUAN'">
-            <p class="cell2">退款金额<span>¥ {{detailItem.refund_fee}}元</span></p>
-            <ul>
-              <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
-              <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-              <li><span><abbr>退款时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-            <ul>
-              <li><span><abbr>支付单号：</abbr>{{detailItem.out_trade_no}}</span></li>
-              <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-              <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}元</span></li>
-              <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='TUIKUANRUZHANG'">
-            <p class="cell2">支付金额<span>¥ {{detailItem.pay_fee}}元</span></p>
-            <ul>
-              <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
-              <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-              <li><span><abbr>退款状态：</abbr>{{detailItem.refund_status}}</span></li>
-              <li><span><abbr>PMS退款入住状态：</abbr>{{detailItem.pms_refund_status}}</span></li>
-              <li><span><abbr>退款时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-            <ul>
-              <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
-              <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-              <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}元</span></li>
-              <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='ZHIFURUZHANG'">
-            <ul>
-              <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
-              <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-              <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
-              <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-              <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}元</span></li>
-              <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='RENLIAN'">
-            <ul>
-              <li><span><abbr>旅客姓名：</abbr>{{detailItem.name}}</span></li>
-              <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-              <li><span><abbr>验证时间：</abbr>{{datetimeparse(detailItem.facein_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='RULVYE'||detailItem.notice_type=='LILVYE'">
-            <ul>
-              <li v-for="i in detailItem.lvye_data"><span><abbr>{{i.room}} 房间：</abbr><abbr>{{i.names|showRoomNum}}</abbr></span></li>
-              <li><span><abbr>时间：</abbr>{{datetimeparse(detailItem.lvye_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='FAKA'">
-            <ul>
-              <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-              <li><span><abbr>姓名：</abbr>{{detailItem.facein_name}}</span></li>
-              <li><span><abbr>失败时间：</abbr>{{datetimeparse(detailItem.faka_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='TUIFANG'">
-            <ul  >
-              <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
-              <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-            </ul>
-            <ul  >
-              <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}</span></li>
-              <li><span><abbr>消费金额：</abbr>{{detailItem.consume}}元</span></li>
-              <li><span><abbr>入住时间：</abbr>{{datetimeparse(detailItem.in_time,'YYYYMMDD hhmm')}}</span></li>
-              <li><span><abbr>退房申请时间：</abbr>{{datetimeparse(detailItem.out_app_time,'YYYYMMDD hhmm')}}</span></li>
-            </ul>
-          </div>
-          <div v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'||detailItem.notice_type=='WUKA'">
-            <img v-if="detailItem.notice_type=='WUKA'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
-            <img v-if="detailItem.notice_type=='HUISHOU'" class= deviceImg src="../../../static/icon/device1.png" alt="">
-          </div>
-          <p class="abnormalReason">{{detailItem.exception_errcode|filter_reason}}</p>
-          <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
-          <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='ZHIFURUZHANG'">支付码 : {{detailItem.pay_code}} ( {{detailItem.pay_name}} )</h5>
-          <div style="height:4rem">
-            <div class="button-group" v-if ='detailItem.notice_type!="人脸验证异常"'>
-              <x-button value="我知道了" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
+      <article>
+       <p v-if="!renderHandelList || renderHandelList.length === 0" class="no-data">暂无数据</p>
+       <div class="list_wrap" v-for="detailItem in renderHandelList">
+        <group>
+          <cell :title="setTitle(detailItem.notice_type)"></cell>
+          <div class="cellBox">
+            <div v-if="detailItem.notice_type=='TUIKUAN'">
+              <p class="cell2">退款金额<span>¥ {{detailItem.refund_fee*100}}元</span></p>
+              <ul>
+                <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
+                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+                <li><span><abbr>退款时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+              <ul>
+                <li><span><abbr>支付单号：</abbr>{{detailItem.out_trade_no}}</span></li>
+                <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee*100}}元</span></li>
+                <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
             </div>
-            <div class="button-group" v-if ='detailItem.notice_type=="人脸验证异常"'>
-              <x-button value="去人工核验" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
+            <div v-if="detailItem.notice_type=='TUIKUANRUZHANG'">
+              <p class="cell2">支付金额<span>¥ {{detailItem.pay_fee*100}}元</span></p>
+              <ul>
+                <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
+                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+                <li><span><abbr>退款状态：</abbr>{{detailItem.refund_status}}</span></li>
+                <li><span><abbr>PMS退款入住状态：</abbr>{{detailItem.pms_refund_status}}</span></li>
+                <li><span><abbr>退款时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+              <ul>
+                <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
+                <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee*100}}元</span></li>
+                <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
             </div>
-            <cell :title="'确认时间:'+'  '+datetimeparse(detailItem.confirm_time,'YYYYMMDD hhmm')" v-if="detailItem.confirm_flag"></cell>
+            <div v-if="detailItem.notice_type=='ZHIFURUZHANG'">
+              <ul>
+                <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
+                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+                <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
+                <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee*100}}元</span></li>
+                <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+            </div>
+            <div v-if="detailItem.notice_type=='RENLIAN'">
+              <ul>
+                <li><span><abbr>旅客姓名：</abbr>{{detailItem.name}}</span></li>
+                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+                <li><span><abbr>验证时间：</abbr>{{datetimeparse(detailItem.facein_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+            </div>
+            <div v-if="detailItem.notice_type=='RULVYE'||detailItem.notice_type=='LILVYE'">
+              <ul>
+                <li v-for="i in detailItem.lvye_data"><span><abbr>{{i.room}} 房间：</abbr><abbr>{{i.names|showRoomNum}}</abbr></span></li>
+                <li><span><abbr>时间：</abbr>{{datetimeparse(detailItem.lvye_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+            </div>
+            <div v-if="detailItem.notice_type=='FAKA'">
+              <ul>
+                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+                <li><span><abbr>姓名：</abbr>{{detailItem.facein_name}}</span></li>
+                <li><span><abbr>失败时间：</abbr>{{datetimeparse(detailItem.faka_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+            </div>
+            <div v-if="detailItem.notice_type=='TUIFANG'">
+              <ul  >
+                <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
+                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+              </ul>
+              <ul  >
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}</span></li>
+                <li><span><abbr>消费金额：</abbr>{{detailItem.consume*100}}元</span></li>
+                <li><span><abbr>入住时间：</abbr>{{datetimeparse(detailItem.in_time,'YYYYMMDD hhmm')}}</span></li>
+                <li><span><abbr>退房申请时间：</abbr>{{datetimeparse(detailItem.out_app_time,'YYYYMMDD hhmm')}}</span></li>
+              </ul>
+            </div>
+            <div v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'||detailItem.notice_type=='WUKA'">
+              <img v-if="detailItem.notice_type=='WUKA'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
+              <img v-if="detailItem.notice_type=='HUISHOU'" class= deviceImg src="../../../static/icon/device1.png" alt="">
+            </div>
+            <p class="abnormalReason">{{detailItem.exception_errcode|filter_reason}}</p>
+            <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
+            <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='ZHIFURUZHANG'">支付码 : {{detailItem.pay_code}} ( {{detailItem.pay_name}} )</h5>
+            <div style="height:4rem">
+              <div class="button-group" v-if ='detailItem.notice_type!="人脸验证异常"'>
+                <x-button value="我知道了" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
+              </div>
+              <div class="button-group" v-if ='detailItem.notice_type=="人脸验证异常"'>
+                <x-button value="去人工核验" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
+              </div>
+              <cell :title="'确认时间:'+'  '+datetimeparse(detailItem.confirm_time,'YYYYMMDD hhmm')" v-if="detailItem.confirm_flag"></cell>
+            </div>
           </div>
-        </div>
-      </group>
-    </div>
-    <h4 class="abnormalRecord "  @click="showRecords" v-if="isShowRecord"><div class="abnormalRecord2">查看本周异常历史记录</div></h4>
-  </article>
+        </group>
+      </div>
+      <h4 class="abnormalRecord"  @click="showRecords" v-if="isShowRecord"><div class="abnormalRecord2">查看本周异常历史记录</div></h4>
+      </article>
     </div>
   </scroller>
   </div>
@@ -257,6 +257,8 @@
         'getAbnormalList',
         'exceptionsHandel',
       ]),
+
+      //设置异常项标题
       setTitle(title){
         switch (title)
         {
@@ -295,7 +297,7 @@
             break;
         }
       },
-      //异常列表数据
+      //请求异常列表数据
       getList(isHistory,page)
       {
         this.getAbnormalList({
@@ -303,7 +305,7 @@
           currentPage:page,
           onsuccess:body => {
             this.abnormalList = body.data.list;
-            console.log('长度：'+this.abnormalList.length)
+//            console.log('长度：'+this.abnormalList.length)
             this.renderList=[...this.renderList,...this.abnormalList];
             if(body.data.record){
               this.isShowRecord=body.data.record;
@@ -315,7 +317,7 @@
             }else if(!isHistory){
               this.abPage=1;
             };
-            if(this.abnormalList.length==0){
+            if(this.abnormalList.length==0||this.abnormalList==null){
               this.scrollerStatus.pullupStatus = 'disabled';
               return;
             }
