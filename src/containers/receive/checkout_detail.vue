@@ -8,7 +8,7 @@
         <XButton value="已手工入账" warn @onClick="confirmPmsResult"></XButton>
       </div>
       <Group :title="isPreCheckin ?'预订信息':'主单信息'">
-        <Cell class="key" title="单号" :value="detail.order_pmsid"></Cell>
+        <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
         <Cell class="key" title="预订人" :value="detail.owner"></Cell>
         <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
         <Cell class="key" title="入离时间"
@@ -302,18 +302,27 @@
           bill: 1,
           onsuccess: body => {
             this.detail = body.data;
-            console.log(body)
+            console.log("zsj:"+this.detail.hotelRc_Config);
+            if(this.detail.hotelRc_Config){
+              this.rcBtn=true;
+            }else if(!this.detail.hotelRc_Config){
+              this.rcBtn=false;
+            };
           }
         })
       },
       RcPrint(suborders){
-        let guestlist=[];
+        console.log(999)
+        let guests=[];
         if(suborders.guests){
           suborders.guests.forEach(v=>{
-            guestlist.push(v.name);
+            guests.push(v.name);
           });
         };
-        this.guestList=guestlist;
+        this.guestList=guests;
+        if(this.guestList.length==1){
+          this.nameList=this.guestList;
+        };
         this.suborderId=suborders.suborder_id;
         this.popup=true;
         this.rcBtn=false;
@@ -324,7 +333,10 @@
           hotelId:this.hotel.hotel_id,
           name:this.nameList,
           onsuccess:body=>{
-            if(body){
+            if(body.data){
+              this.nameList=[];
+              this.popup=false;
+               console.log('已经打印')
             }
           }
         })
@@ -332,6 +344,7 @@
       cancelTxt(){
         this.popup=false;
         this.rcBtn=true;
+        this.nameList=[];
       }
     },
     watch: {
@@ -340,16 +353,8 @@
       }
     },
     mounted() {
-      console.log(11111)
       this.getDetail();
-      if(!this.detail.hotelRc_Config){
-        this.rcBtn=false;
-      }else if(this.detail.hotelRc_Config){
-        this.rcBtn=true;
-      }
-      console.log('hahhhhh:',JSON.stringify(this.detail));
     }
-
   }
 </script>
 <style lang="less" scoped>

@@ -217,10 +217,7 @@
         'setUploadStatus',
         'setLeaveStatus'
       ]),
-      cancelTxt(){
-        this.popup=false;
-        this.rcBtn=true;
-      },
+
       roomInfoTitleIndex(detail){
         return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
       },
@@ -296,18 +293,28 @@
           log: 1,
           bill: 1,
           onsuccess: body => {
-            this.detail = body.data
+            this.detail = body.data;
+            if(this.detail.hotelRc_Config){
+              this.rcBtn=true;
+            }else if(!this.detail.hotelRc_Config){
+              this.rcBtn=false;
+            };
           }
         })
       },
       RcPrint(suborders){
-        let guestlist=[];
+        let guests=[];
         if(suborders.guests){
           suborders.guests.forEach(v=>{
-            guestlist.push(v.name);
+            guests.push(v.name);
           });
         };
-        this.guestList=guestlist;
+        this.guestList=guests;
+
+        if(this.guestList.length==1){
+          this.nameList=this.guestList
+          console.log(this.nameList);
+        };
         this.suborderId=suborders.suborder_id;
         this.popup=true;
         this.rcBtn=false;
@@ -318,11 +325,19 @@
           hotelId:this.hotel.hotel_id,
           name:this.nameList,
           onsuccess:body=>{
-            if(body){
+            if(body.data){
+              this.nameList=[];
+              this.popup=false;
+              console.log('已经打印')
             }
           }
-        });
+        })
       },
+      cancelTxt(){
+        this.popup=false;
+        this.rcBtn=true;
+        this.nameList=[];
+      }
     },
     watch: {
       routeId(val) {
