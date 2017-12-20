@@ -81,7 +81,7 @@
               </ul>
               <ul  >
                 <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}</span></li>
-                <li><span><abbr>消费金额：</abbr>{{detailItem.consume*100}}元</span></li>
+                <li><span><abbr>消费金额：</abbr>{{detailItem.consume/100}}元</span></li>
                 <li><span><abbr>入住时间：</abbr>{{datetimeparse(detailItem.in_time,'YYYYMMDD hhmm')}}</span></li>
                 <li><span><abbr>退房申请时间：</abbr>{{datetimeparse(detailItem.out_app_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
