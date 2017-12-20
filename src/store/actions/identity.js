@@ -153,7 +153,7 @@ module.exports = {
   },
   rcPrint(ctx,param){
     ctx.dispatch('resource',{
-      url:'/rcPrintSheet/print',
+      url:'/order/rcprint',
       method:'POST',
       body:{
         subOrderId:param.suborderId,

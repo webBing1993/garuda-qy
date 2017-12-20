@@ -310,10 +310,8 @@
           });
         };
         this.guestList=guests;
-
         if(this.guestList.length==1){
-          this.nameList=this.guestList
-          console.log(this.nameList);
+          this.nameList=this.guestList;
         };
         this.suborderId=suborders.suborder_id;
         this.popup=true;
