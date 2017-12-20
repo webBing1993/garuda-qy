@@ -112,7 +112,9 @@
           refurndStatusDom = refurndStatus === 'FAILED'
             ? `<span class="cell-right warn">退款失败</span>`
             : refurndStatus === 'REFUNDED'
-              ? `<span class="cell-right primary">已退款</span>` : ''
+//              ? `<span class="cell-right primary">已退款</span>` : ''
+//            : refurndStatus === 'PENDING'
+            ? `<span class="cell-right primary">退款中</span>` : ''
         }
         return `<p><span class="cell-value">${item.room_numbers}</span>${refurndStatusDom}</p>`
       },

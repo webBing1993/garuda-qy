@@ -150,5 +150,20 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
+  },
+  rcPrint(ctx,param){
+    ctx.dispatch('resource',{
+      url:'/rcPrintSheet/print',
+      method:'POST',
+      body:{
+        subOrderId:param.suborderId,
+        hotelId:param.hotelId,
+        name:param.name
+      },
+      onSuccess:body=> {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+
   }
 };

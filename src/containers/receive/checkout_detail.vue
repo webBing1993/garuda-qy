@@ -7,16 +7,14 @@
         <span class="record-tip">入账失败</span>
         <XButton value="已手工入账" warn @onClick="confirmPmsResult"></XButton>
       </div>
-
       <Group :title="isPreCheckin ?'预订信息':'主单信息'">
-        <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
+        <Cell class="key" title="单号" :value="detail.order_pmsid"></Cell>
         <Cell class="key" title="预订人" :value="detail.owner"></Cell>
         <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
         <Cell class="key" title="入离时间"
               :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
         <Cell class="key" title="房型" :value="getRoomType(detail)"></Cell>
       </Group>
-
       <Group title="PMS支付信息" v-if="detail.payinfo">
         <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>
         <Cell class="key" title="PMS预付" :value="cashHandling(detail.payinfo.staff_pay)"></Cell>
@@ -51,22 +49,28 @@
 
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             :key="'guests'+index">
+             :key="'guests'+index" style="margin-bottom: 4rem">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
         <Cell :title="getNOGuestItem" v-if="!item.guests"/>
-
-        <div class="button-group" style="padding-top: 0" v-if="isCheckout">
+        <Cell>
           <p v-if="item.pmscheckout_status === 'FAILED'" style="color: #DF4A4A">PMS退房失败</p>
           <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
           <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
-          <XButton value="一键退房"
-                   v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
-                   @onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>
-        </div>
+        </Cell>
 
+
+        <!--<div class="button-group" style="padding-top: 0" v-if="isCheckout">-->
+          <!--<p v-if="item.pmscheckout_status === 'FAILED'" style="color: #DF4A4A">PMS退房失败</p>-->
+          <!--<p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>-->
+          <!--<p v-else-if="item.pmscheckout_status === 'SUCCESS'">-->
+            <!--退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>-->
+          <!--<XButton value="一键退房"-->
+                   <!--v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"-->
+                   <!--@onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>-->
+        <!--</div>-->
         <!--已离店按钮-->
         <div class="button-group" style="padding-top: 0" >
           <p v-if="item.lvye_checkout_status
@@ -113,19 +117,41 @@
         <p>是否退款</p>
       </Dialog>
 
-      <!--<Dialog v-model="showRefundDialog" @onConfirm="refundApply" confirm cancel>-->
-      <!--<p class="refund-dialog-title">输入退款金额</p>-->
-      <!--<input v-model="refundValue" type="number" class="refund-money"/>-->
-      <!--</Dialog>-->
+      <div class="button-group RCbtn" v-if="rcBtn">
+         <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+      </div>
+
+      <div>
+        <popup v-model="popup" :show-mask=false>
+          <popup-header
+            :left-text=choose
+            :right-text=cancel
+            :show-bottom-border="false"
+            @on-click-right="cancelTxt"></popup-header>
+          <group gutter="0">
+            <checklist :options="guestList" v-model=nameList></checklist>
+            <div class="button-group">
+              <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
+            </div>
+          </group>
+        </popup>
+      </div>
     </div>
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-
+  import { PopupHeader, Popup, TransferDom, Group, XSwitch, Checklist } from 'vux'
   module.exports = {
     name: 'detail',
+    components: {
+      PopupHeader,
+      Popup,
+      Group,
+      XSwitch,
+      Checklist
+    },
     data() {
       return {
         detail: {},
@@ -134,9 +160,22 @@
         showRefundDialog: false,
         refundValue: null,
         pmsCheckoutId: '',
+        popup:false,
+        rcBtn:true,
+        guestList:[],
+        suborderId:'',
+        nameList:[],
+        choose:'请选择入住人',
+        cancel:"取消",
       }
     },
     computed: {
+      ...mapState([
+        'hotel'
+      ]),
+      validate(){
+        return false
+      },
       getNOGuestItem(){
         return "<div>入住人身份证信息未登记</div>";
       },
@@ -183,7 +222,9 @@
         'confirmInvoice',
         'refundapply',
         'setUploadStatus',
-        'setLeaveStatus'
+        'setLeaveStatus',
+        'rcPrint',
+        'tool'
       ]),
       roomInfoTitleIndex(detail){
         return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
@@ -260,10 +301,38 @@
           log: 1,
           bill: 1,
           onsuccess: body => {
-            this.detail = body.data
+            this.detail = body.data;
+            console.log(body)
           }
         })
       },
+      RcPrint(suborders){
+        let guestlist=[];
+        if(suborders.guests){
+          suborders.guests.forEach(v=>{
+            guestlist.push(v.name);
+          });
+        };
+        this.guestList=guestlist;
+        this.suborderId=suborders.suborder_id;
+        this.popup=true;
+        this.rcBtn=false;
+      },
+      RCconfirm(){
+        this.rcPrint({
+          suborderId:this.suborderId,
+          hotelId:this.hotel.hotel_id,
+          name:this.nameList,
+          onsuccess:body=>{
+            if(body){
+            }
+          }
+        })
+      },
+      cancelTxt(){
+        this.popup=false;
+        this.rcBtn=true;
+      }
     },
     watch: {
       routeId(val) {
@@ -271,7 +340,18 @@
       }
     },
     mounted() {
+      console.log(11111)
       this.getDetail();
+      if(!this.detail.hotelRc_Config){
+        this.rcBtn=false;
+      }else if(this.detail.hotelRc_Config){
+        this.rcBtn=true;
+      }
+      console.log('hahhhhh:',JSON.stringify(this.detail));
     }
+
   }
 </script>
+<style lang="less" scoped>
+  @import "index.less";
+</style>

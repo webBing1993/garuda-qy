@@ -28,7 +28,7 @@
 
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             :key="'guests'+index">
+             :key="'guests'+index" style="margin-bottom: 4rem">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
@@ -88,17 +88,51 @@
       <Dialog v-model="showRefundDialog" @onConfirm="refundApply" confirm cancel>
         <p>是否退款</p>
       </Dialog>
+
+      <div class="button-group RCbtn" v-if="rcBtn">
+        <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+      </div>
+      <div>
+        <popup v-model="popup" :show-mask=false>
+          <popup-header
+            :left-text=choose
+            :right-text=cancel
+            :show-bottom-border="false"
+            @on-click-right="cancelTxt"></popup-header>
+          <group gutter="0">
+            <checklist :options="guestList" v-model=nameList></checklist>
+            <div class="button-group">
+              <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
+            </div>
+          </group>
+        </popup>
+      </div>
     </div>
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
+  import { PopupHeader, Popup, TransferDom, Group, XSwitch, Checklist } from 'vux'
 
   module.exports = {
     name: 'detail',
+    components: {
+      PopupHeader,
+      Popup,
+      Group,
+      XSwitch,
+      Checklist
+    },
     data() {
       return {
+        popup:false,
+        rcBtn:true,
+        guestList:[],
+        suborderId:'',
+        nameList:[],
+        choose:'请选择入住人',
+        cancel:"取消",
         detail: {},
         showDialog: false,
         showCheckoutDialog: false,
@@ -108,6 +142,9 @@
       }
     },
     computed: {
+      validate(){
+        return false
+      },
       getNOGuestItem(){
         return "<div>入住人身份证信息未登记</div>";
       },
@@ -154,8 +191,13 @@
         'confirmInvoice',
         'refundapply',
         'setUploadStatus',
-        'setLeaveStatus'
+        'setLeaveStatus',
+        'rcPrint'
       ]),
+      cancelTxt(){
+         this.popup=false;
+         this.rcBtn=true;
+      },
       roomInfoTitleIndex(detail){
         return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
       },
@@ -235,6 +277,29 @@
           }
         })
       },
+      RcPrint(suborders){
+        let guestlist=[];
+        if(suborders.guests){
+          suborders.guests.forEach(v=>{
+            guestlist.push(v.name);
+          });
+        };
+        this.guestList=guestlist;
+        this.suborderId=suborders.suborder_id;
+        this.popup=true;
+        this.rcBtn=false;
+      },
+      RCconfirm(){
+        this.rcPrint({
+          suborderId:this.suborderId,
+          hotelId:this.hotel.hotel_id,
+          name:this.nameList,
+          onsuccess:body=>{
+            if(body){
+            }
+          }
+        });
+      },
     },
     watch: {
       routeId(val) {
@@ -246,3 +311,6 @@
     }
   }
 </script>
+<style lang="less" scoped>
+  @import "index.less";
+</style>

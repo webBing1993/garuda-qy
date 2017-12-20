@@ -8,7 +8,7 @@
         <XButton value="已手工入账" warn @onClick="confirmPmsResult"></XButton>
       </div>
 
-      <Group :title="isPreCheckin ?'预订信息':'主单信息'">
+      <Group :title="isPreCheckin ?'预订信息':'主单信息'" >
         <Cell class="key" title="订单号" :value="detail.order_pmsid"></Cell>
         <Cell class="key" title="预订人" :value="detail.owner"></Cell>
         <Cell class="key" title="手机号" :value="detail.owner_tel"></Cell>
@@ -24,12 +24,12 @@
         <Cell class="key" title="免押金" :value="detail.status.is_free_deposit ?'是':'否'"></Cell>
       </Group>
 
-      <Group title="支付信息" v-if="detail.bill && detail.bill.payment">
+      <Group title="支付信息" v-if="detail.bill && detail.bill.payment" style="margin-bottom: 4rem">
         <Cell class="key" title="微信交易号" :value="detail.bill.payment && detail.bill.payment.wx_order_id"></Cell>
         <Cell class="key" title="微信支付" :value="cashHandling(detail.bill.payment && detail.bill.payment.pay_fee)"></Cell>
         <Cell class="key" title="交易时间"
               :value="datetimeparse(detail.bill.payment && detail.bill.payment.pay_time,'YYYYMMDDhhmm')"></Cell>
-      </Group>
+      </Group >
 
       <Group title="退款信息" v-if="detail.bill && isRefund">
         <Cell class="key" title="消费金额"
@@ -102,6 +102,25 @@
         </div>
       </Group>
 
+      <div class="button-group RCbtn" v-if="rcBtn">
+        <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+      </div>
+
+      <div>
+        <popup v-model="popup" :show-mask=false>
+          <popup-header
+            :left-text=choose
+            :right-text=cancel
+            :show-bottom-border="false"
+            @on-click-right="cancelTxt"></popup-header>
+          <group gutter="0">
+            <checklist :options=nameList></checklist>
+            <div class="button-group">
+              <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
+            </div>
+          </group>
+        </popup>
+      </div>
       <Dialog v-model="showDialog" @onConfirm="setInvoiceConfirm" confirm cancel>
         <p>是否已开发票？</p>
       </Dialog>
@@ -119,9 +138,16 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-
+  import { PopupHeader, Popup, TransferDom, Group, XSwitch, Checklist } from 'vux'
   module.exports = {
     name: 'detail',
+    components: {
+      PopupHeader,
+      Popup,
+      Group,
+      XSwitch,
+      Checklist
+    },
     data() {
       return {
         detail: {},
@@ -130,9 +156,19 @@
         showRefundDialog: false,
         refundValue: null,
         pmsCheckoutId: '',
+        popup:false,
+        rcBtn:true,
+        guestList:[],
+        suborderId:'',
+        nameList:[],
+        choose:'请选择入住人',
+        cancel:"取消",
       }
     },
     computed: {
+      validate(){
+        return false
+      },
       getNOGuestItem(){
         return "<div>入住人身份证信息未登记</div>";
       },
@@ -181,6 +217,10 @@
         'setUploadStatus',
         'setLeaveStatus'
       ]),
+      cancelTxt(){
+        this.popup=false;
+        this.rcBtn=true;
+      },
       roomInfoTitleIndex(detail){
         return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
       },
@@ -260,6 +300,29 @@
           }
         })
       },
+      RcPrint(suborders){
+        let guestlist=[];
+        if(suborders.guests){
+          suborders.guests.forEach(v=>{
+            guestlist.push(v.name);
+          });
+        };
+        this.guestList=guestlist;
+        this.suborderId=suborders.suborder_id;
+        this.popup=true;
+        this.rcBtn=false;
+      },
+      RCconfirm(){
+        this.rcPrint({
+          suborderId:this.suborderId,
+          hotelId:this.hotel.hotel_id,
+          name:this.nameList,
+          onsuccess:body=>{
+            if(body){
+            }
+          }
+        });
+      },
     },
     watch: {
       routeId(val) {
@@ -271,3 +334,6 @@
     }
   }
 </script>
+<style lang="less" scoped>
+  @import "index.less";
+</style>
