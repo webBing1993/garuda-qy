@@ -51,7 +51,7 @@
 
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             :key="'guests'+index">
+             :key="'guests'+index" style="margin-bottom: 4rem">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
