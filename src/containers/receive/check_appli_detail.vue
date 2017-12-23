@@ -61,11 +61,11 @@
           <p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>
           <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
-          <XButton value="一键退房"
-                   v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"
-                   @onClick="isShowCheckoutDialog(item.suborder_id)">
+          <!--<XButton value="一键退房"-->
+                   <!--v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"-->
+                   <!--@onClick="isShowCheckoutDialog(item.suborder_id)">-->
 
-          </XButton>
+          <!--</XButton>-->
         </div>
 
         <div class="button-group" style="padding-top: 0" v-if="!isLivein">

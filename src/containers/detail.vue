@@ -49,16 +49,6 @@
         </div>
       </Group>
 
-
-      <!--<Group title="房间信息"-->
-      <!--v-for="(item,index) in detail.suborders"-->
-      <!--v-if="item.guests.length">-->
-      <!--<Cell-->
-      <!--:title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>-->
-      <!--<Cell :title="getNOGuestItem"/>-->
-      <!--<Cell>{{typeof item.guests.length}}</Cell>-->
-      <!--</Group>-->
-      <!--:title="index === roomInfoTitleIndex(detail) ? '房间信息':null"-->
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
              :key="'guests'+index">
@@ -66,12 +56,6 @@
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
         <Cell :title="getNOGuestItem" v-if="!item.guests"/>
-        <!--<p style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;background-color: #EAEDF0;"
-           v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
-          当前入住房间信息尚未上传旅业系统，您可以前往‘入住核验’已通过列表进行旅业系统上传；或点击该链接进行操作。
-          <a v-if="item.identity_id" style="color: #25B8F1; border-bottom: 1px solid #25B8F1"
-             @click="goto('/identity/detail/' + item.identity_id)">去上传</a>
-        </p>-->
         <p v-if="isLivein && item.lvye_report_status !== 'SUCCESS'"
            style="font-size: 13px;box-sizing:border-box;/*background-color: #EAEDF0;*/">
           <span v-if="item.in_time && item.out_time" style="float: right;margin-right: 15px;margin-bottom: 5px"><b
@@ -133,11 +117,6 @@
             @onClick="setLeavestatus(item.suborder_id)"/>
 
         </div>
-        <!--退房上传按钮-->
-        <!--<div class="button-group" v-if="checkoutApplication && !isCheckout"  style="padding-top: 0">-->
-        <!--<p style="color: #DF4A4A;">旅业系统更新失败</p>-->
-        <!--<XButton value="bb重新上传旅业系统" @onClick="setLvYeStatus(item.suborder_id)"/>-->
-        <!--</div>-->
       </Group>
 
       <Group title="发票信息" v-if="!isLivein && detail.invoice">

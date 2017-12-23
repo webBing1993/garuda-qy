@@ -60,17 +60,6 @@
           <p v-else-if="item.pmscheckout_status === 'SUCCESS'">
             退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>
         </Cell>
-
-
-        <!--<div class="button-group" style="padding-top: 0" v-if="isCheckout">-->
-          <!--<p v-if="item.pmscheckout_status === 'FAILED'" style="color: #DF4A4A">PMS退房失败</p>-->
-          <!--<p v-else-if="item.pmscheckout_status === 'PENDING'">退房中</p>-->
-          <!--<p v-else-if="item.pmscheckout_status === 'SUCCESS'">-->
-            <!--退房时间: {{datetimeparse(item.pmscheckout_time, 'YYYYMMDDhhmm')}}</p>-->
-          <!--<XButton value="一键退房"-->
-                   <!--v-if="isCheckout && detail.is_support_checkout && item.pmscheckout_status !== 'SUCCESS' && detail.is_cash_pay && detail.is_one_room"-->
-                   <!--@onClick="isShowCheckoutDialog(item.suborder_id)"></XButton>-->
-        <!--</div>-->
         <!--已离店按钮-->
         <div class="button-group" style="padding-top: 0" >
           <p v-if="item.lvye_checkout_status
