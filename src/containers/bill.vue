@@ -106,28 +106,30 @@
           `<p class="cell-custom-container"><span class="cell-key4">订单号</span><span class="cell-right">${item.out_trade_no}</span></p>`
       },
       getCellTitle(item){
-        let refurndStatus = item.status;
-        let refurndStatusDom = ``;
-//        if (refurndStatus) {
+        let refundStatus = item.status;
+        let refundStatusDom = ``;
+        if (refundStatus) {
 //          refurndStatusDom = refurndStatus === 'FAILED'
 //            ? `<span class="cell-right warn">退款失败</span>`
 //            : refurndStatus === 'REFUNDED'
 //              //              ? `<span class="cell-right primary">已退款</span>` : ''
 //              //            : refurndStatus === 'PENDING'
 //              ? `<span class="cell-right primary">退款中</span>` : ''
-//        }
-        if(refurndStatus === 'FAILED')
+
+        if(refundStatus === 'FAILED')
         {
-          refurndStatusDom=`<span class="cell-right warn">退款中</span>`
+          refundStatusDom=`<span class="cell-right warn">退款中</span>`
         }
-        else if(refurndStatus === 'SUCCESS')
+        else if(refundStatus === 'SUCCESS')
         {
-          refurndStatusDom=`<span class="cell-right primary">退款成功</span>`
+          refundStatusDom=`<span class="cell-right primary">退款成功</span>`
         }
         else{
-          refurndStatusDom=''
+          refundStatusDom=''
         }
-        return `<p><span class="cell-value">${item.room_numbers}</span>${refurndStatusDom}</p>`
+        }
+        return `<p><span class="cell-value">${item.room_numbers}</span>${refundStatusDom}</p>`
+
       },
       getCellBody(item){
         return `<p><span class="cell-value">微信支付：${this.cashHandling(item.pay_fee)}</span></p>` +

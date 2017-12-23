@@ -132,13 +132,13 @@ module.exports = {
     filterInvoiceType(v) {
       let val;
       switch (v) {
-        case '1': 
+        case '1':
           val = '增值税普通发票';
           break;
-        case '2': 
+        case '2':
           val = '增值税专用发票';
           break;
-        case '3': 
+        case '3':
           val = '个人发票';
           break;
         default:
@@ -161,18 +161,18 @@ module.exports = {
       'stoploading'
     ]),
     submit() {
-      
+
       if (this.btnDisabled) return;
-      
+
       let invoiceType;
       switch (this.data.invoice_type) {
-        case '1': 
+        case '1':
           invoiceType = 'GENERAL';
           break;
-        case '1': 
+        case '2':
           invoiceType = 'VAT';
           break;
-        case '1': 
+        case '3':
           invoiceType = 'PERSONAL';
           break;
         default:
@@ -198,7 +198,7 @@ module.exports = {
           "sid":"",
           "data": data
       };
-      
+
       this.messageId = this.messageId + 1;
       if(this.messageId > 65536) this.messageId = 1;
 
