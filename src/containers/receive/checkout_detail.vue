@@ -328,6 +328,7 @@
             if(body.data){
               this.nameList=[];
               this.popup=false;
+              this.rcBtn=true;
                console.log('已经打印')
             }
           }
