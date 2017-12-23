@@ -318,9 +318,12 @@
       },
       RCconfirm(){
         this.rcPrint({
-          suborderId:this.suborderId,
-          hotelId:this.hotel.hotel_id,
-          name:this.nameList,
+          aaa:11,
+          body:{
+            subOrderId:this.suborderId,
+            hotelId:this.hotel.hotel_id,
+            name:this.nameList,
+          },
           onsuccess:body=>{
             if(body.data){
               this.nameList=[];

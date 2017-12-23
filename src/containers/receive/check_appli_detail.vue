@@ -114,7 +114,7 @@
             :show-bottom-border="false"
             @on-click-right="cancelTxt"></popup-header>
           <group gutter="0">
-            <checklist :options=nameList></checklist>
+            <checklist :options="guestList" v-model=nameList></checklist>
             <div class="button-group">
               <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
             </div>
@@ -166,6 +166,9 @@
       }
     },
     computed: {
+      ...mapState([
+        'hotel'
+      ]),
       validate(){
         return false
       },
@@ -215,7 +218,8 @@
         'confirmInvoice',
         'refundapply',
         'setUploadStatus',
-        'setLeaveStatus'
+        'setLeaveStatus',
+        'rcPrint'
       ]),
 
       roomInfoTitleIndex(detail){
@@ -318,10 +322,17 @@
         this.rcBtn=false;
       },
       RCconfirm(){
+        console.log(444444444);
+        console.log("hotelId:",this.hotel.hotel_id)
+        console.log("subOrderId:",this.suborderId)
+        console.log('name:',this.nameList)
         this.rcPrint({
-          suborderId:this.suborderId,
-          hotelId:this.hotel.hotel_id,
-          name:this.nameList,
+          aaa:11,
+          body:{
+            subOrderId:this.suborderId,
+            hotelId:this.hotel.hotel_id,
+            name:this.nameList,
+          },
           onsuccess:body=>{
             if(body.data){
               this.nameList=[];

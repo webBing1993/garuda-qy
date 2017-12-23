@@ -142,6 +142,9 @@
       }
     },
     computed: {
+      ...mapState([
+        'hotel'
+      ]),
       validate(){
         return false
       },
@@ -284,6 +287,7 @@
         })
       },
       RcPrint(suborders){
+        console.log(999)
         let guests=[];
         if(suborders.guests){
           suborders.guests.forEach(v=>{
@@ -299,10 +303,14 @@
         this.rcBtn=false;
       },
       RCconfirm(){
+        console.log(444444444);
         this.rcPrint({
-          suborderId:this.suborderId,
-          hotelId:this.hotel.hotel_id,
-          name:this.nameList,
+          aaa:11,
+          body:{
+            subOrderId:this.suborderId,
+            hotelId:this.hotel.hotel_id,
+            name:this.nameList,
+          },
           onsuccess:body=>{
             if(body.data){
               this.nameList=[];

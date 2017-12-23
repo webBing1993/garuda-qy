@@ -151,19 +151,16 @@ module.exports = {
       }
     })
   },
-  rcPrint(ctx,param){
+  rcPrint(ctx, param){
+    console.log('过来了')
+    console.log('body:'+param.aaa);
     ctx.dispatch('resource',{
       url:'/order/rcprint',
       method:'POST',
-      body:{
-        subOrderId:param.suborderId,
-        hotelId:param.hotelId,
-        name:param.name
-      },
+      body:param.body,
       onSuccess:body=> {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
-
   }
 };

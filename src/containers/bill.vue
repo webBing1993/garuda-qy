@@ -108,13 +108,24 @@
       getCellTitle(item){
         let refurndStatus = item.status;
         let refurndStatusDom = ``;
-        if (refurndStatus) {
-          refurndStatusDom = refurndStatus === 'FAILED'
-            ? `<span class="cell-right warn">退款失败</span>`
-            : refurndStatus === 'REFUNDED'
-//              ? `<span class="cell-right primary">已退款</span>` : ''
-//            : refurndStatus === 'PENDING'
-            ? `<span class="cell-right primary">退款中</span>` : ''
+//        if (refurndStatus) {
+//          refurndStatusDom = refurndStatus === 'FAILED'
+//            ? `<span class="cell-right warn">退款失败</span>`
+//            : refurndStatus === 'REFUNDED'
+//              //              ? `<span class="cell-right primary">已退款</span>` : ''
+//              //            : refurndStatus === 'PENDING'
+//              ? `<span class="cell-right primary">退款中</span>` : ''
+//        }
+        if(refurndStatus === 'FAILED')
+        {
+          refurndStatusDom=`<span class="cell-right warn">退款中</span>`
+        }
+        else if(refurndStatus === 'SUCCESS')
+        {
+          refurndStatusDom=`<span class="cell-right primary">退款成功</span>`
+        }
+        else{
+          refurndStatusDom=''
         }
         return `<p><span class="cell-value">${item.room_numbers}</span>${refurndStatusDom}</p>`
       },
