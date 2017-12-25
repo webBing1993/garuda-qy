@@ -34,7 +34,7 @@
                 <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
                 <li><span><abbr>退款状态：</abbr>{{detailItem.refund_status}}</span></li>
-                <li><span><abbr>PMS退款入住状态：</abbr>{{detailItem.pms_refund_status}}</span></li>
+                <li><span><abbr>PMS退款入帐状态：</abbr>{{detailItem.pms_refund_status}}</span></li>
                 <li><span><abbr>退款时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
               <ul>
@@ -338,7 +338,7 @@
             let _time=new Date();
             item.confirm_time=_time.getTime();
             if(item.notice_type=='RENLIAN'){
-                this.goto(`/identity/todo/${item.identity_guest_id}`)
+                this.goto(`/identity/todo/${item.identity_check_guest_id}`)
             }
             item.confirm_flag=!item.confirm_flag;
             if(!this.isShowRecord){
