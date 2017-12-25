@@ -50,7 +50,7 @@
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
                 <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
                 <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee*100}}元</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee/10000}}元</span></li>
                 <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
             </div>
@@ -94,10 +94,10 @@
             <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
             <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='ZHIFURUZHANG'">支付码 : {{detailItem.pay_code}} ( {{detailItem.pay_name}} )</h5>
             <div style="height:4rem">
-              <div class="button-group" v-if ='detailItem.notice_type!="人脸验证异常"'>
+              <div class="button-group" v-if ='!detailItem.notice_type=="RENLIAN"'>
                 <x-button value="我知道了" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
               </div>
-              <div class="button-group" v-if ='detailItem.notice_type=="人脸验证异常"'>
+              <div class="button-group" v-if ='detailItem.notice_type=="RENLIAN"'>
                 <x-button value="去人工核验" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
               </div>
               <cell :title="'确认时间:'+'  '+datetimeparse(detailItem.confirm_time,'YYYYMMDD hhmm')" v-if="detailItem.confirm_flag"></cell>
