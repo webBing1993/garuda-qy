@@ -94,7 +94,7 @@
             <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
             <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='ZHIFURUZHANG'">支付码 : {{detailItem.pay_code}} ( {{detailItem.pay_name}} )</h5>
             <div style="height:4rem">
-              <div class="button-group" v-if ='!detailItem.notice_type=="RENLIAN"'>
+              <div class="button-group" v-if ='detailItem.notice_type!="RENLIAN"'>
                 <x-button value="我知道了" @onClick="confirmHandel(detailItem)" v-if="!detailItem.confirm_flag"></x-button>
               </div>
               <div class="button-group" v-if ='detailItem.notice_type=="RENLIAN"'>
