@@ -15,7 +15,7 @@
           <cell :title="setTitle(detailItem.notice_type)"></cell>
           <div class="cellBox">
             <div v-if="detailItem.notice_type=='TUIKUAN'">
-              <p class="cell2">退款金额<span>¥ {{detailItem.refund_fee*100}}元</span></p>
+              <p class="cell2">退款金额<span>¥ {{detailItem.refund_fee|transYuan}}元</span></p>
               <ul>
                 <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
@@ -24,12 +24,12 @@
               <ul>
                 <li><span><abbr>支付单号：</abbr>{{detailItem.out_trade_no}}</span></li>
                 <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee*100}}元</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>
                 <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
             </div>
             <div v-if="detailItem.notice_type=='TUIKUANRUZHANG'">
-              <p class="cell2">支付金额<span>¥ {{detailItem.pay_fee*100}}元</span></p>
+              <p class="cell2">支付金额<span>¥ {{detailItem.pay_fee|transYuan}}元</span></p>
               <ul>
                 <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
@@ -40,7 +40,7 @@
               <ul>
                 <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
                 <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee*100}}元</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>
                 <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
             </div>
@@ -50,7 +50,7 @@
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
                 <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
                 <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee/10000}}元</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>
                 <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
             </div>
@@ -80,8 +80,8 @@
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
               </ul>
               <ul  >
-                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee}}</span></li>
-                <li><span><abbr>消费金额：</abbr>{{detailItem.consume/100}}元</span></li>
+                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>
+                <li><span><abbr>消费金额：</abbr>{{detailItem.consume|transYuan}}元</span></li>
                 <li><span><abbr>入住时间：</abbr>{{datetimeparse(detailItem.in_time,'YYYYMMDD hhmm')}}</span></li>
                 <li><span><abbr>退房申请时间：</abbr>{{datetimeparse(detailItem.out_app_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
@@ -151,6 +151,11 @@
       showRoomNum:function (val) {
         if(val) {
           return val.join(',')
+        }
+      },
+      transYuan:function (val) {
+        if(val) {
+          return val/100
         }
       },
       filter_reason:function (val) {
