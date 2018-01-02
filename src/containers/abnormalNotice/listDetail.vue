@@ -33,16 +33,15 @@
               <ul>
                 <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
-                <li><span><abbr>退款状态：</abbr>{{detailItem.refund_status}}</span></li>
                 <li><span><abbr>PMS退款入帐状态：</abbr>{{detailItem.pms_refund_status}}</span></li>
-                <li><span><abbr>退款时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
+                <li><span><abbr>提交时间：</abbr>{{datetimeparse(detailItem.refund_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
-              <ul>
-                <li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>
-                <li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>
-                <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>
-                <li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>
-              </ul>
+              <!--<ul>-->
+                <!--<li><span><abbr>交易单号：</abbr>{{detailItem.out_trade_no}}</span></li>-->
+                <!--<li><span><abbr>支付方式：</abbr>{{detailItem.pay_way}}</span></li>-->
+                <!--<li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>-->
+                <!--<li><span><abbr>支付时间：</abbr>{{datetimeparse(detailItem.pay_time,'YYYYMMDD hhmm')}}</span></li>-->
+              <!--</ul>-->
             </div>
             <div v-if="detailItem.notice_type=='ZHIFURUZHANG'">
               <ul>
@@ -56,8 +55,8 @@
             </div>
             <div v-if="detailItem.notice_type=='RENLIAN'">
               <ul>
-                <li><span><abbr>旅客姓名：</abbr>{{detailItem.name}}</span></li>
-                <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
+                <li><span><abbr>旅客姓名：</abbr>{{detailItem.facein_name}}</span></li>
+                <li><span><abbr>房间号：</abbr>{{detailItem.facein_room}}</span></li>
                 <li><span><abbr>验证时间：</abbr>{{datetimeparse(detailItem.facein_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
             </div>
@@ -90,7 +89,7 @@
               <img v-if="detailItem.notice_type=='WUKA'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
               <img v-if="detailItem.notice_type=='HUISHOU'" class= deviceImg src="../../../static/icon/device1.png" alt="">
             </div>
-            <p class="abnormalReason">{{detailItem.exception_errcode|filter_reason}}</p>
+            <p class="abnormalReason" v-if="detailItem.notice_type!='TUIKUANRUZHANG'">{{detailItem.exception_errcode|filter_reason}}</p>
             <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='TUIKUANRUZHANG'">退款码 : {{detailItem.refund_code}} ( {{detailItem.refund_name}} )</h5>
             <h5 style="color:#FF0A03;padding-top: 1rem" v-if="detailItem.notice_type=='ZHIFURUZHANG'">支付码 : {{detailItem.pay_code}} ( {{detailItem.pay_name}} )</h5>
             <div style="height:4rem">
@@ -114,7 +113,6 @@
 <script>
 
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import Divider from "../../../node_modules/vux/src/components/divider/index.vue";
   import { Scroller } from 'vux'
   const enumWarnType={
     refundWarn:`退款异常`,
@@ -200,7 +198,7 @@
             return '入住人已经登记到其他房间';
             break;
           case 'pms_120102' :
-            return '退款入账异常';
+            return '新系统接口问题，PMS退款入账失败，请与微前台运营人员联系,4001-690-890';
             break;
           case 'pms_140102' :
             return '入住房间不存在';
@@ -283,7 +281,7 @@
             return enumWarnType.checkInlvyeWarn;
             break;
           case "LILVYE":
-            return enumWarnType.checkOutlvyeWarn
+            return enumWarnType.checkOutlvyeWarn;
             break;
           case "FAKA":
             return enumWarnType.cardOutWarn;
