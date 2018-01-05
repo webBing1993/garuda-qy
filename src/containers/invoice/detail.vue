@@ -1,20 +1,24 @@
 <template>
   <div>
     <Group>
-      <Cell title="房间信息" />
+      <Cell title="申请信息" />
       <Cell>
         <div class="cell-body">
           <p v-if="data.room_no">
             <span class="cell-key2 cell-value-title">房间号：</span>
             <span class="cell-value">{{data.room_no}}</span>
           </p>
-          <p v-if="data.contact_name">
-            <span class="cell-key2 cell-value-title">联系人：</span>
-            <span class="cell-value">{{data.contact_name}}</span>
+          <p v-if="data.invoice_type">
+            <span class="cell-key2 cell-value-title">开票类型：</span>
+            <span class="cell-value">{{data.invoice_type}}</span>
           </p>
-          <p v-if="data.contact_phone">
-            <span class="cell-key2 cell-value-title">联系电话：</span>
-            <span class="cell-value">{{data.contact_phone}}</span>
+          <p v-if="data.invoice_content">
+            <span class="cell-key2 cell-value-title">发票内容：</span>
+            <span class="cell-value">{{data.invoice_content}}</span>
+          </p>
+          <p>
+            <span class="cell-key2 cell-value-title">领取方式：</span>
+            <span class="cell-value">酒店前台领取</span>
           </p>
           <p v-if="data.remark">
             <span class="cell-key2 cell-value-title">备注：</span>
@@ -27,12 +31,8 @@
       <Cell title="发票抬头" />
       <Cell>
         <div class="cell-body">
-          <p v-if="data.invoice_type">
-            <span class="cell-key2 cell-value-title">类型：</span>
-            <span class="cell-value">{{data.invoice_type | filterInvoiceType}}</span>
-          </p>
           <p v-if="data.title">
-            <span class="cell-key2 cell-value-title">名称：</span>
+            <span class="cell-key2 cell-value-title">公司名称：</span>
             <span class="cell-value">{{data.title}}</span>
           </p>
           <p v-if="data.tax_registry_no">

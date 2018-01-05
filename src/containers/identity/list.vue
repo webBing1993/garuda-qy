@@ -66,7 +66,6 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-
   module.exports = {
     name: 'List',
     data() {

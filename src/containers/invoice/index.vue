@@ -12,15 +12,6 @@
       </Tab>
     </header>
 
-    <!--<scroller :depend="waitList" v-show="tabIndex === 0" lock-x-->
-    <!--use-pulldown-->
-    <!--ref="scroller1"-->
-    <!--v-model="scrollerStatus1"-->
-    <!--:pullup-config="pullupConfig"-->
-    <!--:pulldown-config="Interface.scroller"-->
-    <!--@on-pulldown-loading="refresh"-->
-    <!--@on-pullup-loading="loadMore"-->
-    <!--height="-44">-->
     <div class="list-wrapper">
       <div v-show="tabIndex === 0">
         <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
@@ -28,13 +19,16 @@
                :title="titleFilter(index)">
           <Cell>
             <p><span class="cell-value">{{item.room_no}}</span><span
-              class="cell-right">{{datetimeparse(item.create_time, 'YYMMDD hhmm')}}</span></p>
+              class="cell-right">{{datetimeparse(item.create_time, 'hhmm')}}</span></p>
           </Cell>
           <Cell link>
             <div class="cell-body">
               <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
               <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
             </div>
+          </Cell>
+          <Cell v-if="item.remark" >
+            <p><span class="cell-value">备注：</span><span class="remark">{{item.remark}}</span></p>
           </Cell>
         </Group>
       </div>
@@ -57,43 +51,68 @@
       </div>
     </div>
 
-    <!--</scroller>-->
-
-    <!--<scroller :depend="doneList" v-show="tabIndex === 1" lock-x-->
-    <!--use-pulldown-->
-    <!--ref="scroller2"-->
-    <!--v-model="scrollerStatus2"-->
-    <!--:pullup-config="pullupConfig"-->
-    <!--:pulldown-config="Interface.scroller"-->
-    <!--@on-pulldown-loading="refresh"-->
-    <!--@on-pullup-loading="loadMore"-->
-    <!--height="-44">-->
-    <!---->
-    <!--</scroller>-->
-
-    <footer v-if="tabIndex">
+    <footer>
       <div class="listFilter">
-        <span class="filter" @click="isCalendarShow = true">
-          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
-          <abbr v-else>筛选</abbr>
+        <span class="filter" @click="showDialog = true">
+          <abbr>筛选</abbr>
         </span>
       </div>
     </footer>
-
-    <popup v-model="isCalendarShow">
+    <div class="dialog">
+      <x-dialog v-model="showDialog"
+                :hide-on-blur=false
+                 mask-z-index="5"
+                :dialog-style="{'top':'32%'}"
+      >
+        <p class="filterTop">筛选</p>
+        <group>
+          <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
+          <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice"></x-input>
+          <popup-radio title="开票类型" :options="invoTypeList" v-model="invoiceVal" @on-show=popupShow :disabled=flag></popup-radio>
+          <cell title= "起始时间" @onClick="isCalendarShow = true" link :value=datetimeparse(periodFilter[0]) ></cell>
+          <cell title= "起始时间" @onClick="isCalendarShow = true" link :value=datetimeparse(periodFilter[1]) ></cell>
+          <div>
+            <div class="invoiceBtn" @click="cancel">取消</div>
+            <div class="invoiceBtn" @click=confirmHandle>确定</div>
+          </div>
+        </group>
+      </x-dialog>
+     </div>
+    <!--日历控件-->
+    <popup v-model="isCalendarShow"
+           maskShow
+           bottom
+           animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
-
   </article>
 </template>
 
 <script>
-  import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
+  import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput } from 'vux'
 
   module.exports = {
     name: 'list',
+    components: {
+      Scroller,
+      XDialog,
+      XButton,
+      Group,
+      PopupRadio,
+      XInput
+    },
     data(){
       return {
+        filterInvoice:'',
+        filterRoomVal:'',
+        flag:false,
+        invoiceVal:'',
+        invoTypeList:["普通发票","专用发票","个人发票"],
+        popup:false,
+        startDate:'',
+        endDate:'',
+        showDialog:false,
         scrollerStatus1: {
           pullupStatus: 'default',
           pulldownStatus: 'default'
@@ -142,6 +161,16 @@
       }
     },
     watch: {
+      isCalendarShow(val){
+        if(val){
+          console.log("打开了")
+          this.flag=true;
+        }
+        else if(!val){
+          console.log("关闭了")
+          this.flag=false;
+        }
+      },
       tabIndex(val) {
         this.resetFilter();
 //        val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
@@ -187,6 +216,17 @@
         'replaceto',
         'getInvoiceList'
       ]),
+      confirmHandle(){
+        this.showDialog=false;
+        this.isCalendarShow=false;
+      },
+      cancel(){
+        this.showDialog=false;
+        this.isCalendarShow=false;
+      },
+      popupShow(){
+        this.isCalendarShow=false;
+      },
       titleFilter(index){
         if (this.renderList.length > 0) {
           return index
@@ -222,6 +262,29 @@
         }
         this.getList(pa)
       },
+      filterHandle(){
+
+      },
+      getList(status, callback) {
+        this.getInvoiceList({
+          status: status,
+          start_time: this.periodFilter[0],
+          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          title:this.filterRoomVal,
+          invoice_type:this.filterInvoice,
+          onsuccess: callback
+        })
+      },
+      initList() {
+        let pa = {
+          from: 'top',
+          page: 1
+        }
+        if (this.renderList.length === 0) {
+          this.getList(0, body => this.waitList = [...body.data], pa);
+          this.getList(1, body => this.doneList = [...body.data], pa);
+        }
+      }
       // getList(param) {
       //   let successCallback = (body, headers) => {
       //     let page = +headers['x-current-page'],size = +headers['x-page-size'],total = +headers['x-total'];
@@ -290,25 +353,7 @@
       //     onfail: errorCallback
       //   })
       // },
-      getList(status, callback) {
-        this.getInvoiceList({
-          status: status,
-          start_time: this.periodFilter[0],
-          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          onsuccess: callback
-        })
-      },
-      initList() {
-        let pa = {
-          from: 'top',
-          page: 1
-        }
 
-        if (this.renderList.length === 0) {
-          this.getList(0, body => this.waitList = [...body.data], pa);
-          this.getList(1, body => this.doneList = [...body.data], pa);
-        }
-      }
     },
     mounted(){
       this.initList();
@@ -316,8 +361,37 @@
   }
 
 </script>
-<style lang="less" scoped>
+<style lang="less">
+  .dialog .weui-dialog{
+    text-align: left;
+  }
   .scroller-wrap {
     padding-bottom: 0;
+  }
+  .invoiceBtn{
+    width: 49%;
+    height: 2rem;
+    float: left;
+    border-top: 1px solid #EEEEEE;
+    padding-top: 1rem;
+    text-align: center;
+  }
+  .invoiceBtn:nth-child(2){
+    border-left: 1px solid #EEEEEE;
+    color: #22AAFF;
+  }
+  .remark{
+    margin-left: 1rem;
+    color: #22AAFF;
+  }
+  .weui-dialog__bd{
+    padding-left: 0rem;
+  }
+  .filterTop{
+    margin-left: 1rem;
+    text-align: left;
+    padding-top: 0.5rem;
+    font-size: 20px;
+    margin-bottom: -0.6rem;
   }
 </style>
