@@ -20,6 +20,7 @@ module.exports = {
         room_type: "大床房",
         room_count: 2
       }],
+      share_code:"23456789098765",
       payinfo: {
         total_roomfee: 4000, //总房费
         pms_pay: 1000, //PMS中的已付金额,
