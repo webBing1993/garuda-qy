@@ -23,5 +23,27 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
+  },
+  //已离店
+  getOutlist(ctx, param){
+    ctx.dispatch('resource', {
+      url:'/suborder/search?limit=5&offset='+param.offset,
+      method:'POST',
+      body: param.data,
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  //搜索房型
+  searchRoom(ctx, param){
+    ctx.dispatch('resource', {
+      url:'/room/room_type_list',
+      method: 'GET',
+      onSuccess: body => {
+        ctx.dispatch('showtoast');
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
   }
 };

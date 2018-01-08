@@ -86,6 +86,9 @@
               </ul>
             </div>
             <div v-if="detailItem.notice_type=='HUISHOU'||detailItem.notice_type=='QUEKA'||detailItem.notice_type=='WUKA'">
+              <ul>
+                <li><span><abbr>设备名称：</abbr>{{detailItem.device_name}}</span></li>
+              </ul>
               <img v-if="detailItem.notice_type=='WUKA'||detailItem.notice_type=='QUEKA'" class= deviceImg src="../../../static/icon/device2.png" alt="">
               <img v-if="detailItem.notice_type=='HUISHOU'" class= deviceImg src="../../../static/icon/device1.png" alt="">
             </div>
@@ -133,6 +136,7 @@
     components: {Scroller},
     data(){
       return {
+        onFetching:false,
         abnormalList:[],
         isShowRecord:false,
         abPage:1,
@@ -307,7 +311,7 @@
           is_history:isHistory,
           currentPage:page,
           onsuccess:body => {
-            this.abnormalList = body.data.list;
+            this.abnormalList =  body.data.list;
 //            console.log('长度：'+this.abnormalList.length)
             this.renderList=[...this.renderList,...this.abnormalList];
             if(body.data.record){
@@ -336,7 +340,7 @@
             let _time=new Date();
             item.confirm_time=_time.getTime();
             if(item.notice_type=='RENLIAN'){
-                this.goto(`/identity/todo/${item.identity_check_guest_id}`)
+                     this.goto(`/identity/todo/${item.identity_check_guest_id}`)
             }
             item.confirm_flag=!item.confirm_flag;
             if(!this.isShowRecord){

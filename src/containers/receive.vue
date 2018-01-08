@@ -1,6 +1,5 @@
 <template>
   <article>
-
     <header class="tab-wrapper">
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
@@ -16,7 +15,6 @@
       <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
       <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
       <!--</p>-->
-
       <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
 
       <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
@@ -32,8 +30,7 @@
       <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item)"/>
-        <Cell :title="getCheckoutGuestItem(item)" link
-              @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+getParameter)"/>
+        <Cell :title="getCheckoutGuestItem(item)" link @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+getParameter)"/>
       </Group>
 
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
@@ -44,16 +41,39 @@
       </Group>
     </div>
 
+   <!--筛选按钮-->
     <footer v-if="tempPage == '已离店'">
       <div class="listFilter">
-        <span class="filter" @click="isCalendarShow = true">
-          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
-          <abbr v-else>筛选</abbr>
+        <span class="filter" @click="showDialog = true">
+          <abbr>筛选</abbr>
         </span>
       </div>
     </footer>
-
-    <popup v-model="isCalendarShow">
+    <!--筛选弹窗-->
+    <div class="dialog">
+      <x-dialog v-model="showDialog"
+                :hide-on-blur=false
+                mask-z-index="5"
+                :dialog-style="{'top':'30%'}">
+        <p class="filterTop">筛选</p>
+        <group>
+          <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
+          <x-input title="入住人姓名" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
+          <popup-radio title="房型" :options="roomList" v-model="roomType" @on-show=popupShow :disabled=flag></popup-radio>
+          <cell title= "入住时间" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
+          <cell title= "离店时间" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
+          <div>
+            <div class="invoiceBtn" @click="cancel">取消</div>
+            <div class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</div>
+          </div>
+        </group>
+      </x-dialog>
+    </div>
+    <!--日历控件-->
+    <popup v-model="isCalendarShow"
+           maskShow
+           bottom
+           animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
 
@@ -62,12 +82,22 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput } from 'vux'
 
-  export default {
+  module.exports ={
     name: 'receive',
+    components: {
+      Scroller,
+      XDialog,
+      XButton,
+      Group,
+      PopupRadio,
+      XInput
+    },
     data() {
       return {
 //        tabMenu: ['预登记', '在住', '退房申请', '已离店'],
+        flag:false,
         preCheckInList: [],
         liveInList: [],
         checkOutApplicationList: [],
@@ -77,8 +107,35 @@
         checkOutApplicationPageIndex: 0,
         checkoutPageIndex: 0,
         isCalendarShow: false,
-        periodFilter: [null, null]
+        periodFilter: [null, null],
+        guestName:'',
+        filterRoomVal:'',
+        roomList:[],
+        roomType:'',
+        showDialog:false,
+        isCalendarShow:false,
+        offset:0
       }
+    },
+    watch: {
+      tempPage(val) {
+        this.periodFilter = [null, null];
+        this.renderList.length == 0 ? this.initList() : this.refreshList();
+      },
+      periodFilter(val) {
+        val[0] && val[1] && this.refreshList();
+        this.isCalendarShow = false;
+      },
+      isCalendarShow(val) {
+        if (val) {
+          console.log("打开了")
+          this.flag = true;
+        }
+        else if (!val) {
+          console.log("关闭了")
+          this.flag = false;
+        }
+      },
     },
     computed: {
       ...mapState([
@@ -163,8 +220,24 @@
         'hotelrefresh',
         'gettodaylist',
         'getTodaySuborder',
-        'getcheckoutlist'
+        'getcheckoutlist',
+        'searchRoom',
+        'getOutlist'
       ]),
+      //筛选确定处理
+      confirmHandle(){
+        this.showDialog=false;
+        this.isCalendarShow=false;
+        this.outList(body => (this.checkOutList = [...body.data], this.offset));
+      },
+      //筛选取消处理
+      cancel(){
+        this.showDialog=false;
+        this.isCalendarShow=false;
+      },
+      popupShow(){
+        this.isCalendarShow=false;
+      },
       toggleTab(item){
         let tempItem = item.split('(')[0];
         switch (tempItem) {
@@ -302,12 +375,7 @@
             onsuccess: callback
           });
         } else if (this.tempPage == '已离店') {
-          this.getcheckoutlist({
-            status: 'DONE',
-            start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-            onsuccess: callback
-          });
+            this.outList(callback);
         }
       },
       initList() {
@@ -326,13 +394,31 @@
             end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
             onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
           });
-          this.getcheckoutlist({
-            status: 'DONE',
-            start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-            onsuccess: body => (this.checkOutList = [...body.data], this.checkoutPageIndex++)
-          });
+          // this.getcheckoutlist({
+          //   status: 'DONE',
+          //   start_time: this.periodFilter[0],
+          //   end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          //   onsuccess: body => (this.checkOutList = [...body.data], this.checkoutPageIndex++)
+          // });
+
+          //已经离店
+          this.outList(body => (this.checkOutList = [...body.data], this.offset));
         }
+      },
+      //已离店列表
+      outList(callback){
+        this.getOutlist({
+          data:{
+            "filter":"OUT",
+            "room_no":this.filterRoomVal||"",//房间号
+            "room_pms_type_id":"",//PMS房型的ID
+            "guest_name":this.guestName||"",//入住人名称
+            "in_time":this.periodFilter[0]||"",//入住时间
+            "out_time":this.periodFilter[1]||"",//离店时间
+            "offset":this.offset||0
+          },
+          onsuccess: callback
+        });
       },
       refreshList(){
         if (this.tempPage == '预登记') {
@@ -359,20 +445,50 @@
         } else if (this.tempPage == '已离店') {
           this.checkOutList = [];
         }
+      },
+      searchRoomType(){
+        console,log(22222);
+        this.searchRoom({
+          onsuccess:body => {
+            let list=body.data;
+            list.forEach((item,index)=>{
+              this.roomList.push({value:item.room_type_name},{key:item.room_type_id})
+            })
+            console.log('房型：',this.roomList)
+          }
+        })
       }
     },
     mounted(){
+      this.searchRoomType();
       this.initList();
-    },
-    watch: {
-      tempPage(val) {
-        this.periodFilter = [null, null];
-        this.renderList.length == 0 ? this.initList() : this.refreshList();
-      },
-      periodFilter(val) {
-        val[0] && val[1] && this.refreshList();
-        this.isCalendarShow = false;
-      }
     }
   }
 </script>
+<style lang="'less">
+  .dialog .weui-dialog{
+    text-align: left;
+  }
+  .weui-dialog__bd{
+    padding-left: 0rem;
+  }
+  .invoiceBtn{
+    width: 49%;
+    height: 2rem;
+    float: left;
+    border-top: 1px solid #EEEEEE;
+    padding-top: 1rem;
+    text-align: center;
+  }
+  .invoiceBtn:nth-child(2){
+    border-left: 1px solid #EEEEEE;
+    color: #22AAFF;
+  }
+  .filterTop{
+    margin-left: 1rem;
+    text-align: left;
+    padding-top: 0.5rem;
+    font-size: 20px;
+    margin-bottom: -0.6rem;
+  }
+</style>

@@ -12,45 +12,52 @@
       </Tab>
     </header>
 
-    <div class="list-wrapper">
-      <div v-show="tabIndex === 0">
-        <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
-               :title="titleFilter(index)">
-          <Cell>
-            <p><span class="cell-value">{{item.room_no}}</span><span
-              class="cell-right">{{datetimeparse(item.create_time, 'hhmm')}}</span></p>
-          </Cell>
-          <Cell link>
-            <div class="cell-body">
-              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
-              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
-            </div>
-          </Cell>
-          <Cell v-if="item.remark" >
-            <p><span class="cell-value">备注：</span><span class="remark">{{item.remark}}</span></p>
-          </Cell>
-        </Group>
-      </div>
-      <div v-show="tabIndex === 1">
-        <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
-        <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
-               :title="titleFilter(index)">
-          <Cell>
-            <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{item.update_time | filterTime}}</span>
-            </p>
-          </Cell>
-          <Cell link>
-            <div class="cell-body">
-              <p><span class="cell-value">名称：{{item.title}}</span></p>
-              <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
-              <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
-            </div>
-          </Cell>
-        </Group>
-      </div>
-    </div>
-
+    <scroller :pullup-config="Interface.scrollerUp"
+              @on-pullup-loading="refresh2"
+              lock-x
+              use-pullup
+              height="-40"
+              v-model="scrollerStatus"
+              scrollbarY bounce ref="scrollerBottom">
+      <div class="list-wrapper">
+          <div v-show="tabIndex === 0">
+            <p v-if="!waitList || waitList.length === 0" class="no-data">暂无数据</p>
+            <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
+                   :title="titleFilter(index)">
+              <Cell>
+                <p><span class="cell-value">{{item.room_no}}</span><span
+                  class="cell-right">{{datetimeparse(item.create_time, 'hhmm')}}</span></p>
+              </Cell>
+              <Cell link>
+                <div class="cell-body">
+                  <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
+                  <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
+                </div>
+              </Cell>
+              <Cell v-if="item.remark" >
+                <p><span class="cell-value">备注：</span><span class="remark">{{item.remark}}</span></p>
+              </Cell>
+            </Group>
+          </div>
+          <div v-show="tabIndex === 1">
+            <p v-if="!doneList || doneList.length === 0" class="no-data">暂无数据</p>
+            <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
+                   :title="titleFilter(index)">
+              <Cell>
+                <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{item.update_time | filterTime}}</span>
+                </p>
+              </Cell>
+              <Cell link>
+                <div class="cell-body">
+                  <p><span class="cell-value">名称：{{item.title}}</span></p>
+                  <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
+                  <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
+                </div>
+              </Cell>
+            </Group>
+          </div>
+        </div>
+      </scroller>
     <footer>
       <div class="listFilter">
         <span class="filter" @click="showDialog = true">
@@ -62,18 +69,18 @@
       <x-dialog v-model="showDialog"
                 :hide-on-blur=false
                  mask-z-index="5"
-                :dialog-style="{'top':'32%'}"
+                :dialog-style="{'top':'30%'}"
       >
         <p class="filterTop">筛选</p>
         <group>
           <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
           <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice"></x-input>
-          <popup-radio title="开票类型" :options="invoTypeList" v-model="invoiceVal" @on-show=popupShow :disabled=flag></popup-radio>
-          <cell title= "起始时间" @onClick="isCalendarShow = true" link :value=datetimeparse(periodFilter[0]) ></cell>
-          <cell title= "起始时间" @onClick="isCalendarShow = true" link :value=datetimeparse(periodFilter[1]) ></cell>
+          <popup-radio title="开票类型" :options="invoTypeList" v-model="invoType" @on-show=popupShow :disabled=flag></popup-radio>
+          <cell title= "起始时间" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
+          <cell title= "截止时间" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
             <div class="invoiceBtn" @click="cancel">取消</div>
-            <div class="invoiceBtn" @click=confirmHandle>确定</div>
+            <div class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</div>
           </div>
         </group>
       </x-dialog>
@@ -104,33 +111,38 @@
     },
     data(){
       return {
+        scrollerStatus: {
+          pullupStatus: 'default',
+          pulldownStatus: 'default'
+        },
+        onFetching:false,
         filterInvoice:'',
         filterRoomVal:'',
         flag:false,
-        invoiceVal:'',
-        invoTypeList:["普通发票","专用发票","个人发票"],
+        invoType:'',
+        invoTypeList:[{value:"普通发票",key:0},{value:"专用发票",key:1},{value:"个人发票",key:2}],
         popup:false,
         startDate:'',
         endDate:'',
         showDialog:false,
-        scrollerStatus1: {
-          pullupStatus: 'default',
-          pulldownStatus: 'default'
-        },
-        scrollerStatus2: {
-          pullupStatus: 'default',
-          pulldownStatus: 'default'
-        },
-        pullupConfig: {
-          content: '上拉加载更多',
-          pullUpHeight: 60,
-          height: 40,
-          autoRefresh: false,
-          downContent: '松开加载',
-          upContent: '上拉加载更多',
-          loadingContent: '加载中..',
-          clsPrefix: 'xs-plugin-pullup-'
-        },
+        // scrollerStatus1: {
+        //   pullupStatus: 'default',
+        //   pulldownStatus: 'default'
+        // },
+        // scrollerStatus2: {
+        //   pullupStatus: 'default',
+        //   pulldownStatus: 'default'
+        // },
+        // pullupConfig: {
+        //   content: '上拉加载更多',
+        //   pullUpHeight: 60,
+        //   height: 40,
+        //   autoRefresh: false,
+        //   downContent: '松开加载',
+        //   upContent: '上拉加载更多',
+        //   loadingContent: '加载中..',
+        //   clsPrefix: 'xs-plugin-pullup-'
+        // },
         page1: 1,
         page2: 1,
 //        tabmenu: ["待处理", "已处理"],
@@ -138,7 +150,7 @@
         doneList: [],
         isCalendarShow: false,
         periodFilter: [null, null],
-
+        offset:0
       }
     },
     computed: {
@@ -161,6 +173,13 @@
       }
     },
     watch: {
+      showDialog(val){
+        if(!val){
+          this.filterRoomVal='';
+          this.filterInvoice='';
+          this.periodFilter=[]
+        }
+      },
       isCalendarShow(val){
         if(val){
           console.log("打开了")
@@ -178,10 +197,10 @@
         typeof val === 'number' && !isNaN(val)
           ? this.renderList.length == 0 ? this.initList() : this.refresh() : null
       },
-      periodFilter(val) {
-        val[0] && val[1] && this.refresh();
-        this.isCalendarShow = false;
-      }
+      // periodFilter(val) {
+      //   val[0] && val[1] && this.refresh();
+      //   this.isCalendarShow = false;
+      // }
     },
     filters: {
       filterInvoiceType(v) {
@@ -216,10 +235,19 @@
         'replaceto',
         'getInvoiceList'
       ]),
-      confirmHandle(){
+      //筛选确定处理
+      confirmHandle(status){
         this.showDialog=false;
         this.isCalendarShow=false;
+        if(status==0){
+          this.getList(status, body => this.waitList = [...body.data]);
+        }
+        else if(status==1){
+          this.getList(status, body => this.doneList = [...body.data]);
+        }
+
       },
+      //筛选取消处理
       cancel(){
         this.showDialog=false;
         this.isCalendarShow=false;
@@ -265,13 +293,40 @@
       filterHandle(){
 
       },
+      refresh2(){
+        if (this.onFetching) {
+          // do nothing
+          return;
+        }else{
+          this.onFetching = true;
+          setTimeout(() => {
+            this.offset=this.offset+10;
+            if(status==0){
+              this.getList(status, body => this.waitList = [...this.waitList,...body.data]);
+            }
+            else if(status==1){
+              this.getList(status, body => this.doneList = [...this.doneList,...body.data]);
+            }
+            console.log('第'+this.offset+'起');
+            this.scrollerStatus.pullupStatus = 'default';
+            //$nextTick是为了数据改变了等待dom渲染后使用
+            this.$nextTick(() => {
+              this.$refs.scrollerBottom.reset();
+            });
+            this.onFetching = false
+          }, 500);
+        }
+      },
       getList(status, callback) {
         this.getInvoiceList({
+          offset:this.offset||0,
           status: status,
-          start_time: this.periodFilter[0],
-          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          title:this.filterRoomVal,
-          invoice_type:this.filterInvoice,
+          start_time: this.periodFilter[0]||"1510070400",
+          end_time: this.periodFilter[1]||"1515168000",
+          // end_time: this.periodFilter[1]? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          room_no:this.filterRoomVal,
+          title:this.filterInvoice,
+          invoice_type:this.invoType,
           onsuccess: callback
         })
       },
@@ -285,75 +340,6 @@
           this.getList(1, body => this.doneList = [...body.data], pa);
         }
       }
-      // getList(param) {
-      //   let successCallback = (body, headers) => {
-      //     let page = +headers['x-current-page'],size = +headers['x-page-size'],total = +headers['x-total'];
-      //     if(body && Array.isArray(body.data) && body.data.length > 0) {
-      //       if(param.from == "loadMore") {
-      //         if (this.tabIndex) {
-      //           this.page2 = page;
-      //           this.scrollerStatus2.pullupStatus = 'default';
-      //         } else {
-      //           this.page1 = page
-      //           this.scrollerStatus1.pullupStatus = 'default';
-      //         }
-      //       } else {
-      //         if (this.tabIndex) {
-      //           this.doneList = [];
-      //           this.page2 = 1
-      //           this.scrollerStatus2.pulldownStatus = 'default';
-      //         } else {
-      //           this.waitList = [];
-      //           this.page1 = 1
-      //           this.scrollerStatus1.pulldownStatus = 'default';
-      //         }
-      //       }
-      //       // 是否是最后一页
-      //       if (page * size >= total) {
-      //         //禁止上拉
-      //         this.tabIndex ? this.scrollerStatus2.pullupStatus = 'disabled' : this.scrollerStatus1.pullupStatus = 'disabled';
-      //       }
-      //       // 合并数据
-      //       this.tabIndex ? this.doneList = this.doneList.concat(body.data) : this.waitList = this.waitList.concat(body.data)
-      //     } else {
-      //       if (param.from != "loadMore") {
-      //         if (this.tabIndex) {
-      //           this.doneList = body.data;
-      //           this.scrollerStatus2.pulldownStatus = 'default';
-      //           this.scrollerStatus2.pullupStatus = 'disabled';
-      //         } else {
-      //           this.waitList = body.data;
-      //           this.scrollerStatus1.pulldownStatus = 'default';
-      //           this.scrollerStatus1.pullupStatus = 'disabled';
-      //         }
-      //       } else {
-      //         if (this.tabIndex) {
-      //           this.scrollerStatus2.pullupStatus = 'default'
-      //           this.scrollerStatus2.pullupStatus = 'disabled'
-      //         } else {
-      //           this.scrollerStatus1.pullupStatus = 'default'
-      //           this.scrollerStatus1.pullupStatus = 'disabled'
-      //         }
-      //       }
-      //     }
-      //     //更新数据,不然页面容器不够，无法上拉
-      //     this.$nextTick(() => {
-      //       this.tabIndex ? this.$refs.scroller2.reset() : this.$refs.scroller1.reset();
-      //     })
-      //   };
-
-      //   let errorCallback = (data) => {
-      //     this.tabIndex ? this.scrollerStatus2 = {pullupStatus: 'default',pulldownStatus: 'default'} : this.scrollerStatus1 = {pullupStatus: 'default',pulldownStatus: 'default'}
-      //   };
-
-      //   this.getWaitInvoiceList({
-      //     page: +this.page,
-      //     status: this.tabIndex,
-      //     onsuccess: successCallback,
-      //     onfail: errorCallback
-      //   })
-      // },
-
     },
     mounted(){
       this.initList();
