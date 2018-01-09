@@ -133,7 +133,7 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
           `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-          `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code}</span></p>` +
+          `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code?item.share_code:'暂无分享码'}</span></p>` +
           `</div>`
       },
       getCellFooter(item){

@@ -58,7 +58,7 @@ Vue.mixin({
     },
     getShareCode(item){
       let temp = ``;
-      item ? temp += `<div style="color: #32ABE5">${item}</div>` : null;
+      item ? temp += `<div style="color: #32ABE5">${item}</div>` : '暂无分享码';
       return temp;
     },
     invoiceType(type){
