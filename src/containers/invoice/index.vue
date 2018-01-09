@@ -76,8 +76,8 @@
           <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
           <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice"></x-input>
           <popup-radio title="开票类型" :options="invoTypeList" v-model="invoType" @on-show=popupShow :disabled=flag></popup-radio>
-          <cell title= "起始时间" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
-          <cell title= "截止时间" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
+          <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
+          <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
             <div class="invoiceBtn" @click="cancel">取消</div>
             <div class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</div>
@@ -321,8 +321,8 @@
         this.getInvoiceList({
           offset:this.offset||0,
           status: status,
-          start_time: this.periodFilter[0]||"1510070400",
-          end_time: this.periodFilter[1]||"1515168000",
+          start_time: this.periodFilter[0]||"",
+          end_time: this.periodFilter[1]||"",
           // end_time: this.periodFilter[1]? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
           room_no:this.filterRoomVal,
           title:this.filterInvoice,
