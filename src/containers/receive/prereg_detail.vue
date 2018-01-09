@@ -15,6 +15,7 @@
         <Cell class="key" title="入离时间"
               :value="datetimeparse(detail.in_time) + ' - '+ datetimeparse(detail.out_time)"></Cell>
         <Cell class="key" title="房型" :value="getRoomType(detail)"></Cell>
+        <Cell class="key" title="分享码" :value="getShareCode(detail.share_code)"></Cell>
       </Group>
       <Group title="PMS支付信息" v-if="detail.payinfo">
         <Cell class="key" title="应付房费" :value="cashHandling(detail.payinfo.total_roomfee)"></Cell>

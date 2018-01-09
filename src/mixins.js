@@ -56,6 +56,11 @@ Vue.mixin({
       item.rooms_plan ? item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`) : null;
       return temp;
     },
+    getShareCode(item){
+      let temp = ``;
+      item ? temp += `<div style="color: #32ABE5">${item}</div>` : '暂无分享码';
+      return temp;
+    },
     invoiceType(type){
       let typeStr = '';
       if (type === 'PERSONAL') {

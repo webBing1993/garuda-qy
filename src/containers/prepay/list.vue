@@ -29,7 +29,7 @@
           <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
             <Group>
               <Cell :title="getCellTitle(item)"></Cell>
-              <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
+              <Cell :title="getTobeConfirmedCellBody(item)" link @onClick="orderClick(item.order_id)"/>
               <Cell v-if="item.remark" :title="getCellFooter(item)"/>
             </Group>
           </checker-item>
@@ -115,6 +115,16 @@
         }
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
       },
+      getTobeConfirmedCellBody(item){
+        let roomtypewords = ''
+        item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
+        let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
+
+        return `<div class="cell-body">` +
+          `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
+          `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+          `</div>`
+      },
       getCellBody(item){
         let roomtypewords = ''
         item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
@@ -123,6 +133,7 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
           `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+          `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code?item.share_code:'暂无分享码'}</span></p>` +
           `</div>`
       },
       getCellFooter(item){
