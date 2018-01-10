@@ -131,9 +131,11 @@
           `<p><span class="cell-key2">手机号：</span><span class="cell-value">${this.orderdetail.owner_tel}</span></p>` +
           `<p><span class="cell-key2">入离时间：</span><span class="cell-value">${this.datetimeparse(this.orderdetail.in_time)}- ${this.datetimeparse(this.orderdetail.out_time)}</span></p>` +
           `<p><span class="cell-key2">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+          `<p><span class="cell-key2">分享码：</span><span class="cell-value" style="color: #32ABE5">${item.share_code?item.share_code:'暂无分享码'}</span></p>` +
           `</div>`
       },
-      getCellBodyPMS(){
+
+    getCellBodyPMS(){
         return `<div class="cell-body">` +
           `<p><span class="cell-key">应付房费：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.total_roomfee)}</span></p>` +
           `<p><span class="cell-key">PMS预付：</span><span class="cell-value">${this.cashHandling(this.orderdetail.payinfo.pms_pay)}</span></p>` +
