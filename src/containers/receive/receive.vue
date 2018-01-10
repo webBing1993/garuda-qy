@@ -74,8 +74,8 @@
           <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
           <x-input title="入住人姓名" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
           <popup-radio title="房型" :options="roomList" v-model="roomType" @on-show=popupShow :disabled=flag></popup-radio>
-          <cell title= "入住日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
-          <cell title= "离店日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
+          <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
+          <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
             <div class="invoiceBtn" @click=cancel>取消</div>
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
@@ -140,7 +140,7 @@
         if (!val) {
           this.filterRoomVal = '';
           this.guestName = '';
-          this.periodFilter = []
+          // this.periodFilter = []
         }
       },
       tempPage(val) {
@@ -251,7 +251,7 @@
       confirmHandle() {
         this.showDialog = false;
         this.isCalendarShow = false;
-        this.outList(true);
+        this.outList(false);
       },
       //筛选取消处理
       cancel() {
@@ -444,15 +444,14 @@
       },
       //已离店列表
       outList(isPullup) {
-        console.log('此时的：'+this.offset)
         this.getOutlist({
           data: {
             "filter": "OUT",
             "room_no": this.filterRoomVal || "",//房间号
             "room_pms_type_id":this.roomType ||"",//PMS房型的ID
             "guest_name": this.guestName || "",//入住人名称
-            "in_time": this.periodFilter[0] || "",//入住时间
-            "out_time": this.periodFilter[1] || "",//离店时间
+            "out_start_time": this.periodFilter[0] || "",//入住时间
+            "out_end_time": this.periodFilter[1] || "",//离店时间
             "order_by":"out_time",//通过哪种时间排序 in_time, out_time
             "desc":true,
           },
@@ -470,13 +469,12 @@
       //下拉刷新列表，按需加载
       refresh(){
         if (this.onFetching) {
-          // do nothing
           return;
         }else{
           this.onFetching = true;
           setTimeout(() => {
             if (this.tempPage == '已离店'){
-              this.offset=this.offset+10;
+              this.offset=this.offset+5;
               this.outList(true);
             }else {
               return;
@@ -518,16 +516,13 @@
         }
       },
       searchRoomType() {
-        console.log(22222);
         this.roomList=[];
         this.searchRoom({
           onsuccess: body => {
             let list = body.data;
-            console.log('房型：', list)
             list.forEach((item, index) => {
               this.roomList.push({value: item.room_type_name,key:item.room_type_id});
             })
-            console.log('房型：', this.roomList)
           }
         })
       }
