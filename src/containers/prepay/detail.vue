@@ -131,7 +131,11 @@
           `<p><span class="cell-key2">手机号：</span><span class="cell-value">${this.orderdetail.owner_tel}</span></p>` +
           `<p><span class="cell-key2">入离时间：</span><span class="cell-value">${this.datetimeparse(this.orderdetail.in_time)}- ${this.datetimeparse(this.orderdetail.out_time)}</span></p>` +
           `<p><span class="cell-key2">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+<<<<<<< HEAD
           `<p><span class="cell-key2">分享码：</span><span class="cell-value" style="color: #32ABE5">${this.orderdetail.share_code}</span></p>` +
+=======
+          `<p><span class="cell-key2">分享码：</span><span class="cell-value" style="color: #32ABE5">${item.share_code?item.share_code:'暂无分享码'}</span></p>` +
+>>>>>>> 17026795f589f0e656c64f6dec318d718776daec
           `</div>`
       },
 
