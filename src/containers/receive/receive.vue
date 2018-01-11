@@ -73,7 +73,7 @@
         <group>
           <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
           <x-input title="入住人姓名" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
-          <popup-radio title="房型" :options="roomList" v-model="roomType" @on-show=popupShow :disabled=flag></popup-radio>
+          <popup-picker :title="房aaa" :data="roomList" v-model="roomType" @on-show="popupShow" :disabled=flag></popup-picker>
           <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
           <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
@@ -96,7 +96,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput } from 'vux'
+  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput,PopupPicker } from 'vux'
 
   export default {
     name: 'receive',
@@ -106,7 +106,8 @@
       XButton,
       Group,
       PopupRadio,
-      XInput
+      XInput,
+      PopupPicker
     },
     data() {
       return {
