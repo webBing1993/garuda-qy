@@ -46,7 +46,7 @@
       </Group>
 
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-             :title="titleFilter(index)">
+             :title="datetimeparse(item.out_time,'YYMMDD')">
         <Cell :title="checkoutCellTitle(item,index)"/>
         <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
         <Cell :title="getLeaveItem(item)" link
@@ -391,10 +391,11 @@
         this.periodFilter = [null, null]
       },
       titleFilter(index) {
-        return index
-          ? this.datetimeparse(this.renderList[index].created_time) === this.datetimeparse(this.renderList[index - 1].created_time)
-            ? null : this.datetimeparse(this.renderList[index].created_time)
-          : this.datetimeparse(this.renderList[index].created_time)
+        return
+        // return index
+        //   ? this.datetimeparse(this.renderList[index].created_time) === this.datetimeparse(this.renderList[index - 1].created_time)
+        //     ? null : this.datetimeparse(this.renderList[index].created_time)
+        //   : this.datetimeparse(this.renderList[index].created_time)
       },
 //      syncTime() {
 //        this.hotelrefresh({

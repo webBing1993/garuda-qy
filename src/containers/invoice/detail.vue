@@ -4,15 +4,15 @@
       <Cell title="申请信息" />
       <Cell>
         <div class="cell-body">
-          <p v-if="data.room_no">
+          <p>
             <span class="cell-key2 cell-value-title">房间号：</span>
             <span class="cell-value">{{data.room_no}}</span>
           </p>
-          <p v-if="data.invoice_type">
+          <p>
             <span class="cell-key2 cell-value-title">开票类型：</span>
-            <span class="cell-value">{{data.invoice_type}}</span>
+            <span class="cell-value">{{data.invoice_type|filterInvoiceType}}</span>
           </p>
-          <p v-if="data.invoice_content">
+          <p>
             <span class="cell-key2 cell-value-title">发票内容：</span>
             <span class="cell-value">{{data.invoice_content}}</span>
           </p>
@@ -20,7 +20,7 @@
             <span class="cell-key2 cell-value-title">领取方式：</span>
             <span class="cell-value">酒店前台领取</span>
           </p>
-          <p v-if="data.remark">
+          <p>
             <span class="cell-key2 cell-value-title">备注：</span>
             <span class="cell-value">{{data.remark}}</span>
           </p>
