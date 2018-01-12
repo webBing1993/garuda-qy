@@ -29,8 +29,6 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/gemini': {
-
-
         target:'https://intg.fortrun.cn/',
         // target: 'https://qa.fortrun.cn/',
         // target:'https://stg.fortrun.cn/',
