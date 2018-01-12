@@ -1,7 +1,6 @@
 <template>
 
-  <div class="calendar">
-
+  <div class="calendar" style="">
     <div class="tools-bar">
       <span class="clear" @click="reset">清除筛选</span>
       <span class="cancel" @click="$emit('onCancel',false)">取消</span>
@@ -19,7 +18,6 @@
               :class="{checked:item.checked,disabled:item.disabled}"
         >{{item.day}}</span>
     </div>
-
   </div>
 </template>
 
