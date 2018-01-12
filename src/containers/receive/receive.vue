@@ -67,13 +67,12 @@
     <div class="dialog">
       <x-dialog v-model="showDialog"
                 :hide-on-blur=false
-                mask-z-index="5"
-                :dialog-style="{'top':'30%'}">
+                mask-z-index="1">
         <p class="filterTop">筛选</p>
         <group>
           <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
-          <x-input title="入住人姓名" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
-          <popup-picker :title="房aaa" :data="roomList" v-model="roomType" @on-show="popupShow" :disabled=flag></popup-picker>
+          <x-input title="入住人" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
+          <popup-picker hide-on-blur hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'235px','display':show}" :title="roomTitle" :data="roomList" v-model=roomType @on-show="popupShow"></popup-picker>
           <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
           <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
@@ -84,10 +83,9 @@
       </x-dialog>
     </div>
     <!--日历控件-->
-    <popup v-model="isCalendarShow"
-           maskShow
+    <popup hide-on-deactivated :popup-style="{'z-index':'5003','borderTop':'1px solid #eeeeee'}" v-model="isCalendarShow"
            bottom
-           animationTopBottom>
+           animationTopBottom >
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
 
@@ -96,7 +94,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput,PopupPicker } from 'vux'
+  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput,PopupPicker,Picker,Popup } from 'vux'
 
   export default {
     name: 'receive',
@@ -107,7 +105,9 @@
       Group,
       PopupRadio,
       XInput,
-      PopupPicker
+      PopupPicker,
+      Picker,
+      Popup
     },
     data() {
       return {
@@ -120,7 +120,8 @@
         guestName: '',
         filterRoomVal: '',
         roomList: [],
-        roomType: '',
+        roomList1:[],
+        roomType: [],
         showDialog: false,
         isCalendarShow: false,
         offset: 0,
@@ -133,7 +134,9 @@
         checkOutApplicationPageIndex: 0,
         checkoutPageIndex: 0,
         isCalendarShow: false,
-        periodFilter: [null, null]
+        periodFilter: [null, null],
+        roomTitle:"房型",
+        show:'none'
       }
     },
     watch: {
@@ -153,11 +156,8 @@
       //   this.isCalendarShow = false;
       // },
       isCalendarShow(val) {
-        if (val) {
-          this.flag = true;
-        }
-        else if (!val) {
-          this.flag = false;
+        if(val){
+          this.show='none'
         }
       },
     },
@@ -445,11 +445,13 @@
       },
       //已离店列表
       outList(isPullup) {
+        let roomTypeValue='';
+        roomTypeValue=this.roomType[0];
         this.getOutlist({
           data: {
             "filter": "OUT",
             "room_no": this.filterRoomVal || "",//房间号
-            "room_pms_type_id":this.roomType ||"",//PMS房型的ID
+            "room_pms_type_id":roomTypeValue ||"",//PMS房型的ID
             "guest_name": this.guestName || "",//入住人名称
             "out_start_time": this.periodFilter[0] || "",//入住时间
             "out_end_time": this.periodFilter[1] || "",//离店时间
@@ -517,13 +519,16 @@
         }
       },
       searchRoomType() {
+        this.roomList1=[];
         this.roomList=[];
         this.searchRoom({
           onsuccess: body => {
             let list = body.data;
             list.forEach((item, index) => {
-              this.roomList.push({value: item.room_type_name,key:item.room_type_id});
-            })
+              this.roomList1.push({name: item.room_type_name,value:item.room_type_name,key:item.room_type_id});
+            });
+              this.roomList.push(this.roomList1);
+              console.log('房型',this.roomList)
           }
         })
       }
@@ -553,11 +558,17 @@
     border-left: 1px solid #EEEEEE;
     color: #22AAFF;
   }
-  .filterTop{
+  .dialog .filterTop{
     margin-left: 1rem;
     text-align: left;
     padding-top: 0.5rem;
-    font-size: 20px;
+    font-size: 16px;
     margin-bottom: -0.6rem;
+  }
+  .dialog .weui-cells{
+    font-size: 14px;
+  }
+  .dialog .vux-popup-dialog{
+    z-index: 5001;
   }
 </style>
