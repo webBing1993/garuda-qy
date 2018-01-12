@@ -25,16 +25,15 @@
             <Group @click.native="goDetail(item)" v-for="(item,index) in renderList" :key="index"
                    :title="titleFilter(index)">
               <Cell>
-                <p><span class="cell-value">{{item.room_no}}</span><span
-                  class="cell-right">{{datetimeparse(item.create_time, 'hhmm')}}</span></p>
+                <p><span class="cell-value">{{item.room_no}}</span><span class="cell-right">{{datetimeparse(item.create_time, 'hhmm')}}</span></p>
               </Cell>
               <Cell link>
                 <div class="cell-body">
-                  <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
                   <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
+                  <p><span class="cell-value">发票抬头：{{item.title}}</span></p>
                 </div>
               </Cell>
-              <Cell v-if="item.remark" >
+              <Cell>
                 <p><span class="cell-value">备注：</span><span class="remark">{{item.remark}}</span></p>
               </Cell>
             </Group>
@@ -49,10 +48,12 @@
               </Cell>
               <Cell link>
                 <div class="cell-body">
-                  <p><span class="cell-value">名称：{{item.title}}</span></p>
-                  <p v-if="item.contact_name"><span class="cell-value">联系人：{{item.contact_name}}</span></p>
                   <p><span class="cell-value">开票类型：{{item.invoice_type | filterInvoiceType}}</span></p>
+                  <p><span class="cell-value">发票抬头：{{item.title}}</span></p>
                 </div>
+              </Cell>
+              <Cell>
+                <p><span class="cell-value">备注：</span><span class="remark">{{item.remark}}</span></p>
               </Cell>
             </Group>
           </div>
@@ -120,28 +121,11 @@
         filterRoomVal:'',
         flag:false,
         invoType:'',
-        invoTypeList:[{value:"普通发票",key:0},{value:"专用发票",key:1},{value:"个人发票",key:2}],
+        invoTypeList:[{value:"普通发票",key:1},{value:"专用发票",key:2},{value:"个人发票",key:3}],
         popup:false,
         startDate:'',
         endDate:'',
         showDialog:false,
-        // scrollerStatus1: {
-        //   pullupStatus: 'default',
-        //   pulldownStatus: 'default'
-        // },
-        // scrollerStatus2: {
-        //   pullupStatus: 'default',
-        //   pulldownStatus: 'default'
-        // },
-        // pullupConfig: {
-        //   content: '上拉加载更多',
-        //   pullUpHeight: 60,
-        //   height: 40,
-        //   autoRefresh: false,
-        //   downContent: '松开加载',
-        //   upContent: '上拉加载更多',
-        //   loadingContent: '加载中..',
-        //   clsPrefix: 'xs-plugin-pullup-'
         // },
         page1: 1,
         page2: 1,
@@ -174,7 +158,7 @@
     },
     watch: {
       showDialog(val){
-        if(!val){
+        if(val){
           this.filterRoomVal='';
           this.filterInvoice='';
           this.periodFilter=[]
