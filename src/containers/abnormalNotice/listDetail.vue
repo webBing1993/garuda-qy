@@ -62,11 +62,17 @@
             </div>
             <div v-if="detailItem.notice_type=='RULVYE'||detailItem.notice_type=='LILVYE'">
               <ul>
+                <li><span><abbr>设备名称：</abbr>{{detailItem.device_name}}</span></li>
+              </ul>
+              <ul>
                 <li v-for="i in detailItem.lvye_data"><span><abbr>{{i.room}} 房间：</abbr><abbr>{{i.names|showRoomNum}}</abbr></span></li>
                 <li><span><abbr>时间：</abbr>{{datetimeparse(detailItem.lvye_time,'YYYYMMDD hhmm')}}</span></li>
               </ul>
             </div>
             <div v-if="detailItem.notice_type=='FAKA'">
+              <ul>
+                <li><span><abbr>设备名称：</abbr>{{detailItem.device_name}}</span></li>
+              </ul>
               <ul>
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
                 <li><span><abbr>姓名：</abbr>{{detailItem.facein_name}}</span></li>
@@ -74,11 +80,11 @@
               </ul>
             </div>
             <div v-if="detailItem.notice_type=='TUIFANG'">
-              <ul  >
+              <ul>
                 <li><span><abbr>订单号：</abbr>{{detailItem.order_id}}</span></li>
                 <li><span><abbr>房间号：</abbr>{{detailItem.room_numbers|showRoomNum}}</span></li>
               </ul>
-              <ul  >
+              <ul>
                 <li><span><abbr>支付金额：</abbr>{{detailItem.pay_fee|transYuan}}元</span></li>
                 <li><span><abbr>消费金额：</abbr>{{detailItem.consume|transYuan}}元</span></li>
                 <li><span><abbr>入住时间：</abbr>{{datetimeparse(detailItem.in_time,'YYYYMMDD hhmm')}}</span></li>
@@ -227,6 +233,15 @@
             break;
           case '230121' :
             return '旅业离店上报 - 上报失败';
+            break;
+          case '190150' :
+            return '旅业上传超时';
+            break;
+          case '190151' :
+            return '数据库参数不正确';
+            break;
+          case '190152' :
+            return '写卡失败';
             break;
           case '190135' :
             return '底座发卡失败';
