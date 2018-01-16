@@ -69,14 +69,14 @@
     <div class="dialog">
       <x-dialog v-model="showDialog"
                 :hide-on-blur=false
-                 mask-z-index="5"
-                :dialog-style="{'top':'30%'}"
+                 mask-z-index="1"
       >
         <p class="filterTop">筛选</p>
         <group>
-          <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
-          <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice"></x-input>
-          <popup-radio title="开票类型" :options="invoTypeList" v-model="invoType" @on-show=popupShow :disabled=flag></popup-radio>
+          <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal" @on-focus="inputShow"></x-input>
+          <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice" @on-focus="inputShow"></x-input>
+          <!--<popup-radio title="开票类型" :options="invoTypeList" v-model="invoType" @on-show=popupShow :disabled=flag></popup-radio>-->
+          <popup-picker :show=isShowPP hide-on-blur hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'200px'}" title="开票类型" :data="invoTypeList" v-model="invoType"></popup-picker>
           <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
           <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
@@ -90,7 +90,8 @@
     <popup v-model="isCalendarShow"
            maskShow
            bottom
-           animationTopBottom>
+           animationTopBottom
+           :popup-style="{'z-index':'5003','borderTop':'1px solid #eeeeee'}">
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
@@ -98,7 +99,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput } from 'vux'
+  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput,PopupPicker,Picker,Popup } from 'vux'
 
   module.exports = {
     name: 'list',
@@ -108,10 +109,14 @@
       XButton,
       Group,
       PopupRadio,
-      XInput
+      XInput,
+      PopupPicker,
+      Picker,
+      Popup
     },
     data(){
       return {
+        isShowPP:false,
         scrollerStatus: {
           pullupStatus: 'default',
           pulldownStatus: 'default'
@@ -120,8 +125,8 @@
         filterInvoice:'',
         filterRoomVal:'',
         flag:false,
-        invoType:'',
-        invoTypeList:[{value:"普通发票",key:1},{value:"专用发票",key:2},{value:"个人发票",key:3}],
+        invoType:[],
+        invoTypeList:[[{name:"普通发票",value:1},{name:"专用发票",value:2},{name:"个人发票",value:3}]],
         popup:false,
         startDate:'',
         endDate:'',
@@ -166,12 +171,7 @@
       },
       isCalendarShow(val){
         if(val){
-          console.log("打开了")
-          this.flag=true;
-        }
-        else if(!val){
-          console.log("关闭了")
-          this.flag=false;
+          this.isShowPP=false;
         }
       },
       tabIndex(val) {
@@ -219,6 +219,11 @@
         'replaceto',
         'getInvoiceList'
       ]),
+
+      inputShow(){
+         this.isCalendarShow=false;
+         this.isShowPP=false;
+      },
       //筛选确定处理
       confirmHandle(status){
         this.showDialog=false;
@@ -306,7 +311,7 @@
           offset:this.offset||0,
           status: status,
           start_time: this.periodFilter[0]||"",
-          end_time: this.periodFilter[1]||"",
+          end_time: this.periodFilter[1]?this.periodFilter[1] + 86400000 :"",
           // end_time: this.periodFilter[1]? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
           room_no:this.filterRoomVal,
           title:this.filterInvoice,
@@ -363,5 +368,8 @@
     padding-top: 0.5rem;
     font-size: 20px;
     margin-bottom: -0.6rem;
+  }
+  .dialog .vux-popup-dialog{
+    z-index: 5001;
   }
 </style>
