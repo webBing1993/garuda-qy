@@ -24,14 +24,15 @@ module.exports = {
       headers: {
         Session: sessionStorage.session_id,
       },
-      body: {
-        status: param.status.toString() || "0",
-        start_time: param.start_time||"",
-        end_time: param.end_time||"",
-        room_no:param.room_no||"",
-        title:param.title||"",
-        invoice_type:param.invoice_type||''
-      },
+      body: param.data,
+        // {
+        // status: param.status.toString() || "0",
+        // start_time: param.start_time||"",
+        // end_time: param.end_time||"",
+        // room_no:param.room_no||"",
+        // title:param.title||"",
+        // invoice_type:param.invoice_type||''
+        // },
       onSuccess: (body, headers) => {
         param.onsuccess ? param.onsuccess(body, headers) : null
       },

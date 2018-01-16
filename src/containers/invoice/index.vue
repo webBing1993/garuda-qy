@@ -76,7 +76,7 @@
           <x-input title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal" @on-focus="inputShow"></x-input>
           <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice" @on-focus="inputShow"></x-input>
           <!--<popup-radio title="开票类型" :options="invoTypeList" v-model="invoType" @on-show=popupShow :disabled=flag></popup-radio>-->
-          <popup-picker :show=isShowPP hide-on-blur hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'200px'}" title="开票类型" :data="invoTypeList" v-model="invoType"></popup-picker>
+          <popup-picker :show=isShowPP show-name hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'200px'}" title="开票类型" :data="invoTypeList" v-model=invoType></popup-picker>
           <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
           <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
@@ -116,6 +116,7 @@
     },
     data(){
       return {
+        isPullMore:false,
         isShowPP:false,
         scrollerStatus: {
           pullupStatus: 'default',
@@ -126,7 +127,7 @@
         filterRoomVal:'',
         flag:false,
         invoType:[],
-        invoTypeList:[[{name:"普通发票",value:1},{name:"专用发票",value:2},{name:"个人发票",value:3}]],
+        invoTypeList:[[{name:"全部发票",value:""},{name:"普通发票",value:"1"},{name:"专用发票",value:"2"},{name:"个人发票",value:"3"}]],
         popup:false,
         startDate:'',
         endDate:'',
@@ -139,7 +140,9 @@
         doneList: [],
         isCalendarShow: false,
         periodFilter: [null, null],
-        offset:0
+        offset:0,
+        doneListTotal:0,
+        waitListTotal:0
       }
     },
     computed: {
@@ -152,8 +155,8 @@
       },
       tabMenu() {
         let menu = [];
-        menu[0] = `待处理(${this.waitList.length})`;
-        menu[1] = `已处理(${this.doneList.length})`;
+        menu[0] = `待处理(${this.waitListTotal})`;
+        menu[1] = `已处理(${this.doneListTotal})`;
         return menu;
       },
       renderList() {
@@ -164,9 +167,9 @@
     watch: {
       showDialog(val){
         if(val){
-          this.filterRoomVal='';
-          this.filterInvoice='';
-          this.periodFilter=[]
+          // this.filterRoomVal='';
+          // this.filterInvoice='';
+          // this.periodFilter=[]
         }
       },
       isCalendarShow(val){
@@ -219,7 +222,6 @@
         'replaceto',
         'getInvoiceList'
       ]),
-
       inputShow(){
          this.isCalendarShow=false;
          this.isShowPP=false;
@@ -228,13 +230,7 @@
       confirmHandle(status){
         this.showDialog=false;
         this.isCalendarShow=false;
-        if(status==0){
-          this.getList(status, body => this.waitList = [...body.data]);
-        }
-        else if(status==1){
-          this.getList(status, body => this.doneList = [...body.data]);
-        }
-
+        this.getList(status,false);
       },
       //筛选取消处理
       cancel(){
@@ -279,23 +275,21 @@
         }
         this.getList(pa)
       },
-      filterHandle(){
-
-      },
       refresh2(){
-        if (this.onFetching) {
-          // do nothing
+        let off;
+        if(this.tabIndex==0){
+           off=this.waitListTotal-this.offset;
+        }else if(this.tabIndex==1){
+           off=this.doneListTotal-this.offset;
+        };
+        if (this.onFetching||off<5) {
+          console.log('不能再请求了')
           return;
         }else{
           this.onFetching = true;
           setTimeout(() => {
             this.offset=this.offset+10;
-            if(status==0){
-              this.getList(status, body => this.waitList = [...this.waitList,...body.data]);
-            }
-            else if(status==1){
-              this.getList(status, body => this.doneList = [...this.doneList,...body.data]);
-            }
+            this.getList(this.tabIndex,true);
             console.log('第'+this.offset+'起');
             this.scrollerStatus.pullupStatus = 'default';
             //$nextTick是为了数据改变了等待dom渲染后使用
@@ -306,27 +300,47 @@
           }, 500);
         }
       },
-      getList(status, callback) {
+      //获取发票数据
+      getList(status,isPullMore) {
+        let roomTypeValue='';
+        roomTypeValue=this.invoType[0];
         this.getInvoiceList({
-          offset:this.offset||0,
-          status: status,
-          start_time: this.periodFilter[0]||"",
-          end_time: this.periodFilter[1]?this.periodFilter[1] + 86400000 :"",
-          // end_time: this.periodFilter[1]? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          room_no:this.filterRoomVal,
-          title:this.filterInvoice,
-          invoice_type:this.invoType,
-          onsuccess: callback
+          data:{
+            status: status?status.toString():"0",
+            start_time: this.periodFilter[0]?this.periodFilter[0].toString():"",
+            end_time: this.periodFilter[1]?(this.periodFilter[1] + 86400000).toString():"",
+            room_no:this.filterRoomVal||"",
+            title:this.filterInvoice||"",
+            invoice_type:roomTypeValue||"",
+          },
+          offset: this.offset || 0,
+          onsuccess: (body, headers) => {
+            if(status==0){
+              this.waitListTotal=headers.map['x-total-count'][0];
+              if(isPullMore){
+                this.waitList = [...body.waitList,...body.data];
+              }else if(!isPullMore){
+                this.waitList = [...body.data];
+              }
+            }else if(status==1){
+              this.doneListTotal=headers.map['x-total-count'][0];
+              if(isPullMore){
+                this.doneList = [...body.waitList,...body.data];
+              }else if(!isPullMore){
+                this.waitList = [...body.data];
+              }
+            }
+          }
         })
       },
       initList() {
-        let pa = {
-          from: 'top',
-          page: 1
-        }
+        // let pa = {
+        //   from: 'top',
+        //   page: 1
+        // }
         if (this.renderList.length === 0) {
-          this.getList(0, body => this.waitList = [...body.data], pa);
-          this.getList(1, body => this.doneList = [...body.data], pa);
+          this.getList(0,false);
+          this.getList(1,false);
         }
       }
     },
