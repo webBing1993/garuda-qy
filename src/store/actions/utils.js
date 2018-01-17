@@ -73,7 +73,7 @@ module.exports = {
     document.title = t;
     if (/ip(hone|od|ad)/i.test(navigator.userAgent)) {
       var i = document.createElement('iframe');
-      i.src = '/favicon.ico';
+      // i.src = '/favicon.ico';
       i.style.display = 'none';
       i.onload = function () {
         setTimeout(function () {
