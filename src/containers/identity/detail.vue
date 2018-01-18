@@ -22,7 +22,7 @@
         <img :src="detail.guest.photo" alt="身份证照片">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span>相似度： <abbr>{{detail.guest.similarity}}%</abbr></span></p>
+        <p><span>现场图片</span><span v-if="detail.config.show_similarity">相似度： <abbr>{{detail.guest.similarity}}%</abbr></span></p>
         <img :src="detail.guest.live_photo" alt="现场照片">
       </div>
     </div>
