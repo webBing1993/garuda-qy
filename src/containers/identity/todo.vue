@@ -19,7 +19,7 @@
         <img :src="detail.guest.photo" alt="身份证照片">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span v-if="detail.config.identity_check_channel === 'YOUTU'">相似度： <abbr>{{detail.guest.similarity}}%</abbr></span></p>
+        <p><span>现场图片</span><span v-if="hotelConfig.identity_check_channel==='true'&& hotelConfig.show_similarity=== 'YOUTU'">相似度： <abbr>{{detail.guest.similarity}}%</abbr></span></p>
         <img :src="detail.guest.live_photo" alt="现场照片">
       </div>
     </div>
@@ -40,7 +40,8 @@
   module.exports = {
     data(){
       return {
-        detail: {}
+        detail: {},
+        hotelConfig:{}
       }
     },
     computed: {
@@ -76,7 +77,10 @@
       getDetail(){
         this.getIdentity({
           identityGuestId: this.identityGuestId,
-          onsuccess: body => this.detail = body.data
+          onsuccess: body => {
+            this.detail = body.data.content;
+            this.hotelConfig=body.data.config;
+          }
         })
       },
       setidentitystatus(val){
