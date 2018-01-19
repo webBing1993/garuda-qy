@@ -314,8 +314,14 @@
       initList(){
         if (this.renderList.length === 0) {
 //          this.getList(body => (this.mylist = [...body.data]));
-          this.getList(body => (this.handled = [...body.data], this.handledPageIndex++), ['SUCCESS'])
-          this.getList(body => (this.tobeHandled = [...body.data], this.tobeHandledPageIndex++), ['NONE', 'FAILED'])
+          this.getList((body => {
+            this.handled = [...body.data.content];
+            this.handledPageIndex++;
+          }), ['SUCCESS']);
+          this.getList((body => {
+            this.tobeHandled = [...body.data.content];
+            this.tobeHandledPageIndex++;
+          }), ['NONE', 'FAILED'])
         }
       },
       refreshList(){
