@@ -38,19 +38,19 @@ const receive = [{
     path: 'checkout',
     component: require('./containers/receive/receive.vue')
   }, {
-    path: 'precheckin-detail/:id/:parameter',
+    path: 'precheckin-detail/:id',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/prereg_detail.vue')
   }, {
-    path: 'livein-detail/:id/:parameter',
+    path: 'livein-detail/:id',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/livein_detail.vue')
   }, {
-    path: 'checkout-application-detail/:id/:parameter',
+    path: 'checkout-application-detail/:id',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/check_appli_detail.vue')
   }, {
-    path: 'checkout-detail/:id/:parameter',
+    path: 'checkout-detail/:id',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/checkout_detail.vue')
   }]

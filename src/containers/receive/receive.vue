@@ -29,20 +29,20 @@
       <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="preCheckInCellTitle(item)"/>
         <Cell :title="preCheckInCellBody(item)" link
-              @onClick="goto('/receive/precheckin-detail/' + item.order_id+'/'+getParameter)"/>
+              @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
       </Group>
 
       <Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">
         <Cell :title="liveInCellTitle(item)"/>
         <Cell :title="liveInGuestItem(item)"
-              @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+getParameter)"/>
+              @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
       </Group>
 
       <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
              :title="titleFilter(index)">
         <Cell :title="checkoutCellTitle(item)"/>
         <Cell :title="getCheckoutGuestItem(item)" link
-              @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+getParameter)"/>
+              @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
       </Group>
 
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
@@ -50,7 +50,7 @@
         <Cell :title="checkoutCellTitle(item,index)"/>
         <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
         <Cell :title="getLeaveItem(item)" link
-              @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+getParameter)"/>
+              @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
       </Group>
     </div>
     </scroller>
@@ -178,8 +178,9 @@
         return menu;
       },
       getParameter() {
-        let tempRoute = this.route.path.split('/')[2];
-        return tempRoute
+        // let tempRoute = this.route.path.split('/')[2];
+        // return tempRoute
+        return ''
       },
       tempPage() {
         let tempRoute = this.route.path.split('/')[2];
