@@ -9,7 +9,7 @@ Vue.config.productionTip = false;
 // Utils
 import FastClick from 'fastclick';
 FastClick.attach(document.body);
-
+import "babel-polyfill";
 // Router & Store
 import store from './store';
 import router from './router';

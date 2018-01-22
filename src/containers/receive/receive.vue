@@ -469,7 +469,8 @@
           },
           offset: this.offset || 0,
           onsuccess:(body,headers)=> {
-            // this.checkOutTotal=headers.get['x-total-count'][0];
+            this.checkOutTotal=headers.map['x-total-count'][0];
+            // this.checkOutTotal=174
             if(isPullup){
               this.checkOutList = [...this.checkOutList,...body.data];
             }else if(!isPullup){
