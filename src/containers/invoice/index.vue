@@ -316,14 +316,14 @@
           offset: this.offset || 0,
           onsuccess: (body, headers) => {
             if(status==0){
-              this.waitListTotal=headers.map['x-total-count'][0];
+              this.waitListTotal=headers.get('x-total-count');
               if(isPullMore){
                 this.waitList = [...body.waitList,...body.data];
               }else if(!isPullMore){
                 this.waitList = [...body.data];
               }
             }else if(status==1){
-              this.doneListTotal=headers.map['x-total-count'][0];
+              this.doneListTotal=headers.get('x-total-count');
               if(isPullMore){
                 this.doneList = [...body.waitList,...body.data];
               }else if(!isPullMore){
