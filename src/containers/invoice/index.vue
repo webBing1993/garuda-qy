@@ -181,8 +181,9 @@
         this.resetFilter();
 //        val ? this.$refs.scroller1.reset() : this.$refs.scroller2.reset();
 
-        typeof val === 'number' && !isNaN(val)
-          ? this.renderList.length == 0 ? this.initList() : this.refresh() : null
+        // typeof val === 'number' && !isNaN(val)
+        //   ? this.renderList.length == 0 ? this.initList() : this.refresh() : null
+        this.initList()
       },
       // periodFilter(val) {
       //   val[0] && val[1] && this.refresh();
@@ -264,7 +265,7 @@
           from: "top",
           page: 1
         }
-        this.getList( this.tabIndex, body =>this.tabIndex ? this.doneList = [...body.data] : this.wait = [...body.data], pa)
+        this.getList( this.tabIndex, body =>this.tabIndex ? this.doneList = [...body.data] : this.waitList = [...body.data], pa)
       },
       loadMore() {
         let page;
@@ -318,16 +319,16 @@
             if(status==0){
               this.waitListTotal=headers.get('x-total-count');
               if(isPullMore){
-                this.waitList = [...body.waitList,...body.data];
+                this.waitList = [...this.waitList,...body.data];
               }else if(!isPullMore){
                 this.waitList = [...body.data];
               }
             }else if(status==1){
               this.doneListTotal=headers.get('x-total-count');
               if(isPullMore){
-                this.doneList = [...body.waitList,...body.data];
+                this.doneList = [...this.doneList,...body.data];
               }else if(!isPullMore){
-                this.waitList = [...body.data];
+                this.doneList = [...body.data];
               }
             }
           }
