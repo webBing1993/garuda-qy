@@ -258,7 +258,10 @@
       },
       resetFilter() {
         console.log('resetFilter');
-        this.periodFilter = [null, null]
+        this.periodFilter = [null, null];
+        this.filterRoomVal="";
+        this.filterInvoice="";
+        this.invoType=[];
       },
       refresh() {
         let pa = {
