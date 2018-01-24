@@ -7,8 +7,11 @@ module.exports = {
   getconfirmelist(ctx, param){
     ctx.dispatch('resource', {
       url: '/order/precheckin/confirm',
-      params: {
-        status: param.status
+      method: "POST",
+      body: {
+        precheckin_status: param.precheckin_status,
+        like_owner: param.like_owner,
+        pms_room_type_id: param.pms_room_type_id,
       },
       onSuccess: (body) => {
         param.onsuccess ? param.onsuccess(body) : null

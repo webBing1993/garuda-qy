@@ -266,7 +266,9 @@
 
       getList(status, callback){
         this.getconfirmelist({
-          status: status,
+          precheckin_status: status,
+          like_owner:'',
+          pms_room_type_id:'',
           onsuccess: callback
         })
       },
