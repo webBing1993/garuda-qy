@@ -16,6 +16,22 @@ module.exports = {
       onFail: () => null
     })
   },
+  //筛选确认订单列表
+  filtrateConfirmelist(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/order/precheckin/confirm',
+      method: "POST",
+      body: {
+        precheckin_status: param.precheckin_status,
+        like_owner: param.like_owner,
+        pms_room_type_id: param.pms_room_type_id,
+      },
+      onSuccess: (body) => {
+        param.onsuccess ? param.onsuccess(body) : null
+      },
+      onFail: () => null
+    })
+  },
   //获取确认订单详情
    getorderdetail(ctx, param){
     ctx.dispatch('resource', {

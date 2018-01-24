@@ -107,7 +107,13 @@
       </Dialog>
 
       <div class="button-group RCbtn" v-if="rcBtn">
-         <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+        <div>
+          <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+        </div>
+        <p class="space"></p>
+        <div>
+          <x-button value="账单打印" @onClick="BillPrint()" ></x-button>
+        </div>
       </div>
 
       <div>
@@ -121,6 +127,22 @@
             <checklist :options="guestList" v-model=nameList></checklist>
             <div class="button-group">
               <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
+            </div>
+          </group>
+        </popup>
+      </div>
+      <XradioList :options="test" :onClick="myaaa()"></XradioList>
+      <div>
+        <popup v-model="billPrint">
+          <popup-header
+            :left-text=chooseNum
+            :right-text=cancel
+            :show-bottom-border="false"
+            @on-click-right="cancelTxt"></popup-header>
+          <group gutter="0">
+            <checklist :options="roomNumList" v-model=roomNumList></checklist>
+            <div class="button-group">
+              <x-button value="确认"></x-button>
             </div>
           </group>
         </popup>
@@ -150,11 +172,15 @@
         refundValue: null,
         pmsCheckoutId: '',
         popup:false,
+        billPrint:false,
         rcBtn:true,
         guestList:[],
+        test:['111','222','333'],
         suborderId:'',
         nameList:[],
+        roomNumList:[],
         choose:'请选择入住人',
+        chooseNum:'请选择房号',
         cancel:"取消",
       }
     },
@@ -215,15 +241,18 @@
         'rcPrint',
         'tool'
       ]),
+
       roomInfoTitleIndex(detail){
         return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
       },
+
       setLeavestatus(suborderId){
         this.setLeaveStatus({
           suborder_Id: suborderId,
           onsuccess: body => this.getDetail()
         })
       },
+
 //      在住点击提交上传按钮
       setuploadstatus(suborderId) {
         this.setUploadStatus({
@@ -234,10 +263,12 @@
           }
         })
       },
+
       isShowCheckoutDialog(id) {
         this.showCheckoutDialog = true;
         this.pmsCheckoutId = id;
       },
+
       //手工入账
       confirmPmsResult() {
         this.conformPmsSync({
@@ -249,6 +280,7 @@
           }
         })
       },
+
       //退款申请
       refundApply() {
         this.refundapply({
@@ -258,6 +290,7 @@
           }
         })
       },
+
       //确认开票
       setInvoiceConfirm() {
         this.confirmInvoice({
@@ -266,6 +299,7 @@
           onsuccess: () => this.getDetail()
         })
       },
+
       //手动上传旅业系统
       setLvYeStatus(suborderId) {
         this.setUploadStatus({
@@ -273,6 +307,7 @@
           onsuccess: body => this.getDetail()
         })
       },
+
       //退房申请
       pmsCheckout() {
         this.pmscheckout({
@@ -280,6 +315,7 @@
           onsuccess: body => this.getDetail()
         })
       },
+
       getDetail() {
         this.getorderdetail({
           order_id: this.routeId,
@@ -300,6 +336,7 @@
           }
         })
       },
+
       RcPrint(suborders){
         console.log(999)
         let guests=[];
@@ -316,6 +353,17 @@
         this.popup=true;
         this.rcBtn=false;
       },
+
+      BillPrint(){
+        this.billPrint=true;
+        console.log('========',this.detail.suborders)
+        this.detail.suborders.map((item,index)=>{
+          this.roomNumList.push(item.room_number)
+        })
+        console.log('========',this.roomNumList)
+
+      },
+
       RCconfirm(){
         this.rcPrint({
           aaa:11,
@@ -334,11 +382,14 @@
           }
         })
       },
+
       cancelTxt(){
         this.popup=false;
+        this.billPrint=false;
         this.rcBtn=true;
         this.nameList=[];
-      }
+      },
+
     },
     watch: {
       routeId(val) {

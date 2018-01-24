@@ -51,6 +51,8 @@ Vue.component('Checker', require('./components/Functional/checker/checker.vue'))
 Vue.component('CheckerItem', require('./components/Functional/checker/checker-item.vue'));
 Vue.component('Search', require('./components/Functional/search'));
 Vue.component('Progress', require('./components/Layers/progress.vue'));
+Vue.component('XradioList', require('./components/Forms/x-radioList.vue'));
+// Vue.component('MyList', require('./components/Forms/myList.vue.vue'));
 
 /* eslint-disable no-new */
 new Vue({

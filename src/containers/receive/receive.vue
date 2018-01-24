@@ -72,7 +72,14 @@
         <group>
           <x-input @on-focus="inputShow" title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
           <x-input @on-focus="inputShow" title="入住人" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
-          <popup-picker show-name :show=isShowPP hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'235px'}" :title="roomTitle" :data="roomList" v-model=roomType @on-show="popupShow"></popup-picker>
+          <popup-picker show-name
+                        :show=isShowPP
+                        hide-on-deactivated
+                        :popup-style="{'z-index':'5002','max-height':'235px'}"
+                        :title="roomTitle"
+                        :data="roomList"
+                        v-model=roomType
+                        @on-show="popupShow"></popup-picker>
           <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
           <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
@@ -432,6 +439,7 @@
           this.outList(false);
         }
       },
+
       initList() {
         if (this.renderPageIndex === 0 || this.renderList.length == 0) {
           this.gettodaylist({
@@ -483,6 +491,7 @@
           }
         });
       },
+
       //下拉刷新列表，按需加载
       refresh(){
         let off=this.checkOutTotal-this.offset;
@@ -508,6 +517,7 @@
           }, 500);
         }
       },
+
       refreshList() {
         if (this.tempPage == '预登记') {
 //          this.resetList();
@@ -523,6 +533,7 @@
           this.getList();
         }
       },
+
       resetList() {
         if (this.tempPage == '预登记') {
           this.preCheckInList = [];
@@ -534,6 +545,7 @@
           this.checkOutList = [];
         }
       },
+
       searchRoomType() {
         this.roomList1=[{name:'全部房型',value:''}];
         this.roomList=[];

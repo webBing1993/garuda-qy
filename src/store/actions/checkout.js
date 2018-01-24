@@ -41,7 +41,7 @@ module.exports = {
       url:'/room/room_type_list',
       method: 'GET',
       onSuccess: body => {
-        ctx.dispatch('showtoast');
+        // ctx.dispatch('showtoast');
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
