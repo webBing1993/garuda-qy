@@ -174,7 +174,7 @@
             <p></p>
             <span>入住人：</span><span>${item.name}</span>`
 
-        item.identity_status && item.identity_status === 'AUTO_AGREED' ? dom += `<p style = "color: #86e85e" > 人脸识别度大于预设值，已自动通过 </p >` : null
+        item.identity_status && item.identity_status === 'AUTO_AGREED' ? dom += `<p style = "color: #86e85e" > 人脸识别度预设值，已自动通过 </p >` : null
         item.identity_status && item.identity_status === 'AGREED' ? dom += `<p style = "color: #86e85e" > 人脸识别度大于预设值，人工核验通过 </p >` : null
         dom += `</div>`
         return dom
@@ -195,31 +195,32 @@
       getList(callback, status){
         this.getIdentities({
           scope: this.periodFilter[0] && this.periodFilter[1] ? 'HISTORY' : 'TODAY',
+          // scope:'HISTORY',
           status: status,
-          start_time: this.periodFilter[0],
+          start_time: this.periodFilter[0]||'',
           end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
           onsuccess: callback
         })
       },
       initList() {
         if (this.renderList.length === 0) {
-//          this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), 'PENDING');
-//          this.getList(body => (this.refusedIdentities = [...body.data.rows], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
-//          this.getList(body => (this.agreedIdentities = [...body.data.rows], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
+//          this.getList(body => (this.pendingList = [...body.data.content], this.pendingPageIndex++), 'PENDING');
+//          this.getList(body => (this.refusedIdentities = [...body.data.content], this.refusedPageIndex++), 'REFUSED,AUTO_REFUSED');
+//          this.getList(body => (this.agreedIdentities = [...body.data.content], this.agreedPageIndex++), 'AGREED,AUTO_AGREED');
           this.getPendingList();
           this.getAgreedIdentities();
           this.getRefusedIdentities();
         }
       },
       getPendingList() {
-        this.getList(body => (this.pendingList = [...body.data.rows], this.pendingPageIndex++), ['PENDING']);
+        this.getList(body => (this.pendingList = [...body.data.content], this.pendingPageIndex++), ['PENDING']);
       },
       getAgreedIdentities() {
 
-        this.getList(body => (this.agreedIdentities = [...body.data.rows], this.refusedPageIndex++), ['AGREED', 'AUTO_AGREED']);
+        this.getList(body => (this.agreedIdentities = [...body.data.content], this.refusedPageIndex++), ['AGREED', 'AUTO_AGREED']);
       },
       getRefusedIdentities() {
-        this.getList(body => (this.refusedIdentities = [...body.data.rows], this.agreedPageIndex++), ['REFUSED', 'AUTO_REFUSED']);
+        this.getList(body => (this.refusedIdentities = [...body.data.content], this.agreedPageIndex++), ['REFUSED', 'AUTO_REFUSED']);
       },
       refreshList() {
         let tempStatus = '';

@@ -13,7 +13,7 @@
         <img :src="detail.photo" alt="身份证照片">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span>相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
+        <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
         <img :src="detail.livePhoto" alt="现场照片">
       </div>
     </div>
@@ -100,6 +100,7 @@
         isErrorNumber: false,
         canSearch: true,
         isWxPayBtnShow: false,//微信支付入住按钮显示
+        hotelConfig:{}
       }
     },
     computed: {
@@ -161,11 +162,12 @@
         this.newIdentityDetail({
           identity_id: this.identityId,
           onsuccess: body => {
-            this.detail = body.data;
-            typeof body.data.nights === 'number' && (this.days = body.data.nights);
-            body.data.roomNumber && (this.roomNumber = body.data.roomNumber);
-            body.data.reportInTime && (this.inTimeFilter = body.data.reportInTime);
-            if (body.data.roomNumber && (typeof body.data.nights === 'number' && body.data.nights >= 0)) this.isWxPayBtnShow = true;
+            this.hotelConfig=body.data.config;
+            this.detail = body.data.content;
+            typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
+            this.detail.roomNumber && (this.roomNumber = this.detail.roomNumber);
+            this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
+            if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
             this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
           }
         })
