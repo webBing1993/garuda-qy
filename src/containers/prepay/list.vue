@@ -283,6 +283,7 @@
       },
 
       getRoomTypeList(){
+        this.roomList=[]
         this.searchRoom({
           onsuccess: body => {
             let list = body.data;
