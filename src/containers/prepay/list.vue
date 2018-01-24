@@ -143,10 +143,11 @@
         'hotel'
       ]),
       currentTab(){
+          console.log(this.route.params.tab)
         return parseInt(this.route.params.tab)
       },
       renderList(){
-        return this.currentTab ? this.confirmed : this.tobeconfirmed
+        return this.currentTab==2 ? this.confirmed : this.tobeconfirmed
       },
       tabMenu() {
         let menu = [];
@@ -276,6 +277,8 @@
       },
 
       initList(){
+        this.tobeConfirmedPageIndex=0
+        this.confirmedPageIndex=0
         if (this.renderList.length === 0) {
           this.getList(1, body => (this.tobeconfirmed = [...body.data], this.tobeConfirmedPageIndex++))
           this.getList(2, body => (this.confirmed = [...body.data], this.confirmedPageIndex++))
@@ -283,7 +286,7 @@
       },
 
       refreshList(){
-        this.getList(this.currentTab, body => this.currentTab ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
+        this.getList(this.currentTab+1, body => this.currentTab==2 ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
       },
 
       getRoomTypeList(){
@@ -312,8 +315,6 @@
               this.roomList1.push({name: item.room_type_name, value: item.room_type_id});
             });
             this.roomList.push(this.roomList1);
-            console.log('房型1', list)
-            console.log('房型', this.roomList)
           }
         })
       },
@@ -325,7 +326,6 @@
       showDialog(){
         this.IsshowDialog = true;
         this.getRoomTypeList();
-//          this.searchRoomType();
       },
 
       //筛选取消处理
@@ -337,15 +337,11 @@
       confirmHandle() {
         console.log('入住人', this.customerName)
         console.log('房型', this.defaultRoomType)
-//        room_type_id
-//        room_type_name
         this.getedRoomList.map((item,index)=>{
             if(item.room_type_name==this.defaultRoomType[0]){
               this.roomTypeId=item.room_type_id
             }
         })
-        console.log('this.getedRoomList',this.roomList)
-        console.log('this.roomTypeId',this.roomTypeId)
         this.getconfirmelist({
           precheckin_status: 2,
           like_owner:this.customerName,
@@ -362,12 +358,12 @@
 
     },
     watch: {
-      currentTab: function (val, oldval) {
-        this.cancelPick();
-        typeof val === 'number' && !isNaN(val)
-          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
-          : null;
-      }
+//      currentTab: function (val, oldval) {
+//        this.cancelPick();
+//        typeof val === 'number' && !isNaN(val)
+//          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
+//          : null;
+//      }
     },
     mounted(){
       this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
