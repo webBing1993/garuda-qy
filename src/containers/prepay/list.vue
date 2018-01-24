@@ -275,8 +275,8 @@
 
       initList(){
         if (this.renderList.length === 0) {
-          this.getList(0, body => (this.tobeconfirmed = [...body.data], this.tobeConfirmedPageIndex++))
-          this.getList(1, body => (this.confirmed = [...body.data], this.confirmedPageIndex++))
+          this.getList(1, body => (this.tobeconfirmed = [...body.data], this.tobeConfirmedPageIndex++))
+          this.getList(2, body => (this.confirmed = [...body.data], this.confirmedPageIndex++))
         }
       },
 
@@ -334,8 +334,8 @@
       confirmHandle() {
         console.log('入住人', this.customerName)
         console.log('房型', this.defaultRoomType)
-        this.filtrateConfirmelist({
-          precheckin_status: 1,
+        this.getconfirmelist({
+          precheckin_status: 2,
           like_owner:this.customerName,
           pms_room_type_id:this.defaultRoomType[0],
           onsuccess: body =>(this.confirmed = [...body.data], this.confirmedPageIndex++)
