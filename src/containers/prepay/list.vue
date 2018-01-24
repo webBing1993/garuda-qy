@@ -287,6 +287,8 @@
 
       refreshList(){
         console.log(this.currentTab)
+        this.tobeconfirmed=[]
+        this.confirmed=[]
         if(this.currentTab==0){
           this.getList(1,body=>this.tobeconfirmed = [...body.data])
         }else if(this.currentTab==1){
@@ -365,12 +367,12 @@
 
     },
     watch: {
-//      currentTab: function (val, oldval) {
-//        this.cancelPick();
-//        typeof val === 'number' && !isNaN(val)
-//          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
-//          : null;
-//      }
+      currentTab: function (val, oldval) {
+        this.cancelPick();
+        typeof val === 'number' && !isNaN(val)
+          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
+          : null;
+      }
     },
     mounted(){
       this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()

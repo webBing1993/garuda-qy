@@ -131,7 +131,6 @@
           </group>
         </popup>
       </div>
-      <XradioList :options="test" :onClick="myaaa()"></XradioList>
       <div>
         <popup v-model="billPrint">
           <popup-header
