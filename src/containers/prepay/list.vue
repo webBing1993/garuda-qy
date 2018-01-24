@@ -286,7 +286,14 @@
       },
 
       refreshList(){
-        this.getList(this.currentTab+1, body => this.currentTab==2 ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
+        console.log(this.currentTab)
+        if(this.currentTab==0){
+          this.getList(1,body=>this.tobeconfirmed = [...body.data])
+        }else if(this.currentTab==1){
+          this.getList(2,body=>this.confirmed = [...body.data])
+        }
+//        this.getList(this.currentTab+1, body => this.currentTab==2 ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
+
       },
 
       getRoomTypeList(){
