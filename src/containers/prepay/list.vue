@@ -127,6 +127,8 @@
         roomTypeShow: false,
         roomList: [],
         roomType: '',
+        roomTypeId: '',
+        getedRoomList:[],
         defaultRoomType: ['全部房型'],
         selectedRoomType: '',
         IsshowDialog: false,
@@ -288,6 +290,7 @@
         this.roomList=[]
         this.searchRoom({
           onsuccess: body => {
+              this.getedRoomList=body.data;
             let list = body.data;
             let tempList = ['全部房型']
             list.forEach((item, index) => {
@@ -334,10 +337,19 @@
       confirmHandle() {
         console.log('入住人', this.customerName)
         console.log('房型', this.defaultRoomType)
+//        room_type_id
+//        room_type_name
+        this.getedRoomList.map((item,index)=>{
+            if(item.room_type_name==this.defaultRoomType[0]){
+              this.roomTypeId=item.room_type_id
+            }
+        })
+        console.log('this.getedRoomList',this.roomList)
+        console.log('this.roomTypeId',this.roomTypeId)
         this.getconfirmelist({
           precheckin_status: 2,
           like_owner:this.customerName,
-          pms_room_type_id:this.defaultRoomType[0],
+          pms_room_type_id:this.roomTypeId,
           onsuccess: body =>(this.confirmed = [...body.data], this.confirmedPageIndex++)
         });
         this.IsshowDialog = false;
