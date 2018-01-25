@@ -77,8 +77,8 @@
           <x-input title="发票抬头" novalidate placeholder="请输入发票抬头" :show-clear="true" placeholder-align="left" v-model="filterInvoice" @on-focus="inputShow"></x-input>
           <!--<popup-radio title="开票类型" :options="invoTypeList" v-model="invoType" @on-show=popupShow :disabled=flag></popup-radio>-->
           <popup-picker :show=isShowPP show-name hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'200px'}" title="开票类型" :data="invoTypeList" v-model=invoType></popup-picker>
-          <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
-          <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
+          <cell v-show="tabIndex === 1" title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
+          <cell v-show="tabIndex === 1" title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
           <div>
             <div class="invoiceBtn" @click="cancel">取消</div>
             <div class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</div>
