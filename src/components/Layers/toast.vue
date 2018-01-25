@@ -2,7 +2,7 @@
   <div :class="{hide:!value}">
     <div class="weui-mask_transparent"></div>
     <div class="weui-toast">
-      <i class=" weui-icon_toast" :class="[loading ? 'weui-loading' : 'weui-icon-success-no-circle']"></i>
+      <i class=" weui-icon_toasts" :class="[loading ? 'weui-loading' : 'weui-icon-success-no-circle']"></i>
       <p class="weui-toast__content">{{content}}</p>
     </div>
   </div>

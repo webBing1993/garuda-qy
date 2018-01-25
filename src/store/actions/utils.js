@@ -38,9 +38,18 @@ module.exports = {
     }).then(
       response => {
         if (response.body.errcode && +response.body.errcode === 0) {
-          let isShowToast = param.url.match(/identities/) || param.url.match(/precheckin/) || param.url.match(/login/) || param.url.match(/refund_apply_list/) || param.url.match(/searchLvyeReportInfo/) || param.url.match(/lvyeReport/) || param.url.match(/order\/pay/) || param.url.match(/hotel\/.+\/refresh/)||param.url.match(/exceptions/)
+          let isShowToast = param.url.match(/identities/) ||
+            param.url.match(/precheckin/) ||
+            param.url.match(/login/) ||
+            param.url.match(/refund_apply_list/) ||
+            param.url.match(/searchLvyeReportInfo/) ||
+            param.url.match(/lvyeReport/) ||
+            param.url.match(/order\/pay/) ||
+            param.url.match(/hotel\/.+\/refresh/) ||
+            param.url.match(/suborder\/search/) ||
+            param.url.match(/exceptions/)
           param.method && !isShowToast ? ctx.dispatch('showtoast') : null;
-          param.onSuccess ? param.onSuccess(response.body,response.headers) : null
+          param.onSuccess ? param.onSuccess(response.body, response.headers) : null
         } else {
           ctx.dispatch('showtoast', response.body.errmsg);
           param.onFail ? param.onFail(response.body) : null
