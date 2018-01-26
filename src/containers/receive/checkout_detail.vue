@@ -172,7 +172,7 @@
         pmsCheckoutId: '',
         popup:false,
         billPrint:false,
-        rcBtn:true,
+        rcBtn:false,
         guestList:[],
         test:['111','222','333'],
         suborderId:'',
