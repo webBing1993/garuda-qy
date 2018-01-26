@@ -16,18 +16,13 @@
       </div>
 
     </header>
-
+      <!--<switchs title="aa"></switchs>-->
     <div class="list-wrapper">
       <p class="synchronize">
         <x-button mini value="同步" @onClick="syncTime"></x-button>
         上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
       </p>
-      <!--<p @click="showDialog">筛选</p>-->
-      <!--<div class="listFilter">-->
-      <!--<span class="filter" @click="showDialog">-->
-      <!--<abbr>筛选</abbr>-->
-      <!--</span>-->
-      <!--</div>-->
+
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
         <checker type="checkbox" v-model="batchlist"
@@ -93,9 +88,7 @@
       </x-dialog>
     </div>
 
-    <!--<popup v-model="isTimerConterShow" height="80%">-->
-      <!--<calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>-->
-    <!--</popup>-->
+
   </article>
 </template>
 

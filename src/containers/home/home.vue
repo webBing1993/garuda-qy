@@ -53,6 +53,10 @@
             <img src="../../../static/icon/ic_abnormity_notice.png" alt="异常提醒">
             <span class="app-title">异常提醒</span>
           </li>
+          <!--<li class="app-item" @click="goto('examples')">-->
+            <!--<img src="../../../static/icon/ic_abnormity_notice.png" alt="异常提醒">-->
+            <!--<span class="app-title">组件构造</span>-->
+          <!--</li>-->
         </ul>
       </Group>
     </div>

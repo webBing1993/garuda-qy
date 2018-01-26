@@ -78,15 +78,17 @@
         <XButton value="Vue2" primary warn @onClick="showProgress = true"/>
       </div>
     </scroller>
-
-
-
-
-
     <Actionsheet v-model="showAction"/>
     <Dialog v-model="showDialog" confirm title="弹窗呀呀呀呀"/>
     <Toast v-model="showToast"/>
     <Toast v-model="showLoading" loading/>
+
+    <!--————————————————myCom————————————————————————————————————-->
+
+    <h1>我的组件</h1>
+    <h1>我的组件</h1>
+    <h1>我的组件</h1>
+    <Switchs title="开关" v-model="switchValue1"></Switchs>
   </div>
 </template>
 
@@ -109,7 +111,10 @@
         tabMenu: ['待确认', '已确认', 'xxx'],
         selectedTab: '待确认',
         searchValue: '',
-        searchResult: []
+        searchResult: [],
+// --------------------------------------
+        switchValue1: false,
+
       }
     },
     methods: {

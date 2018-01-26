@@ -110,10 +110,10 @@
         <div>
           <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
         </div>
-        <p class="space"></p>
-        <div>
-          <x-button value="账单打印" @onClick="BillPrint()" ></x-button>
-        </div>
+        <!--<p class="space"></p>-->
+        <!--<div>-->
+          <!--<x-button value="账单打印" @onClick="BillPrint()" ></x-button>-->
+        <!--</div>-->
       </div>
 
       <div>

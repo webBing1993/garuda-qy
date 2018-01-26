@@ -146,7 +146,8 @@ const invoice = [{
   }]
 }];
 
-const unchained = [{
+const unchained = [
+  {
   path: '/roommanager',
   component: require('./containers/unchained/ROOMMANAGER')
 }, {
