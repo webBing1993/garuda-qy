@@ -7,27 +7,27 @@
             <img :src='flag?imgList[0].openItem:imgList[0].closeItem' alt="身份核验">
             <span class="app-title">公安验证</span>
           </li>
-          <li class="app-item" @click="goto('prepay/0')">
+          <li class="app-item" @click="flag?goto('prepay/0'):''">
             <img :src='flag?imgList[1].openItem:imgList[1].closeItem' alt="订单中心">
             <span class="app-title">订单中心</span>
           </li>
-          <li class="app-item" @click="goto('receive/precheckin')">
+          <li class="app-item" @click="flag?goto('receive/precheckin'):''">
             <img :src='flag?imgList[2].openItem:imgList[2].closeItem' alt="接待服务">
             <span class="app-title">住离信息</span>
           </li>
-          <li class="app-item" @click="goto('/identity/0')">
+          <li class="app-item" @click="flag?goto('/identity/0'):''">
             <img :src='flag?imgList[3].openItem:imgList[3].closeItem' alt="公安验证">
             <span class="app-title">入住核验</span>
           </li>
-          <li class="app-item" @click="goto('/invoice/0')">
+          <li class="app-item" @click="flag?goto('/invoice/0'):''">
             <img :src='flag?imgList[4].openItem:imgList[4].closeItem' alt="闪开发票">
             <span class="app-title">发票中心</span>
           </li>
-          <li class="app-item" @click="goto('/bill/0')">
+          <li class="app-item" @click="flag?goto('/bill/0'):''">
             <img :src='flag?imgList[5].openItem:imgList[5].closeItem' alt="账务管理">
             <span class="app-title">账务管理</span>
           </li>
-          <li class="app-item" @click="goto('abnormalNotice/listDetail')">
+          <li class="app-item" @click="flag?goto('abnormalNotice/listDetail'):''">
             <img :src='flag?imgList[6].openItem:imgList[6].closeItem' alt="异常提醒">
             <span class="app-title">异常提醒</span>
           </li>
@@ -62,7 +62,7 @@
     name: 'home',
     data() {
       return {
-        flag:false,
+        flag:true,
         List: [],
         prepayTodoNum: 0,
         identityNum: 0,
@@ -76,8 +76,8 @@
             closeItem:'../../../static/icon/ic_police.png'
           },
           {
-            openItem:'../../../static/icon/ic_bill.png',
-            closeItem:'../../../static/icon/closeBill.png'
+            openItem:'../../../static/icon/ic_prepay_confirm.png',
+            closeItem:'../../../static/icon/closePrepay.png'
           },
           {
             openItem:'../../../static/icon/ic_checkout.png',
