@@ -4,8 +4,8 @@ import App from './App.vue';
 Vue.config.productionTip = false;
 
 // Mockdata
-// import './mock';
-
+import './mock';
+// import './server/app'
 // Utils
 import FastClick from 'fastclick';
 FastClick.attach(document.body);

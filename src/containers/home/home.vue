@@ -2,6 +2,7 @@
   <div class="home-container">
 
     <Group title="待办事项" v-if="isHaveTodoList">
+    <!--<Group title="待办事项">-->
 
       <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="订单金额待确认" link :badge="prepayTodoNum"
             @onClick="goto('prepay/0')"></Cell>
@@ -15,6 +16,8 @@
             @onClick="goto('receive/checkout-application')"></Cell>
       <Cell v-if="abnormalNoticeNum > 0" icon="../../../static/icon/ic_abnormity_notice.png" title="异常提醒" link :badge="abnormalNoticeNum"
             @onClick="goto('abnormalNotice/listDetail')"></Cell>
+      <Cell v-if="abnormalNoticeNum > 0" icon="../../../static/icon/ic_checkout.png" title="同住人未入住提醒" link :badge="abnormalNoticeNum"
+            @onClick="goto('notLiveIn/list')"></Cell>
     </Group>
 
     <div v-else class="none-list-container">
@@ -114,6 +117,8 @@
                 if(i.type == 'INVOICE') this.invoiceNum = i.total;
                 if(i.type == 'CHECKOUT') this.checkoutApplicationNum = i.total;
                 if(i.type == 'EXCEPTION') this.abnormalNoticeNum=i.total;
+//                同住人未入住
+                if(i.type == 'NOTLIVEIN') this.abnormalNoticeNum=i.total;
             })
           }
         })

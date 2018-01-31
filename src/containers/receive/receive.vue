@@ -18,41 +18,56 @@
               height="-40"
               v-model="scrollerStatus"
               scrollbarY bounce ref="scrollerBottom">
-    <div class="list-wrapper">
-      <!--<p class="synchronize">-->
-      <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
-      <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
-      <!--</p>-->
+      <div class="list-wrapper">
+        <!--<p class="synchronize">-->
+        <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
+        <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
+        <!--</p>-->
 
-      <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
+        <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
 
-      <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
-        <Cell :title="preCheckInCellTitle(item)"/>
-        <Cell :title="preCheckInCellBody(item)" link
-              @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
-      </Group>
+        <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
+          <Cell :title="preCheckInCellTitle(item)"/>
+          <Cell :title="preCheckInCellBody(item)" link
+                @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
+        </Group>
 
-      <Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">
-        <Cell :title="liveInCellTitle(item)"/>
-        <Cell :title="liveInGuestItem(item)"
-              @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
-      </Group>
+        <!--<Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">-->
+        <!--<Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>-->
+        <!--<Cell :title="liveInGuestItem(item)" @onClick="confirmDelete()"/>-->
+        <!--</Group>-->
 
-      <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
-             :title="titleFilter(index)">
-        <Cell :title="checkoutCellTitle(item)"/>
-        <Cell :title="getCheckoutGuestItem(item)" link
-              @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-      </Group>
 
-      <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-             :title="datetimeparse(item.out_time,'YYMMDD')">
-        <Cell :title="checkoutCellTitle(item,index)"/>
-        <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
-        <Cell :title="getLeaveItem(item)" link
-              @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
-      </Group>
-    </div>
+
+
+
+          <div v-if="tempPage == '在住'"class="rowCont" v-for="(item,index) in LiveInRenderList" :key="index">
+            <div>{{item}}</div>
+          <div class="rowItem">
+          <p>入住人</p>
+          <div>
+          <span>{{item.name}}</span>
+          </div>
+          </div>
+          </div>
+        </div>
+
+
+        <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
+               :title="titleFilter(index)">
+          <Cell :title="checkoutCellTitle(item)"/>
+          <Cell :title="getCheckoutGuestItem(item)" link
+                @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+        </Group>
+
+        <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
+               :title="datetimeparse(item.out_time,'YYMMDD')">
+          <Cell :title="checkoutCellTitle(item,index)"/>
+          <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
+          <Cell :title="getLeaveItem(item)" link
+                @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
+        </Group>
+      </div>
     </scroller>
     <!--筛选按钮-->
     <footer v-if="tempPage == '已离店'">
@@ -70,8 +85,10 @@
                 mask-z-index="1">
         <p class="filterTop">筛选</p>
         <group>
-          <x-input @on-focus="inputShow" title="房号" novalidate  placeholder="请输入房号" :show-clear="true" placeholder-align="left" v-model="filterRoomVal"></x-input>
-          <x-input @on-focus="inputShow" title="入住人" novalidate placeholder="请输入住人姓名" :show-clear="true" placeholder-align="left" v-model="guestName"></x-input>
+          <x-input @on-focus="inputShow" title="房号" novalidate placeholder="请输入房号" :show-clear="true"
+                   placeholder-align="left" v-model="filterRoomVal"></x-input>
+          <x-input @on-focus="inputShow" title="入住人" novalidate placeholder="请输入住人姓名" :show-clear="true"
+                   placeholder-align="left" v-model="guestName"></x-input>
           <popup-picker show-name
                         :show=isShowPP
                         hide-on-deactivated
@@ -80,8 +97,10 @@
                         :data="roomList"
                         v-model=roomType
                         @on-show="popupShow"></popup-picker>
-          <cell title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
-          <cell title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
+          <cell title="起始日期" @onClick="isCalendarShow = true" link
+                :value="datetimeparse(periodFilter[0],'YYMMDD')"></cell>
+          <cell title="截止日期" @onClick="isCalendarShow = true" link
+                :value="datetimeparse(periodFilter[1],'YYMMDD')"></cell>
           <div>
             <div class="invoiceBtn" @click=cancel>取消</div>
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
@@ -90,18 +109,32 @@
       </x-dialog>
     </div>
     <!--日历控件-->
-    <popup hide-on-deactivated :popup-style="{'z-index':'5003','borderTop':'1px solid #eeeeee'}" v-model="isCalendarShow"
+    <popup hide-on-deactivated :popup-style="{'z-index':'5003','borderTop':'1px solid #eeeeee'}"
+           v-model="isCalendarShow"
            bottom
-           animationTopBottom >
+           animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
+    <!--确认删除-->
 
+    <div v-if="confirmDeleteDialog" class="conformDialog">
+      <div class="mask"></div>
+      <div class="dialogCont">
+        <div>确认删除朱飞</div>
+        <div class="space"></div>
+        <div>
+          <p>取消</p>
+          <span></span>
+          <p>确定</p>
+        </div>
+      </div>
+    </div>
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {Scroller, XDialog, XButton, Group,PopupRadio,XInput,PopupPicker,Picker,Popup } from 'vux'
+  import {Scroller, XDialog, XButton, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
 
   export default {
     name: 'receive',
@@ -118,17 +151,17 @@
     },
     data() {
       return {
-        isShowPP:false,
+        isShowPP: false,
         scrollerStatus: {
           pullupStatus: 'default',
           pulldownStatus: 'default'
         },
-        onFetching:false,
+        onFetching: false,
         flag: false,
         guestName: '',
         filterRoomVal: '',
         roomList: [],
-        roomList1:[],
+        roomList1: [],
         roomType: [],
         showDialog: false,
         isCalendarShow: false,
@@ -143,8 +176,9 @@
         checkoutPageIndex: 0,
         isCalendarShow: false,
         periodFilter: [null, null],
-        roomTitle:"房型",
-        checkOutTotal:0
+        roomTitle: "房型",
+        checkOutTotal: 0,
+        confirmDeleteDialog: false
       }
     },
     watch: {
@@ -164,8 +198,8 @@
       //   this.isCalendarShow = false;
       // },
       isCalendarShow(val) {
-        if(val){
-          this.isShowPP=false;
+        if (val) {
+          this.isShowPP = false;
           console.log(this.isShowPP)
         }
       },
@@ -184,11 +218,13 @@
         menu[3] = `已离店(${this.checkOutTotal})`;
         return menu;
       },
+
       getParameter() {
         // let tempRoute = this.route.path.split('/')[2];
         // return tempRoute
         return ''
       },
+
       tempPage() {
         let tempRoute = this.route.path.split('/')[2];
         switch (tempRoute) {
@@ -207,6 +243,7 @@
         }
         return tempRoute
       },
+
 //      离店信息上传失败----》入住信息上传旅业失败
       renderList() {
         if (this.tempPage == '预登记') {
@@ -221,6 +258,21 @@
           return this.sortByTime(this.checkOutList, 'created_time');
         }
       },
+      LiveInRenderList(){
+//        this.sortByTime(this.liveInList, 'in_time');
+//        let guests=[]
+//        this.liveInList.map((item,index)=>{
+//         guests.push(item.guests)
+//        })
+        let guests = []
+
+        for (let i = 0; i < this.liveInList.length; i++) {
+          guests.push(this.liveInList[i].guests[0])
+        }
+        return guests
+      },
+
+
       renderPageIndex() {
         if (this.tempPage == '预登记') {
           return this.preCheckInPageIndex;
@@ -232,6 +284,7 @@
           return this.checkoutPageIndex;
         }
       },
+
       unionTag() {
         let totalList = [...this.renderList];
         let tagList = [];
@@ -245,7 +298,8 @@
           }
         );
         return tagList;
-      }
+      },
+
     },
     methods: {
       ...mapActions([
@@ -258,15 +312,16 @@
         'searchRoom',
         'getOutlist'
       ]),
+
       inputShow(){
         this.isCalendarShow = false;
-        this.isShowPP=false;
+        this.isShowPP = false;
       },
       //筛选确定处理
       confirmHandle() {
         this.showDialog = false;
         this.isCalendarShow = false;
-        this.offset=0;
+        this.offset = 0;
         this.outList(false);
       },
       //筛选取消处理
@@ -295,10 +350,12 @@
             break;
         }
       },
+
       preCheckInCellTitle(item) {
         let alertdom = item.status.is_recording_success ? `` : `<span class="cell-right warn">入账失败</span>`;
         return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${alertdom}</p>`
       },
+
       preCheckInCellBody(item) {
         let roomtypewords = '';
         item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count));
@@ -306,9 +363,10 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
           `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-          `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code?item.share_code:'暂无分享码'}</span></p>` +
+          `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code ? item.share_code : '暂无分享码'}</span></p>` +
           `</div>`
       },
+
       liveInCellTitle(item) {
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
@@ -333,36 +391,39 @@
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-              dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
-                    <p><span style="color:  #8A8A8A">入住人</span>`
-              i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
-              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">()</span>` : null
-              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
-              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
-              dom += `<span style="float: right">${i.name}</span>`;
-              dom += `</p></div>`
-            })
+            dom += `<div class="rowCont">
+                    <div class="rowItem"><p>入住人</p>`
+            dom += `<div> <span>${i.name}</span>`
+            i.checkin_status && i.checkin_status === 'R' ? dom += `<span>(尚未入住)</span><img src="../../../static/icon/delete.png" alt=""></div>` : null
+            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">()</span>` : null
+            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
+            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
+            ;
+            dom += `</div></div>`
+          })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
         }
-        dom += `<p>
+        dom += `<div>
                  <span style="color:  #8A8A8A">入离时间</span>
                  <span style="float: right">${this.datetimeparse(item.in_time, 'YYMMDD')} - ${this.datetimeparse(item.out_time, 'YYMMDD')}</span>
-               </p>`
+               </div>`
         return dom
       },
+
       checkoutCellTitle(item) {
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.created_time, this.isCompleted ? 'MMddhhmm' : 'hhmm')}</span></p>`
       },
+
       getCheckoutGuestItem(item) {
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-              dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
-            })
+            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+          })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -378,13 +439,14 @@
         }
         return dom
       },
+
       getLeaveItem(item) {
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-              dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
-            })
+            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+          })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -398,13 +460,16 @@
         }
         return dom
       },
+
       getUnionTag(tag, tempRoom) {
         return this.unionTag.filter(i => i.tag === tag)[0].room_number.filter(i => i !== tempRoom).join(',')
       },
+
       resetFilter() {
         console.log('resetFilter');
         this.periodFilter = [null, null]
       },
+
       titleFilter(index) {
         return
         // return index
@@ -462,51 +527,52 @@
       },
       //已离店列表
       outList(isPullup) {
-        let roomTypeValue='';
-        roomTypeValue=this.roomType[0];
+        let roomTypeValue = '';
+        roomTypeValue = this.roomType[0];
         this.getOutlist({
           data: {
             "filter": "OUT",
             "room_no": this.filterRoomVal || "",//房间号
-            "pms_room_type_id":roomTypeValue ||"",//PMS房型的ID
+            "pms_room_type_id": roomTypeValue || "",//PMS房型的ID
             "guest_name": this.guestName || "",//入住人名称
             "out_start_time": this.periodFilter[0] || "",//入住时间
-            "out_end_time": this.periodFilter[1]?this.periodFilter[1] + 86400000 :"",//离店时间
-            "order_by":"out_time",//通过哪种时间排序 in_time, out_time
-            "desc":true,
+            "out_end_time": this.periodFilter[1] ? this.periodFilter[1] + 86400000 : "",//离店时间
+            "order_by": "out_time",//通过哪种时间排序 in_time, out_time
+            "desc": true,
           },
           offset: this.offset || 0,
-          onsuccess:(body,headers)=> {
-            this.checkOutTotal=headers.get('x-total-count');
-            if(isPullup){
-              this.checkOutList = [...this.checkOutList,...body.data];
-            }else if(!isPullup){
-              this.checkOutList=[...body.data];
+          onsuccess: (body, headers) => {
+            this.checkOutTotal = headers.get('x-total-count');
+            if (isPullup) {
+              this.checkOutList = [...this.checkOutList, ...body.data];
+            } else if (!isPullup) {
+              this.checkOutList = [...body.data];
               this.$nextTick(() => {
                 this.$refs.scrollerBottom.reset();
               });
             }
-            console.log('list:',this.renderList)
+            console.log('list:', this.renderList)
           }
         });
       },
 
       //下拉刷新列表，按需加载
       refresh(){
-        let off=this.checkOutTotal-this.offset;
-        if (this.onFetching||off<5) {
+        let off = this.checkOutTotal - this.offset;
+        if (this.onFetching || off < 5) {
           console.log('不能再请求了')
           return;
-        }else{
+        } else {
           this.onFetching = true;
           setTimeout(() => {
-            if (this.tempPage == '已离店'){
-              this.offset=this.offset+5;
+            if (this.tempPage == '已离店') {
+              this.offset = this.offset + 5;
               this.outList(true);
-            }else {
+            } else {
               return;
-            };
-            console.log('第'+this.offset+'起');
+            }
+            ;
+            console.log('第' + this.offset + '起');
             this.scrollerStatus.pullupStatus = 'default';
             //$nextTick是为了数据改变了等待dom渲染后使用
             this.$nextTick(() => {
@@ -546,56 +612,34 @@
       },
 
       searchRoomType() {
-        this.roomList1=[{name:'全部房型',value:''}];
-        this.roomList=[];
+        this.roomList1 = [{name: '全部房型', value: ''}];
+        this.roomList = [];
         this.searchRoom({
           onsuccess: body => {
             let list = body.data;
             list.forEach((item, index) => {
-              this.roomList1.push({name: item.room_type_name,value:item.room_type_id});
+              this.roomList1.push({name: item.room_type_name, value: item.room_type_id});
             });
-              this.roomList.push(this.roomList1);
-              console.log('房型',this.roomList)
+            this.roomList.push(this.roomList1);
+            console.log('房型', this.roomList)
           }
         })
+      },
+
+      confirmDelete(){
+        console.log('11111')
+        this.confirmDeleteDialog = true
       }
     },
     mounted() {
       this.initList();
+
     },
 
   }
 </script>
 <style lang="less">
-  .dialog .weui-dialog{
-    text-align: left;
-  }
-  .weui-dialog__bd{
-    padding-left: 0rem;
-  }
-  .invoiceBtn{
-    width: 49%;
-    height: 2rem;
-    float: left;
-    border-top: 1px solid #EEEEEE;
-    padding-top: 1rem;
-    text-align: center;
-  }
-  .invoiceBtn:nth-child(2){
-    border-left: 1px solid #EEEEEE;
-    color: #22AAFF;
-  }
-  .dialog .filterTop{
-    margin-left: 1rem;
-    text-align: left;
-    padding-top: 0.5rem;
-    font-size: 16px;
-    margin-bottom: -0.6rem;
-  }
-  .dialog .weui-cells{
-    font-size: 14px;
-  }
-  .dialog .vux-popup-dialog{
-    z-index: 5001;
-  }
+  @import "./index.less";
 </style>
+
+

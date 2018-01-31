@@ -13,7 +13,8 @@
         <img :src="detail.photo" alt="身份证照片">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
+        <p><span>现场图片</span><span
+          v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
         <img :src="detail.livePhoto" alt="现场照片">
       </div>
     </div>
@@ -51,11 +52,13 @@
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
       <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>
-      <p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
+      <p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span
+        style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span>
+        {{datetimeparse(detail.reportInTime, 'YYYYMMDD hhmm')}}</p>
       <!--<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">-->
-        <!--<span style="color: #80C435;padding-right:10px;">支付成功</span>-->
-        <!--<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>-->
-        <!--<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>-->
+      <!--<span style="color: #80C435;padding-right:10px;">支付成功</span>-->
+      <!--<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>-->
+      <!--<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>-->
       <!--</p>-->
       <x-button v-if="detail.reportInStatus !== 'SUCCESS'"
                 :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
@@ -63,7 +66,7 @@
                 :disabled="isDisabled">
       </x-button>
       <!--<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary-->
-                <!--@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>-->
+      <!--@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>-->
     </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
@@ -100,11 +103,11 @@
         isErrorNumber: false,
         canSearch: true,
         isWxPayBtnShow: false,//微信支付入住按钮显示
-        hotelConfig:{}
+        hotelConfig: {}
       }
     },
     computed: {
-        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
+      // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
         'route',
         'roomNumberList'
@@ -162,7 +165,7 @@
         this.newIdentityDetail({
           identity_id: this.identityId,
           onsuccess: body => {
-            this.hotelConfig=body.data.config;
+            this.hotelConfig = body.data.config;
             this.detail = body.data.content;
             typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
             this.detail.roomNumber && (this.roomNumber = this.detail.roomNumber);

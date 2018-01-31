@@ -1285,12 +1285,16 @@ module.exports = {
       "type": "LVYE" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
     },
     {
-      "total": 0,
+      "total": 1,
       "type": "INVOICE" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
     },
     {
       "total": 0,
       "type": "CHECKOUT" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
+    },
+    {
+      "total": 2,
+      "type": "NOTLIVEIN" //待办事项类型 ，PREPAY预付款确认,IDENTITY身份检验、LVYE旅业上报、INVOICE极速开票、CHECKOUT退房
     },
   ],
 
