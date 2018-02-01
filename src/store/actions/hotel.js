@@ -24,5 +24,14 @@ module.exports = {
        return param.onsuccess ? param.onsuccess(body) : null
       }
     })
+  },
+  getConfig(ctx, param){
+    ctx.dispatch('resource', {
+      url:'/hotel/config',
+      method: "GET",
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
   }
 };

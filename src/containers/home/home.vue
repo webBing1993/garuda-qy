@@ -36,9 +36,9 @@
       <Group title="待办事项" v-if="isHaveTodoList">
         <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="订单金额待确认" link :badge="prepayTodoNum"
               @onClick="goto('prepay/0')"></Cell>
-        <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_police.png" title="您有一条公安验证待处理" link :badge="identityNum"
+        <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_lvye.png" title="您有一条入住核验待处理" link :badge="identityNum"
               @onClick="goto('/identity/0')"></Cell>
-        <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_lvye.png" title="旅业信息待上传" link :badge="policeIdentityNum"
+        <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_police.png" title="公安验证待处理" link :badge="policeIdentityNum"
               @onClick="goto('policeIdentity/handle/0')"></Cell>
         <Cell v-if="invoiceNum > 0" icon="../../../static/icon/ic_invoice.png" title="开票申请待处理" link :badge="invoiceNum"
               @onClick="goto('invoice/0')"></Cell>
@@ -51,6 +51,7 @@
         <img src="../../../static/icon/no_todo_list.png" alt="">
         <span>暂无待办事项</span>
       </div>
+      <div class="tel"><a href="tel:4001-690-890" style="color: rgba(107, 107, 107, 0.82)">客服电话：4001-690-890</a></div>
     </div>
   </div>
 </template>
@@ -84,7 +85,7 @@
             closeItem:'../../../static/icon/closeCheckout.png'
           },
           {
-            openItem:'../../../static/icon/ic_Lvye.png',
+            openItem:'../../../static/icon/ic_lvye.png',
             closeItem:'../../../static/icon/closeLvye.png'
           },
           {
@@ -121,6 +122,7 @@
         'yunbaUnsubscribe',
         'yunbaPublish',
         'setPublishCallback',
+        'getConfig'
       ]),
       setPlay(){
         document.querySelector('#audio').play();
@@ -141,6 +143,20 @@
           }
         })
       },
+      gethotelConfig(){
+        this.getConfig({
+          onsuccess: body => {
+            if(body.data){
+              if(body.data.business_mode==='WQT'){
+                this.flag=true;
+              }else if(body.data.business_mode==='IDENTITY'){
+                this.flag=false;
+              }
+            }
+          }
+        })
+      },
+
       subscribe() {
         this.yunbaSubscribe({
           info: {
@@ -171,6 +187,7 @@
 //      云吧链接
       init() {
         this.getTodoList();
+        this.gethotelConfig();
         if (!this.yunbaConnected) {
 //          this.yunbaConnect();
         }

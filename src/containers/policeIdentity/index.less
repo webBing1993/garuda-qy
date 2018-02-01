@@ -84,12 +84,22 @@ article {
       }
     }
     img {
-      width: 100%;
+      display:block;
       text-align: center;
+      @media screen {
+        width: 100%;
+        @media(min-width:510px){
+          margin: auto;
+          width: 40%;
+          height: 40%;
+        }
+      }
     }
   }
 }
-
+.weui-cells{
+  font-size: 15px;
+}
 footer {
   &:before {
     content: " ";
@@ -142,6 +152,7 @@ footer {
   display: flex;
   flex-direction: column;
   margin: 15px 10px;
+  margin-bottom: 5rem;
   padding: 15px 10px;
   background-color: #ffffff;
   font-size: 14px;
@@ -266,3 +277,40 @@ footer {
     }
   }
 }
+.detailPage{
+  position: relative;
+}
+.footButton{
+  margin-top:0.5rem;
+  padding-top:0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: #ffffff;
+  font-size: 14px;
+  height: 45px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+.footButton .weui-btn {
+  position: absolute;
+  z-index: 0;
+  margin: 0;
+  color: #ffffff;
+}
+.footButton .weui-btn:first-child{
+  width:60%;
+  left: 0;
+  color: #e1e1e1;
+  //background: #3F6CA5;
+  margin-left: 0.5rem;
+}
+.footButton .weui-btn:nth-child(2){
+  width:34%;
+  right: 0;
+  background: #ff385c;
+  margin-right: 0.5rem;
+}
+.pick-btn-group .weui-btn_plain-default{
+     margin-top: 15px;
+}
+

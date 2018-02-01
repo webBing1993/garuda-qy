@@ -134,12 +134,12 @@
 //        path.match(/order\/history/) ? title = '历史登记' : null
 //        path.match(/order\/detail/) ? title = '预登记订单详情' : null
         path.match(/identity\/\d+/) ? title = '入住核验' : null
-        path.match(/identity\/detail/) ? title = '核验详情' : null
+        path.match(/identity\/detail/) ? title = '入住核验详情' : null
 //        path.match(/identity\/today/) ? title = '当日验证' : null
 //        path.match(/identity\/history/) ? title = '历史验证' : null
         path.match(/identity\/todo/) ? title = '待核验' : null
-        path.match(/policeIdentity\/./) ? title = '核验详情' : null
-        path.match(/policeIdentity\/handle/) ? title = '设备核验' : null
+        path.match(/policeIdentity\/./) ? title = '公安验证详情' : null
+        path.match(/policeIdentity\/handle/) ? title = '公安验证' : null
 
 //        path.match(/new-policeIdentity\/wxPay/) ? title = '微信支付入住' : null
         path.match(/livein\/./) ? title = '入住单详情' : null

@@ -56,7 +56,7 @@ const receive = [{
   }]
 }];
 
-//设备核验
+//公安核验
 const policeIdentity = [{
   path: '/policeIdentity',
   component: {
@@ -216,7 +216,7 @@ export default new VueRouter({
 //   }]
 // }];
 
-// const checkIn = [{
+// const identity = [{
 //   path: '/identity',
 //   component: {
 //     name: "identity",

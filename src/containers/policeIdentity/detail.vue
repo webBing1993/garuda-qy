@@ -1,7 +1,7 @@
 <template>
-  <article v-if="detail">
-
-    <div class="guestcard">
+  <div class="detailPage">
+    <article v-if="detail">
+     <div class="guestcard">
       <div class="hd">
         <ul>
           <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
@@ -10,14 +10,13 @@
           <li><span><abbr>住址</abbr>{{detail.address}}</span></li>
           <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
         </ul>
-        <img :src="detail.photo" alt="身份证照片">
+        <img :src="detail.photo" alt="身份证照片" class="policeIdentityImg">
       </div>
       <div class="bd">
         <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
         <img :src="detail.livePhoto" alt="现场照片">
       </div>
     </div>
-
     <div class="report-info">
       <div class="info-item">
         <label class="item-left">房间号码:</label>
@@ -50,21 +49,16 @@
         <label class="item-left">离店时间:</label>
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
-      <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>
+      <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span></p>
       <p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
-      <!--<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">-->
-        <!--<span style="color: #80C435;padding-right:10px;">支付成功</span>-->
-        <!--<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>-->
-        <!--<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>-->
-      <!--</p>-->
-      <x-button v-if="detail.reportInStatus !== 'SUCCESS'"
-                :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
-                @onClick="isDialogShow"
-                :disabled="isDisabled">
-      </x-button>
-      <!--<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary-->
-                <!--@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>-->
+      <p v-if="detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span> {{datetimeparse(detail.createdTime,'YYYYMMDD hhmm')}}</p>
     </div>
+      <div class="footButton" v-if="!(detail.identityStatus == 'REFUSED'||detail.identityStatus == 'AGREED')">
+        <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
+                  @onClick="isDialogShow"
+                  :disabled="isDisabled"></x-button>
+        <x-button value='拒绝' @onClick="isRejectDialogShow"></x-button>
+      </div>
 
     <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
       <ul class="dialog-info">
@@ -79,8 +73,13 @@
           class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
       </ul>
     </Dialog>
-
+    <Dialog confirm cancel v-model="rejectDialog" @onConfirm="rejectConfirm" confirm cancel>
+      <p>是否确认拒绝</p>
+      <br>
+      <p style="color: #808080;font-size: 14px">请客人重新办理公安验证</p>
+    </Dialog>
   </article>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -100,7 +99,8 @@
         isErrorNumber: false,
         canSearch: true,
         isWxPayBtnShow: false,//微信支付入住按钮显示
-        hotelConfig:{}
+        hotelConfig:{},
+        rejectDialog:false
       }
     },
     computed: {
@@ -127,11 +127,25 @@
         'replaceto',
         'newIdentityDetail',
         'reportLvYe',
-        'getRoomNumberList'
+        'getRoomNumberList',
+        'rejectStatus'
       ]),
       ...mapMutations([
         'DEVICEID'
       ]),
+      rejectConfirm(){
+        this.rejectStatus({
+          status:'REFUSED',
+          identity_id: this.detail.identityId,
+          onsuccess: body => {
+            this.goto('/policeIdentity/handle/0')
+            console.log('已经拒绝')
+          }
+        })
+      },
+      isRejectDialogShow(){
+        this.rejectDialog=true;
+      },
       resultPick(item) {
         this.canSearch = false;
         this.roomNumber = item;
