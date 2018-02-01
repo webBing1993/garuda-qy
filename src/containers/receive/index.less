@@ -48,24 +48,58 @@
 .dialog .vux-popup-dialog{
   z-index: 5001;
 }
-
+.spaceTop{
+  height: 20px;
+}
 .rowCont {
   color: #4a4a4a;
   justify-content: space-between;
   line-height: 2;
   display: flex;
   flex-direction: column;
+  background-color: #ffffff;
+  font-size: 17px;
+  margin-bottom: 20px;
+  .weui-cell{
+    font-size: 17px;
+    padding: 5px 1em;
+  }
+  div:last-of-type{
+    margin-left: 1em;
+    margin-right: 20px;
+  }
+  .space{
+    border: 1px solid #E6E6E6;
+    border-top: none;
+    margin-left: 1em;
+    margin-bottom: 10px;
+  }
+  .comTime{
+    margin-bottom: 10px;
+  }
 }
 .rowCont .rowItem{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-left: 1em;
+  margin-right: 20px;
   p{
-    color:  #8A8A8A
+    color:  #8A8A8A;
+    width: 100px;
   }
   div{
+    margin-left: 80px;
+    text-align: left;
+    width: 200px;
     span:first-of-type,span:last-of-type{
       margin-right: 10px;
+    }
+    .LvReport{
+      color: #0BB20C;
+    }
+    .LvReportIng{
+      color: #ffb01f;
     }
     img{
       width: 20px;
@@ -73,8 +107,13 @@
       display:inline-block;
       vertical-align: middle;
     }
+    :last-of-type{
+      margin-bottom: 10px;
+    }
   }
 }
+
+
 .conformDialog{
    .mask{
     background-color: #0D0D0D;

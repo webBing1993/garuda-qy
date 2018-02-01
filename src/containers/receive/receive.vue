@@ -36,38 +36,56 @@
         <!--<Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>-->
         <!--<Cell :title="liveInGuestItem(item)" @onClick="confirmDelete()"/>-->
         <!--</Group>-->
+        <div @click="getQrCode()">二维码</div>
+        <div style="margin: 10px auto">
+          <div id="qrcode" ref="qrcode"></div>
+        </div>
+        <input type="text" id="getval" value="" placeholder="修改这个值改变二维码">
 
 
 
-
-
-          <div v-if="tempPage == '在住'"class="rowCont" v-for="(item,index) in LiveInRenderList" :key="index">
-            <div>{{item}}</div>
-          <div class="rowItem">
-          <p>入住人</p>
+      <div class="spaceTop"></div>
+      <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
+        <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
+        <div class="space"></div>
+        <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
+          <p>入住人:</p>
           <div>
-          <span>{{item.name}}</span>
-          </div>
-          </div>
+            <span>{{i.name}}</span>
+            <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
+            <span class="LvReport"
+                  v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业已上报)</span>
+            <span class="LvReportIng"
+                  v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING '">(旅业正在上传)</span>
+            <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
+                 src="../../../static/icon/delete.png" alt="">
           </div>
         </div>
-
-
-        <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
-               :title="titleFilter(index)">
-          <Cell :title="checkoutCellTitle(item)"/>
-          <Cell :title="getCheckoutGuestItem(item)" link
-                @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-        </Group>
-
-        <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-               :title="datetimeparse(item.out_time,'YYMMDD')">
-          <Cell :title="checkoutCellTitle(item,index)"/>
-          <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
-          <Cell :title="getLeaveItem(item)" link
-                @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
-        </Group>
+        <div class="comTime">
+          <span style="color:  #8A8A8A">入离时间:</span>
+          <span
+            style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
+        </div>
       </div>
+
+
+      </div>
+
+      <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
+             :title="titleFilter(index)">
+        <Cell :title="checkoutCellTitle(item)"/>
+        <Cell :title="getCheckoutGuestItem(item)" link
+              @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+      </Group>
+
+      <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
+             :title="datetimeparse(item.out_time,'YYMMDD')">
+        <Cell :title="checkoutCellTitle(item,index)"/>
+        <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
+        <Cell :title="getLeaveItem(item)" link
+              @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
+      </Group>
+      <!--</div>-->
     </scroller>
     <!--筛选按钮-->
     <footer v-if="tempPage == '已离店'">
@@ -120,12 +138,12 @@
     <div v-if="confirmDeleteDialog" class="conformDialog">
       <div class="mask"></div>
       <div class="dialogCont">
-        <div>确认删除朱飞</div>
+        <div>确认删除"{{deleteName}}"</div>
         <div class="space"></div>
         <div>
           <p>取消</p>
           <span></span>
-          <p>确定</p>
+          <p @click="confirmDeleteDialog = false">确定</p>
         </div>
       </div>
     </div>
@@ -135,7 +153,6 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
   import {Scroller, XDialog, XButton, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
-
   export default {
     name: 'receive',
     components: {
@@ -178,7 +195,9 @@
         periodFilter: [null, null],
         roomTitle: "房型",
         checkOutTotal: 0,
-        confirmDeleteDialog: false
+        confirmDeleteDialog: false,
+        deleteName: '',
+        i:false
       }
     },
     watch: {
@@ -626,10 +645,33 @@
         })
       },
 
-      confirmDelete(){
-        console.log('11111')
+      confirmDelete(i){
         this.confirmDeleteDialog = true
+        this.deleteName = i.name
+      },
+
+      _getQart: function() {
+
+        if(this.i==false){
+          let qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 200,//设置宽高
+            height : 200,
+            colorDark : '#000000',
+            colorLight : '#ffffff',
+          });
+//          document.getElementById("getval").onkeyup =function(){
+//            qrcode.makeCode(document.getElementById("getval").value);
+//          };
+
+          qrcode.makeCode('https://qa.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
+
+        }
+        this.i = true;
+      },
+      getQrCode(){
+        this._getQart()
       }
+
     },
     mounted() {
       this.initList();

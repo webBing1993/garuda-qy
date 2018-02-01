@@ -16,7 +16,7 @@
       </div>
 
     </header>
-      <!--<switchs title="aa"></switchs>-->
+    <!--<switchs title="aa"></switchs>-->
     <div class="list-wrapper">
       <p class="synchronize">
         <x-button mini value="同步" @onClick="syncTime"></x-button>
@@ -38,21 +38,54 @@
       </div>
 
       <div v-show="currentTab">
-        <p v-show="(!confirmed||confirmed.length === 0) && confirmedPageIndex > 0" class="no-data">暂无数据</p>
-        <Group v-for="(item,index) in confirmed" :key="index">
-          <Cell :title="getCellTitle(item)"/>
-          <Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>
-          <Cell v-if="item.remark" :title="getCellFooter(item)"/>
-        </Group>
-
+        <!--<p v-show="(!confirmed||confirmed.length === 0) && confirmedPageIndex > 0" class="no-data">暂无数据</p>-->
+        <!--<Group v-for="(item,index) in confirmed" :key="index">-->
+        <!--<Cell :title="getCellTitle(item)"/>-->
+        <!--<Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>-->
+        <!--<Cell v-if="item.remark" :title="getCellFooter(item)"/>-->
+        <!--</Group>-->
+        <div class="orderCell">
+          <div class="orderCellTitle">
+            <div>
+              <span class="orderCellKey">订单号：</span>
+              <span>ertyuioihgfdfghjkjh</span>
+            </div>
+            <div>
+              <!--<span class="cell-right other">现付 </span>-->
+              <!--<span class="cell-right primary">预付 </span>-->
+              <span>后付/挂账/公账等</span>
+            </div>
+          </div>
+          <div class="space"></div>
+          <div class="orderCellBody" @onClick="orderClick()">
+            <div>
+              <p>
+                <span class="orderCellKey">预订人：</span>
+                <span>张三 18317893610</span>
+              </p>
+              <p class="space10"></p>
+              <p>
+                <span class="orderCellKey">房型：</span>
+                <span>大床房X2</span>
+              </p>
+            </div>
+            <div class="setArrowRight"></div>
+          </div>
+          <div class="orderCellFooter">
+            <p>
+              <span class="orderCellKey">房型：</span>
+              <span>大床房X2</span>
+            </p>
+            <x-button mini value="生成二维码" @onClick="_getQart()"></x-button>
+          </div>
+        </div>
       </div>
     </div>
-
 
     <footer v-show="route.params.tab == 0 && tobeconfirmed.length !== 0 && tobeConfirmedPageIndex > 0">
       <div class="button-group">
         <x-button v-if="batch" value="未支付" @onClick="setMultiConfirm" warn/>
-        <x-button class="blue-btn" v-else @onClick="goPick" value="未支付批量处理"/>
+        <x-button class="blue-btn" v-else  @onClick="goPick" value="未支付批量处理"/>
       </div>
     </footer>
     <footer v-show="route.params.tab == 1">
@@ -77,9 +110,9 @@
                         :data="roomList">
           </popup-picker>
           <!--<cell title="起始日期" @onClick="isTimerConterShow = true" link-->
-                <!--:value="datetimeparse(periodFilter[0],'YYMMDD')"></cell>-->
+          <!--:value="datetimeparse(periodFilter[0],'YYMMDD')"></cell>-->
           <!--<cell title="截止日期" @onClick="isTimerConterShow = true" link-->
-                <!--:value="datetimeparse(periodFilter[1],'YYMMDD')"></cell>-->
+          <!--:value="datetimeparse(periodFilter[1],'YYMMDD')"></cell>-->
           <div>
             <div class="invoiceBtn" @click=cancel>取消</div>
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
@@ -88,6 +121,16 @@
       </x-dialog>
     </div>
 
+    <div class="QrCode" v-if="showQrcode">
+      <!--<div class="mask"></div>-->
+      <div class="qrContent">
+        <div class="qrTitle">
+          <p>二维码</p>
+          <p @click="showQrcode=false">X</p>
+        </div>
+        <div id="qrcode" ref="qrcode"></div>
+      </div>
+    </div>
 
   </article>
 </template>
@@ -121,12 +164,14 @@
         roomList: [],
         roomType: '',
         roomTypeId: '',
-        getedRoomList:[],
+        getedRoomList: [],
         defaultRoomType: ['全部房型'],
         selectedRoomType: '',
         IsshowDialog: false,
         isTimerConterShow: false,
         periodFilter: [null, null],
+        showQrcode:false,
+        i:false
       }
     },
     computed: {
@@ -136,11 +181,11 @@
         'hotel'
       ]),
       currentTab(){
-          console.log(this.route.params.tab)
+        console.log(this.route.params.tab)
         return parseInt(this.route.params.tab)
       },
       renderList(){
-        return this.currentTab==2 ? this.confirmed : this.tobeconfirmed
+        return this.currentTab == 2 ? this.confirmed : this.tobeconfirmed
       },
       tabMenu() {
         let menu = [];
@@ -263,15 +308,15 @@
       getList(status, callback){
         this.getconfirmelist({
           precheckin_status: status,
-          like_owner:'',
-          pms_room_type_id:'',
+          like_owner: '',
+          pms_room_type_id: '',
           onsuccess: callback
         })
       },
 
       initList(){
-        this.tobeConfirmedPageIndex=0
-        this.confirmedPageIndex=0
+        this.tobeConfirmedPageIndex = 0
+        this.confirmedPageIndex = 0
         if (this.renderList.length === 0) {
           this.getList(1, body => (this.tobeconfirmed = [...body.data], this.tobeConfirmedPageIndex++))
           this.getList(2, body => (this.confirmed = [...body.data], this.confirmedPageIndex++))
@@ -280,22 +325,22 @@
 
       refreshList(){
         console.log(this.currentTab)
-        this.tobeconfirmed=[]
-        this.confirmed=[]
-        if(this.currentTab==0){
-          this.getList(1,body=>this.tobeconfirmed = [...body.data])
-        }else if(this.currentTab==1){
-          this.getList(2,body=>this.confirmed = [...body.data])
+        this.tobeconfirmed = []
+        this.confirmed = []
+        if (this.currentTab == 0) {
+          this.getList(1, body => this.tobeconfirmed = [...body.data])
+        } else if (this.currentTab == 1) {
+          this.getList(2, body => this.confirmed = [...body.data])
         }
 //        this.getList(this.currentTab+1, body => this.currentTab==2 ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
 
       },
 
       getRoomTypeList(){
-        this.roomList=[]
+        this.roomList = []
         this.searchRoom({
           onsuccess: body => {
-              this.getedRoomList=body.data;
+            this.getedRoomList = body.data;
             let list = body.data;
             let tempList = ['全部房型']
             list.forEach((item, index) => {
@@ -339,16 +384,16 @@
       confirmHandle() {
         console.log('入住人', this.customerName)
         console.log('房型', this.defaultRoomType)
-        this.getedRoomList.map((item,index)=>{
-            if(item.room_type_name==this.defaultRoomType[0]){
-              this.roomTypeId=item.room_type_id
-            }
+        this.getedRoomList.map((item, index) => {
+          if (item.room_type_name == this.defaultRoomType[0]) {
+            this.roomTypeId = item.room_type_id
+          }
         })
         this.getconfirmelist({
           precheckin_status: 2,
-          like_owner:this.customerName,
-          pms_room_type_id:this.roomTypeId,
-          onsuccess: body =>(this.confirmed = [...body.data], this.confirmedPageIndex++)
+          like_owner: this.customerName,
+          pms_room_type_id: this.roomTypeId,
+          onsuccess: body => (this.confirmed = [...body.data], this.confirmedPageIndex++)
         });
         this.IsshowDialog = false;
       },
@@ -357,6 +402,25 @@
         console.log('resetFilter');
         this.periodFilter = [null, null]
       },
+
+      _getQart: function() {
+        this.showQrcode=true
+          console.log('qwe')
+          let qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 180,//设置宽高
+            height : 180,
+            colorDark : '#000000',
+            colorLight : '#ffffff',
+          });
+        console.log(qrcode)
+          qrcode.makeCode('https://qa.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
+        console.log('aaaaa')
+
+      },
+
+      getQrCode(){
+        this._getQart()
+      }
 
     },
     watch: {
