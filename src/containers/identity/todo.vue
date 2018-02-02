@@ -19,7 +19,7 @@
         <img :src="detail.guest.photo" alt="身份证照片">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span v-if="hotelConfig.identity_check_channel==='true'&& hotelConfig.show_similarity=== 'YOUTU'">相似度： <abbr>{{detail.guest.similarity}}%</abbr></span></p>
+        <p><span>现场图片</span><span v-if="hotelConfig.identity_check_channel==='YOUTU'&& hotelConfig.show_similarity=== 'true'">相似度： <abbr>{{detail.guest.similarity}}%</abbr></span></p>
         <img :src="detail.guest.live_photo" alt="现场照片">
       </div>
     </div>

@@ -1,7 +1,6 @@
 <!--住离信息列表-->
 <template>
   <article>
-
     <header class="tab-wrapper">
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
@@ -46,7 +45,7 @@
       </Group>
 
       <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-             :title="datetimeparse(item.out_time,'YYMMDD')">
+             :title="titleFilter(index)" >
         <Cell :title="checkoutCellTitle(item,index)"/>
         <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
         <Cell :title="getLeaveItem(item)" link
@@ -258,6 +257,20 @@
         'searchRoom',
         'getOutlist'
       ]),
+      //标题项时间处理
+      titleFilter(index) {
+        if (this.tempPage == '已离店') {
+          if(index && this.renderList.length > 0) {
+            if(this.datetimeparse(this.renderList[index].out_time) === this.datetimeparse(this.renderList[index - 1].out_time)){
+              return null
+            }else {
+              return this.datetimeparse(this.renderList[index].out_time);
+            }
+          }else {
+            return this.datetimeparse(this.renderList[index].out_time);
+          }
+        }
+      },
       inputShow(){
         this.isCalendarShow = false;
         this.isShowPP=false;
@@ -313,21 +326,6 @@
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
-//      liveInGuestItem(item){
-//        let dom = ``;
-//        if (item.guests) {
-//          item.guests.length > 0
-//            ? item.guests.forEach(i => {
-//            dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
-//          })
-//            : dom += `<div>无入住人</div>`
-//        } else {
-//          dom += `<div>无入住人</div>`
-//        }
-//        !item.lvye_report_status || item.lvye_report_status === 'FAILED' ? dom += `<p style="color:#DF4A4A;">入住信息上传旅业失败</p>` : null
-//        !item.lvye_report_status || item.lvye_report_status === 'NONE' ? dom += `<p style="color:#DF4A4A;">未上传旅业系统</p>` : null
-//        return dom
-//      },
       liveInGuestItem(item) {
         let dom = ``;
         if (item.guests) {
@@ -405,18 +403,6 @@
         console.log('resetFilter');
         this.periodFilter = [null, null]
       },
-      titleFilter(index) {
-        return
-        // return index
-        //   ? this.datetimeparse(this.renderList[index].created_time) === this.datetimeparse(this.renderList[index - 1].created_time)
-        //     ? null : this.datetimeparse(this.renderList[index].created_time)
-        //   : this.datetimeparse(this.renderList[index].created_time)
-      },
-//      syncTime() {
-//        this.hotelrefresh({
-//          onsuccess: (body) => this.refreshList()
-//        })
-//      },
       getList(callback) {
         if (this.tempPage == '预登记') {
           this.gettodaylist({
@@ -570,9 +556,9 @@
   .dialog .weui-dialog{
     text-align: left;
   }
-  .weui-dialog__bd{
-    padding-left: 0rem;
-  }
+  /*.weui-dialog__bd{*/
+    /*padding-left: 0rem;*/
+  /*}*/
   .invoiceBtn{
     width: 49%;
     height: 2rem;

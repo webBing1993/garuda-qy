@@ -237,12 +237,17 @@
         this.replaceto(newpath)
         this.refreshList()
       },
-      titleFilter(index){
+      titleFilter(index) {
         if (this.handled.length > 0) {
-          return index
-            ? this.datetimeparse(this.handled[index].createdTime) === this.datetimeparse(this.handled[index - 1].createdTime)
-              ? null : this.datetimeparse(this.handled[index].createdTime)
-            : this.datetimeparse(this.handled[index].createdTime)
+          if(index) {
+            if(this.datetimeparse(this.handled[index].createdTime) === this.datetimeparse(this.handled[index - 1].createdTime)){
+              return null
+            }else {
+              return this.datetimeparse(this.handled[index].createdTime);
+            }
+          }else {
+              return this.datetimeparse(this.handled[index].createdTime);
+          }
         }
       },
       goPick(){
