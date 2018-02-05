@@ -11,86 +11,76 @@
         </TabItem>
       </Tab>
     </header>
-    <scroller :pullup-config="Interface.scrollerUp"
-              @on-pullup-loading="refresh"
-              lock-x
-              use-pullup
-              height="-40"
-              v-model="scrollerStatus"
-              scrollbarY bounce ref="scrollerBottom">
+    <!--<scroller :pullup-config="Interface.scrollerUp" @on-pullup-loading="refresh"lock-x use-pullup height="-40" v-model="scrollerStatus" scrollbarY bounce ref="scrollerBottom">-->
+
+    <scroller delegate-id="myscroller"
+              :on-infinite="loadMore"
+              ref="my_scroller"
+              :on-refresh="refresh">
       <div class="list-wrapper">
-        <!--<p class="synchronize">-->
-        <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
-        <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
-        <!--</p>-->
-
-        <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
-
-        <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
-          <Cell :title="preCheckInCellTitle(item)"/>
-          <Cell :title="preCheckInCellBody(item)" link
-                @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
-        </Group>
-
-        <!--<Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">-->
-        <!--<Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>-->
-        <!--<Cell :title="liveInGuestItem(item)" @onClick="confirmDelete()"/>-->
-        <!--</Group>-->
-        <div @click="getQrCode()">二维码</div>
-        <div style="margin: 10px auto">
-          <div id="qrcode" ref="qrcode"></div>
-        </div>
-        <input type="text" id="getval" value="" placeholder="修改这个值改变二维码">
-
-
-
-      <div class="spaceTop"></div>
-      <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
-        <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
-        <div class="space"></div>
-        <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
-          <p>入住人:</p>
-          <div>
-            <span>{{i.name}}</span>
-            <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
-            <span class="LvReport"
-                  v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业已上报)</span>
-            <span class="LvReportIng"
-                  v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING '">(旅业正在上传)</span>
-            <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
-                 src="../../../static/icon/delete.png" alt="">
+          <!--<p class="synchronize">-->
+          <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
+          <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
+          <!--</p>-->
+          <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
+          <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
+            <Cell :title="preCheckInCellTitle(item)"/>
+            <Cell :title="preCheckInCellBody(item)" link
+                  @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
+          </Group>
+          <!--<Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">-->
+          <!--<Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>-->
+          <!--<Cell :title="liveInGuestItem(item)" @onClick="confirmDelete()"/>-->
+          <!--</Group>-->
+          <div class="spaceTop"></div>
+          <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
+            <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
+            <div class="space"></div>
+            <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
+              <p>入住人:</p>
+              <div class="liveInPeop">
+                <span>{{i.name}}</span>
+                <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
+                <span class="LvReport"
+                      v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业已上报)</span>
+                <span class="LvReportIng"
+                      v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING '">(旅业正在上传)</span>
+                <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
+                     src="../../../static/icon/delete.png" alt="">
+              </div>
+            </div>
+            <div class="comTime">
+              <span style="color:  #8A8A8A">入离时间:</span>
+              <span
+                style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
+            </div>
+            <x-button value="退款" @onClick="showTK()">退款</x-button>
           </div>
-        </div>
-        <div class="comTime">
-          <span style="color:  #8A8A8A">入离时间:</span>
-          <span
-            style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
-        </div>
+          <div class="spaceTopApply"></div>
+          <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
+                 :title="titleFilter(index)">
+            <Cell :title="checkoutCellTitle(item)"/>
+            <Cell :title="getCheckoutGuestItem(item)" link
+                  @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+            <div class="appalyBtn">
+              <x-button value="退款" @onClick="showTK()">退款</x-button>
+            </div>
+          </Group>
+          <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
+                 :title="datetimeparse(item.out_time,'YYMMDD')">
+            <Cell :title="checkoutCellTitle(item,index)"/>
+            <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
+            <Cell :title="getLeaveItem(item)" link
+                  @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
+          </Group>
       </div>
-
-
-      </div>
-
-      <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
-             :title="titleFilter(index)">
-        <Cell :title="checkoutCellTitle(item)"/>
-        <Cell :title="getCheckoutGuestItem(item)" link
-              @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-      </Group>
-
-      <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-             :title="datetimeparse(item.out_time,'YYMMDD')">
-        <Cell :title="checkoutCellTitle(item,index)"/>
-        <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
-        <Cell :title="getLeaveItem(item)" link
-              @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
-      </Group>
-      <!--</div>-->
     </scroller>
     <!--筛选按钮-->
-    <footer v-if="tempPage == '已离店'">
+    <!--<footer v-if="tempPage == '已离店'">-->
+    <footer>
       <div class="listFilter">
-        <span class="filter" @click="showDialog = true">
+        <!--<span class="filter" @click="showDialog = true">-->
+        <span class="filter" @click="_filtrate">
           <abbr>筛选</abbr>
         </span>
       </div>
@@ -98,7 +88,58 @@
 
     <!--筛选弹窗-->
     <div class="dialog">
-      <x-dialog v-model="showDialog"
+      <x-dialog v-if="tempPage == '预登记'" v-model="showDialog"
+                :hide-on-blur=false
+                mask-z-index="1">
+        <p class="filterTop">筛选</p>
+        <group>
+          <x-input @on-focus="inputShow" title="姓名：" novalidate placeholder="请输入筛选人姓名" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <x-input @on-focus="inputShow" title="分享码：" novalidate placeholder="请输入分享码" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <x-input @on-focus="inputShow" title="房间号：" novalidate placeholder="请输入筛选人房号" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <x-input @on-focus="inputShow" title="订单号：" novalidate placeholder="请输入筛选人订单号" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <x-input @on-focus="inputShow" title="手机号码：" novalidate placeholder="请输入筛选人手机号" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <div>
+            <div class="invoiceBtn" @click=cancel>取消</div>
+            <div class="invoiceBtn" @click=confirmHandle>确定</div>
+          </div>
+        </group>
+      </x-dialog>
+      <x-dialog v-if="tempPage == '在住'" v-model="showDialog"
+                :hide-on-blur=false
+                mask-z-index="1">
+        <p class="filterTop">筛选</p>
+        <group>
+          <x-input @on-focus="inputShow" title="姓名：" novalidate placeholder="请输入筛选人姓名" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <x-input @on-focus="inputShow" title="房间号：" novalidate placeholder="请输入筛选人房号" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <div>
+            <div class="invoiceBtn" @click=cancel>取消</div>
+            <div class="invoiceBtn" @click=confirmHandle>确定</div>
+          </div>
+        </group>
+      </x-dialog>
+      <x-dialog v-if="tempPage == '退房申请'" v-model="showDialog"
+                :hide-on-blur=false
+                mask-z-index="1">
+        <p class="filterTop">筛选</p>
+        <group>
+          <x-input @on-focus="inputShow" title="姓名：" novalidate placeholder="请输入筛选人姓名" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <x-input @on-focus="inputShow" title="房间号：" novalidate placeholder="请输入筛选人房号" :show-clear="true"
+                   placeholder-align="right"></x-input>
+          <div>
+            <div class="invoiceBtn" @click=cancel>取消</div>
+            <div class="invoiceBtn" @click=confirmHandle>确定</div>
+          </div>
+        </group>
+      </x-dialog>
+      <x-dialog v-if="tempPage == '已离店'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
         <p class="filterTop">筛选</p>
@@ -133,8 +174,8 @@
            animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
-    <!--确认删除-->
 
+    <!--确认删除-->
     <div v-if="confirmDeleteDialog" class="conformDialog">
       <div class="mask"></div>
       <div class="dialogCont">
@@ -147,24 +188,72 @@
         </div>
       </div>
     </div>
+
+    <!--确定退款弹框-->
+    <div v-if="tkDialog" class="conformDialog">
+      <div class="mask"></div>
+      <div class="tkDialogCont" v-if="tkCont1">
+        <div class="close1" @click="_closeDialog()">
+          <img src="../../../static/icon/close.png" alt="">
+        </div>
+        <p>是否已在PMS里录入 <br>该房间的消费</p>
+        <x-button value="确定" @onClick="_changeTkDialogCont()"></x-button>
+      </div>
+
+      <div class="tkDialogCont" v-if="tkCont2">
+        <div class="close1" @click="_closeDialog()">
+          <img src="../../../static/icon/close.png" alt="">
+        </div>
+        <!--单房状态-->
+        <div>
+          <p>退款金额</p>
+          <x-input placeholder-align="left" value="400"></x-input>
+          <p class="tip">如对退款金额有异议，请手动输入</p>
+          <x-button value="确定" @onClick="_changeTkDialogCont1()"></x-button>
+        </div>
+        <!--联房状态-->
+        <div>
+          <p class="lfTip">该房间处于联房状态<br>退款将在最后一个房间退房时退款</p>
+          <x-button value="确定" @onClick="_changeTkDialogCont1()"></x-button>
+        </div>
+
+        <!--退款大于押金状态-->
+        <!--<div class="DisableBtn">-->
+        <!--<p class="tip">退款金额大于押金</p>-->
+        <!--<x-button value="确定"></x-button>-->
+        <!--</div>-->
+      </div>
+
+      <div class="tkDialogCont" v-if="tkCont3">
+        <div class="close1" @click="_closeDialog()">
+          <img src="../../../static/icon/close.png" alt="">
+        </div>
+        <div class="isOk">
+          <img src="../../../static/icon/right.png" alt="">
+        </div>
+        <p>操作完成</p>
+        <p class="miniTip">该房处于联房状态，请PMS手动退款</p>
+      </div>
+    </div>
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {Scroller, XDialog, XButton, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
+//  import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
+  import {XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
+  import {VueScroller} from 'vue-scroller'
   export default {
     name: 'receive',
     components: {
-      Scroller,
       XDialog,
-      XButton,
       Group,
       PopupRadio,
       XInput,
       PopupPicker,
       Picker,
-      Popup
+      Popup,
+      VueScroller
     },
     data() {
       return {
@@ -197,7 +286,11 @@
         checkOutTotal: 0,
         confirmDeleteDialog: false,
         deleteName: '',
-        i:false
+        i: false,
+        tkDialog: false,
+        tkCont1: true,
+        tkCont2: false,
+        tkCont3: false
       }
     },
     watch: {
@@ -602,6 +695,64 @@
         }
       },
 
+      infinite(done) {
+        console.log(this.noData)
+        if(this.noData) {
+          setTimeout(()=>{
+            this.$refs.myscroller.finishInfinite(2);
+          })
+          return;
+        }
+        let self = this;
+        let start = this.moveList.length;
+
+        setTimeout(() => {
+          for(let i = start + 1; i < start + 10; i++) {
+            self.moveList.push(i)
+          }
+          if(start > 30) {
+            self.noData = "没有更多数据"
+          }
+          self.$refs.myscroller.resize();
+          done()
+        }, 1500)
+
+      },
+//      refresh() {
+//        setTimeout(() => {
+//          let start = this.top - 1
+//
+//          for (let i = start; i > start - 10; i--) {
+//            this.items.splice(0, 0, i + ' - keep walking, be 2 with you.')
+//          }
+//
+//          this.top = this.top - 10;
+//
+//          /* 下面3种方式都可以调用 finishPullToRefresh 方法 */
+//
+//          // this.$broadcast('$finishPullToRefresh')
+//          $scroller.get('myScroller').finishPullToRefresh()
+//          // this.$refs.my_scroller.finishPullToRefresh()
+//
+//        }, 1500)
+//      },
+      loadMore() {
+        setTimeout(() => {
+
+          let start = this.bottom + 1
+
+          for (let i = start; i < start + 10; i++) {
+            this.items.push(i + ' - keep walking, be 2 with you.')
+          }
+
+          this.bottom = this.bottom + 10;
+
+          setTimeout(() => {
+            $scroller.get('myScroller').resize()
+          })
+        }, 1500)
+      },
+
       refreshList() {
         if (this.tempPage == '预登记') {
 //          this.resetList();
@@ -650,27 +801,53 @@
         this.deleteName = i.name
       },
 
-      _getQart: function() {
-
-        if(this.i==false){
-          let qrcode = new QRCode(document.getElementById("qrcode"), {
-            width : 200,//设置宽高
-            height : 200,
-            colorDark : '#000000',
-            colorLight : '#ffffff',
-          });
-//          document.getElementById("getval").onkeyup =function(){
-//            qrcode.makeCode(document.getElementById("getval").value);
-//          };
-
-          qrcode.makeCode('https://qa.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
-
-        }
-        this.i = true;
+      showTK(){
+        this.tkDialog = true
       },
-      getQrCode(){
-        this._getQart()
+
+      _closeDialog(){
+        this.tkDialog = false
+        this.tkCont1 = true
+        this.tkCont2 = false
+        this.tkCont3 = false
+      },
+
+      _changeTkDialogCont(){
+        this.tkCont1 = false
+        this.tkCont2 = true
+        this.tkCont3 = false
+      },
+      _changeTkDialogCont1(){
+        this.tkCont1 = false
+        this.tkCont2 = false
+        this.tkCont3 = true
+      },
+//      筛选按钮
+      _filtrate(){
+        this.showDialog=true
       }
+
+//      _getQart: function() {
+//
+//        if(this.i==false){
+//          let qrcode = new QRCode(document.getElementById("qrcode"), {
+//            width : 200,//设置宽高
+//            height : 200,
+//            colorDark : '#000000',
+//            colorLight : '#ffffff',
+//          });
+////          document.getElementById("getval").onkeyup =function(){
+////            qrcode.makeCode(document.getElementById("getval").value);
+////          };
+//
+//          qrcode.makeCode('https://qa.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
+//
+//        }
+//        this.i = true;
+//      },
+//      getQrCode(){
+//        this._getQart()
+//      }
 
     },
     mounted() {

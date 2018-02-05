@@ -16,13 +16,13 @@
       </div>
 
     </header>
+
     <!--<switchs title="aa"></switchs>-->
     <div class="list-wrapper">
       <p class="synchronize">
         <x-button mini value="同步" @onClick="syncTime"></x-button>
         上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
       </p>
-
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
         <checker type="checkbox" v-model="batchlist"
@@ -88,6 +88,7 @@
         <x-button class="blue-btn" v-else  @onClick="goPick" value="未支付批量处理"/>
       </div>
     </footer>
+
     <footer v-show="route.params.tab == 1">
       <div class="listFilter">
          <span class="filter" @click="showDialog">
@@ -121,17 +122,18 @@
       </x-dialog>
     </div>
 
-    <div class="QrCode" v-if="showQrcode">
-      <!--<div class="mask"></div>-->
+    <div class="QrCode" v-model="showQrcode" v-show="showQrcode" >
+      <div class="mask"></div>
       <div class="qrContent">
         <div class="qrTitle">
           <p>二维码</p>
-          <p @click="showQrcode=false">X</p>
+          <!--<p @click="showQrcode=false">X</p>-->
+          <p @click="_close">X</p>
         </div>
         <div id="qrcode" ref="qrcode"></div>
       </div>
     </div>
-
+    <!--<div id="qrcode" ref="qrcode"></div>-->
   </article>
 </template>
 
@@ -141,6 +143,7 @@
 
   export default{
     name: "prepay",
+
     components: {
       XDialog,
       PopupRadio,
@@ -148,6 +151,7 @@
       Picker,
       Popup
     },
+
     data(){
       return {
 //        tabmenu: ["待确认", "已确认"],
@@ -174,19 +178,24 @@
         i:false
       }
     },
+
     computed: {
+
       ...mapState([
         'Interface',
         'route',
         'hotel'
       ]),
+
       currentTab(){
         console.log(this.route.params.tab)
         return parseInt(this.route.params.tab)
       },
+
       renderList(){
         return this.currentTab == 2 ? this.confirmed : this.tobeconfirmed
       },
+
       tabMenu() {
         let menu = [];
         menu[0] = `待确认(${this.tobeconfirmed.length})`;
@@ -194,6 +203,7 @@
         return menu;
       }
     },
+
     methods: {
       ...mapActions([
         'goto',
@@ -204,6 +214,7 @@
         'hotelrefresh',
         'searchRoom',
       ]),
+
       confirmMode(item){
         return item.payinfo
           ? item.payinfo.confirm_mode === 2 ? '(手动确认)' : ''
@@ -405,17 +416,20 @@
 
       _getQart: function() {
         this.showQrcode=true
-          console.log('qwe')
-          let qrcode = new QRCode(document.getElementById("qrcode"), {
+         if(this.i==false){
+//          let qrcode = new QRCode(document.getElementById("qrcode"), {
+          let qrcode = new QRCode(this.$refs.qrcode, {
             width : 180,//设置宽高
             height : 180,
             colorDark : '#000000',
             colorLight : '#ffffff',
           });
-        console.log(qrcode)
-          qrcode.makeCode('https://qa.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
-        console.log('aaaaa')
-
+          qrcode.makeCode('https://gem.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
+         }
+        this.i = true;
+      },
+      _close(){
+        this.showQrcode=false
       },
 
       getQrCode(){
@@ -423,6 +437,7 @@
       }
 
     },
+
     watch: {
       currentTab: function (val, oldval) {
         this.cancelPick();
@@ -431,6 +446,7 @@
           : null;
       }
     },
+
     mounted(){
       this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
     }
