@@ -5,7 +5,7 @@
       <Tab active-color="#5077AA">
         <TabItem v-for="(item,index) in tabMenu"
                  :key="'tabmenu'+index"
-                 :selected="route.params.tab == index"
+                 :selected="route.params.tab === index"
                  @on-item-click="toggleTab(index)">{{item}}
         </TabItem>
       </Tab>
@@ -119,7 +119,7 @@
             return this.pendingPageIndex;
             break;
           case 1:
-            return this.agreedPageIndex
+            return this.agreedPageIndex;
             break;
           case 2:
             return this.refusedPageIndex;

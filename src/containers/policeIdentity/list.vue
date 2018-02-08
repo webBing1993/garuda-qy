@@ -1,4 +1,4 @@
-<!--设备核验-->
+<!--公安核验列表-->
 <template>
   <article>
     <header class="tab-wrapper">
@@ -150,7 +150,7 @@
         select: true,
         resultList: [],
         isErrorNumber: false,
-        canSearch: true
+        canSearch: true,
       }
     },
     computed: {
@@ -165,8 +165,8 @@
       tabMenu() {
         this.initList();
         let menu = [];
-        menu[0] = `待办理(${this.tobeHandled.length})`;
-        menu[1] = `已办理(${this.handled.length})`;
+        menu[0] = `待处理(${this.tobeHandled.length})`;
+        menu[1] = `已处理(${this.handled.length})`;
         return menu;
       },
       renderTodoHandelList(){
@@ -237,12 +237,17 @@
         this.replaceto(newpath)
         this.refreshList()
       },
-      titleFilter(index){
+      titleFilter(index) {
         if (this.handled.length > 0) {
-          return index
-            ? this.datetimeparse(this.handled[index].createdTime) === this.datetimeparse(this.handled[index - 1].createdTime)
-              ? null : this.datetimeparse(this.handled[index].createdTime)
-            : this.datetimeparse(this.handled[index].createdTime)
+          if(index) {
+            if(this.datetimeparse(this.handled[index].createdTime) === this.datetimeparse(this.handled[index - 1].createdTime)){
+              return null
+            }else {
+              return this.datetimeparse(this.handled[index].createdTime);
+            }
+          }else {
+              return this.datetimeparse(this.handled[index].createdTime);
+          }
         }
       },
       goPick(){
@@ -290,7 +295,7 @@
       },
       tobeHandledItem(item){
         return `<div class="cell-body">` +
-          `<span class="cell-right warn">待处理</abbr></span>` +
+          // `<span class="cell-right warn">待处理</abbr></span>` +
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
           `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span><span class="cell-right">${this.datetimeparse(item.createdTime, 'hhmm')}</span></p>` +
           `</div>`;
@@ -299,13 +304,16 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
           `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span></p>` +
+          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus==='REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus==='SUCCESS' ? '已上传旅业' : ''}</span></p>` +
           `</div>`
       },
-      getList(callback, status){
+      getList(callback, status,idenStatus){
         this.newIdentityList({
-          startTime: this.periodFilter ? this.periodFilter[0] : '',
-          endTime: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+          // createTimeStart:1509851866000,
+          createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          // createTimeEnd:1518751066000,
+          identityStatuses:idenStatus,
           reportInStatuses: status,//需要的入住上报旅业状态
           onsuccess: callback
         })
@@ -317,19 +325,19 @@
           this.getList((body => {
             this.handled = [...body.data.content];
             this.handledPageIndex++;
-          }), ['SUCCESS']);
+          }), [],["AGREED","REFUSED"]);
           this.getList((body => {
             this.tobeHandled = [...body.data.content];
             this.tobeHandledPageIndex++;
-          }), ['NONE', 'FAILED'])
+          }), ['NONE', 'FAILED',"PENDING"],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
         }
       },
       refreshList(){
 //        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
         if (this.currentTab === 1) {
-          this.getList(body => this.handled = [...body.data], ['SUCCESS'])
+          this.getList(body => this.handled = [...body.data], [],["AGREED","REFUSED"])
         } else if (this.currentTab === 0) {
-          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'])
+          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
         }
       },
       resetList(){
@@ -338,7 +346,7 @@
       },
       resetFilter() {
         this.periodFilter = [null, null]
-      }
+      },
     },
     mounted(){
       this.initList();

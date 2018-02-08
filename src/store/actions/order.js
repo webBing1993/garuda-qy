@@ -95,6 +95,10 @@ module.exports = {
       body: {
         is_cancelled: param.is_cancelled, //是否取消
         is_sequence: param.is_sequence,// 依据precheckin_done false:默认倒序 true:正序
+        like_owner:param.like_owner,//预定人
+        like_owner_tel:param.like_owner_tel,//预定电话
+        like_order_no:param.like_order_no,//订单号
+        like_auth_code:param.like_auth_code//分享码
       },
       onSuccess: (body) => {
         param.onsuccess ? param.onsuccess(body) : null

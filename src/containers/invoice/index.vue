@@ -377,9 +377,9 @@
     margin-left: 1rem;
     color: #22AAFF;
   }
-  .weui-dialog__bd{
-    padding-left: 0rem;
-  }
+  /*.weui-dialog__bd{*/
+    /*padding-left: 0rem;*/
+  /*}*/
   .filterTop{
     margin-left: 1rem;
     text-align: left;

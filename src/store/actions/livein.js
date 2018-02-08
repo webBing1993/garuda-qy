@@ -19,5 +19,17 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       },
     })
+  },
+  // 在住列表删除未到人员
+  deleteAbsentPerson(ctx, orderGuestId){
+    ctx.dispatch('resource', {
+      url: '/suborder/orderGuest/'+orderGuestId,
+      method: 'DELETE',
+      onSuccess: body => {
+        console.log('isOK')
+        // // ctx.dispatch('showtoast');
+        ctx.dispatch('replaceto','/receive/livein');
+      }
+    })
   }
 }

@@ -43,14 +43,14 @@ module.exports = {
     })
   },
   //删除订单
-  deleteRecord(ctx, order_id){
-    ctx.dispatch('resource', {
-      url: '/order/record/' + order_id,
-      method: 'DEL',
-      onSuccess: body => {
-        // ctx.dispatch('showtoast');
-        ctx.dispatch('goto',-1);
-      }
-    })
-  }
+    deleteRecord(ctx, order_id){
+      ctx.dispatch('resource', {
+        url: '/order/record/' + order_id,
+        method: 'DEL',
+        onSuccess: body => {
+          // ctx.dispatch('showtoast');
+          ctx.dispatch('goto',-1);
+        }
+      })
+    }
 }

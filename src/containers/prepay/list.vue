@@ -44,16 +44,56 @@
         <!--<Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>-->
         <!--<Cell v-if="item.remark" :title="getCellFooter(item)"/>-->
         <!--</Group>-->
-        <div class="orderCell">
+        <!--<div class="orderCell">-->
+          <!--<div class="orderCellTitle">-->
+            <!--<div>-->
+              <!--<span class="orderCellKey">订单号：</span>-->
+              <!--<span>ertyuioihgfdfghjkjh</span>-->
+            <!--</div>-->
+            <!--<div>-->
+              <!--&lt;!&ndash;<span class="cell-right other">现付 </span>&ndash;&gt;-->
+              <!--&lt;!&ndash;<span class="cell-right primary">预付 </span>&ndash;&gt;-->
+              <!--<span>后付/挂账/公账等</span>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="space"></div>-->
+          <!--<div class="orderCellBody" @onClick="orderClick()">-->
+            <!--<div>-->
+              <!--<p>-->
+                <!--<span class="orderCellKey">预订人：</span>-->
+                <!--<span>张三 18317893610</span>-->
+              <!--</p>-->
+              <!--<p class="space10"></p>-->
+              <!--<p>-->
+                <!--<span class="orderCellKey">房型：</span>-->
+                <!--<span>大床房X2</span>-->
+              <!--</p>-->
+              <!--<p>-->
+                <!--<span class="orderCellKey">房型：</span>-->
+                <!--<span>大床房X3</span>-->
+              <!--</p>-->
+            <!--</div>-->
+            <!--<div class="setArrowRight"></div>-->
+          <!--</div>-->
+          <!--<div class="orderCellFooter">-->
+            <!--<p>-->
+              <!--<span class="orderCellKey">授权码：</span>-->
+              <!--<span>rtyuioiuytre</span>-->
+            <!--</p>-->
+            <!--<x-button mini value="生成二维码" @onClick="_getQart()"></x-button>-->
+          <!--</div>-->
+        <!--</div>-->
+
+        <div class="orderCell" v-for="(item,index) in confirmed" :key="index">
           <div class="orderCellTitle">
             <div>
               <span class="orderCellKey">订单号：</span>
-              <span>ertyuioihgfdfghjkjh</span>
+              <span>{{item.order_pmsid}}</span>
             </div>
             <div>
-              <!--<span class="cell-right other">现付 </span>-->
-              <!--<span class="cell-right primary">预付 </span>-->
-              <span>后付/挂账/公账等</span>
+              <span class="cell-right other" v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode==1">现付 </span>
+              <span class="cell-right primary" v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode==2">预付 </span>
+              <span v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode!=1&&item.payinfo.pay_mode!=2">后付/挂账/公账等</span>
             </div>
           </div>
           <div class="space"></div>
@@ -61,31 +101,32 @@
             <div>
               <p>
                 <span class="orderCellKey">预订人：</span>
-                <span>张三 18317893610</span>
+                <span>{{item.owner}} {{item.owner_tel}}</span>
               </p>
               <p class="space10"></p>
-              <p>
+              <p v-for="(i,k) in item.rooms_plan" :key="k">
                 <span class="orderCellKey">房型：</span>
-                <span>大床房X2</span>
+                <span>{{i.room_type}}X{{i.room_count}}</span>
               </p>
             </div>
             <div class="setArrowRight"></div>
           </div>
           <div class="orderCellFooter">
             <p>
-              <span class="orderCellKey">房型：</span>
-              <span>大床房X2</span>
+              <span class="orderCellKey">授权码：</span>
+              <span>12345678987654</span>
             </p>
-            <x-button mini value="生成二维码" @onClick="_getQart()"></x-button>
+            <x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>
           </div>
         </div>
+
       </div>
     </div>
 
     <footer v-show="route.params.tab == 0 && tobeconfirmed.length !== 0 && tobeConfirmedPageIndex > 0">
       <div class="button-group">
         <x-button v-if="batch" value="未支付" @onClick="setMultiConfirm" warn/>
-        <x-button class="blue-btn" v-else  @onClick="goPick" value="未支付批量处理"/>
+        <x-button class="blue-btn" v-else @onClick="goPick" value="未支付批量处理"/>
       </div>
     </footer>
 
@@ -122,7 +163,7 @@
       </x-dialog>
     </div>
 
-    <div class="QrCode" v-model="showQrcode" v-show="showQrcode" >
+    <div class="QrCode" v-model="showQrcode" v-show="showQrcode">
       <div class="mask"></div>
       <div class="qrContent">
         <div class="qrTitle">
@@ -174,8 +215,8 @@
         IsshowDialog: false,
         isTimerConterShow: false,
         periodFilter: [null, null],
-        showQrcode:false,
-        i:false
+        showQrcode: false,
+        i: false
       }
     },
 
@@ -414,22 +455,25 @@
         this.periodFilter = [null, null]
       },
 
-      _getQart: function() {
-        this.showQrcode=true
-         if(this.i==false){
+      _getQart(item){
+        this.showQrcode = true;
+        let order_id = item.order_id
+        let hotel_id = this.hotel.hotel_id
+        if (this.i == false) {
 //          let qrcode = new QRCode(document.getElementById("qrcode"), {
           let qrcode = new QRCode(this.$refs.qrcode, {
-            width : 180,//设置宽高
-            height : 180,
-            colorDark : '#000000',
-            colorLight : '#ffffff',
+            width: 180,//设置宽高
+            height: 180,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
           });
-          qrcode.makeCode('https://gem.fortrun.cn/mirror?hotel_id=6584198400c0451fb5e00302fb3c8e8f&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
-         }
+//          qrcode.makeCode('https://gem.fortrun.cn/mirror?hotel_id=123456789098765&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
+          qrcode.makeCode("https://gem.fortrun.cn/mirror?hotel_id="+hotel_id+"&signpost=BIND_ORDER&order_id="+order_id);
+        }
         this.i = true;
       },
       _close(){
-        this.showQrcode=false
+        this.showQrcode = false
       },
 
       getQrCode(){

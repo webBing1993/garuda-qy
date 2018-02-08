@@ -32,7 +32,7 @@
       <Cell>
         <div class="cell-body">
           <p v-if="data.title">
-            <span class="cell-key2 cell-value-title">公司名称：</span>
+            <span class="cell-key2 cell-value-title">名称：</span>
             <span class="cell-value">{{data.title}}</span>
           </p>
           <p v-if="data.tax_registry_no">

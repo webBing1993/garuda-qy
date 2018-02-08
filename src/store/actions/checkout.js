@@ -3,10 +3,13 @@ module.exports = {
   getcheckoutlist(ctx, param){
     ctx.dispatch('resource', {
       url: '/checkout',
-      params: {
+      method:'POST',
+      body: {
         status: param.status,
         start_time: param.start_time,
-        end_time: param.end_time
+        end_time: param.end_time,
+        guest_name:param.guest_name,//入住人名称
+        room_no:param.room_no,//房间号
       },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
@@ -45,5 +48,19 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
-  }
+  },
+  //退款申请
+  applicationRefund(ctx, param){
+    ctx.dispatch('resource', {
+      url:'/refundAply',
+      method:'POST',
+      body: {
+        orderId:param.orderId,//订单ID
+        refundFee:param.refundFee,//退款金额(分)
+      },
+      onSuccess: (body) => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
 };
