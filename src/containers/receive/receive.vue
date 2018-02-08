@@ -480,26 +480,31 @@
           });
         }
         else if (this.tempPage == '在住') {
+          this.liveInList=[]
           this.getOutlist({
             data: {
               "filter": "IN",
               "guest_name": this.preName,
               room_no: this.live_RoomNum || "",
-              onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
+//              onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
             },
+
             offset: this.offset || 0,
-            onsuccess: (body, headers) => {
-              this.liveInList = headers.get('x-total-count');
-              if (isPullup) {
-                this.liveInList = [...this.liveInList, ...body.data];
-              } else if (!isPullup) {
-                this.liveInList = [...body.data];
-                this.$nextTick(() => {
-                  this.$refs.scrollerBottom.reset();
-                });
-              }
-            }
+           onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
+
+//            onsuccess: (body, headers) => {
+//              this.liveInList = headers.get('x-total-count');
+//              if (isPullup) {
+//                this.liveInList = [...this.liveInList, ...body.data.content];
+//              } else if (!isPullup) {
+//                this.liveInList = [...body.data.content];
+//                this.$nextTick(() => {
+//                  this.$refs.scrollerBottom.reset();
+//                });
+//              }
+//            }
           });
+          console.log('----->',this.liveInList)
 
         }
         else if (this.tempPage == '退房申请') {
@@ -881,12 +886,9 @@
           refundFee:this.tkMoney,//退款金额(分)
           onsuccess: body => (res = [...body])
         })
-
+        this.tkDialog = false
         console.log('res是',res)
         if(res.errcode==0){
-          this.tkCont1 = false;
-          this.tkCont2 = false;
-          this.tkCont3 = true;
           this.tkBtnHide=false;
         }
       },

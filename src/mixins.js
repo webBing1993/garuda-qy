@@ -116,6 +116,11 @@ Vue.mixin({
     },
     showArrVal(arr){
       return arr.join(',')
+    },
+
+    idCardParse:()=>{
+      // suborder.guests[j]['cardStar'] = suborder.guests[j].idcard.replace(/^(.{3})(?:\d+)(.{4})$/, "$1*******$2")
+
     }
   }
 })
