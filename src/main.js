@@ -5,6 +5,7 @@ Vue.config.productionTip = false;//关闭生产模式给出的提示
 
 // Mockdata
 // import './mock';
+// import './server/app'
 
 // Utils
 import FastClick from 'fastclick';

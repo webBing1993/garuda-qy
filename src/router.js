@@ -168,6 +168,17 @@ const unchained = [
   }]
 }];
 
+const notLiveIn=[{
+  path: '/notLiveIn',
+  component: {
+    name: "notLiveIn",
+    template: `<keep-alive><router-view/></keep-alive>`,
+  },
+  children: [{
+    path: 'list',
+    component: require('./containers/notLiveIn/list.vue')
+  }]
+}]
 const others = [
   {
     path: '/',
@@ -189,7 +200,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice, ...others]
+  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn, ...others]
 })
 
 // const precheckin = [{

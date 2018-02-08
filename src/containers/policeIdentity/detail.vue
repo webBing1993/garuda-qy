@@ -13,7 +13,8 @@
         <img :src="detail.photo" alt="身份证照片" class="policeIdentityImg">
       </div>
       <div class="bd">
-        <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
+        <p><span>现场图片</span><span
+          v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
         <img :src="detail.livePhoto" alt="现场照片">
       </div>
     </div>
@@ -49,6 +50,24 @@
         <label class="item-left">离店时间:</label>
         <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
       </div>
+<!--<<<<<<< HEAD-->
+      <!--<p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>-->
+      <!--<p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span-->
+        <!--style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span>-->
+        <!--{{datetimeparse(detail.reportInTime, 'YYYYMMDD hhmm')}}</p>-->
+      <!--&lt;!&ndash;<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">&ndash;&gt;-->
+      <!--&lt;!&ndash;<span style="color: #80C435;padding-right:10px;">支付成功</span>&ndash;&gt;-->
+      <!--&lt;!&ndash;<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>&ndash;&gt;-->
+      <!--&lt;!&ndash;<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>&ndash;&gt;-->
+      <!--&lt;!&ndash;</p>&ndash;&gt;-->
+      <!--<x-button v-if="detail.reportInStatus !== 'SUCCESS'"-->
+                <!--:value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"-->
+                <!--@onClick="isDialogShow"-->
+                <!--:disabled="isDisabled">-->
+      <!--</x-button>-->
+      <!--&lt;!&ndash;<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary&ndash;&gt;-->
+      <!--&lt;!&ndash;@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>&ndash;&gt;-->
+<!--=======-->
       <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span></p>
       <p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
       <p v-if="detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span> {{datetimeparse(detail.createdTime,'YYYYMMDD hhmm')}}</p>
@@ -104,7 +123,7 @@
       }
     },
     computed: {
-        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
+      // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
         'route',
         'roomNumberList'
@@ -176,7 +195,7 @@
         this.newIdentityDetail({
           identity_id: this.identityId,
           onsuccess: body => {
-            this.hotelConfig=body.data.config;
+            this.hotelConfig = body.data.config;
             this.detail = body.data.content;
             typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
             this.detail.roomNumber && (this.roomNumber = this.detail.roomNumber);

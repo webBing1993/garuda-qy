@@ -19,19 +19,42 @@ module.exports = {
   hoteltodolist(ctx, param){
     ctx.dispatch('resource', {
       url: '/todolist',
-      onSuccess: function (body)
-      {
-       return param.onsuccess ? param.onsuccess(body) : null
+      onSuccess: function (body) {
+        return param.onsuccess ? param.onsuccess(body) : null
       }
     })
   },
   getConfig(ctx, param){
     ctx.dispatch('resource', {
-      url:'/hotel/config',
+      url: '/hotel/config',
       method: "GET",
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
+  },
+
+  getAbsentList(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/remindNoShow/list',
+      method: "POST",
+      body: {},
+      onSuccess: (body) => {
+        param.onsuccess ? param.onsuccess(body) : null
+      },
+      onFail: () => null
+    })
+  },
+  setRemindStatus(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/remindNoShow/confirm/' +param.remindId,
+      method: "PUT",
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+
   }
+
+
 };

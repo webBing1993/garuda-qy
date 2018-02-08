@@ -2,7 +2,7 @@
   <div class="home-container">
     <div class="app">
       <Group title="应用">
-        <ul class="app-container" >
+        <ul class="app-container">
           <li class="app-item" @click="goto('/policeIdentity/handle/0')">
             <img :src='flag?imgList[0].openItem:imgList[0].closeItem' alt="身份核验">
             <span class="app-title">公安验证</span>
@@ -34,18 +34,26 @@
         </ul>
       </Group>
       <Group title="待办事项" v-if="isHaveTodoList">
-        <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="订单金额待确认" link :badge="prepayTodoNum"
+        <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="订单金额待确认" link
+              :badge="prepayTodoNum"
               @onClick="goto('prepay/0')"></Cell>
-        <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_lvye.png" title="您有一条入住核验待处理" link :badge="identityNum"
+        <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_lvye.png" title="您有一条入住核验待处理" link
+              :badge="identityNum"
               @onClick="goto('/identity/0')"></Cell>
-        <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_police.png" title="公安验证待处理" link :badge="policeIdentityNum"
+        <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_police.png" title="公安验证待处理" link
+              :badge="policeIdentityNum"
               @onClick="goto('policeIdentity/handle/0')"></Cell>
         <Cell v-if="invoiceNum > 0" icon="../../../static/icon/ic_invoice.png" title="开票申请待处理" link :badge="invoiceNum"
               @onClick="goto('invoice/0')"></Cell>
-        <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="离店申请待处理" link :badge="checkoutApplicationNum"
+        <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="离店申请待处理" link
+              :badge="checkoutApplicationNum"
               @onClick="goto('receive/checkout-application')"></Cell>
-        <Cell v-if="abnormalNoticeNum > 0" icon="../../../static/icon/ic_abnormity_notice.png" title="异常提醒" link :badge="abnormalNoticeNum"
+        <Cell v-if="abnormalNoticeNum > 0" icon="../../../static/icon/ic_abnormity_notice.png" title="异常提醒" link
+              :badge="abnormalNoticeNum"
               @onClick="goto('abnormalNotice/listDetail')"></Cell>
+        <Cell v-if="absentPersonNum > 0" icon="../../../static/icon/ic_checkout.png" title="同住人未入住提醒" link
+              :badge="absentPersonNum"
+              @onClick="goto('notLiveIn/list')"></Cell>
       </Group>
       <div v-else class="none-list-container">
         <img src="../../../static/icon/no_todo_list.png" alt="">
@@ -63,7 +71,7 @@
     name: 'home',
     data() {
       return {
-        flag:true,
+        flag: true,
         List: [],
         prepayTodoNum: 0,
         identityNum: 0,
@@ -71,34 +79,35 @@
         invoiceNum: 0,
         checkoutApplicationNum: 0,
         abnormalNoticeNum: 0,
-        imgList:[
+        absentPersonNum: 0,
+        imgList: [
           {
-            openItem:'../../../static/icon/ic_police.png',
-            closeItem:'../../../static/icon/ic_police.png'
+            openItem: '../../../static/icon/ic_police.png',
+            closeItem: '../../../static/icon/ic_police.png'
           },
           {
-            openItem:'../../../static/icon/ic_prepay_confirm.png',
-            closeItem:'../../../static/icon/closePrepay.png'
+            openItem: '../../../static/icon/ic_prepay_confirm.png',
+            closeItem: '../../../static/icon/closePrepay.png'
           },
           {
-            openItem:'../../../static/icon/ic_checkout.png',
-            closeItem:'../../../static/icon/closeCheckout.png'
+            openItem: '../../../static/icon/ic_checkout.png',
+            closeItem: '../../../static/icon/closeCheckout.png'
           },
           {
-            openItem:'../../../static/icon/ic_lvye.png',
-            closeItem:'../../../static/icon/closeLvye.png'
+            openItem: '../../../static/icon/ic_lvye.png',
+            closeItem: '../../../static/icon/closeLvye.png'
           },
           {
-            openItem:'../../../static/icon/ic_invoice.png',
-            closeItem:'../../../static/icon/closeInvoice.png'
+            openItem: '../../../static/icon/ic_invoice.png',
+            closeItem: '../../../static/icon/closeInvoice.png'
           },
           {
-            openItem:'../../../static/icon/ic_bill.png',
-            closeItem:'../../../static/icon/closeBill.png'
+            openItem: '../../../static/icon/ic_bill.png',
+            closeItem: '../../../static/icon/closeBill.png'
           },
           {
-            openItem:'../../../static/icon/ic_abnormity_notice.png',
-            closeItem:'../../../static/icon/closeAbnormity.png'
+            openItem: '../../../static/icon/ic_abnormity_notice.png',
+            closeItem: '../../../static/icon/closeAbnormity.png'
           }
         ]
       }
@@ -110,7 +119,13 @@
         'yunbaConnected',
       ]),
       isHaveTodoList() {
-        return this.prepayTodoNum > 0 || this.identityNum > 0 || this.policeIdentityNum > 0 || this.invoiceNum > 0 || this.checkoutApplicationNum > 0||this.abnormalNoticeNum > 0
+        return this.prepayTodoNum > 0 ||
+          this.identityNum > 0 ||
+          this.policeIdentityNum > 0 ||
+          this.invoiceNum > 0 ||
+          this.checkoutApplicationNum > 0 ||
+          this.abnormalNoticeNum > 0||
+          this.absentPersonNum > 0
       }
     },
     methods: {
@@ -133,12 +148,14 @@
           onsuccess: body => {
             let list = body.data;
             list.forEach(i => {
-                if(i.type == 'PREPAY') this.prepayTodoNum = i.total;
-                if(i.type == 'IDENTITY') this.identityNum = i.total;
-                if(i.type == 'LVYE') this.policeIdentityNum = i.total;
-                if(i.type == 'INVOICE') this.invoiceNum = i.total;
-                if(i.type == 'CHECKOUT') this.checkoutApplicationNum = i.total;
-                if(i.type == 'EXCEPTION') this.abnormalNoticeNum=i.total;
+              if (i.type == 'PREPAY') this.prepayTodoNum = i.total;
+              if (i.type == 'IDENTITY') this.identityNum = i.total;
+              if (i.type == 'LVYE') this.policeIdentityNum = i.total;
+              if (i.type == 'INVOICE') this.invoiceNum = i.total;
+              if (i.type == 'CHECKOUT') this.checkoutApplicationNum = i.total;
+              if (i.type == 'EXCEPTION') this.abnormalNoticeNum = i.total;
+//                同住人未入住
+              if (i.type == 'NOCHECKIN') this.absentPersonNum = i.total;
             })
           }
         })
@@ -171,16 +188,17 @@
       publishCallback() {
         this.setPublishCallback({
           onSuccess: (body) => {
-            console.log('---------  收到云吧消息',JSON.parse(body.msg));
+            console.log('---------收到云吧消息', JSON.parse(body.msg));
             let data = JSON.parse(body.msg);
             this.setPlay();
-            if(data.type == 'PREPAY') this.prepayTodoNum = data.total;
-            if(data.type == 'IDENTITY') this.identityNum = data.total;
-            if(data.type == 'LVYE') this.policeIdentityNum = data.total;
-            if(data.type == 'INVOICE') this.invoiceNum = data.total;
-            if(data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
-            if(data.type == 'EXCEPITON') this.abnormalNoticeNum = data.total;
-           console.log(this.abnormalNoticeNum)
+            if (data.type == 'PREPAY') this.prepayTodoNum = data.total;
+            if (data.type == 'IDENTITY') this.identityNum = data.total;
+            if (data.type == 'LVYE') this.policeIdentityNum = data.total;
+            if (data.type == 'INVOICE') this.invoiceNum = data.total;
+            if (data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
+            if (data.type == 'EXCEPITON') this.abnormalNoticeNum = data.total;
+            if (data.type == 'NOCHECKIN') this.absentPersonNum = data.total;
+            console.log(this.abnormalNoticeNum)
           }
         })
       },
