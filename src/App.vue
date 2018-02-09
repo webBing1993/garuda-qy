@@ -3,7 +3,7 @@
     <router-view></router-view>
     <Toast v-model="Interface.toast.show" :title="Interface.toast.text"/>
     <Toast v-model="Interface.loading.show" loading/>
-    <audio id="audio" hidden src="/static/4182.wav" ref="audio"></audio>
+    <audio id="audio" hidden src="./static/4182.wav" ref="audio"></audio>
     <Progress v-model="Interface.progress.show" :isOk="Interface.progress.isOk"></Progress>
   </div>
 </template>
