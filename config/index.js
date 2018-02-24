@@ -34,28 +34,28 @@ module.exports = {
         pathRewrite: {
           // '^/gemini': ''
         }
-      },
-      '/q/master/gemini': {
-        target: 'https://qa.fortrun.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          // '^/gemini': ''
-        }
-      },
-      '/s/master/gemini': {
-        target: 'https://stg.fortrun.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          // '^/gemini': ''
-        }
-      },
-      '/p/master/gemini': {
-        target: 'https://gem.fortrun.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          // '^/gemini': ''
-        }
-      }
+      // },
+      // '/q/master/gemini': {
+      //   target: 'https://qa.fortrun.cn/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // '^/gemini': ''
+      //   }
+      // },
+      // '/s/master/gemini': {
+      //   target: 'https://stg.fortrun.cn/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // '^/gemini': ''
+      //   }
+      // },
+      // '/p/master/gemini': {
+      //   target: 'https://gem.fortrun.cn/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // '^/gemini': ''
+      //   }
+      // }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
