@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import configUrl from '../../../../garuda-qy/config/index'
 
 Vue.use(VueResource)
 
@@ -16,15 +17,29 @@ module.exports = {
   },
   urlquery(ctx) {
     let o = {}
+    // console.log("哈哈哈：",window.location.search);
+    // console.log("hehhe：",decodeURIComponent(window.location.search));
     decodeURIComponent(window.location.search).split('&').forEach(i => i ? o[i.split(/=/)[0].replace(/\?/, '')] = i.split(/=/)[1] : null)
     ctx.commit('URLQUERY', o)
   },
+
   //服务器请求
   resource: (ctx, param) => {
+    console.log('configUrl:------>',configUrl.dev.proxyTable['/gemini'].target)
+    let requrl='';
+    if(configUrl.dev.proxyTable['/i/master/gemini']&&configUrl.dev.proxyTable['/i/master/gemini'].target=='https://intg.fortrun.cn/'){
+      requrl='/i/master/gemini' + param.url;
+    }else if(configUrl.dev.proxyTable['/q/master/gemini']&&configUrl.dev.proxyTable['/q/master/gemini'].target=='https://qa.fortrun.cn/'){
+      requrl='/q/master/gemini' + param.url;
+    }else if(configUrl.dev.proxyTable['/s/master/gemini']&&configUrl.dev.proxyTable['/s/master/gemini'].target=='https://stg.fortrun.cn/'){
+      requrl='/s/master/gemini' + param.url;
+    }else if(configUrl.dev.proxyTable['/p/master/gemini']&&configUrl.dev.proxyTable['/p/master/gemini'].target=='https://gem.fortrun.cn/'){
+      requrl='/p/master/gemini' + param.url;
+    }
     let isRefresh = /hotel\/.+\/refresh/.test(param.url);
     isRefresh ? ctx.dispatch('showprogress', {show: true, isOk: false}) : ctx.commit('LOADING', 1);
     Vue.http({
-      url: '/i/master/gemini' + param.url,
+      url: requrl+param.url,
       body: param.body || null,
       headers: param.headers || {
         Session: sessionStorage.session_id

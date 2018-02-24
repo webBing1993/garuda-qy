@@ -3,7 +3,7 @@
     <router-view></router-view>
     <Toast v-model="Interface.toast.show" :title="Interface.toast.text"/>
     <Toast v-model="Interface.loading.show" loading/>
-    <audio id="audio" hidden src="/i/master/garuda-qy/static/4182.wav" ref="audio"></audio>
+    <!--<audio id="audio" hidden src="/i/master/garuda-qy/static/4182.wav" ref="audio"></audio>-->
     <Progress v-model="Interface.progress.show" :isOk="Interface.progress.isOk"></Progress>
   </div>
 </template>
@@ -113,13 +113,11 @@
           s.parentNode.insertBefore(mta, s);
         })();
       }
-
     },
     mounted(){
       if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
         this.initMTA();
       }
-
       this.urlquery()
       this.login()
     },

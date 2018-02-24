@@ -19,6 +19,7 @@
     "vue": "^2.2.2",
     "vue-resource": "^1.2.1",
     "vue-router": "^2.3.0",
+    "vue-scroller": "^2.2.4",
     "vuex": "^2.2.1",
     "vux": "^2.1.1-rc.12",
     "xscroll": "^3.1.3"
