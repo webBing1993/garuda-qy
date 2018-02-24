@@ -39,7 +39,7 @@ module.exports = {
     let isRefresh = /hotel\/.+\/refresh/.test(param.url);
     isRefresh ? ctx.dispatch('showprogress', {show: true, isOk: false}) : ctx.commit('LOADING', 1);
     Vue.http({
-      url: '/i/master/gemini/'+param.url,
+      url: '/i/master/gemini'+param.url,
       body: param.body || null,
       headers: param.headers || {
         Session: sessionStorage.session_id
