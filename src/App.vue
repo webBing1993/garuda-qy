@@ -29,7 +29,6 @@
       sessionId(){
         return this.AppParams.session
       },
-
     },
     methods: {
       ...mapActions([
@@ -108,7 +107,6 @@
           mta.src = "http://pingjs.qq.com/h5/stats.js?v2.0.4";
           mta.setAttribute("name", "MTAH5");
           mta.setAttribute("sid", sid);
-
           var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(mta, s);
         })();
