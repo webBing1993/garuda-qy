@@ -44,45 +44,7 @@
         <!--<Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>-->
         <!--<Cell v-if="item.remark" :title="getCellFooter(item)"/>-->
         <!--</Group>-->
-        <!--<div class="orderCell">-->
-          <!--<div class="orderCellTitle">-->
-            <!--<div>-->
-              <!--<span class="orderCellKey">订单号：</span>-->
-              <!--<span>ertyuioihgfdfghjkjh</span>-->
-            <!--</div>-->
-            <!--<div>-->
-              <!--&lt;!&ndash;<span class="cell-right other">现付 </span>&ndash;&gt;-->
-              <!--&lt;!&ndash;<span class="cell-right primary">预付 </span>&ndash;&gt;-->
-              <!--<span>后付/挂账/公账等</span>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="space"></div>-->
-          <!--<div class="orderCellBody" @onClick="orderClick()">-->
-            <!--<div>-->
-              <!--<p>-->
-                <!--<span class="orderCellKey">预订人：</span>-->
-                <!--<span>张三 18317893610</span>-->
-              <!--</p>-->
-              <!--<p class="space10"></p>-->
-              <!--<p>-->
-                <!--<span class="orderCellKey">房型：</span>-->
-                <!--<span>大床房X2</span>-->
-              <!--</p>-->
-              <!--<p>-->
-                <!--<span class="orderCellKey">房型：</span>-->
-                <!--<span>大床房X3</span>-->
-              <!--</p>-->
-            <!--</div>-->
-            <!--<div class="setArrowRight"></div>-->
-          <!--</div>-->
-          <!--<div class="orderCellFooter">-->
-            <!--<p>-->
-              <!--<span class="orderCellKey">授权码：</span>-->
-              <!--<span>rtyuioiuytre</span>-->
-            <!--</p>-->
-            <!--<x-button mini value="生成二维码" @onClick="_getQart()"></x-button>-->
-          <!--</div>-->
-        <!--</div>-->
+
 
         <div class="orderCell" v-for="(item,index) in confirmed" :key="index">
           <div class="orderCellTitle">
@@ -97,7 +59,7 @@
             </div>
           </div>
           <div class="space"></div>
-          <div class="orderCellBody" @onClick="orderClick()">
+          <div class="orderCellBody">
             <div>
               <p>
                 <span class="orderCellKey">预订人：</span>
@@ -109,7 +71,7 @@
                 <span>{{i.room_type}}X{{i.room_count}}</span>
               </p>
             </div>
-            <div class="setArrowRight"></div>
+            <div class="setArrowRight" @click="orderClick(item.order_id)"></div>
           </div>
           <div class="orderCellFooter">
             <p>
@@ -118,6 +80,7 @@
             </p>
             <x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>
           </div>
+          <Cell v-if="item.remark" :title="getCellFooter(item)"/>
         </div>
 
       </div>

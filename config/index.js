@@ -27,7 +27,8 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
+    proxyTable:
+      {
       '/i/master/gemini': {
         target:'https://wqt.fortrun.cn',
         changeOrigin: true,

@@ -7,7 +7,7 @@ import data from './data'
 Mock
   .mock(
     // 获取确认订单列表 /order/precheckin/confirm
-    /\/order\/precheckin\/confirm\?status=\d/,
+    /\/order\/precheckin\/confirm/,
     {
       errcode: "0",
       errmsg: "ok",
@@ -37,6 +37,15 @@ Mock
 
 
 Mock
+  .mock(
+    // 获取确认订单列表 /order/precheckin/confirm
+    /\/order\/precheckin\/confirm\?status=\d/,
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: data.orderlist
+    }
+  )
   .mock(
     // 获取当日预登记订单列表 /order/precheckin/today
     data.prefix + '/order/precheckin/today',
