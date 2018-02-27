@@ -1,17 +1,23 @@
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
+// var wqtapi = require('../wqtapi')
 var vueLoaderConfig = require('./vue-loader.conf')
 const vuxLoader = require('vux-loader')
 require("babel-polyfill");
+require("string-replace-loader");
+var argv = require('yargs').argv;
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
+console.log(argv.wqtenv)
+console.log(argv.wqtversion)
+
 let webpackConfig = {
   entry: {
-    app: ['babel-polyfill','./src/main.js']
+    app: ['babel-polyfill', './src/main.js']
   },
   output: {
     path: config.build.assetsRoot,
@@ -29,6 +35,16 @@ let webpackConfig = {
   },
   module: {
     rules: [
+      {
+        test: /utils.js\.js$/,
+        loader: 'string-replace-loader',
+        options: {
+          multiple: [
+            {search: 'wqtenv', replace: argv.wqtenv},
+            {search: 'wqtversion', replace: argv.wqtversion}
+          ]
+        }
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',

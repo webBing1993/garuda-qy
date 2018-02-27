@@ -5,12 +5,11 @@
   "author": "fe@fortrun",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "prod": "node build/build.js",
-    "test": "node build/build.js",
-    "intg": "node build/build.js",
-    "stg": "node build/build.js"
+    "dev": "node build/dev-server.js --wqtenv i --wqtversion master",
+    "prod": "node build/build.js --wqtenv p --wqtversion master",
+    "test": "node build/build.js --wqtenv q --wqtversion master",
+    "intg": "node build/build.js --wqtenv i --wqtversion master",
+    "stg": "node build/build.js --wqtenv s --wqtversion master"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -63,6 +62,7 @@
     "ora": "^1.1.0",
     "rimraf": "^2.6.0",
     "semver": "^5.3.0",
+    "string-replace-loader": "^2.1.1",
     "url-loader": "^0.5.7",
     "vue-loader": "^11.1.4",
     "vue-scroller": "^2.2.4",
