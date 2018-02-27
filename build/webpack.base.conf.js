@@ -36,7 +36,7 @@ let webpackConfig = {
   module: {
     rules: [
       {
-        test: /utils.js\.js$/,
+        test: /utils.js$/,
         loader: 'string-replace-loader',
         options: {
           multiple: [
