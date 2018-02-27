@@ -20,12 +20,12 @@ sync(store, router);
 import './mixins'
 
 //raven
-import Raven from 'raven-js';
-import RavenVue from 'raven-js/plugins/vue';
-Raven
-  .config('http://d6a3b3f4a8cd4617bef21bfb6ca63216@111.231.65.183:9000/25')
-  .addPlugin(RavenVue, Vue)
-  .install();
+// import Raven from 'raven-js';
+// import RavenVue from 'raven-js/plugins/vue';
+// Raven
+//   .config('http://d6a3b3f4a8cd4617bef21bfb6ca63216@111.231.65.183:9000/25')
+//   .addPlugin(RavenVue, Vue)
+//   .install();
 
 // Components
 Vue.component('XInput', require('./components/Forms/x-input.vue'))
