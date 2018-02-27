@@ -4,7 +4,7 @@ module.exports = {
       ctx.commit('SESSION', sessionStorage.session_id)
       ctx.commit('HOTEL', {'hotel_id': sessionStorage.hotel_id});
       console.log('STORAGE: ', sessionStorage.session_id, sessionStorage.hotel_id)
-
+    }
     // } else {
     //   ctx.dispatch('resource', {
     //     url: "/login",
@@ -23,6 +23,6 @@ module.exports = {
     //       }
     //     }
     //   })
-    }
+
   }
 }

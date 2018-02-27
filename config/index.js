@@ -28,8 +28,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/i/master/gemini/': {
-        target:'https://intg.fortrun.cn/',
+      '/i/master/gemini': {
+        target:'https://wqt.fortrun.cn',
         changeOrigin: true,
         pathRewrite: {
           // '^/gemini': ''
