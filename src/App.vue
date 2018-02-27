@@ -121,19 +121,7 @@
     },
     watch: {
       AppParams(val){
-        if (sessionStorage.session_id && sessionStorage.hotel_id) {
-          ctx.commit('SESSION', sessionStorage.session_id)
-          ctx.commit('HOTEL', {'hotel_id': sessionStorage.hotel_id});
-          console.log('SESSIONSTORAGE: ', sessionStorage.session_id, sessionStorage.hotel_id)
-        }else {
-          console.log('LOGIN: ', val.session, val.hotel_id);
-          sessionStorage.session_id = val.session;
-          console.log('11:', sessionStorage.session_id)
-          ctx.commit('SESSION', val.session);
-          sessionStorage.hotel_id = val.hotel_id;
-          console.log('22:', {'hotel_id': val.hotel_id})
-          ctx.commit('HOTEL', {'hotel_id': val.hotel_id});
-        }
+          this.login(val);
       },
       $route(val){
         const path = val.fullPath;
