@@ -57,6 +57,7 @@ module.exports = {
       body: {
         orderId:param.orderId,//订单ID
         refundFee:param.refundFee,//退款金额(分)
+        subOrderId:param.subOrderId,//入住单ID
       },
       onSuccess: (body) => {
         param.onsuccess ? param.onsuccess(body) : null

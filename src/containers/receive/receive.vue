@@ -90,6 +90,7 @@
 
     <!--筛选弹窗-->
     <div class="dialog">
+
       <x-dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -113,6 +114,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '在住'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -130,6 +132,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '退房申请'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -147,6 +150,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '已离店'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -307,7 +311,8 @@
         preNum: '',
         live_RoomNum: '',
         tkMoney:'',
-        orderId:''
+        orderId:'',
+        suborderId:''
       }
     },
     watch: {
@@ -861,9 +866,11 @@
       },
 
       showTK(item){
+          console.log('------->',item)
         this.tkDialog = true
         this.tkMoney=item.order.cash_pledge
         this.orderId=item.order.order_id
+        this.suborderId=item.suborder_id
       },
 
       _closeDialog(){
@@ -884,6 +891,7 @@
         this.applicationRefund({
           orderId:this.orderId,//订单ID
           refundFee:this.tkMoney,//退款金额(分)
+          subOrderId:this.suborderId,
           onsuccess: body => (res = [...body])
         })
         this.tkDialog = false
