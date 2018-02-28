@@ -109,7 +109,7 @@
                 <span>{{i.room_type}}X{{i.room_count}}</span>
               </p>
             </div>
-            <div class="setArrowRight"></div>
+            <div class="setArrowRight" @click="orderClick(item.order_id)"></div>
           </div>
           <div class="orderCellFooter">
             <p>
@@ -118,6 +118,7 @@
             </p>
             <x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>
           </div>
+          <Cell v-if="item.remark" :title="getCellFooter(item)"/>
         </div>
 
       </div>

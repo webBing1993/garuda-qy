@@ -307,6 +307,7 @@
         preNum: '',
         live_RoomNum: '',
         tkMoney:'',
+        suborderId:'',
         orderId:''
       }
     },
@@ -862,8 +863,10 @@
 
       showTK(item){
         this.tkDialog = true
-        this.tkMoney=item.order.cash_pledge
+        this.tkMoney=(item.order.cash_pledge*0.01)
         this.orderId=item.order.order_id
+        this.suborderId=item.suborder_id
+
       },
 
       _closeDialog(){
@@ -883,7 +886,8 @@
         let res=''
         this.applicationRefund({
           orderId:this.orderId,//订单ID
-          refundFee:this.tkMoney,//退款金额(分)
+          refundFee:this.tkMoney/0.01,//退款金额(分)
+          subOrderId:this.suborderId,
           onsuccess: body => (res = [...body])
         })
         this.tkDialog = false
