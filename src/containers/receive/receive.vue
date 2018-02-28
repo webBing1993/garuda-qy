@@ -577,16 +577,16 @@
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
-            dom += `<div class="rowCont">
-                    <div class="rowItem"><p>入住人</p>`
-            dom += `<div> <span>${i.name}</span>`
-            i.checkin_status && i.checkin_status === 'R' ? dom += `<span>(尚未入住)</span><img src="../../../static/icon/delete.png" alt=""></div>` : null
-            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">()</span>` : null
-            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
-            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
-            ;
-            dom += `</div></div>`
-          })
+
+              dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
+                    <p><span style="color:  #8A8A8A">入住人</span>`
+              i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
+              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
+              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
+              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
+              dom += `<span style="float: right">${i.name}</span>`;
+              dom += `</p></div>`
+            })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -868,7 +868,7 @@
       showTK(item){
           console.log('------->',item)
         this.tkDialog = true
-        this.tkMoney=item.order.cash_pledge
+        this.tkMoney=(item.order.cash_pledge*0.01)+'元'
         this.orderId=item.order.order_id
         this.suborderId=item.suborder_id
       },
@@ -890,7 +890,7 @@
         let res=''
         this.applicationRefund({
           orderId:this.orderId,//订单ID
-          refundFee:this.tkMoney,//退款金额(分)
+          refundFee:this.tkMoney/0.01,//退款金额(分)
           subOrderId:this.suborderId,
           onsuccess: body => (res = [...body])
         })
