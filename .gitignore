@@ -6,3 +6,4 @@ yarn-error.log
 .idea
 .vscode
 /src/containers/receive/receive.vue
+package-lock.json

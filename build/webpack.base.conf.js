@@ -12,8 +12,7 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-console.log(argv.wqtenv)
-console.log(argv.wqtversion)
+console.log("basePath:" + argv.basePath)
 
 let webpackConfig = {
   entry: {
@@ -36,14 +35,13 @@ let webpackConfig = {
   module: {
     rules: [
       {
-        test: /utils.js$/,
+        test: /index\.html$/,
+        loader: 'raw-loader'
+      },
+      {
+        test: /index\.html$/,
         loader: 'string-replace-loader',
-        options: {
-          multiple: [
-            {search: 'wqtenv', replace: argv.wqtenv},
-            {search: 'wqtversion', replace: argv.wqtversion}
-          ]
-        }
+        options: {search: 'basePath', replace: argv.basePath}
       },
       {
         test: /\.vue$/,

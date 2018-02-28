@@ -34,29 +34,29 @@
         </ul>
       </Group>
       <Group title="待办事项" v-if="isHaveTodoList">
-        <Cell v-if="prepayTodoNum > 0" icon="../../../static/icon/ic_prepay_confirm.png" title="订单金额待确认" link
+        <Cell v-if="prepayTodoNum > 0" icon="./static/icon/ic_prepay_confirm.png" title="订单金额待确认" link
               :badge="prepayTodoNum"
               @onClick="goto('prepay/0')"></Cell>
-        <Cell v-if="identityNum > 0" icon="../../../static/icon/ic_lvye.png" title="您有一条入住核验待处理" link
+        <Cell v-if="identityNum > 0" icon="./static/icon/ic_lvye.png" title="您有一条入住核验待处理" link
               :badge="identityNum"
               @onClick="goto('/identity/0')"></Cell>
-        <Cell v-if="policeIdentityNum > 0" icon="../../../static/icon/ic_police.png" title="公安验证待处理" link
+        <Cell v-if="policeIdentityNum > 0" icon="./static/icon/ic_police.png" title="公安验证待处理" link
               :badge="policeIdentityNum"
               @onClick="goto('policeIdentity/handle/0')"></Cell>
-        <Cell v-if="invoiceNum > 0" icon="../../../static/icon/ic_invoice.png" title="开票申请待处理" link :badge="invoiceNum"
+        <Cell v-if="invoiceNum > 0" icon="./static/icon/ic_invoice.png" title="开票申请待处理" link :badge="invoiceNum"
               @onClick="goto('invoice/0')"></Cell>
-        <Cell v-if="checkoutApplicationNum > 0" icon="../../../static/icon/ic_checkout.png" title="离店申请待处理" link
+        <Cell v-if="checkoutApplicationNum > 0" icon="./static/icon/ic_checkout.png" title="离店申请待处理" link
               :badge="checkoutApplicationNum"
               @onClick="goto('receive/checkout-application')"></Cell>
-        <Cell v-if="abnormalNoticeNum > 0" icon="../../../static/icon/ic_abnormity_notice.png" title="异常提醒" link
+        <Cell v-if="abnormalNoticeNum > 0" icon="./static/icon/ic_abnormity_notice.png" title="异常提醒" link
               :badge="abnormalNoticeNum"
               @onClick="goto('abnormalNotice/listDetail')"></Cell>
-        <Cell v-if="absentPersonNum > 0" icon="../../../static/icon/ic_checkout.png" title="同住人未入住提醒" link
+        <Cell v-if="absentPersonNum > 0" icon="./static/icon/ic_checkout.png" title="同住人未入住提醒" link
               :badge="absentPersonNum"
               @onClick="goto('notLiveIn/list')"></Cell>
       </Group>
       <div v-else class="none-list-container">
-        <img src="../../../static/icon/no_todo_list.png" alt="">
+        <img :src="'./static/icon/no_todo_list.png'">
         <span>暂无待办事项</span>
       </div>
       <div class="tel"><a href="tel:4001-690-890" style="color: rgba(107, 107, 107, 0.82)">客服电话：4001-690-890</a></div>
@@ -82,32 +82,32 @@
         absentPersonNum: 0,
         imgList: [
           {
-            openItem: '../../../static/icon/ic_police.png',
-            closeItem: '../../../static/icon/ic_police.png'
+            openItem: './static/icon/ic_police.png',
+            closeItem: './static/icon/ic_police.png'
           },
           {
-            openItem: '../../../static/icon/ic_prepay_confirm.png',
-            closeItem: '../../../static/icon/closePrepay.png'
+            openItem: './static/icon/ic_prepay_confirm.png',
+            closeItem: './static/icon/closePrepay.png'
           },
           {
-            openItem: '../../../static/icon/ic_checkout.png',
-            closeItem: '../../../static/icon/closeCheckout.png'
+            openItem: './static/icon/ic_checkout.png',
+            closeItem: './static/icon/closeCheckout.png'
           },
           {
-            openItem: '../../../static/icon/ic_lvye.png',
-            closeItem: '../../../static/icon/closeLvye.png'
+            openItem: './static/icon/ic_lvye.png',
+            closeItem: './static/icon/closeLvye.png'
           },
           {
-            openItem: '../../../static/icon/ic_invoice.png',
-            closeItem: '../../../static/icon/closeInvoice.png'
+            openItem: './static/icon/ic_invoice.png',
+            closeItem: './static/icon/closeInvoice.png'
           },
           {
-            openItem: '../../../static/icon/ic_bill.png',
-            closeItem: '../../../static/icon/closeBill.png'
+            openItem: './static/icon/ic_bill.png',
+            closeItem: './static/icon/closeBill.png'
           },
           {
-            openItem: '../../../static/icon/ic_abnormity_notice.png',
-            closeItem: '../../../static/icon/closeAbnormity.png'
+            openItem: './static/icon/ic_abnormity_notice.png',
+            closeItem: './static/icon/closeAbnormity.png'
           }
         ]
       }
