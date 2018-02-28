@@ -90,7 +90,6 @@
 
     <!--筛选弹窗-->
     <div class="dialog">
-
       <x-dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -114,7 +113,6 @@
           </div>
         </group>
       </x-dialog>
-
       <x-dialog v-if="tempPage == '在住'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -132,7 +130,6 @@
           </div>
         </group>
       </x-dialog>
-
       <x-dialog v-if="tempPage == '退房申请'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -150,7 +147,6 @@
           </div>
         </group>
       </x-dialog>
-
       <x-dialog v-if="tempPage == '已离店'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -866,7 +862,6 @@
       },
 
       showTK(item){
-          console.log('------->',item)
         this.tkDialog = true
         this.tkMoney=(item.order.cash_pledge*0.01)+'元'
         this.orderId=item.order.order_id
