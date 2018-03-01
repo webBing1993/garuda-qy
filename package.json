@@ -6,10 +6,10 @@
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js --basePath /i/master/",
-    "prod": "node build/build.js --basePath /i/master/",
-    "test": "node build/build.js --basePath /i/master/",
+    "prod": "node build/build.js --basePath /p/master/",
+    "test": "node build/build.js --basePath /a/master/",
     "intg": "node build/build.js --basePath /i/master/",
-    "stg": "node build/build.js --basePath /i/master/"
+    "stg": "node build/build.js --basePath /s/master/"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
