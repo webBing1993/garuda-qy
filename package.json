@@ -5,11 +5,11 @@
   "author": "fe@fortrun",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js --wqtenv i --wqtversion master",
-    "prod": "node build/build.js --wqtenv p --wqtversion master",
-    "test": "node build/build.js --wqtenv q --wqtversion master",
-    "intg": "node build/build.js --wqtenv i --wqtversion master",
-    "stg": "node build/build.js --wqtenv s --wqtversion master"
+    "dev": "node build/dev-server.js --basePath /i/master/",
+    "prod": "node build/build.js --basePath /i/master/",
+    "test": "node build/build.js --basePath /i/master/",
+    "intg": "node build/build.js --basePath /i/master/",
+    "stg": "node build/build.js --basePath /i/master/"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -75,7 +75,8 @@
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
-    "webpack-merge": "^2.6.1"
+    "webpack-merge": "^2.6.1",
+    "raw-loader": "^0.5.1"
   },
   "engines": {
     "node": ">= 4.0.0",
