@@ -10,7 +10,6 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-
   export default {
     name: 'app',
     computed: {
@@ -29,6 +28,12 @@
       sessionId(){
         return this.AppParams.session
       },
+    },
+    mounted(){
+        if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
+            this.initMTA();
+        }
+        this.urlquery()//存AppParams
     },
     methods: {
       ...mapActions([
@@ -111,13 +116,6 @@
           s.parentNode.insertBefore(mta, s);
         })();
       }
-    },
-    mounted(){
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
-        this.initMTA();
-      }
-      this.urlquery()
-      // this.login()
     },
     watch: {
       AppParams(val){
