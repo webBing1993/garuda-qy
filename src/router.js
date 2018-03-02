@@ -27,16 +27,16 @@ const receive = [{
   },
   children: [{
     path: 'precheckin',
-    component: require('./containers/receive/receive.vue')
+    component: require('./containers/receive/receive复件.vue')
   }, {
     path: 'livein',
-    component: require('./containers/receive/receive.vue')
+    component: require('./containers/receive/receive复件.vue')
   }, {
     path: 'checkout-application',
-    component: require('./containers/receive/receive.vue')
+    component: require('./containers/receive/receive复件.vue')
   }, {
     path: 'checkout',
-    component: require('./containers/receive/receive.vue')
+    component: require('./containers/receive/receive复件.vue')
   }, {
     path: 'precheckin-detail/:id',
     // component: require('./containers/detail.vue')
