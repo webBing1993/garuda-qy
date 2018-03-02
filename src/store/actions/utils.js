@@ -18,7 +18,7 @@ module.exports = {
   urlquery(ctx) {
     let o = {}
     // console.log("哈哈哈：",window.location.search); ?app=wqt&session=gs_lacaw2mcb4apjef06lxmzq==&hotel_id=0864f6731acb11e780ad5cb9018d9b5c
-    // console.log("hehhe：",decodeURIComponent(window.location.search));
+    console.log("hehhe：",decodeURIComponent(window.location.search));
     window.location.search.split('&').forEach(i => i ? o[i.split(/=/)[0].replace(/\?/, '')] = decodeURIComponent(i.split(/=/)[1]) : null)
 
     ctx.commit('URLQUERY', o);

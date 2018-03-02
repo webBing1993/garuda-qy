@@ -173,7 +173,6 @@
 //          }
 //        })
       },
-
       subscribe() {
         this.yunbaSubscribe({
           info: {
