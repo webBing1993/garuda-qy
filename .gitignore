@@ -5,5 +5,4 @@ npm-debug.log
 yarn-error.log
 .idea
 .vscode
-/src/containers/receive/receive复件.vue
 package-lock.json
