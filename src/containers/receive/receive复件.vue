@@ -90,6 +90,7 @@
 
     <!--筛选弹窗-->
     <div class="dialog">
+
       <x-dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -113,6 +114,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '在住'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -130,6 +132,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '退房申请'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -147,6 +150,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '已离店'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -215,11 +219,9 @@
         <!--单房状态-->
         <div>
           <p>退款金额</p>
-          <x-input placeholder-align="left" v-model="tkMoney" :is-type="numCheck"></x-input>
-          <!--<x-input title="必须输入2333" :is-type="be2333" placeholder="I'm placeholder"></x-input>-->
-          <!--<input type = "text" name= "price" id = 'price' onkeyup= "if( ! /^d*(?:.d{0,2})?$/.test(this.value)){alert('只能输入数字，小数点后只能保留两位');this.value='';}" />-->
+          <x-input placeholder-align="left" v-model="tkMoney"></x-input>
           <p class="tip">如对退款金额有异议，请手动输入</p>
-          <x-button value="确定" v-if="/^[0-9]+([.]{1}[0-9]{1})?$/.test(tkMoney)" @onClick="_changeTkDialogCont1()"></x-button>
+          <x-button value="确定" @onClick="_changeTkDialogCont1()"></x-button>
         </div>
         <!--联房状态-->
         <!--<div>-->
@@ -310,22 +312,7 @@
         live_RoomNum: '',
         tkMoney:'',
         orderId:'',
-        suborderId:'',
-        canuse:true,
-        numCheck:function (value) {
-          return {
-//            valid: value.toFixed(1),
-//            valid: !/^d*(?:.d{0,1})?$/.test(value),
-            valid: /^[0-9]+([.]{1}[0-9]{1})?$/.test(value),
-            msg: '请输入含一位小数的字符',
-          }
-        },
-//        be2333: function (value) {
-//          return {
-//            valid: value === '2333',
-//            msg: 'Must be 2333'
-//          }
-//        },
+        suborderId:''
       }
     },
     watch: {
@@ -879,8 +866,9 @@
       },
 
       showTK(item){
+          console.log('------->',item)
         this.tkDialog = true
-        this.tkMoney=(item.order.cash_pledge*0.01).toFixed(1)
+        this.tkMoney=(item.order.cash_pledge*0.01)+'元'
         this.orderId=item.order.order_id
         this.suborderId=item.suborder_id
       },
@@ -900,11 +888,9 @@
 
       _changeTkDialogCont1(){
         let res=''
-        console.log('退款金额是2',this.tkMoney)
         this.applicationRefund({
           orderId:this.orderId,//订单ID
-        refundFee:parseFloat((this.tkMoney * 100).toFixed(2)),
-//          refundFee:this.tkMoney/0.01,//退款金额(分)
+          refundFee:this.tkMoney/0.01,//退款金额(分)
           subOrderId:this.suborderId,
           onsuccess: body => (res = [...body])
         })
