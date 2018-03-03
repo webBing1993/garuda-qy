@@ -38,8 +38,10 @@
               <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
               <span class="LvReport"
                     v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业已上报)</span>
+              <span class="" style="color: #0bb20c"
+                    v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS'">(旅业已上报)</span>
               <span class="LvReportIng"
-                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING '">(旅业正在上传)</span>
+                    v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING'">(旅业正在上传)</span>
               <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
                    src="../../../static/icon/delete.png" alt="">
             </div>
@@ -49,7 +51,7 @@
             <span
               style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
           </div>
-          <div v-if="!item.order.has_refund_apply && item.order.has_refund_apply!=0">
+          <div v-if="!item.order.has_refund_apply || hotel_config_can_REfend">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </div>
@@ -64,7 +66,7 @@
           <Cell :title="checkoutCellTitle(item)"/>
           <Cell :title="getCheckoutGuestItem(item)" link
                 @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-          <div class="appalyBtn" v-if="!item.order.has_refund_apply">
+          <div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
@@ -319,6 +321,7 @@
         orderId: '',
         suborderId: '',
         canuse: true,
+        hotel_config_can_REfend: false,
         numCheck: function (value) {
           return {
 //            valid: value.toFixed(1),
@@ -740,7 +743,8 @@
             "filter": "IN",
             "guest_name": this.preName,
             room_no: this.live_RoomNum || "",
-            onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
+            onsuccess: body => (this.liveInList = [...body.data.content], this.hotel_config_can_REfend = [...body.data.config.enable_out_of_cash_pledge_refund], this.liveInPageIndex++)
+//            this.hotel_config_can_REfend=[...body.data.config.enable_out_of_cash_pledge_refund]
           },
 
           offset: this.offset || 0,
