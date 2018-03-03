@@ -27,6 +27,16 @@ module.exports = {
       }
     })
   },
+  getLiveINlist(ctx, param){
+    ctx.dispatch('resource', {
+      url:'/suborder/search?limit=5&offset='+param.offset,
+      method:'POST',
+      body: param.data,
+      onSuccess: (body,headers) => {
+        param.onsuccess ? param.onsuccess(body,headers) : null
+      }
+    })
+  },
   //已离店
   getOutlist(ctx, param){
     ctx.dispatch('resource', {

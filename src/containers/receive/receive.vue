@@ -31,15 +31,17 @@
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
           <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
           <div class="space"></div>
-          <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
+          <div class="rowItem" v-for="(i,k) in item.guests" :key="k" @click="goto('/receive/livein-detail/'+item.order_id)">
             <p>入住人:</p>
             <div class="liveInPeop">
               <span>{{i.name}}</span>
               <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
+              <span class="LvReportFaile"
+                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业上传失败)</span>
               <span class="LvReport"
-                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业已上报)</span>
+                    v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS'">(旅业已上报)</span>
               <span class="LvReportIng"
-                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING '">(旅业正在上传)</span>
+                    v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING'">(旅业正在上传)</span>
               <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
                    src="../../../static/icon/delete.png" alt="">
             </div>
@@ -49,20 +51,22 @@
             <span
               style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
           </div>
-          <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
+          <div v-if="!item.order.has_refund_apply || hotel_config_can_REfend||item.order.is_paid">
+            <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
+          </div>
         </div>
 
         <div class="spaceTopApply"></div>
 
         <!--<div v-if="tempPage == '退房申请'">-->
-          <!--<x-button value="退款" @onClick="showTK(item)">退款</x-button>-->
+        <!--<x-button value="退款" @onClick="showTK(item)">退款</x-button>-->
         <!--</div>-->
         <Group class="Apply" v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
                :title="titleFilter(index)">
           <Cell :title="checkoutCellTitle(item)"/>
           <Cell :title="getCheckoutGuestItem(item)" link
                 @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-          <div class="appalyBtn">
+          <div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend ||item.order.is_paid">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
@@ -90,6 +94,7 @@
 
     <!--筛选弹窗-->
     <div class="dialog">
+
       <x-dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -113,6 +118,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '在住'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -130,6 +136,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '退房申请'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -147,6 +154,7 @@
           </div>
         </group>
       </x-dialog>
+
       <x-dialog v-if="tempPage == '已离店'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -219,12 +227,13 @@
           <!--<x-input title="必须输入2333" :is-type="be2333" placeholder="I'm placeholder"></x-input>-->
           <!--<input type = "text" name= "price" id = 'price' onkeyup= "if( ! /^d*(?:.d{0,2})?$/.test(this.value)){alert('只能输入数字，小数点后只能保留两位');this.value='';}" />-->
           <p class="tip">如对退款金额有异议，请手动输入</p>
-          <x-button value="确定" v-if="/^[0-9]+([.]{1}[0-9]{1})?$/.test(tkMoney)" @onClick="_changeTkDialogCont1()"></x-button>
+          <x-button value="确定" v-if="/^[0-9]+([.]{1}[0-9]{1})?$/.test(tkMoney)"
+                    @onClick="_changeTkDialogCont1()"></x-button>
         </div>
         <!--联房状态-->
         <!--<div>-->
-          <!--<p class="lfTip">该房间处于联房状态<br>退款将在最后一个房间退房时退款</p>-->
-          <!--<x-button value="确定" @onClick="_changeTkDialogCont1()"></x-button>-->
+        <!--<p class="lfTip">该房间处于联房状态<br>退款将在最后一个房间退房时退款</p>-->
+        <!--<x-button value="确定" @onClick="_changeTkDialogCont1()"></x-button>-->
         <!--</div>-->
 
         <!--退款大于押金状态-->
@@ -296,23 +305,24 @@
         checkOutTotal: 0,
         confirmDeleteDialog: false,
         deleteName: '',
-        guest_id:'',
+        guest_id: '',
         i: false,
         tkDialog: false,
         tkCont1: true,
         tkCont2: false,
         tkCont3: false,
-        tkBtnHide:true,
+        tkBtnHide: true,
         preName: '',
         preCode: '',
         preTel: '',
         preNum: '',
         live_RoomNum: '',
-        tkMoney:'',
-        orderId:'',
-        suborderId:'',
-        canuse:true,
-        numCheck:function (value) {
+        tkMoney: '',
+        orderId: '',
+        suborderId: '',
+        canuse: true,
+        hotel_config_can_REfend: false,
+        numCheck: function (value) {
           return {
 //            valid: value.toFixed(1),
 //            valid: !/^d*(?:.d{0,1})?$/.test(value),
@@ -459,7 +469,8 @@
         'searchRoom',
         'getOutlist',
         'deleteAbsentPerson',
-        'applicationRefund'
+        'applicationRefund',
+        'getLiveINlist'
       ]),
 
       //标题项时间处理
@@ -498,7 +509,7 @@
           });
         }
         else if (this.tempPage == '在住') {
-          this.liveInList=[]
+          this.liveInList = []
           this.getOutlist({
             data: {
               "filter": "IN",
@@ -508,7 +519,7 @@
             },
 
             offset: this.offset || 0,
-           onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
+            onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
 
 //            onsuccess: (body, headers) => {
 //              this.liveInList = headers.get('x-total-count');
@@ -522,14 +533,16 @@
 //              }
 //            }
           });
-          console.log('----->',this.liveInList)
+          this.preName = '';
+          this.live_RoomNum = ''
+          console.log('----->', this.liveInList)
 
         }
         else if (this.tempPage == '退房申请') {
           this.getcheckoutlist({
             status: 'PENDING',
-            guest_name:this.preName,//入住人名称
-            room_no:this.live_RoomNum || "",
+            guest_name: this.preName,//入住人名称
+            room_no: this.live_RoomNum || "",
             onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
           })
 
@@ -538,15 +551,18 @@
           this.outList(false);
         }
       },
+
       //筛选取消处理
       cancel() {
         this.showDialog = false;
         this.isCalendarShow = false;
       },
+
       popupShow() {
         this.searchRoomType();
         this.isCalendarShow = false;
       },
+
       toggleTab(item) {
         let tempItem = item.split('(')[0];
         switch (tempItem) {
@@ -585,21 +601,22 @@
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
+
       liveInGuestItem(item) {
         let dom = ``;
         if (item.guests) {
           item.guests.length > 0
             ? item.guests.forEach(i => {
 
-              dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
+            dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
                     <p><span style="color:  #8A8A8A">入住人</span>`
-              i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
-              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
-              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
-              i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
-              dom += `<span style="float: right">${i.name}</span>`;
-              dom += `</p></div>`
-            })
+            i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
+            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
+            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
+            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
+            dom += `<span style="float: right">${i.name}</span>`;
+            dom += `</p></div>`
+          })
             : dom += `<div>无入住人</div>`
         } else {
           dom += `<div>无入住人</div>`
@@ -672,61 +689,80 @@
 
       titleFilter(index) {
         return
-        // return index
-        //   ? this.datetimeparse(this.renderList[index].created_time) === this.datetimeparse(this.renderList[index - 1].created_time)
-        //     ? null : this.datetimeparse(this.renderList[index].created_time)
-        //   : this.datetimeparse(this.renderList[index].created_time)
       },
-//      syncTime() {
-//        this.hotelrefresh({
-//          onsuccess: (body) => this.refreshList()
-//        })
-//      },
 
-      getList(callback) {
-        if (this.tempPage == '预登记') {
-          this.gettodaylist({
-            is_cancelled: 0,
-            is_sequence: 0,
-            onsuccess: callback
-          })
-        } else if (this.tempPage == '在住') {
-          this.getTodaySuborder({
-            onsuccess: callback
-          })
-        } else if (this.tempPage == '退房申请') {
-          this.getcheckoutlist({
-            status: 'PENDING',
-            start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1],
-            onsuccess: callback
-          });
-        } else if (this.tempPage == '已离店') {
-          this.outList(false);
-        }
-      },
+
+//      getList(callback) {
+//        if (this.tempPage == '预登记') {
+//          this.gettodaylist({
+//            is_cancelled: 0,
+//            is_sequence: 0,
+//            onsuccess: callback
+//          })
+//        }
+//        else if (this.tempPage == '在住') {
+////          this.getTodaySuborder({
+////            onsuccess: callback
+////          })
+//            this.liveInList()
+//        }
+//
+//        else if (this.tempPage == '退房申请') {
+//          this.getcheckoutlist({
+//            status: 'PENDING',
+//            start_time: this.periodFilter[0],
+//            end_time: this.periodFilter[1],
+//            onsuccess: callback
+//          });
+//        } else if (this.tempPage == '已离店') {
+//          this.outList(false);
+//        }
+//      },
 
       initList() {
         if (this.renderPageIndex === 0 || this.renderList.length == 0) {
-          this.gettodaylist({
-            is_cancelled: 0,
-            is_sequence: 0,
-            onsuccess: body => (this.preCheckInList = [...body.data], this.preCheckInPageIndex++)
-          });
-          this.getTodaySuborder({
-            onsuccess: body => (this.liveInList = [...body.data], this.liveInPageIndex++)
-          });
-          this.getcheckoutlist({
-            status: 'PENDING',
-            start_time: this.periodFilter[0],
-            end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-            onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
-          });
-          //已经离店
-          this.outList(false);
+          this.prePayList();
+          this.LiveInList();
+          this.ChechOutAppl();
+          this.outList();
         }
       },
-      //已离店列表
+
+//      获取预登记列表
+      prePayList(){
+        this.gettodaylist({
+          is_cancelled: 0,
+          is_sequence: 0,
+          onsuccess: body => (this.preCheckInList = [...body.data], this.preCheckInPageIndex++)
+        });
+      },
+
+//      获取在住列表
+      LiveInList(){
+        this.getLiveINlist({
+          data: {
+            "filter": "IN",
+            "guest_name": this.preName,
+            room_no: this.live_RoomNum || "",
+            onsuccess: body => (this.liveInList = [...body.data.content], this.hotel_config_can_REfend = [...body.data.config.enable_out_of_cash_pledge_refund], this.liveInPageIndex++)
+          },
+
+          offset: this.offset || 0,
+          onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
+        });
+      },
+
+//      获取退房申请列表
+      ChechOutAppl(){
+        this.getcheckoutlist({
+          status: 'PENDING',
+          start_time: this.periodFilter[0],
+          end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
+        });
+      },
+
+//    已离店列表
       outList(isPullup) {
         let roomTypeValue = '';
         roomTypeValue = this.roomType[0];
@@ -766,7 +802,7 @@
         } else {
           this.onFetching = true;
           setTimeout(() => {
-            if (this.tempPage == '已离店') {
+            if (this.tempPage == '已离店'||this.tempPage == '在住') {
               this.offset = this.offset + 5;
               this.outList(true);
             } else {
@@ -824,19 +860,19 @@
         }, 1500)
       },
 
-      refreshList() {
+      refreshList(){
         if (this.tempPage == '预登记') {
-//          this.resetList();
-          this.getList(body => this.preCheckInList = [...body.data]);
+          this.prePayList();
+          return false;
         } else if (this.tempPage == '在住') {
-//          this.resetList();
-          this.getList(body => this.liveInList = [...body.data]);
+          this.LiveInList();
+          return false;
         } else if (this.tempPage == '退房申请') {
-//          this.resetList();
-          this.getList(body => this.checkOutApplicationList = [...body.data]);
+          this.ChechOutAppl()
+          return false;
         } else if (this.tempPage == '已离店') {
-//          this.resetList();
-          this.getList();
+          this.outList();
+          return false;
         }
       },
 
@@ -869,20 +905,29 @@
 
       confirmDelete(i){
         this.confirmDeleteDialog = true
-        this.guest_id=i.guest_id
+        this.guest_id = i.guest_id
         this.deleteName = i.name
       },
 
       _makeSureDelete(){
         this.confirmDeleteDialog = false
-       this.deleteAbsentPerson(this.guest_id)
+        this.deleteAbsentPerson(this.guest_id)
       },
 
       showTK(item){
-        this.tkDialog = true
-        this.tkMoney=(item.order.cash_pledge*0.01).toFixed(1)
-        this.orderId=item.order.order_id
-        this.suborderId=item.suborder_id
+        console.log('------->', item)
+        if (this.tempPage == '在住') {
+          this.tkDialog = true
+          this.tkMoney = (item.order.cash_pledge * 0.01).toFixed(1)
+          this.orderId = item.order.order_id
+          this.suborderId = item.suborder_id
+        } else if (this.tempPage == '退房申请') {
+          this.tkDialog = true
+          this.tkMoney = (item.order.cash_pledge * 0.01).toFixed(1)
+          this.orderId = item.order.order_id
+          this.suborderId = item.suborder_id
+        }
+
       },
 
       _closeDialog(){
@@ -898,20 +943,21 @@
         this.tkCont3 = false
       },
 
+//      确认退款按钮
       _changeTkDialogCont1(){
-        let res=''
-        console.log('退款金额是2',this.tkMoney)
+        let res = ''
         this.applicationRefund({
-          orderId:this.orderId,//订单ID
-        refundFee:parseFloat((this.tkMoney * 100).toFixed(2)),
+          orderId: this.orderId,//订单ID
+          refundFee: parseFloat((this.tkMoney * 100).toFixed(2)),
 //          refundFee:this.tkMoney/0.01,//退款金额(分)
-          subOrderId:this.suborderId,
+          subOrderId: this.suborderId,
           onsuccess: body => (res = [...body])
         })
         this.tkDialog = false
-        console.log('res是',res)
-        if(res.errcode==0){
-          this.tkBtnHide=false;
+        this.tkMoney = null
+        console.log('res是', res)
+        if (res.errcode == 0) {
+          this.tkBtnHide = false;
         }
       },
 

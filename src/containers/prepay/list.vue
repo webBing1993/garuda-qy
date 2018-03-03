@@ -431,7 +431,9 @@
             colorLight: '#ffffff',
           });
 //          qrcode.makeCode('https://gem.fortrun.cn/mirror?hotel_id=123456789098765&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
-          qrcode.makeCode("https://gem.fortrun.cn/mirror?hotel_id="+hotel_id+"&signpost=BIND_ORDER&order_id="+order_id);
+
+          qrcode.makeCode("https://wqt.fortrun.cn/q?hotel_id="+hotel_id+"&signpost=BIND_ORDER&order_id="+order_id);
+//          qrcode.makeCode("https://gem.fortrun.cn/mirror?hotel_id="+hotel_id+"&signpost=BIND_ORDER&order_id="+order_id);
         }
         this.i = true;
       },
