@@ -163,7 +163,7 @@
         return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
-        this.initList();
+        // this.initList();
         let menu = [];
         menu[0] = `待处理(${this.tobeHandled.length})`;
         menu[1] = `已处理(${this.handled.length})`;
@@ -355,16 +355,24 @@
     },
     watch: {
       currentTab(val) {
-        typeof val === 'number' && !isNaN(val)
-          ? this.renderList.length == 0 ? this.initList() : this.refreshList()
-          : null
+          if(typeof val === 'number' && !isNaN(val)){
+            if(this.renderList.length == 0){
+                this.initList()
+            }else {
+                this.refreshList()
+            }
+          }
       },
       periodFilter(){
         this.refreshList();
       },
       days(val, old) {
-        if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;
-        if (val > 31) this.days = 0;
+        if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) {
+            this.days = 0;
+        }
+        if (val > 31) {
+            this.days = 0;
+        }
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
@@ -374,14 +382,18 @@
           this.resultList = [];
           this.isErrorNumber = false;
         }
-        if (!this.canSearch) return;
+        if (!this.canSearch) {
+            return;
+        }
         if (val && val.split('').some(i => !/^[A-Za-z0-9]+$/.test(i))) {//验证特殊字符，不支持中文，只能字母和数字
           this.roomNumber = old
         }
         if (this.roomNumberList.length > 0 && val) {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-          if (this.resultList.length === 0) this.isErrorNumber = true;
+          if (this.resultList.length === 0) {
+              this.isErrorNumber = true;
+          }
         }
       },
       resultList(val, old) {
