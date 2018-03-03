@@ -31,14 +31,14 @@
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
           <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
           <div class="space"></div>
-          <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
+          <div class="rowItem" v-for="(i,k) in item.guests" :key="k" @click="goto('/receive/livein-detail/'+item.order_id)">
             <p>入住人:</p>
             <div class="liveInPeop">
               <span>{{i.name}}</span>
               <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
+              <span class="LvReportFaile"
+                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业上传失败)</span>
               <span class="LvReport"
-                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业已上报)</span>
-              <span class="" style="color: #0bb20c"
                     v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS'">(旅业已上报)</span>
               <span class="LvReportIng"
                     v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING'">(旅业正在上传)</span>
@@ -51,7 +51,7 @@
             <span
               style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
           </div>
-          <div v-if="!item.order.has_refund_apply || hotel_config_can_REfend">
+          <div v-if="!item.order.has_refund_apply || hotel_config_can_REfend||item.order.is_paid">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </div>
@@ -66,7 +66,7 @@
           <Cell :title="checkoutCellTitle(item)"/>
           <Cell :title="getCheckoutGuestItem(item)" link
                 @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-          <div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend">
+          <div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend ||item.order.is_paid">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
@@ -469,7 +469,8 @@
         'searchRoom',
         'getOutlist',
         'deleteAbsentPerson',
-        'applicationRefund'
+        'applicationRefund',
+        'getLiveINlist'
       ]),
 
       //标题项时间处理
@@ -738,13 +739,12 @@
 
 //      获取在住列表
       LiveInList(){
-        this.getOutlist({
+        this.getLiveINlist({
           data: {
             "filter": "IN",
             "guest_name": this.preName,
             room_no: this.live_RoomNum || "",
             onsuccess: body => (this.liveInList = [...body.data.content], this.hotel_config_can_REfend = [...body.data.config.enable_out_of_cash_pledge_refund], this.liveInPageIndex++)
-//            this.hotel_config_can_REfend=[...body.data.config.enable_out_of_cash_pledge_refund]
           },
 
           offset: this.offset || 0,
@@ -802,7 +802,7 @@
         } else {
           this.onFetching = true;
           setTimeout(() => {
-            if (this.tempPage == '已离店') {
+            if (this.tempPage == '已离店'||this.tempPage == '在住') {
               this.offset = this.offset + 5;
               this.outList(true);
             } else {
