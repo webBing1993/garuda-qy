@@ -76,7 +76,7 @@
           <div class="orderCellFooter">
             <p>
               <span class="orderCellKey">分享码：</span>
-              <span>12345678987654</span>
+              <span>{{item.share_code}}</span>
             </p>
             <x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>
           </div>
