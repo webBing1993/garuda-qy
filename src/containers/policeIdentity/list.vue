@@ -25,7 +25,7 @@
         <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
         <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
           <checker-item v-for="(item,index) in renderTodoHandelList" :key="index" :value="item.lvyeReportRecordId">
-            <group>
+            <group :title="datetimeparse(item.createdTime)">
               <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
             </group>
           </checker-item>
@@ -44,15 +44,15 @@
     </div>
     <!--</scroller>-->
 
-    <footer v-show="route.params.tab == 0 && tobeHandled.length !== 0 && tobeHandledPageIndex > 0">
-      <div class="button-group">
-        <div class="pick-btn-group" v-if="batch">
-          <x-button value="取消" @onClick="cancelPick" plain/>
-          <x-button value="确认选择" @onClick="showDialog = true"/>
-        </div>
-        <x-button class="blue-btn" v-else @onClick="goPick()" value="合并入住"/>
-      </div>
-    </footer>
+    <!--<footer v-show="route.params.tab == 0 && tobeHandled.length !== 0 && tobeHandledPageIndex > 0">-->
+      <!--<div class="button-group">-->
+        <!--<div class="pick-btn-group" v-if="batch">-->
+          <!--<x-button value="取消" @onClick="cancelPick" plain/>-->
+          <!--<x-button value="确认选择" @onClick="showDialog = true"/>-->
+        <!--</div>-->
+        <!--<x-button class="blue-btn" v-else @onClick="goPick()" value="合并入住"/>-->
+      <!--</div>-->
+    <!--</footer>-->
 
     <footer v-if="currentTab">
       <div class="listFilter">
