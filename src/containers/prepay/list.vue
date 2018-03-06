@@ -79,6 +79,7 @@
               <span>{{item.share_code}}</span>
             </p>
             <x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>
+            <!--<button v-on:click="_getQart(item,index)">生成二维码1</button>-->
           </div>
           <Cell v-if="item.remark" :title="getCellFooter(item)"/>
         </div>
@@ -418,24 +419,23 @@
         this.periodFilter = [null, null]
       },
 
-      _getQart(item){
+      _getQart(item, index){
+        document.getElementById('qrcode').innerHTML=''
         this.showQrcode = true;
         let order_id = item.order_id
         let hotel_id = this.hotel.hotel_id
-        if (this.i == false) {
-//          let qrcode = new QRCode(document.getElementById("qrcode"), {
-          let qrcode = new QRCode(this.$refs.qrcode, {
-            width: 180,//设置宽高
-            height: 180,
-            colorDark: '#000000',
-            colorLight: '#ffffff',
-          });
-//          qrcode.makeCode('https://gem.fortrun.cn/mirror?hotel_id=123456789098765&signpost=BIND_ORDER&order_id=c232a965f02242dc843aeb5687d65d6f');
+//        if (this.i == false) {
+        let qrcode = new QRCode(this.$refs.qrcode, {
+          width: 180,//设置宽高
+          height: 180,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+        });
+        console.log('生成二维码是', "https://wqt.fortrun.cn/q?hotel_id=" + hotel_id + "&signpost=BIND_ORDER&order_id=" + order_id)
+        qrcode.makeCode("https://wqt.fortrun.cn/q?hotel_id=" + hotel_id + "&signpost=BIND_ORDER&order_id=" + order_id);
+//        }
+//        this.i = true;
 
-          qrcode.makeCode("https://wqt.fortrun.cn/q?hotel_id="+hotel_id+"&signpost=BIND_ORDER&order_id="+order_id);
-//          qrcode.makeCode("https://gem.fortrun.cn/mirror?hotel_id="+hotel_id+"&signpost=BIND_ORDER&order_id="+order_id);
-        }
-        this.i = true;
       },
       _close(){
         this.showQrcode = false
