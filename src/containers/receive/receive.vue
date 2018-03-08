@@ -748,34 +748,26 @@
       },
 
 //      获取在住列表
-      LiveInList(){
+      LiveInList(isPullup){
         this.getLiveINlist({
           data: {
             "filter": "IN",
             "guest_name": this.preName,
-            room_no: this.live_RoomNum || "",
-            onsuccess: body => (
-                this.liveInList = [...body.data.content],
-                this.hotel_config_can_REfend = body.data.config.enable_out_of_cash_pledge_refund,
-                this.refundPathway = body.data.config.refund_amount_source,
-                this.liveInPageIndex++
-            )
+            room_no: this.live_RoomNum || ""
           },
-
           offset: this.offset || 0,
-          onsuccess: body => (this.liveInList = [...body.data.content],
-            this.hotel_config_can_REfend = body.data.config.enable_out_of_cash_pledge_refund,
-            this.refundPathway = body.data.config.refund_amount_source,
-            this.liveInPageIndex++)
-        });
-//
-//        for(let i=0;i<this.liveInList.length;i++){
-//          this.liveInList[i]['hotel_config_can_REfend']=this.hotel_config_can_REfend
-//          this.liveInList[i]['refundPathway']=this.refundPathway
-//        }
-        console.log(this.liveInList, "<--------->")
-        console.log(this.refundPathway, "<--------->", this.hotel_config_can_REfend)
-
+          onsuccess: (body, headers) => {
+            this.liveInList.length = headers.get('x-total-count');
+            if (isPullup) {
+              this.liveInList = [...this.liveInList, ...body.data.content];
+            } else if (!isPullup) {
+              this.liveInList = [...body.data.content];
+              this.$nextTick(() => {
+                this.$refs.scrollerBottom.reset();
+              });
+            }
+          }
+        })
       },
 
 //      获取退房申请列表
@@ -826,6 +818,7 @@
           }
         });
       },
+
 
       //下拉刷新列表，按需加载
       refresh(){
