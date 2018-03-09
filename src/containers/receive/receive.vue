@@ -894,8 +894,6 @@
           return false;
         } else if (this.tempPage == '在住') {
           this.LiveInList();
-          this.hotel_config_can_REfend = '';
-          this.refundPathway = '';
           return false;
         } else if (this.tempPage == '退房申请') {
           this.ChechOutAppl()
