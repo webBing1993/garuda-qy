@@ -49,7 +49,7 @@
 
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             :key="'guests'+index" style="margin-bottom: 4rem">
+             :key="'guests'+index">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
@@ -106,9 +106,9 @@
         <p>是否退款</p>
       </Dialog>
 
-      <div class="button-group RCbtn" v-if="rcBtn">
+      <div class="button-group RCbtn" v-if="rcBtn" style="margin-top: 2rem">
         <div>
-          <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+          <x-button value="RC单打印"  @onClick="RcPrint(detail.suborders[0])"></x-button>
         </div>
         <!--<p class="space"></p>-->
         <!--<div>-->

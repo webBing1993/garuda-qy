@@ -28,7 +28,7 @@
 
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             :key="'guests'+index" style="margin-bottom: 4rem">
+             :key="'guests'+index">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
@@ -44,11 +44,6 @@
           <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'NONE' ">未上传旅业系统</span>
           <!--在住按钮-->
           <div v-if="isLivein && item.lvye_report_status && item.lvye_report_status !== 'SUCCESS'" class="button-group" style="padding: 10px 0px">
-            <!--<x-button-->
-            <!--v-if="item.lvye_report_status && item.lvye_report_status !== 'SUCCESS' && item.lvye_report_status != 'PENDING' "-->
-            <!--:value="item.lvye_report_status && item.lvye_report_status === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"-->
-            <!--@onClick="setuploadstatus(item.identity_id)">-->
-            <!--</x-button>-->
             <x-button
               v-if="item.lvye_report_status && item.lvye_report_status === 'FAILED'"
               value="重新上传旅业系统"
@@ -89,7 +84,7 @@
         <p>是否退款</p>
       </Dialog>
 
-      <div class="button-group RCbtn" v-if="rcBtn">
+      <div class="button-group RCbtn" v-if="rcBtn" style="margin-top: 2rem">
         <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
       </div>
       <div>
