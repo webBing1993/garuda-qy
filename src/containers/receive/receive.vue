@@ -829,11 +829,13 @@
         } else {
           this.onFetching = true;
           setTimeout(() => {
-            if (this.tempPage == '已离店' || this.tempPage == '在住') {
+            if (this.tempPage == '已离店' ) {
               this.offset = this.offset + 5;
               this.outList(true);
+            } else if(this.tempPage == '在住'){
+              this.offset = this.offset + 5;
               this.LiveInList(true);
-            } else {
+            }else {
               return;
             }
             ;
@@ -889,6 +891,7 @@
       },
 
       refreshList(){
+        this.offset=0;
         if (this.tempPage == '预登记') {
           this.prePayList();
           return false;
