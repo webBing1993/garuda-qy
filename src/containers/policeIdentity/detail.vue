@@ -1,103 +1,99 @@
 <template>
   <div class="detailPage">
-    <article v-if="detail">
-     <div class="guestcard">
-      <div class="hd">
-        <ul>
-          <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
-          <li><span><abbr>性别</abbr>{{detail.sex}}</span><span><abbr>民族</abbr>{{detail.ethnicity}}</span></li>
-          <li><span><abbr>生日</abbr>{{detail.dateOfBirth}}</span></li>
-          <li><span><abbr>住址</abbr>{{detail.address}}</span></li>
-          <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
-        </ul>
-        <img :src="detail.photo" alt="身份证照片" class="policeIdentityImg">
-      </div>
-      <div class="bd">
-        <p><span>现场图片</span><span
-          v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
-        <img :src="detail.livePhoto" alt="现场照片">
-      </div>
-    </div>
-    <div class="report-info">
-      <div class="info-item">
-        <label class="item-left">房间号码:</label>
-        <input class="item-right room-number" v-model="roomNumber"
-               v-if="detail.reportInStatus !== 'SUCCESS'"/>
-        <span class="item-right" v-else>{{roomNumber}}</span>
-      </div>
-      <div class="search">
-        <label>搜索结果</label>
-        <ul class="search-result" v-if="resultList.length > 0">
-          <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
-        </ul>
-      </div>
-      <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
-      <div class="info-item">
-        <label class="item-left">入住几晚:</label>
-        <div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">
-          <span class="days-reduce" @click="daysReduce">-</span>
-          <input class="days" v-model="days"/>
-          <span class="days-add" @click="daysAdd()">+</span>
+    <article v-if="detail" >
+      <div class="report-info">
+        <div class="info-item">
+          <label class="item-left">房间号码:</label>
+          <input class="item-right room-number" v-model="roomNumber" v-if="detail.reportInStatus !== 'SUCCESS'" @keyup.13="enterToLvye($event)"/>
+          <span class="item-right" v-else>{{roomNumber}}</span>
         </div>
-        <span class="item-right" v-else>{{days}}</span>
-      </div>
-      <div class="info-item">
-        <label class="item-left">入住时间:</label>
-        <span class="item-right">{{datetimeparse(inTimeFilter)}}</span>
-      </div>
+        <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
+        <div class="searchRoom">
+          <label>搜索结果</label>
+          <ul class="searchRoom-result" v-if="resultList.length > 0">
+            <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
+          </ul>
+        </div>
+        <div class="info-item">
+          <label class="item-left">拍照时间:</label>
+          <span class="item-right">{{datetimeparse(detail.createdTime,'YYYYMMDD hhmm')}}</span>
+        </div>
+        <!--<div class="info-item">-->
+          <!--<label class="item-left">入住几晚:</label>-->
+          <!--<div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">-->
+            <!--<span class="days-reduce" @click="daysReduce">-</span>-->
+            <!--<input class="days" v-model="days"/>-->
+            <!--<span class="days-add" @click="daysAdd()">+</span>-->
+          <!--</div>-->
+          <!--<span class="item-right" v-else>{{days}}</span>-->
+        <!--</div>-->
+        <!--<div class="info-item">-->
+          <!--<label class="item-left">入住时间:</label>-->
+          <!--<span class="item-right">{{datetimeparse(inTimeFilter)}}</span>-->
+        <!--</div>-->
 
-      <div class="info-item">
-        <label class="item-left">离店时间:</label>
-        <span class="item-right">{{datetimeparse(outTimeFilter)}}</span>
+        <!--<div class="info-item">-->
+          <!--<label class="item-left">离店时间:</label>-->
+          <!--<span class="item-right">{{datetimeparse(outTimeFilter)}}</span>-->
+        <!--</div>-->
+        <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAILED'" style="margin-bottom: 10px"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
+        <p v-if="detail.reportInStatus &&detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
+        <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
+        <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
+        <!--<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">-->
+          <!--<span style="color: #80C435;padding-right:10px;">支付成功</span>-->
+          <!--<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>-->
+          <!--<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>-->
+        <!--</p>-->
+        <!--<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary-->
+                  <!--@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>-->
       </div>
-<!--<<<<<<< HEAD-->
-      <!--<p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'">上传旅业系统失败，请重试</p>-->
-      <!--<p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span-->
-        <!--style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span>-->
-        <!--{{datetimeparse(detail.reportInTime, 'YYYYMMDD hhmm')}}</p>-->
-      <!--&lt;!&ndash;<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">&ndash;&gt;-->
-      <!--&lt;!&ndash;<span style="color: #80C435;padding-right:10px;">支付成功</span>&ndash;&gt;-->
-      <!--&lt;!&ndash;<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>&ndash;&gt;-->
-      <!--&lt;!&ndash;<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>&ndash;&gt;-->
-      <!--&lt;!&ndash;</p>&ndash;&gt;-->
-      <!--<x-button v-if="detail.reportInStatus !== 'SUCCESS'"-->
-                <!--:value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"-->
-                <!--@onClick="isDialogShow"-->
-                <!--:disabled="isDisabled">-->
-      <!--</x-button>-->
-      <!--&lt;!&ndash;<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary&ndash;&gt;-->
-      <!--&lt;!&ndash;@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>&ndash;&gt;-->
-<!--=======-->
-      <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAIL'"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span></p>
-      <p v-if="detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
-      <p v-if="detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span> {{datetimeparse(detail.createdTime,'YYYYMMDD hhmm')}}</p>
-    </div>
+      <div class="guestcard">
+        <div class="hd">
+          <ul>
+            <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
+            <li><span><abbr>性别</abbr>{{detail.sex}}</span><span><abbr>民族</abbr>{{detail.ethnicity}}</span></li>
+            <li><span><abbr>生日</abbr>{{detail.dateOfBirth}}</span></li>
+            <li><span><abbr>住址</abbr>{{detail.address}}</span></li>
+            <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
+          </ul>
+          <img :src="detail.photo" alt="身份证照片" class="policeIdentityImg">
+        </div>
+        <div class="bd">
+          <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
+          <img :src="detail.livePhoto" alt="现场照片">
+        </div>
+      </div>
       <div class="footButton" v-if="!(detail.identityStatus == 'REFUSED'||detail.identityStatus == 'AGREED')">
-        <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAIL' ? '重新上传旅业系统' : '上传旅业系统'"
-                  @onClick="isDialogShow"
+        <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
+                  @onClick="setMultiConfirm"
                   :disabled="isDisabled"></x-button>
         <x-button value='拒绝' @onClick="isRejectDialogShow"></x-button>
       </div>
+      <!--<Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>-->
+        <!--<ul class="dialog-info">-->
+          <!--<li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{detail.name}}</span></li>-->
+          <!--<li class="info-col"><span class="dialog-key">证件号码：</span><span-->
+            <!--class="dialog-value">{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>-->
+          <!--<li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>-->
+          <!--<li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>-->
+          <!--<li class="info-col"><span class="dialog-key">入住日期：</span><span-->
+            <!--class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>-->
+          <!--<li class="info-col"><span class="dialog-key">离店日期：</span><span-->
+            <!--class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>-->
+        <!--</ul>-->
+      <!--</Dialog>-->
 
-    <Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>
-      <ul class="dialog-info">
-        <li class="info-col"><span class="dialog-key">姓名：</span><span class="dialog-value">{{detail.name}}</span></li>
-        <li class="info-col"><span class="dialog-key">证件号码：</span><span
-          class="dialog-value">{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
-        <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住日期：</span><span
-          class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><span class="dialog-key">离店日期：</span><span
-          class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
-      </ul>
-    </Dialog>
-    <Dialog confirm cancel v-model="rejectDialog" @onConfirm="rejectConfirm" confirm cancel>
-      <p>是否确认拒绝</p>
-      <br>
-      <p style="color: #808080;font-size: 14px">请客人重新办理公安验证</p>
-    </Dialog>
-  </article>
+      <Dialog confirm cancel v-model="rejectDialog" @onConfirm="rejectConfirm" confirm cancel>
+        <p>是否确认拒绝</p>
+        <br>
+        <p style="color: #808080;font-size: 14px">请客人重新办理公安验证</p>
+      </Dialog>
+
+      <Dialog confirm cancel v-model="similarityCheck" @onConfirm="reporetLvye" confirm cancel>
+        <p style="color: #000000;font-size: 14px">此人相似度太低 <br> 是否确认上传</p>
+      </Dialog>
+    </article>
   </div>
 </template>
 
@@ -119,11 +115,12 @@
         canSearch: true,
         isWxPayBtnShow: false,//微信支付入住按钮显示
         hotelConfig:{},
-        rejectDialog:false
+        rejectDialog:false,
+        similarityCheck :false
       }
     },
     computed: {
-      // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
+        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
         'route',
         'roomNumberList'
@@ -152,6 +149,21 @@
       ...mapMutations([
         'DEVICEID'
       ]),
+        //enter键事件上传旅业
+      enterToLvye (event) {
+          if(detail.identityStatus === 'REFUSED'){
+              return
+          }else {
+              if(event.keyCode == 13){
+                  if(this.isErrorNumber){
+                      return
+                  }else {
+                      this.setMultiConfirm();
+                  }
+
+              }
+          }
+      },
       rejectConfirm(){
         this.rejectStatus({
           status:'REFUSED',
@@ -172,6 +184,7 @@
         this.isErrorNumber = false
       },
       isDialogShow() {
+          console.log(666)
         if (!this.isDisabled) {
           this.resultList = [];
           this.showDialog = true;
@@ -205,21 +218,36 @@
           }
         })
       },
+        //上传旅业前多次确认
       setMultiConfirm() {
-        this.reportLvYe({
-          lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
-          roomNumber: this.roomNumber,//房间号
-          nights: +this.days,//入住晚数
-          inTime: this.inTimeFilter,//入住时间
-          outTime: this.outTimeFilter,//离店时间
-          onsuccess: () => {
-            this.resetFilter();
-            this.getDetail();
+          if (this.detail.similarity<70){
+              this.similarityCheck=true;
+          }else {
+              this.reporetLvye();
           }
-        })
       },
+        //上传旅业
+      reporetLvye(){
+          this.reportLvYe({
+              lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
+              roomNumber: this.roomNumber,//房间号
+              nights: +this.days,//入住晚数
+              inTime: this.inTimeFilter,//入住时间
+              outTime: this.outTimeFilter,//离店时间
+              onsuccess: () => {
+                  this.resetFilter();
+                  this.getDetail();
+              }
+          })
+      }
     },
     watch: {
+      detail(val){
+         if(val.reportInStatus!=='SUCCESS') {
+             console.log(333);
+             this.roomNumber='';
+         }
+      },
       identityId(val){
         val ? this.resetFilter() : null
       },
