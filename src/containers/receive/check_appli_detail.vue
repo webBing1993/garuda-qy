@@ -24,7 +24,7 @@
         <Cell class="key" title="免押金" :value="detail.status.is_free_deposit ?'是':'否'"></Cell>
       </Group>
 
-      <Group title="支付信息" v-if="detail.bill && detail.bill.payment" style="margin-bottom: 4rem">
+      <Group title="支付信息" v-if="detail.bill && detail.bill.payment">
         <Cell class="key" title="微信交易号" :value="detail.bill.payment && detail.bill.payment.wx_order_id"></Cell>
         <Cell class="key" title="微信支付" :value="cashHandling(detail.bill.payment && detail.bill.payment.pay_fee)"></Cell>
         <Cell class="key" title="交易时间"
@@ -51,7 +51,7 @@
 
       <Group title="房间信息"
              v-for="(item,index) in detail.suborders"
-             :key="'guests'+index" style="margin-bottom: 4rem">
+             :key="'guests'+index">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
@@ -102,7 +102,7 @@
         </div>
       </Group>
 
-      <div class="button-group RCbtn" v-if="rcBtn">
+      <div class="button-group RCbtn" v-if="rcBtn" style="margin-top: 2rem">
         <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
       </div>
 

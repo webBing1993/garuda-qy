@@ -31,11 +31,13 @@
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
           <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
           <div class="space"></div>
-          <div class="rowItem" v-for="(i,k) in item.guests" :key="k" @click="goto('/receive/livein-detail/'+item.order_id)">
+          <div class="rowItem" v-for="(i,k) in item.guests" :key="k"
+               @click="goto('/receive/livein-detail/'+item.order_id)">
             <p>入住人:</p>
             <div class="liveInPeop">
               <span>{{i.name}}</span>
               <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
+              <span v-if="i.checkin_status && i.checkin_status === 'PMS'">(pms转入住)</span>
               <span class="LvReportFaile"
                     v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业上传失败)</span>
               <span class="LvReport"
@@ -51,7 +53,9 @@
             <span
               style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
           </div>
-          <div v-if="hotel_config_can_REfend && refundPathway=='MANUAL'&&(!item.order.has_refund_apply ||item.order.is_paid)">
+          <!--<div>{{refundPathway}}=={{hotel_config_can_REfend}}==={{item.order.is_paid}}=={{item.order.cash_pledge}} </div>-->
+          <div
+            v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </div>
@@ -66,11 +70,15 @@
           <Cell :title="checkoutCellTitle(item)"/>
           <Cell :title="getCheckoutGuestItem(item)" link
                 @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-          <div class="appalyBtn" v-if="hotel_config_can_REfend && refundPathway=='MANUAL'&&(!item.order.has_refund_apply ||item.order.is_paid)">
-          <!--<div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend ||item.order.is_paid">-->
+          <div class="appalyBtn"
+               v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
+            <!--<div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend ||item.order.is_paid">-->
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
+        <!--(refundPathway=='MANUAL'&& hotel_config_can_REfend &&item.order.is_paid &&!item.order.has_refund_apply)||-->
+        <!--(refundPathway=='MANUAL'&& !hotel_config_can_REfend && item.cash_pledge&&item.cash_pledge!=0&&item.order.is_paid &&!item.order.has_refund_apply)-->
+
 
         <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
                :title="datetimeparse(item.out_time,'YYMMDD')">
@@ -322,8 +330,9 @@
         orderId: '',
         suborderId: '',
         canuse: true,
-        hotel_config_can_REfend: false,
-        refundPathway:'',
+        hotel_config_can_REfend: '',
+        refundPathway: '',
+        showRefundBtn: [],
         numCheck: function (value) {
           return {
 //            valid: value.toFixed(1),
@@ -359,7 +368,6 @@
       isCalendarShow(val) {
         if (val) {
           this.isShowPP = false;
-          console.log(this.isShowPP)
         }
       },
     },
@@ -410,6 +418,8 @@
         } else if (this.tempPage == '在住') {
           return this.sortByTime(this.liveInList, 'in_time');
           return sortLiveInList;
+          return hotel_config_can_REfend;
+          return refundPathway;
         } else if (this.tempPage == '退房申请') {
           return this.sortByTime(this.checkOutApplicationList, 'created_time');
           return sortCheckOutApplicationList;
@@ -537,7 +547,6 @@
           });
           this.preName = '';
           this.live_RoomNum = ''
-          console.log('----->', this.liveInList)
 
         }
         else if (this.tempPage == '退房申请') {
@@ -684,7 +693,6 @@
       },
 
       resetFilter() {
-        console.log('resetFilter');
         this.periodFilter = [null, null]
       },
 
@@ -740,21 +748,26 @@
       },
 
 //      获取在住列表
-      LiveInList(){
+      LiveInList(isPullup){
         this.getLiveINlist({
           data: {
             "filter": "IN",
             "guest_name": this.preName,
-            room_no: this.live_RoomNum || "",
-            onsuccess: body => (this.liveInList = [...body.data.content],
-              this.hotel_config_can_REfend = [...body.data.config.enable_out_of_cash_pledge_refund],
-              this.refundPathway=[...body.data.config.refund_amount_source],
-              this.liveInPageIndex++)
+            room_no: this.live_RoomNum || ""
           },
-
           offset: this.offset || 0,
-          onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
-        });
+          onsuccess: (body, headers) => {
+            this.liveInList.length = headers.get('x-total-count');
+            if (isPullup) {
+              this.liveInList = [...this.liveInList, ...body.data.content];
+            } else if (!isPullup) {
+              this.liveInList = [...body.data.content];
+              this.$nextTick(() => {
+                this.$refs.scrollerBottom.reset();
+              });
+            }
+          }
+        })
       },
 
 //      获取退房申请列表
@@ -763,11 +776,16 @@
           status: 'PENDING',
           start_time: this.periodFilter[0],
           end_time: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          onsuccess: body => (this.checkOutApplicationList = [...body.data],
-            this.hotel_config_can_REfend = [...body.data.config.enable_out_of_cash_pledge_refund],
-            this.refundPathway=[...body.data.config.refund_amount_source],
+          onsuccess: body => (this.checkOutApplicationList = [...body.data.content],
+            this.hotel_config_can_REfend = body.data.config.enable_out_of_cash_pledge_refund,
+            this.refundPathway = body.data.config.refund_amount_source,
             this.checkOutApplicationPageIndex++)
         });
+        for(let i=0;i<this.checkOutApplicationList.length;i++){
+          this.checkOutApplicationList[i]['hotel_config_can_REfend']=this.hotel_config_can_REfend
+          this.checkOutApplicationList[i]['refundPathway']=this.refundPathway
+        }
+        console.log('退房申请列表是', this.checkOutApplicationList)
       },
 
 //    已离店列表
@@ -801,6 +819,7 @@
         });
       },
 
+
       //下拉刷新列表，按需加载
       refresh(){
         let off = this.checkOutTotal - this.offset;
@@ -810,10 +829,13 @@
         } else {
           this.onFetching = true;
           setTimeout(() => {
-            if (this.tempPage == '已离店'||this.tempPage == '在住') {
+            if (this.tempPage == '已离店' ) {
               this.offset = this.offset + 5;
               this.outList(true);
-            } else {
+            } else if(this.tempPage == '在住'){
+              this.offset = this.offset + 5;
+              this.LiveInList(true);
+            }else {
               return;
             }
             ;
@@ -869,6 +891,7 @@
       },
 
       refreshList(){
+        this.offset=0;
         if (this.tempPage == '预登记') {
           this.prePayList();
           return false;

@@ -161,17 +161,17 @@
         })
       },
       gethotelConfig(){
-//        this.getConfig({
-//          onsuccess: body => {
-//            if(body.data){
-//              if(body.data.business_mode==='WQT'){
-//                this.flag=true;
-//              }else if(body.data.business_mode==='IDENTITY'){
-//                this.flag=false;
-//              }
-//            }
-//          }
-//        })
+       this.getConfig({
+         onsuccess: body => {
+           if(body.data){
+             if(body.data.business_mode==='WQT'){
+               this.flag=true;
+             }else if(body.data.business_mode==='IDENTITY'){
+               this.flag=false;
+             }
+           }
+         }
+       })
       },
       subscribe() {
         this.yunbaSubscribe({

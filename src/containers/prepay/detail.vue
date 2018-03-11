@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="prepay">
     <div class="confirmeddetail" v-if="isNotEmpty(orderdetail)">
       <p class="synchronize">上次同步PMS时间: {{datetimeparse(orderdetail.update_time, 'MMDDhhmm')}}</p>
       <Group>

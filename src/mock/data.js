@@ -1,6 +1,6 @@
 module.exports = {
   // prefix: "/gemini",
-  prefix: "/i/master/gemini",
+  prefix: "/q/master/gemini",
   // ===============================================================
   // 订单列表
   // ===============================================================
@@ -1358,6 +1358,388 @@ module.exports = {
       create_time: 12312312312313
     }
 
-  ]
+  ],
+
+  LiveINlist: {
+    "config": {
+      enable_out_of_cash_pledge_refund: true / false,//是否允许退款金额超过押金
+      refund_amount_source: "false"//退款方式PMS-PMS/ORDER_BILL-订单账单表/MANUAL-手动
+    },
+    "content": [
+      {
+        order_id: "230420402402401",//订单号
+        order_pmsid: "230420402402401",//订单号
+        source_id: 'XC',
+        in_time: 1490976000000,
+        out_time: 1491148800000,
+        owner: "张三",//预订人
+        owner_tel: "8618500059035",//预订人手机
+        remark: "携程已付300元",//备注
+        is_cash_pay: true,//是否是现付 true代表是，false代表不是 17-07-13
+        is_one_room: true,//是否是一个房间 true代表是，false代表不是 17-07-13
+        is_support_checkout: false,//是否支持checkout
+        rooms_plan: [{
+          room_type: "大床房",
+          room_count: 2
+        }],
+        share_code: "23456789098765",
+        payinfo: {
+          total_roomfee: 4000, //总房费
+          pms_pay: 1000, //PMS中的已付金额,
+          staff_pay: 100,//营业员确认的付款金额,
+          user_pay: 1000, //小程序已付金额
+          deposit: 0, //应付押金
+          pay_mode: 1,
+          confirm_mode: 2
+        },
+        bill: {
+          payment: {
+            wx_order_id: '4008162001602672232323295',
+            pay_fee: 0,//支付金额
+            pay_time: 1495444639000
+          },
+          refund: {
+            need_pay_fee: 200,  //消费金额
+            refund_fee: 100,  //退款金额
+            refund_time: 1495444639000,  //申请退款时间
+            refund_status: 'FAILED',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          }
+        },
+        status: {
+          is_cancelled: false, //是否已取消
+          is_refund_required: false, //是否需要退款
+          is_recording_success: false, //PMS入账是否成功
+          is_any_checkin: false, //订单是否有入住
+          is_free_deposit: true,//true免押、false不免押
+        },
+        timeline: { //状态变化时间
+          staff_confirm: 1491384458000, //营业员确认订单的时间
+          precheckin_done: 1491384458000, //预登记全部完成时间
+        },
+        invoice: {
+          id: '00210212310001',
+          type: "GENERAL",
+          media: "PAPER",
+          category: "住宿费",
+          title: "上海复创",
+          tax_registry_no: "统一社会信用代码",
+          address: "地址",
+          phone_number: null,
+          bank_name: null,
+          bank_account: null,
+          invoice_status: 1,//1未开，2已开
+          draw_time: 1491384458000//开票时间
+        },
+        logs: [{
+          date: 1491384458000,
+          action: '操作“确认退款”转退款流程',
+          operator: '张三'
+        }, {
+          date: 1491384458000,
+          action: '操作“确认退款”转退款流程',
+          operator: 'ted'
+        }],
+        room_fees: [{
+          room_type_name: '大床房', //房型名称
+          amount: 2, //房间数
+          date_price: [{
+            date: 1491384458000, //日期
+            price: 30000, //房费
+          }]
+        }],
+        suborders: [
+          {
+            suborder_id: "2304204024024011",
+            order_id: '2304204024024011',
+            order_pmsid: '2304204024024011',
+            union_tag: '023jatrtgfs00001',
+            status: {
+              is_cancelled: false, //是否已取消
+              is_checkin: false, //是否入住
+              is_checkout: false, //是否离店
+            },
+            breakfast: 1,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+            room_number: "203",
+            room_tags: ["靠南", "带窗"],
+            room_type_id: "DCF",
+            room_type_name: "大床房",
+            room_price: [{
+              date: 1490976000000,
+              price: '2222',
+            }, {
+              date: 1490976000000 + 86400000,
+              price: '3333',
+            }],
+            guests: [
+              {
+                name: "李四",
+                idcard: "343245623456728199",
+                status: 'I',//R（预定）I(在住)
+              }, {
+                name: "李四",
+                idcard: "343245623456728199"
+              }
+            ],
+            in_time: 1490976000000, //办理入住时间
+            // in_time: null, //办理入住时间
+            // out_time: null, //离店时间
+            out_time: 1490976000000, //离店时间
+            identity_id: "2304204024024012", //身份验证记录ID:null,
+            lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+            lvye_report_status: 'SUCCESS', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+            pmscheckout_status: "FAILED"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          },
+          {
+            suborder_id: "2304204024024011",
+            order_id: '2304204024024011',
+            order_pmsid: '2304204024024011',
+            union_tag: '023jatrtgfs00001',
+            status: {
+              is_cancelled: false, //是否已取消
+              is_checkin: false, //是否入住
+              is_checkout: false, //是否离店
+            },
+            breakfast: 3,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+            room_number: "203",
+            room_tags: ["靠南", "带窗"],
+            room_type_id: "DCF",
+            room_type_name: "大床房",
+            room_price: [{
+              date: 1490976000000,
+              price: '2222',
+            }, {
+              date: 1490976000000 + 86400000,
+              price: '3333',
+            }],
+            guests: [
+              {
+                name: "李四",
+                idcard: "343245623456728199"
+              }, {
+                name: "李四",
+                idcard: "343245623456728199"
+              }
+            ],
+            // in_time: null, //办理入住时间
+            in_time: 1490976000000, //办理入住时间
+            out_time: 1490976000000, //离店时间
+            identity_id: "", //身份验证记录ID:null,
+            lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+            lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+            pmscheckout_status: "PENDING"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          }, {
+            suborder_id: "2304204024024011",
+            order_id: '2304204024024011',
+            order_pmsid: '2304204024024011',
+            union_tag: '023jatrtgfs00001',
+            status: {
+              is_cancelled: false, //是否已取消
+              is_checkin: false, //是否入住
+              is_checkout: false, //是否离店
+            },
+            breakfast: 0,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+            room_number: "203",
+            room_tags: ["靠南", "带窗"],
+            room_type_id: "DCF",
+            room_type_name: "大床房",
+            room_price: [{
+              date: 1490976000000,
+              price: '2222',
+            }, {
+              date: 1490976000000 + 86400000,
+              price: '3333',
+            }],
+            guests: [
+              {
+                name: "四",
+                idcard: "343245623456728199"
+              }, {
+                name: "四",
+                idcard: "343245623456728199"
+              }
+            ],
+            in_time: null, //办理入住时间
+            out_time: null, //离店时间
+            identity_id: "", //身份验证记录ID:null,
+            lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+            lvye_report_status: 'FAILED', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+            pmscheckout_status: "SUCCESS"//PENDING处理中, SUCCESS退房成功,FAILED退房失败'
+          }]
+      },
+      {
+        order_id: "230420402402402",//订单号
+        order_pmsid: "230420402402402",//订单号
+        source_id: 'XC',
+        in_time: 1490976000000,
+        out_time: 1491148800000,
+        owner: "张三",//预订人
+        owner_tel: "8618500059035",//预订人手机
+        remark: "携程已付300元",//备注
+        rooms_plan: [{
+          room_type: "大床房",
+          room_count: 2
+        }],
+        payinfo: {
+          total_roomfee: 4000, //总房费
+          pms_pay: 1000, //PMS中的已付金额,
+          staff_pay: 100,//营业员确认的付款金额,
+          user_pay: 1000, //小程序已付金额
+          deposit: 0, //应付押金
+          pay_mode: 2,
+          confirm_mode: 2
+        },
+        bill: {
+          payment: {
+            wx_order_id: '4008162001602672232323295',
+            pay_fee: 0,//支付金额
+            pay_time: 1495444639000
+          },
+          refund: {
+            need_pay_fee: 200,  //消费金额
+            refund_fee: 100,  //退款金额
+            refund_time: 1495444639000,  //申请退款时间
+            refund_status: 'PENDING',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          }
+        },
+        status: {
+          is_cancelled: false, //是否已取消
+          is_refund_required: false, //是否需要退款
+          is_recording_success: false, //PMS入账是否成功
+          is_any_checkin: false, //订单是否有入住
+          is_free_deposit: true,//true免押、false不免押
+        },
+        timeline: { //状态变化时间
+          staff_confirm: 1491384458000, //营业员确认订单的时间
+          precheckin_done: 1491384458000, //预登记全部完成时间
+        },
+        room_fees: [{
+          room_type_name: '大床房', //房型名称
+          amount: 2, //房间数
+          date_price: [{
+            date: 1491384458000, //日期
+            price: 30000, //房费
+          }]
+        }],
+        suborders: []
+      },
+      {
+        order_id: "230420402402403",//订单号
+        order_pmsid: "230420402402403",//订单号
+        source_id: 'XC',
+        in_time: 1490976000000,
+        out_time: 1491148800000,
+        owner: "张三",//预订人
+        owner_tel: "8618500059035",//预订人手机
+        remark: "携程已付300元",//备注
+        rooms_plan: [{
+          room_type: "大床房",
+          room_count: 2
+        }],
+        payinfo: {
+          total_roomfee: 4000, //总房费
+          pms_pay: 1000, //PMS中的已付金额,
+          staff_pay: 100,//营业员确认的付款金额,
+          user_pay: 1000, //小程序已付金额
+          deposit: 0, //应付押金
+          pay_mode: 3,
+          confirm_mode: 2
+        },
+        bill: {
+          payment: {
+            wx_order_id: '4008162001602672232323295',
+            pay_fee: 0,//支付金额
+            pay_time: 1495444639000
+          },
+          refund: {
+            need_pay_fee: 200,  //消费金额
+            refund_fee: 100,  //退款金额
+            refund_time: 1495444639000,  //申请退款时间
+            refund_status: 'PENDING',  //PENDING退款中、FAILED失败，REFUNDED退款完成
+          }
+        },
+        status: {
+          is_cancelled: false, //是否已取消
+          is_refund_required: false, //是否需要退款
+          is_recording_success: false, //PMS入账是否成功
+          is_any_checkin: false, //订单是否有入住
+          is_free_deposit: true,//true免押、false不免押
+        },
+        timeline: { //状态变化时间
+          staff_confirm: 1491384458000, //营业员确认订单的时间
+          precheckin_done: 1491384458000, //预登记全部完成时间
+        },
+        invoice: {
+          id: '00210212310001',
+          type: "GENERAL",
+          media: "PAPER",
+          category: "住宿费",
+          title: "上海复创",
+          tax_registry_no: "统一社会信用代码",
+          address: "地址",
+          phone_number: null,
+          bank_name: null,
+          bank_account: null,
+          invoice_status: 1,//1未开，2已开
+          draw_time: 1491384458000//开票时间
+        },
+        logs: [{
+          date: 1491384458000,
+          action: '操作“确认退款”转退款流程',
+          operator: '张三'
+        }, {
+          date: 1491384458000,
+          action: '操作“确认退款”转退款流程',
+          operator: 'ted'
+        }],
+        room_fees: [{
+          room_type_name: '大床房', //房型名称
+          amount: 2, //房间数
+          date_price: [{
+            date: 1491384458000, //日期
+            price: 30000, //房费
+          }]
+        }],
+        suborders: [
+          {
+            suborder_id: "2304204024024011",
+            order_id: '2304204024024011',
+            order_pmsid: '2304204024024011',
+            union_tag: '023jatrtgfs00001',
+            status: {
+              is_cancelled: false, //是否已取消
+              is_checkin: false, //是否入住
+              is_checkout: false, //是否离店
+            },
+            breakfast: 1,//早餐份数 null未配置,0-无早，1-单早，2-双早，3-全早
+            room_number: "203",
+            room_tags: ["靠南", "带窗"],
+            room_type_id: "DCF",
+            room_type_name: "大床房",
+            room_price: [{
+              date: 1490976000000,
+              price: '2222',
+            }, {
+              date: 1490976000000 + 86400000,
+              price: '3333',
+            }],
+            guests: [
+              {
+                name: "李四",
+                idcard: "343245623456728199"
+              }, {
+                name: "李四",
+                idcard: "343245623456728199"
+              }
+            ],
+            in_time: null, //办理入住时间
+            out_time: null, //离店时间
+            identity_id: "", //身份验证记录ID:null,
+            lvye_report_time: 1490976000000, //成功上传旅业系统的时间时间戳
+            lvye_report_status: 'NONE', //NONE未上传，SUCCESS成功，FAILED失败, PENDING等待 。上传旅业系统状态。
+          }]
+
+      }
+    ]
+  }
 
 }
