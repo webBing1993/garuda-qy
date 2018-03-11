@@ -3,7 +3,39 @@ article {
   box-sizing: border-box;
   user-select: none;
   touch-callout:none;
+  .list-wrapper{
+
+  }
+  .fontColorTip .redTip{
+    color: #df1f0f;
+  }
+    .fontColorTip .blueTip{
+        color: #3393df;
+    }
+    .fontColorTip .greenTip{
+        color: #69c572;
+    }
+  .todoListGroup{
+    .cell-body{
+      background: #FFFFFF;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .titleDate{
+    margin: 0.5rem;
+    padding-left: 0.5rem;
+    color: #6b6b6b;
+  }
+  .cellImg{
+    display: inline-block;
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-left: 0.8rem;
+  }
 }
+
 .batch {
   .checker-item {
     &:before {
@@ -30,6 +62,7 @@ article {
   background-color: #ffffff;
   border-radius: 4px;
   border: solid 1px #e0e0e0;
+  margin-bottom: 5rem;
   .hd {
     display: flex;
     justify-content: space-between;
@@ -108,7 +141,7 @@ footer {
     top: 0;
     right: 0;
     height: 1px;
-    border-top: 1px solid #C3C3C3;
+    //border-top: 1px solid #C3C3C3;
     color: #C3C3C3;
     -webkit-transform-origin: 0 0;
     -ms-transform-origin: 0 0;
@@ -154,8 +187,7 @@ footer {
 .report-info {
   display: flex;
   flex-direction: column;
-  margin: 15px 10px;
-  margin-bottom: 5rem;
+  //margin-bottom: 5rem;
   padding: 15px 10px;
   background-color: #ffffff;
   font-size: 14px;
@@ -173,7 +205,7 @@ footer {
       min-width: 5em;
     }
     .item-right {
-      flex-grow: 1;
+      //flex-grow: 1;
       text-indent: 1em;
       text-align: left;
       color: #4A4A4A;
@@ -222,21 +254,23 @@ footer {
     }
 
   }
-  .search {
+  .searchRoom {
     display: flex;
     width: 100%;
     box-sizing: border-box;
     padding: 0 10px;
     position: absolute;
     z-index: 55;
-    top: 22%;
+    top: 4rem;
     right: 0;
     label {
       width: 5em;
       margin-right: 10px;
       opacity: 0;
     }
-    .search-result {
+    .searchRoom-result {
+        //position: absolute;
+        //top: 3rem;
       flex-grow: 1;
       list-style: none;
       background-color: #FFF;
@@ -261,21 +295,22 @@ footer {
   }
   .error-room-number {
     color: red;
-    text-align: right;
+    text-align: left;
+    padding-left: 5rem;
   }
 }
 .dialog-report-info {
   .report-info {
     margin: 0;
     padding: 0 0 1em 0;
-    .search {
+    .searchRoom {
       padding: 0;
       top:30%
     }
     .error-room-number {
       text-align: right;
     }
-    .search-result {
+    .searchRoom-result {
       text-align: left;
     }
   }
@@ -314,6 +349,82 @@ footer {
   margin-right: 0.5rem;
 }
 .pick-btn-group .weui-btn_plain-default{
-     margin-top: 15px;
+  margin-top: 15px;
+}
+.dialog{
+  .weui-dialog{
+    width: 96%;
+    max-width: 370px;
+    z-index:2
+  }
+  .weui-mask {
+    z-index: 1;
+  }
+}
+
+.withoutLicenseCon{
+  width: 90%;
+  min-height: 300px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  .onspace{
+    border: 1px solid #E6E6E6;
+    border-top: none;
+    margin-left: 15px;
+  }
+  .title{
+    color: #8A8A8A;
+    font-size: 16px;
+    text-align: left;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 15px;
+    margin-left: 20px;
+  }
+  .popup .weui-label{
+    margin-left: 8px;
+    font-size: 17px;
+  }
+  .Equipment{
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    margin-left: 23px;
+    height: 40px;
+    line-height: 40px;
+    p{
+      width: 50%;
+    }
+    :last-child{
+      text-align: right;
+      margin-right: 5px;
+    }
+  }
+  .footer{
+    margin-top: 20px;
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    color: #8A8A8A;
+    width: 110%;
+    border-top: 1px solid #b6b6b6;
+    .aLine{
+      height: 50px;
+      border: 1px solid #b6b6b6;
+      border-right: none;
+    }
+    div{
+      width: 50%;
+      text-align: center;
+    }
+    .invoiceBtn1{
+      color: #4A9BDF;
+    }
+    .invoiceBtn2{
+      color: #8A8A8A;
+    }
+  }
 }
 
