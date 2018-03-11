@@ -20,21 +20,45 @@
     <!--use-pulldown-->
     <!--v-show="!currentTab">-->
     <div class="list-wrapper">
-
-      <div v-show="!currentTab" :class="{batch}">
-        <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
-        <checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">
-          <checker-item v-for="(item,index) in renderTodoHandelList" :key="index" :value="item.lvyeReportRecordId">
-            <group>
-              <cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>
-            </group>
-          </checker-item>
-        </checker>
+      <!--<div v-show="!currentTab" :class="{batch}">-->
+      <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
+      <!--<checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">-->
+      <!--<checker-item v-for="(item,index) in renderTodoHandelList" :key="index" :value="item.lvyeReportRecordId">-->
+      <!--<group :title="titleFilter(index)">-->
+      <!--<cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>-->
+      <!--</group>-->
+      <!--</checker-item>-->
+      <!--</checker>-->
+      <!--</div>-->
+      <!--待处理列表-->
+      <div v-show="!currentTab">
+        <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
+        <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList"
+             @click="orderClick(item.lvyeReportRecordId)">
+          <div class="titleDate">{{titleFilter(index)}}</div>
+          <div class="cell-body" :class="{'fontColorTip':true}">
+            <p><span class="cell-key">姓名：</span><span class="cell-value "
+                                                      :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{item.name}}</span>
+            </p>
+            <p><span class="cell-key">身份证：</span><span class="cell-value"
+                                                       :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
+              <span class="cell-right">
+                {{datetimeparse(item.createdTime, 'hhmm')}}
+                <img src="../../../static/icon/arow.png" alt="" class="cellImg">
+              </span></p>
+            <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
+              <span class="cell-value"
+                    :class="{'redTip':item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED','blueTip':item.identityStatus=='PENDING','greenTip':item.identityStatus=='AUTO_AGREED'}">
+                无证核验 {{item.identityStatus == 'AUTO_REFUSED' ? '验证不通过' : item.identityStatus == 'PENDING' ? '验证完成' : item.identityStatus == 'AUTO_AGREED' ? '验证通过' : item.identityStatus == 'FAILED' ? '验证失败' : '验证失败'}}
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
-
+      <!--已处理列表-->
       <div v-show="currentTab">
         <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-        <group v-for="(item,index) in renderHandelList" :key="index" :title="titleFilter(index)">
+        <group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">
           <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
                 :value="datetimeparse(item.createdTime,'hhmm')"></cell>
           <cell :title="handledItem(item,item.inTime,item.outTime)"
@@ -44,24 +68,25 @@
     </div>
     <!--</scroller>-->
 
-    <footer v-show="route.params.tab == 0 && tobeHandled.length !== 0 && tobeHandledPageIndex > 0">
+    <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
-        <div class="pick-btn-group" v-if="batch">
-          <x-button value="取消" @onClick="cancelPick" plain/>
-          <x-button value="确认选择" @onClick="showDialog = true"/>
-        </div>
-        <x-button class="blue-btn" v-else @onClick="goPick()" value="合并入住"/>
+        <!--<div class="pick-btn-group" v-if="batch">-->
+        <!--<x-button value="取消" @onClick="cancelPick" plain/>-->
+        <!--<x-button value="确认选择" @onClick="showDialog = true"/>-->
+        <!--</div>-->
+        <!--<x-button class="blue-btn"  @onClick="goPick()" value="合并入住"/>-->
+        <x-button class="blue-btn" @onClick="showwithoutLicenseDialog()" value="无证核验"/>
       </div>
     </footer>
 
-    <footer v-if="currentTab">
-      <div class="listFilter">
-        <span class="filter" @click="isCalendarShow = true">
-          <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
-          <abbr v-else>筛选</abbr>
-        </span>
-      </div>
-    </footer>
+    <!--<footer v-if="currentTab">-->
+    <!--<div class="listFilter">-->
+    <!--<span class="filter" @click="isCalendarShow = true">-->
+    <!--<abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>-->
+    <!--<abbr v-else>筛选</abbr>-->
+    <!--</span>-->
+    <!--</div>-->
+    <!--</footer>-->
 
     <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
@@ -121,20 +146,81 @@
           class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
       </ul>
     </Dialog>
+
+    <!--无证核验-->
+    <div class="dialog">
+      <x-dialog v-model="without_license">
+        <div class="withoutLicenseCon">
+          <div class="title">无证核验</div>
+          <div class="space"></div>
+          <group>
+            <x-input title="姓名：" placeholder="核验人姓名"
+                     :show-clear="true"
+                     v-model="guestName"
+                     placeholder-align="right"></x-input>
+            <x-input title="身份证：" placeholder="核验人身份证号"
+                     :show-clear="true"
+                     v-model="idCard"
+                     placeholder-align="right"></x-input>
+            <x-input title="地址：" placeholder="核验人地址"
+                     :show-clear="true"
+                     type="text"
+                     v-model="guestAddress"
+                     placeholder-align="right"></x-input>
+            <div class="onspace"></div>
+            <div class="popup">
+              <popup-picker title="民族："
+                            :data="NationList"
+                            v-model="defaultNation"
+                            @on-change="nationOnChange"
+                            :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
+              <div class="onspace"></div>
+              <div v-if="getedEquipmentList.length>1">
+                <popup-picker title="设备："
+                              :data="EquipmentList"
+                              v-model="defaultEquipment"
+                              @on-change="EquipmentOnChange"
+                              :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
+              </div>
+            </div>
+            <!--<div class="onspace"></div>-->
+            <div class="Equipment" v-if="getedEquipmentList.length==1">
+              <p>设备：</p>
+              <!--<p>11111</p>-->
+              <p>{{sinerEquipmentName}}</p>
+            </div>
+
+          </group>
+          <div class="footer">
+            <div class="invoiceBtn" @click='cansoleVerify'>取消</div>
+            <p class="aLine"></p>
+            <div v-if="guestName!=''&& idCard!=''&& guestAddress!='' " class="invoiceBtn1" @click='makeSureVerify'>确定
+            </div>
+            <div v-if="guestName==''|| idCard==''||guestAddress=='' " class="invoiceBtn2" @click=''>确定</div>
+          </div>
+        </div>
+      </x-dialog>
+    </div>
+
+
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-
+  import {XDialog, Group, XInput, PopupPicker, Picker, Popup} from 'vux'
   module.exports = {
     name: 'List',
+    components: {
+      XDialog, Group, XInput, PopupPicker, Picker, Popup
+    },
     data(){
       return {
 //        tabMenu: ['待办理', '已办理'],
         tobeHandled: [],
+        tobeHandledConfig: {},
         handled: [],
-        mylist:[],
+        mylist: [],
         batch: false,
         batchlist: [],
         tobeHandledPageIndex: 0,
@@ -151,6 +237,20 @@
         resultList: [],
         isErrorNumber: false,
         canSearch: true,
+        flag: true,
+        without_license: false,
+        guestName: '',
+        idCard: '',
+        guestAddress: '',
+        NationList: [],
+        getedNationList: [],
+        EquipmentList: [],
+        getedEquipmentList: [],
+        sinerEquipmentName: '',
+        defaultNation: ["汉族"],
+        NationId: '01',
+        devaiceId: '',
+        defaultEquipment: []//默认设备名称
       }
     },
     computed: {
@@ -159,18 +259,21 @@
         'Interface',
         'roomNumberList'
       ]),
+      renderList() {
+        return NationList;
+      },
       currentTab(){
         return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
-        // this.initList();
+        this.initList();
         let menu = [];
         menu[0] = `待处理(${this.tobeHandled.length})`;
         menu[1] = `已处理(${this.handled.length})`;
         return menu;
       },
       renderTodoHandelList(){
-         return this.tobeHandled
+        return this.tobeHandled
       },
       renderHandelList(){
         return this.handled;
@@ -205,8 +308,110 @@
         'goto',
         'reportLvYe',
         'newIdentityList',
-        'getRoomNumberList'
+        'getNationality',//民族列表
+        'hotelEquipment',//设备列表
+        'withoutIdCard',//设备列表
+        'getRoomNumberList',
+
       ]),
+      showwithoutLicenseDialog(){
+        this.Nationality();
+        this.gethotelEquipment();
+        this.without_license = true
+      },
+      nationOnChange(val){
+        console.log('val是', val)
+        this.NationId = ''
+        for (var i = 0; i < this.getedNationList.length; i++) {
+          if (val[0] == this.getedNationList[i].nation_name) {
+            this.NationId = this.getedNationList[i].nation_id
+          }
+        }
+        console.log('民族Id是', this.NationId)
+      },
+      EquipmentOnChange(val){
+        console.log('val是', val)
+        this.devaiceId = ''
+        for (var i = 0; i < this.getedEquipmentList.length; i++) {
+          if (val[0] == this.getedEquipmentList[i].name) {
+            this.devaiceId = this.getedEquipmentList[i].id
+          }
+        }
+        console.log('设备Id是', this.devaiceId)
+      },
+      //民族列表
+      Nationality(){
+        let temp = [];
+        let temp2 = [];
+        this.NationList=[]
+        this.getNationality({
+          onsuccess: body => {
+            temp = body.data
+            this.getedNationList = body.data
+            for (var i = 0; i < temp.length; i++) {
+              temp2.push(temp[i].nation_name);
+            }
+            this.NationList.push(temp2)
+            console.log(this.NationList)
+          }
+
+        })
+        console.log(this.NationList)
+      },
+
+      //设备列表
+      gethotelEquipment(){
+        let temp = [];
+        let temp2 = [];
+        this.EquipmentList=[]
+        this.sinerEquipmentName=''
+        this.getedEquipmentList=[]
+        this.defaultEquipment=[]
+        this.hotelEquipment({
+          onsuccess: body => {
+            temp = body.data;
+            this.getedEquipmentList = body.data;
+            this.sinerEquipmentName = body.data[0].name;
+            this.defaultEquipment.push(body.data[0].name)
+            this.devaiceId = body.data[0].id
+            for (var i = 0; i < temp.length; i++) {
+              temp2.push(temp[i].name);
+            }
+            this.EquipmentList.push(temp2);
+            console.log('-------->', this.sinerEquipmentName)
+          }
+        })
+
+      },
+
+//      取消核验
+      cansoleVerify(){
+        this.without_license = false
+      },
+
+//      确认核验
+      makeSureVerify(){
+        this.withoutIdCard({
+          guest_name: this.guestName,
+          id_card: this.idCard,
+          nation_id: this.NationId,
+          address: this.guestAddress,
+          device_id: this.devaiceId,
+          onsuccess: (body) => {
+            this.without_license = false
+          }
+        })
+      },
+
+      //标题日期筛选
+      titleFilter(index){
+        if (this.tobeHandled.length > 0) {
+          return index
+            ? this.datetimeparse(this.tobeHandled[index].createdTime) === this.datetimeparse(this.tobeHandled[index - 1].createdTime)
+              ? null : this.datetimeparse(this.tobeHandled[index].createdTime)
+            : this.datetimeparse(this.tobeHandled[index].createdTime)
+        }
+      },
       resultPick(item) {
         this.canSearch = false;
         this.roomNumber = item;
@@ -237,17 +442,12 @@
         this.replaceto(newpath)
         this.refreshList()
       },
-      titleFilter(index) {
+      titleHandledFilter(index){
         if (this.handled.length > 0) {
-          if(index) {
-            if(this.datetimeparse(this.handled[index].createdTime) === this.datetimeparse(this.handled[index - 1].createdTime)){
-              return null
-            }else {
-              return this.datetimeparse(this.handled[index].createdTime);
-            }
-          }else {
-              return this.datetimeparse(this.handled[index].createdTime);
-          }
+          return index
+            ? this.datetimeparse(this.handled[index].createdTime) === this.datetimeparse(this.handled[index - 1].createdTime)
+              ? null : this.datetimeparse(this.handled[index].createdTime)
+            : this.datetimeparse(this.handled[index].createdTime)
         }
       },
       goPick(){
@@ -304,16 +504,16 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
           `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus==='REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus==='SUCCESS' ? '已上传旅业' : ''}</span></p>` +
+          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span></p>` +
           `</div>`
       },
-      getList(callback, status,idenStatus){
+      getList(callback, status, idenStatus){
         this.newIdentityList({
           createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
           // createTimeStart:1509851866000,
           createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
           // createTimeEnd:1518751066000,
-          identityStatuses:idenStatus,
+          identityStatuses: idenStatus,
           reportInStatuses: status,//需要的入住上报旅业状态
           onsuccess: callback
         })
@@ -325,19 +525,21 @@
           this.getList((body => {
             this.handled = [...body.data.content];
             this.handledPageIndex++;
-          }), [],["AGREED","REFUSED"]);
+          }), [], ["AGREED", "REFUSED"]);
           this.getList((body => {
             this.tobeHandled = [...body.data.content];
+            this.tobeHandledConfig = {...body.data.config};
+            console.log(this.tobeHandledConfig.enable_identity_check_undocumented)
             this.tobeHandledPageIndex++;
-          }), ['NONE', 'FAILED',"PENDING"],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
+          }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
         }
       },
       refreshList(){
 //        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
         if (this.currentTab === 1) {
-          this.getList(body => this.handled = [...body.data], [],["AGREED","REFUSED"])
+          this.getList(body => this.handled = [...body.data], [], ["AGREED", "REFUSED"])
         } else if (this.currentTab === 0) {
-          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
+          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
         }
       },
       resetList(){
