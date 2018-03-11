@@ -504,7 +504,7 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
           `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus==='REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus==='SUCCESS' ? '已上传旅业' : ''}</span></p>` +
+          `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span></p>` +
           `</div>`
       },
       getList(callback, status, idenStatus){
