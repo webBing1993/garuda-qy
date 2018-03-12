@@ -38,6 +38,7 @@
         <!--</div>-->
         <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAILED'" style="margin-bottom: 10px"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
+        <p v-if="detail.reportInStatus &&detail.reportInStatus === 'PENDING'" style="margin-bottom: 10px"><span style="color: #c4a726;padding-right: 10px;">上传中！</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
         <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
         <!--<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">-->
