@@ -23,11 +23,6 @@
           <Cell :title="preCheckInCellBody(item)" link
                 @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
         </Group>
-        <!--<Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">-->
-        <!--<Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>-->
-        <!--<Cell :title="liveInGuestItem(item)" @onClick="confirmDelete()"/>-->
-        <!--</Group>-->
-        <div class="spaceTop"></div>
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
           <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
           <div class="space"></div>
@@ -59,31 +54,17 @@
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </div>
-
-        <div class="spaceTopApply"></div>
-
-        <!--<div v-if="tempPage == '退房申请'">-->
-        <!--<x-button value="退款" @onClick="showTK(item)">退款</x-button>-->
-        <!--</div>-->
-        <Group class="Apply" v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
-               :title="titleFilter(index)">
+        <!--<div class="spaceTopApply"></div>-->
+        <Group class="Apply" v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index">
           <Cell :title="checkoutCellTitle(item)"/>
-          <Cell :title="getCheckoutGuestItem(item)" link
-                @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
-          <div class="appalyBtn"
-               v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
+          <Cell :title="getCheckoutGuestItem(item)" link @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+          <div class="appalyBtn" v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
             <!--<div class="appalyBtn" v-if="!item.order.has_refund_apply || hotel_config_can_REfend ||item.order.is_paid">-->
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
-        <!--(refundPathway=='MANUAL'&& hotel_config_can_REfend &&item.order.is_paid &&!item.order.has_refund_apply)||-->
-        <!--(refundPathway=='MANUAL'&& !hotel_config_can_REfend && item.cash_pledge&&item.cash_pledge!=0&&item.order.is_paid &&!item.order.has_refund_apply)-->
-
-
-        <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-               :title="datetimeparse(item.out_time,'YYMMDD')">
+        <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index" :title="titleHandelFilter(index)">
           <Cell :title="checkoutCellTitle(item,index)"/>
-          <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
           <Cell :title="getLeaveItem(item)" link
                 @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
         </Group>
@@ -91,10 +72,8 @@
 
     </scroller>
     <!--筛选按钮-->
-    <!--<footer v-if="tempPage == '已离店'">-->
     <footer>
       <div class="listFilter">
-        <!--<span class="filter" @click="showDialog = true">-->
         <span class="filter" @click="_filtrate">
           <abbr>筛选</abbr>
         </span>
@@ -233,23 +212,10 @@
         <div>
           <p>退款金额</p>
           <x-input placeholder-align="left" v-model="tkMoney" :is-type="numCheck"></x-input>
-          <!--<x-input title="必须输入2333" :is-type="be2333" placeholder="I'm placeholder"></x-input>-->
-          <!--<input type = "text" name= "price" id = 'price' onkeyup= "if( ! /^d*(?:.d{0,2})?$/.test(this.value)){alert('只能输入数字，小数点后只能保留两位');this.value='';}" />-->
           <p class="tip">如对退款金额有异议，请手动输入</p>
           <x-button value="确定" v-if="/^[0-9]+([.]{1}[0-9]{1})?$/.test(tkMoney)"
                     @onClick="_changeTkDialogCont1()"></x-button>
         </div>
-        <!--联房状态-->
-        <!--<div>-->
-        <!--<p class="lfTip">该房间处于联房状态<br>退款将在最后一个房间退房时退款</p>-->
-        <!--<x-button value="确定" @onClick="_changeTkDialogCont1()"></x-button>-->
-        <!--</div>-->
-
-        <!--退款大于押金状态-->
-        <!--<div class="DisableBtn">-->
-        <!--<p class="tip">退款金额大于押金</p>-->
-        <!--<x-button value="确定"></x-button>-->
-        <!--</div>-->
       </div>
 
       <div class="tkDialogCont" v-if="tkCont3">
@@ -268,7 +234,6 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  //  import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   import {XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   import {VueScroller} from 'vue-scroller'
   export default {
@@ -385,13 +350,6 @@
         menu[3] = `已离店(${this.checkOutTotal})`;
         return menu;
       },
-
-      getParameter() {
-        // let tempRoute = this.route.path.split('/')[2];
-        // return tempRoute
-        return ''
-      },
-
       tempPage() {
         let tempRoute = this.route.path.split('/')[2];
         switch (tempRoute) {
@@ -427,21 +385,6 @@
           return this.sortByTime(this.checkOutList, 'created_time');
         }
       },
-
-      LiveInRenderList(){
-//        this.sortByTime(this.liveInList, 'in_time');
-//        let guests=[]
-//        this.liveInList.map((item,index)=>{
-//         guests.push(item.guests)
-//        })
-        let guests = []
-
-        for (let i = 0; i < this.liveInList.length; i++) {
-          guests.push(this.liveInList[i].guests[0])
-        }
-        return guests
-      },
-
       renderPageIndex() {
         if (this.tempPage == '预登记') {
           return this.preCheckInPageIndex;
@@ -484,12 +427,12 @@
         'applicationRefund',
         'getLiveINlist'
       ]),
-
       //标题项时间处理
-      titleFilter(index) {
-        if (this.tempPage == '已离店') {
+      titleHandelFilter(index) {
+        if (this.tempPage === '已离店') {
           if (index && this.renderList.length > 0) {
             if (this.datetimeparse(this.renderList[index].out_time) === this.datetimeparse(this.renderList[index - 1].out_time)) {
+
               return null
             } else {
               return this.datetimeparse(this.renderList[index].out_time);
@@ -695,12 +638,6 @@
       resetFilter() {
         this.periodFilter = [null, null]
       },
-
-
-      titleFilter(index) {
-        return
-      },
-
 
 //      getList(callback) {
 //        if (this.tempPage == '预登记') {
