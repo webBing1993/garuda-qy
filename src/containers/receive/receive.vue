@@ -53,11 +53,16 @@
             <span
               style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
           </div>
-          <div v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
+          <!--<div>{{refundPathway}}=={{hotel_config_can_REfend}}==={{item.order.is_paid}}=={{item.order.cash_pledge}} </div>-->
+          <div
+            v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </div>
+
         <div class="spaceTopApply"></div>
+
+
         <Group class="Apply" v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
                :title="titleFilter(index)">
           <Cell :title="checkoutCellTitle(item)"/>
@@ -68,9 +73,12 @@
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
+
+
         <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-               :title="titleHandelFilter(index)">
+               :title="datetimeparse(item.out_time,'YYMMDD')">
           <Cell :title="checkoutCellTitle(item,index)"/>
+          <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
           <Cell :title="getLeaveItem(item)" link
                 @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
         </Group>
@@ -78,8 +86,10 @@
 
     </scroller>
     <!--筛选按钮-->
+    <!--<footer v-if="tempPage == '已离店'">-->
     <footer>
       <div class="listFilter">
+        <!--<span class="filter" @click="showDialog = true">-->
         <span class="filter" @click="_filtrate">
           <abbr>筛选</abbr>
         </span>
@@ -218,6 +228,8 @@
         <div>
           <p>退款金额</p>
           <x-input placeholder-align="left" v-model="tkMoney" :is-type="numCheck"></x-input>
+          <!--<x-input title="必须输入2333" :is-type="be2333" placeholder="I'm placeholder"></x-input>-->
+          <!--<input type = "text" name= "price" id = 'price' onkeyup= "if( ! /^d*(?:.d{0,2})?$/.test(this.value)){alert('只能输入数字，小数点后只能保留两位');this.value='';}" />-->
           <p class="tip">如对退款金额有异议，请手动输入</p>
           <x-button value="确定" v-if="/^[0-9]+([.]{1}[0-9]{1})?$/.test(tkMoney)"
                     @onClick="_changeTkDialogCont1()"></x-button>
@@ -251,6 +263,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+  //  import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   import {XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   import {VueScroller} from 'vue-scroller'
   export default {
@@ -317,6 +330,8 @@
         showRefundBtn: [],
         numCheck: function (value) {
           return {
+//            valid: value.toFixed(1),
+//            valid: !/^d*(?:.d{0,1})?$/.test(value),
             valid: /^[0-9]+([.]{1}[0-9]{1})?$/.test(value),
             msg: '请输入含一位小数的字符',
           }
@@ -464,7 +479,7 @@
       ]),
 
       //标题项时间处理
-        titleHandelFilter(index) {
+      titleFilter(index) {
         if (this.tempPage == '已离店') {
           if (index && this.renderList.length > 0) {
             if (this.datetimeparse(this.renderList[index].out_time) === this.datetimeparse(this.renderList[index - 1].out_time)) {
@@ -675,6 +690,11 @@
       },
 
 
+      titleFilter(index) {
+        return
+      },
+
+
 //      getList(callback) {
 //        if (this.tempPage == '预登记') {
 //          this.gettodaylist({
@@ -870,13 +890,9 @@
           return false;
         } else if (this.tempPage == '在住') {
           this.LiveInList();
-          this.hotel_config_can_REfend = '';
-          this.refundPathway = '';
           return false;
         } else if (this.tempPage == '退房申请') {
           this.ChechOutAppl()
-          this.hotel_config_can_REfend = '';
-          this.refundPathway = '';
           return false;
         } else if (this.tempPage == '已离店') {
           this.outList();
