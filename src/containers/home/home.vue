@@ -201,7 +201,7 @@
           }
         })
       },
-//      云吧链接
+//      云吧链接confi
       init() {
         this.getTodoList();
         this.gethotelConfig();
