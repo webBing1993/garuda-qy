@@ -507,12 +507,12 @@
           `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span></p>` +
           `</div>`
       },
-      getList(callback, status, idenStatus){
+      getList(callback, idenStatus,status ){
         this.newIdentityList({
-          createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-          // createTimeStart:1509851866000,
-          createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          // createTimeEnd:1518751066000,
+          // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+          createTimeStart:1519384206000,
+          // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          createTimeEnd: 1520766606000,
           identityStatuses: idenStatus,
           reportInStatuses: status,//需要的入住上报旅业状态
           onsuccess: callback
@@ -529,9 +529,10 @@
           this.getList((body => {
             this.tobeHandled = [...body.data.content];
             this.tobeHandledConfig = {...body.data.config};
-            console.log(this.tobeHandledConfig.enable_identity_check_undocumented)
+            console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
             this.tobeHandledPageIndex++;
-          }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
+          }), ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING", "AGREED", "REFUSED"], ["NONE", "SUCCESS", "PENDING", "FAIL"]
+          )
         }
       },
       refreshList(){

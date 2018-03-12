@@ -93,10 +93,11 @@ module.exports = {
       url: '/lvye/searchLvyeReportInfo',
       method: 'POST',
       body: {
-        startTime: param.startTime,
-        endTime: param.endTime,
+        createTimeStart: param.createTimeStart,
+        createTimeEnd: param.createTimeEnd,
         desc: true,//true 降序
-        reportInStatuses: param.reportInStatuses,//需要的入住上报旅业状态
+        identityStatuses:param.identityStatuses,
+        reportInStatuses: param.reportInStatuses//需要的入住上报旅业状态
       },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
@@ -162,5 +163,53 @@ module.exports = {
         param.onsuccess ? param.onsuccess(body) : null
       }
     })
-  }
+  },
+  rejectStatus(ctx, param){
+    ctx.dispatch('resource',{
+      url:'/lvye/checkStatus/'+param.identity_id+'/'+param.status,
+      method:'PUT',
+      body:param.body,
+      onSuccess:body=> {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  // 无证核验获取民族列表
+  getNationality(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/nation',
+      method: 'GET',
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  // 无证核验获取设备名称
+  hotelEquipment(ctx, param){
+    ctx.dispatch('resource', {
+      url: '/hotel/device/bottom',
+      method: 'GET',
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+    // 新增无证核验入住人 /identities/undocumented/guest
+  withoutIdCard(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/identities/undocumented/guest',
+      method: 'POST',
+      body: {
+         guest_name: param.guest_name,
+        id_card: param.id_card,
+        nation_id: param.nation_id,
+        address: param.address,
+        device_id: param.device_id
+      },
+      onSuccess: body => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+
 };

@@ -129,12 +129,18 @@
         return this.route.params.id
       },
       isDisabled(){
-        if (this.roomNumberList.length > 0) {
-          let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-          return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
-        } else {
-          return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || this.days < 0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
-        }
+        // if (this.roomNumberList.length > 0) {
+        //   let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
+        //   return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
+        // } else {
+        //   return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || this.days < 0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
+        // }
+          if (this.roomNumberList.length > 0) {
+              let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
+              return !this.roomNumber  || this.isErrorNumber ||!isRightInputRoomNumber
+          } else {
+              return !this.roomNumber  ||  !this.isErrorNumber
+          }
       }
     },
     methods: {
@@ -151,7 +157,7 @@
       ]),
         //enter键事件上传旅业
       enterToLvye (event) {
-          if(detail.identityStatus === 'REFUSED'){
+          if(this.detail.identityStatus === 'REFUSED'){
               return
           }else {
               if(event.keyCode == 13){
