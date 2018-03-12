@@ -76,8 +76,6 @@
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
           </div>
         </Group>
-        <!--(refundPathway=='MANUAL'&& hotel_config_can_REfend &&item.order.is_paid &&!item.order.has_refund_apply)||-->
-        <!--(refundPathway=='MANUAL'&& !hotel_config_can_REfend && item.cash_pledge&&item.cash_pledge!=0&&item.order.is_paid &&!item.order.has_refund_apply)-->
 
 
         <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
@@ -418,8 +416,6 @@
         } else if (this.tempPage == '在住') {
           return this.sortByTime(this.liveInList, 'in_time');
           return sortLiveInList;
-          return hotel_config_can_REfend;
-          return refundPathway;
         } else if (this.tempPage == '退房申请') {
           return this.sortByTime(this.checkOutApplicationList, 'created_time');
           return sortCheckOutApplicationList;
@@ -897,13 +893,9 @@
           return false;
         } else if (this.tempPage == '在住') {
           this.LiveInList();
-          this.hotel_config_can_REfend = '';
-          this.refundPathway = '';
           return false;
         } else if (this.tempPage == '退房申请') {
           this.ChechOutAppl()
-          this.hotel_config_can_REfend = '';
-          this.refundPathway = '';
           return false;
         } else if (this.tempPage == '已离店') {
           this.outList();
