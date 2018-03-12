@@ -266,7 +266,7 @@
         return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
-        // this.initList();
+        this.initList();
         let menu = [];
         menu[0] = `待处理(${this.tobeHandled.length})`;
         menu[1] = `已处理(${this.handled.length})`;
@@ -507,12 +507,12 @@
           `<p><span class="cell-key">入离：</span><span class="cell-value">${this.datetimeparse(in_time)} - ${this.datetimeparse(out_time)}</span><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span></p>` +
           `</div>`
       },
-      getList(callback, idenStatus,status ){
+      getList(callback, status, idenStatus){
         this.newIdentityList({
-          // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-          createTimeStart:1519384206000,
-          // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          createTimeEnd: 1520766606000,
+          createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+          // createTimeStart:1509851866000,
+          createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+          // createTimeEnd:1518751066000,
           identityStatuses: idenStatus,
           reportInStatuses: status,//需要的入住上报旅业状态
           onsuccess: callback
@@ -531,8 +531,7 @@
             this.tobeHandledConfig = {...body.data.config};
             console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
             this.tobeHandledPageIndex++;
-          }), ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING", "AGREED", "REFUSED"], ["NONE", "SUCCESS", "PENDING", "FAIL"]
-          )
+          }), ['NONE', 'FAILED',"PENDING"],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
         }
       },
       refreshList(){
@@ -540,7 +539,7 @@
         if (this.currentTab === 1) {
           this.getList(body => this.handled = [...body.data], [], ["AGREED", "REFUSED"])
         } else if (this.currentTab === 0) {
-          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
+          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED',"PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
         }
       },
       resetList(){
