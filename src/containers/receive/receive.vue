@@ -398,8 +398,6 @@
         } else if (this.tempPage == '在住') {
           return this.sortByTime(this.liveInList, 'in_time');
           return sortLiveInList;
-          return hotel_config_can_REfend;
-          return refundPathway;
         } else if (this.tempPage == '退房申请') {
           return this.sortByTime(this.checkOutApplicationList, 'created_time');
           return sortCheckOutApplicationList;
