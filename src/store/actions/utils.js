@@ -26,17 +26,6 @@ module.exports = {
 
   //服务器请求
   resource: (ctx, param) => {
-    // console.log('configUrl:------>',configUrl.dev.proxyTable['/gemini'].target)
-    // let requrl='';
-    // if(configUrl.dev.proxyTable['/i/master/gemini']&&configUrl.dev.proxyTable['/i/master/gemini'].target=='https://intg.fortrun.cn/'){
-    //   requrl='/i/master/gemini' + param.url;
-    // }else if(configUrl.dev.proxyTable['/q/master/gemini']&&configUrl.dev.proxyTable['/q/master/gemini'].target=='https://qa.fortrun.cn/'){
-    //   requrl='/q/master/gemini' + param.url;
-    // }else if(configUrl.dev.proxyTable['/s/master/gemini']&&configUrl.dev.proxyTable['/s/master/gemini'].target=='https://stg.fortrun.cn/'){
-    //   requrl='/s/master/gemini' + param.url;
-    // }else if(configUrl.dev.proxyTable['/p/master/gemini']&&configUrl.dev.proxyTable['/p/master/gemini'].target=='https://gem.fortrun.cn/'){
-    //   requrl='/p/master/gemini' + param.url;
-    // }
     let isRefresh = /hotel\/.+\/refresh/.test(param.url);
     isRefresh ? ctx.dispatch('showprogress', {show: true, isOk: false}) : ctx.commit('LOADING', 1);
     Vue.http({
@@ -63,7 +52,8 @@ module.exports = {
             param.url.match(/order\/pay/) ||
             param.url.match(/hotel\/.+\/refresh/) ||
             param.url.match(/suborder\/search/) ||
-            param.url.match(/exceptions/)
+            param.url.match(/exceptions/)||
+            param.url.match(/hotel\/config/)
           param.method && !isShowToast ? ctx.dispatch('showtoast') : null;
           param.onSuccess ? param.onSuccess(response.body, response.headers) : null
         } else {
