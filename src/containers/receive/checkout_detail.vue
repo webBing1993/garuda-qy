@@ -181,7 +181,7 @@
         choose:'请选择入住人',
         chooseNum:'请选择房号',
         cancel:"取消",
-        rcSuborders:''
+        rcSuborders:[]
       }
     },
     computed: {
@@ -399,15 +399,13 @@
         val ? this.getDetail() : null
       },
       roomNumber(val){
-        if (val){
             this.detail.suborders.forEach(value => {
                 if (val==value.room_number){
-                    console.log('rcSuborders:'+value)
+                    console.log('rcSuborders:',value)
                     this.rcSuborders=value;
                     return;
                 }
             })
-        }
       }
     },
     mounted() {

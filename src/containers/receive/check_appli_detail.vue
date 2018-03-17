@@ -103,7 +103,7 @@
       </Group>
 
       <div class="button-group RCbtn" v-if="rcBtn" style="margin-top: 2rem">
-        <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+        <x-button value="RC单打印" @onClick="RcPrint(rcSuborders)"></x-button>
       </div>
 
       <div>
@@ -119,7 +119,7 @@
               <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
             </div>
           </group>
-        </popup>
+        </popup>ß
       </div>
       <Dialog v-model="showDialog" @onConfirm="setInvoiceConfirm" confirm cancel>
         <p>是否已开发票？</p>
@@ -163,6 +163,7 @@
         nameList:[],
         choose:'请选择入住人',
         cancel:"取消",
+        rcSuborders:[]
       }
     },
     computed: {
@@ -177,6 +178,10 @@
       },
       routeId() {
         return this.$route.params.id
+      },
+      roomNumber(){
+          console.log(this.$route.params.roomNum)
+          return this.$route.params.roomNum;
       },
       routeParameter(){
         return this.$route.params.parameter
@@ -352,6 +357,17 @@
     watch: {
       routeId(val) {
         val ? this.getDetail() : null
+      },
+      roomNumber(val){
+          if (val){
+              this.detail.suborders.forEach(value => {
+                  if (val==value.room_number){
+                      console.log('rcSuborders:',value)
+                      this.rcSuborders=value;
+                      return;
+                  }
+              })
+          }
       }
     },
     mounted() {

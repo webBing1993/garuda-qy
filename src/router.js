@@ -42,11 +42,11 @@ const receive = [{
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/prereg_detail.vue')
   }, {
-    path: 'livein-detail/:id',
+    path: 'livein-detail/:id/:roomNum',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/livein_detail.vue')
   }, {
-    path: 'checkout-application-detail/:id',
+    path: 'checkout-application-detail/:id/:roomNum',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/check_appli_detail.vue')
   }, {

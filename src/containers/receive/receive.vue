@@ -29,10 +29,10 @@
         <!--</Group>-->
         <div class="spaceTop"></div>
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
-          <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>
+          <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"/>
           <div class="space"></div>
           <div class="rowItem" v-for="(i,k) in item.guests" :key="k"
-               @click="goto('/receive/livein-detail/'+item.order_id)">
+               @click="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)">
             <p>入住人:</p>
             <div class="liveInPeop">
               <span>{{i.name}}</span>
@@ -67,7 +67,7 @@
                :title="titleFilter(index)">
           <Cell :title="checkoutCellTitle(item)"/>
           <Cell :title="getCheckoutGuestItem(item)" link
-                @onClick="goto('/receive/checkout-application-detail/'+item.order_id)"/>
+                @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+item.room_number)"/>
           <div class="appalyBtn"
                v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
             <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
