@@ -80,7 +80,7 @@
           <Cell :title="checkoutCellTitle(item,index)"/>
           <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
           <Cell :title="getLeaveItem(item)" link
-                @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>
+                @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+item.room_number)"/>
         </Group>
       </div>
 
@@ -352,10 +352,10 @@
           // this.periodFilter = []
         }
       },
-      tempPage(val) {
-        this.periodFilter = [null, null];
-        this.renderList.length == 0 ? this.initList() : this.refreshList();
-      },
+      // tempPage(val) {
+      //   this.periodFilter = [null, null];
+      //   this.renderList.length == 0 ? this.initList() : this.refreshList();
+      // },
       // periodFilter(val) {
       //   val[0] && val[1] && this.refreshList();
       //   this.isCalendarShow = false;
