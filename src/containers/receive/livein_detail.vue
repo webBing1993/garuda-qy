@@ -85,7 +85,7 @@
       </Dialog>
 
       <div class="button-group RCbtn" v-if="rcBtn" style="margin-top: 2rem">
-        <x-button value="RC单打印" @onClick="RcPrint(detail.suborders[0])"></x-button>
+        <x-button value="RC单打印" @onClick="RcPrint(rcSuborders)"></x-button>
       </div>
       <div>
         <popup v-model="popup" :show-mask=false>
@@ -134,6 +134,7 @@
         showRefundDialog: false,
         refundValue: null,
         pmsCheckoutId: '',
+        rcSuborders:[]
       }
     },
     computed: {
@@ -147,7 +148,11 @@
         return "<div>入住人身份证信息未登记</div>";
       },
       routeId() {
-        return this.$route.params.id
+        return this.$route.params.id;
+      },
+      roomNumber(){
+          console.log(this.$route.params.roomNum)
+          return this.$route.params.roomNum;
       },
       routeParameter() {
         return this.$route.params.parameter
@@ -289,6 +294,7 @@
             guests.push(v.name);
           });
         };
+          //如果只有一个人，默认勾选
         this.guestList=guests;
         if(this.guestList.length==1){
           this.nameList=this.guestList;
@@ -325,6 +331,15 @@
     watch: {
       routeId(val) {
         val ? this.getDetail() : null
+      },
+      roomNumber(val){
+        this.detail.suborders.forEach(value => {
+            if (val==value.room_number){
+                console.log('rcSuborders:',value)
+                this.rcSuborders=value;
+                return;
+            }
+        })
       }
     },
     mounted() {
