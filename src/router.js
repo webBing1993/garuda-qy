@@ -50,7 +50,7 @@ const receive = [{
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/check_appli_detail.vue')
   }, {
-    path: 'checkout-detail/:id',
+    path: 'checkout-detail/:id/:roomNum',
     // component: require('./containers/detail.vue')
     component: require('./containers/receive/checkout_detail.vue')
   }]

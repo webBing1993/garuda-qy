@@ -108,7 +108,7 @@
 
       <div class="button-group RCbtn" v-if="rcBtn" style="margin-top: 2rem">
         <div>
-          <x-button value="RC单打印"  @onClick="RcPrint(detail.suborders[0])"></x-button>
+          <x-button value="RC单打印"  @onClick="RcPrint(rcSuborders)"></x-button>
         </div>
         <!--<p class="space"></p>-->
         <!--<div>-->
@@ -181,6 +181,7 @@
         choose:'请选择入住人',
         chooseNum:'请选择房号',
         cancel:"取消",
+        rcSuborders:''
       }
     },
     computed: {
@@ -188,16 +189,20 @@
         'hotel'
       ]),
       validate(){
-        return false
+        return false;
       },
       getNOGuestItem(){
         return "<div>入住人身份证信息未登记</div>";
       },
       routeId() {
-        return this.$route.params.id
+        return this.$route.params.id;
+      },
+      roomNumber(){
+          console.log(this.$route.params.roomNum)
+        return this.$route.params.roomNum;
       },
       routeParameter(){
-        return this.$route.params.parameter
+        return this.$route.params.parameter;
       },
       getPath(){
         return this.$route.path.split('/')[2];
@@ -258,7 +263,6 @@
           identity_id: suborderId,
           onsuccess: body => {
             this.getDetail();
-
           }
         })
       },
@@ -344,7 +348,8 @@
             guests.push(v.name);
           });
         };
-        this.guestList=guests;
+        //如果只有一个人，默认勾选
+          this.guestList=guests;
         if(this.guestList.length==1){
           this.nameList=this.guestList;
         };
@@ -387,12 +392,22 @@
         this.billPrint=false;
         this.rcBtn=true;
         this.nameList=[];
-      },
-
+      }
     },
     watch: {
       routeId(val) {
         val ? this.getDetail() : null
+      },
+      roomNumber(val){
+        if (val){
+            this.detail.suborders.forEach(value => {
+                if (val==value.room_number){
+                    console.log('rcSuborders:'+value)
+                    this.rcSuborders=value;
+                    return;
+                }
+            })
+        }
       }
     },
     mounted() {
