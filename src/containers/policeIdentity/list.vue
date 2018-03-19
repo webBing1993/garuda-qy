@@ -2,14 +2,14 @@
 <template>
   <article>
     <header class="tab-wrapper">
-      <Tab active-color="#5077AA">
-        <TabItem v-for="(item,index) in tabMenu"
+      <tab active-color="#5077AA">
+        <tab-item v-for="(item,index) in tabMenu"
                  :key="index"
                  :class="{'vux-1px-r': index===0}"
                  :selected="currentTab === index"
                  @on-item-click="toggleTab(index)">{{item}}
-        </TabItem>
-      </Tab>
+        </tab-item>
+      </tab>
     </header>
 
     <!--<scroller lock-x :scrollbar-x=false-->
@@ -20,16 +20,6 @@
     <!--use-pulldown-->
     <!--v-show="!currentTab">-->
     <div class="list-wrapper">
-      <!--<div v-show="!currentTab" :class="{batch}">-->
-      <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
-      <!--<checker type="checkbox" v-model="batchlist" default-item-class="checker-item" selected-item-class="selected">-->
-      <!--<checker-item v-for="(item,index) in renderTodoHandelList" :key="index" :value="item.lvyeReportRecordId">-->
-      <!--<group :title="titleFilter(index)">-->
-      <!--<cell :title="tobeHandledItem(item)" @onClick="orderClick(item.lvyeReportRecordId)" link></cell>-->
-      <!--</group>-->
-      <!--</checker-item>-->
-      <!--</checker>-->
-      <!--</div>-->
       <!--待处理列表-->
       <div v-show="!currentTab">
         <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
@@ -208,11 +198,11 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-  import {XDialog, Group, XInput, PopupPicker, Picker, Popup} from 'vux'
+  import {Tab, TabItem,XDialog, Group, XInput, PopupPicker, Picker, Popup} from 'vux'
   module.exports = {
     name: 'List',
     components: {
-      XDialog, Group, XInput, PopupPicker, Picker, Popup
+      XDialog, Group, XInput, PopupPicker, Picker, Popup,Tab, TabItem
     },
     data(){
       return {
@@ -266,7 +256,7 @@
         return parseInt(this.route.params.tab)//返回0，1
       },
       tabMenu() {
-        this.initList();
+        // this.initList();
         let menu = [];
         menu[0] = `待处理(${this.tobeHandled.length})`;
         menu[1] = `已处理(${this.handled.length})`;
@@ -440,7 +430,7 @@
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
-        this.refreshList()
+        this.initList();
       },
       titleHandledFilter(index){
         if (this.handled.length > 0) {
@@ -520,35 +510,34 @@
       },
 
       initList(){
-        if (this.renderList.length === 0) {
-//          this.getList(body => (this.mylist = [...body.data]));
           this.getList((body => {
             this.handled = [...body.data.content];
-            this.handledPageIndex++;
-          }), [], ["AGREED", "REFUSED"]);
+            // this.handledPageIndex++;
+          }), [],["AGREED","REFUSED"]);
           this.getList((body => {
             this.tobeHandled = [...body.data.content];
             this.tobeHandledConfig = {...body.data.config};
             console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
-            this.tobeHandledPageIndex++;
+            // this.tobeHandledPageIndex++;
           }), ['NONE', 'FAILED',"PENDING"],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
-        }
-      },
-      refreshList(){
-//        this.getList(body => this[this.currentTab ? 'handled' : 'tobeHandled'] = [...body.data], this.currentTab ? ['SUCCESS'] : ['NONE', 'FAILED'])
-        if (this.currentTab === 1) {
-          this.getList(body => this.handled = [...body.data], [], ["AGREED", "REFUSED"])
-        } else if (this.currentTab === 0) {
-          this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED',"PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
-        }
-      },
+        },
+      // refreshList(){
+      //   console.log('refreshList')
+      //   if (this.currentTab ==0) {
+      //       this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
+      //   } else if (this.currentTab == 1) {
+      //       this.getSuspiciousList();
+      //   } else if(this.currentTab == 2){
+      //       this.getList(body => this.handled = [...body.data], [],["AGREED","REFUSED"])
+      //   }
+      // },
       resetList(){
         this.handled = [];
         this.tobeHandled = [];
       },
       resetFilter() {
         this.periodFilter = [null, null]
-      },
+      }
     },
     mounted(){
       this.initList();
@@ -556,15 +545,16 @@
       this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     },
     watch: {
-      currentTab(val) {
-          if(typeof val === 'number' && !isNaN(val)){
-            if(this.renderList.length == 0){
-                this.initList()
-            }else {
-                this.refreshList()
-            }
-          }
-      },
+      // currentTab(val) {
+          // if(typeof val === 'number' && !isNaN(val)){
+            // if(this.renderList.length == 0){
+            //     this.initList()
+            // }else {
+            //     this.refreshList()
+            // }
+            //   this.refreshList();
+          // }
+      // },
       periodFilter(){
         this.refreshList();
       },

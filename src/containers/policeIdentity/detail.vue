@@ -191,7 +191,6 @@
         this.isErrorNumber = false
       },
       isDialogShow() {
-          console.log(666)
         if (!this.isDisabled) {
           this.resultList = [];
           this.showDialog = true;

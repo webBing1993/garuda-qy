@@ -57,8 +57,16 @@
       }
     }
     img {
-      width: 100%;
-      text-align: center;
+        display:block;
+        text-align: center;
+        @media screen {
+            width: 100%;
+            @media(min-width:510px){
+                margin: auto;
+                width: 20%;
+                height:20%;
+            }
+        }
     }
   }
 }
