@@ -4,10 +4,10 @@
     <header class="tab-wrapper">
       <tab active-color="#5077AA">
         <tab-item v-for="(item,index) in tabMenu"
-                 :key="index"
-                 :class="{'vux-1px-r': index===0}"
-                 :selected="currentTab === index"
-                 @on-item-click="toggleTab(index)">{{item}}
+                  :key="index"
+                  :class="{'vux-1px-r': index===0}"
+                  :selected="currentTab === index"
+                  @on-item-click="toggleTab(index)">{{item}}
         </tab-item>
       </tab>
     </header>
@@ -182,7 +182,7 @@
 
           </group>
           <div class="footer">
-            <div class="invoiceBtn" @click='cansoleVerify'>取消</div>
+            <div class="" @click='cansoleVerify'>取消</div>
             <p class="aLine"></p>
             <div v-if="guestName!=''&& idCard!=''&& guestAddress!='' " class="invoiceBtn1" @click='makeSureVerify'>确定
             </div>
@@ -198,11 +198,11 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-  import {Tab, TabItem,XDialog, Group, XInput, PopupPicker, Picker, Popup} from 'vux'
+  import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup} from 'vux'
   module.exports = {
     name: 'List',
     components: {
-      XDialog, Group, XInput, PopupPicker, Picker, Popup,Tab, TabItem
+      XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem
     },
     data(){
       return {
@@ -333,7 +333,7 @@
       Nationality(){
         let temp = [];
         let temp2 = [];
-        this.NationList=[]
+        this.NationList = []
         this.getNationality({
           onsuccess: body => {
             temp = body.data
@@ -353,29 +353,34 @@
       gethotelEquipment(){
         let temp = [];
         let temp2 = [];
-        this.EquipmentList=[]
-        this.sinerEquipmentName=''
-        this.getedEquipmentList=[]
-        this.defaultEquipment=[]
+        this.EquipmentList = []
+        this.sinerEquipmentName = ''
+        this.getedEquipmentList = []
+        this.defaultEquipment = []
         this.hotelEquipment({
           onsuccess: body => {
             temp = body.data;
-            this.getedEquipmentList = body.data;
-            this.sinerEquipmentName = body.data[0].name;
-            this.defaultEquipment.push(body.data[0].name)
-            this.devaiceId = body.data[0].id
-            for (var i = 0; i < temp.length; i++) {
-              temp2.push(temp[i].name);
+            if (temp && temp != null) {
+              this.getedEquipmentList = body.data;
+              this.sinerEquipmentName = body.data[0].name;
+              this.defaultEquipment.push(body.data[0].name)
+              this.devaiceId = body.data[0].id
+              for (var i = 0; i < temp.length; i++) {
+                temp2.push(temp[i].name);
+              }
+              this.EquipmentList.push(temp2);
+              console.log('-------->', this.sinerEquipmentName)
             }
-            this.EquipmentList.push(temp2);
-            console.log('-------->', this.sinerEquipmentName)
           }
+
+
         })
 
       },
 
 //      取消核验
       cansoleVerify(){
+        console.log(this.guestName, this.idCard, this.guestAddress)
         this.without_license = false
       },
 
@@ -510,17 +515,17 @@
       },
 
       initList(){
-          this.getList((body => {
-            this.handled = [...body.data.content];
-            // this.handledPageIndex++;
-          }), [],["AGREED","REFUSED"]);
-          this.getList((body => {
-            this.tobeHandled = [...body.data.content];
-            this.tobeHandledConfig = {...body.data.config};
-            console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
-            // this.tobeHandledPageIndex++;
-          }), ['NONE', 'FAILED',"PENDING"],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
-        },
+        this.getList((body => {
+          this.handled = [...body.data.content];
+          // this.handledPageIndex++;
+        }), [], ["AGREED", "REFUSED"]);
+        this.getList((body => {
+          this.tobeHandled = [...body.data.content];
+          this.tobeHandledConfig = {...body.data.config};
+          console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
+          // this.tobeHandledPageIndex++;
+        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
+      },
       // refreshList(){
       //   console.log('refreshList')
       //   if (this.currentTab ==0) {
@@ -546,24 +551,24 @@
     },
     watch: {
       // currentTab(val) {
-          // if(typeof val === 'number' && !isNaN(val)){
-            // if(this.renderList.length == 0){
-            //     this.initList()
-            // }else {
-            //     this.refreshList()
-            // }
-            //   this.refreshList();
-          // }
+      // if(typeof val === 'number' && !isNaN(val)){
+      // if(this.renderList.length == 0){
+      //     this.initList()
+      // }else {
+      //     this.refreshList()
+      // }
+      //   this.refreshList();
+      // }
       // },
       periodFilter(){
         this.refreshList();
       },
       days(val, old) {
         if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) {
-            this.days = 0;
+          this.days = 0;
         }
         if (val > 31) {
-            this.days = 0;
+          this.days = 0;
         }
         let nowDate = new Date();
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
@@ -575,7 +580,7 @@
           this.isErrorNumber = false;
         }
         if (!this.canSearch) {
-            return;
+          return;
         }
         if (val && val.split('').some(i => !/^[A-Za-z0-9]+$/.test(i))) {//验证特殊字符，不支持中文，只能字母和数字
           this.roomNumber = old
@@ -584,7 +589,7 @@
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
           if (this.resultList.length === 0) {
-              this.isErrorNumber = true;
+            this.isErrorNumber = true;
           }
         }
       },
