@@ -29,10 +29,9 @@
         <!--</Group>-->
         <div class="spaceTop"></div>
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
-          <Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"/>
+          <Cell :title="liveInCellTitle(item)"link @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"/>
           <div class="space"></div>
-          <div class="rowItem" v-for="(i,k) in item.guests" :key="k"
-               @click="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)">
+          <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
             <p>入住人:</p>
             <div class="liveInPeop">
               <span>{{i.name}}</span>
