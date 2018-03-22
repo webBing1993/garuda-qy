@@ -69,14 +69,14 @@
       </div>
     </footer>
 
-    <!--<footer v-if="currentTab">-->
-    <!--<div class="listFilter">-->
-    <!--<span class="filter" @click="isCalendarShow = true">-->
-    <!--<abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>-->
-    <!--<abbr v-else>筛选</abbr>-->
-    <!--</span>-->
-    <!--</div>-->
-    <!--</footer>-->
+    <footer v-if="currentTab">
+    <div class="listFilter">
+    <span class="filter" @click="isCalendarShow = true">
+    <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
+    <abbr v-else>筛选</abbr>
+    </span>
+    </div>
+    </footer>
 
     <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
@@ -502,18 +502,20 @@
           `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
           `</div>`
       },
-      getList(callback, status, idenStatus){
-        this.newIdentityList({
-          createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-          // createTimeStart:1509851866000,
-          createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-          // createTimeEnd:1518751066000,
-          identityStatuses: idenStatus,
-          reportInStatuses: status,//需要的入住上报旅业状态
-          onsuccess: callback
-        })
+      getList(callback, reportStatus, identStatus) {
+          this.newIdentityList ({
+              data: {
+                  createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                  // createTimeStart:1509851866000,
+                  createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+                  // createTimeEnd:1518751066000,
+                  identityStatuses: identStatus,
+                  reportInStatuses: reportStatus,//需要的入住上报旅业状态
+                  desc: true
+              },
+              onsuccess: callback
+          })
       },
-
       initList(){
         this.getList((body => {
           this.handled = [...body.data.content];
@@ -561,7 +563,7 @@
       // }
       // },
       periodFilter(){
-        this.refreshList();
+        this.initList();
       },
       days(val, old) {
         if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) {

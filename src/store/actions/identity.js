@@ -92,13 +92,7 @@ module.exports = {
     ctx.dispatch('resource', {
       url: '/lvye/searchLvyeReportInfo',
       method: 'POST',
-      body: {
-        createTimeStart: param.createTimeStart,
-        createTimeEnd: param.createTimeEnd,
-        desc: true,//true 降序
-        identityStatuses:param.identityStatuses,
-        reportInStatuses: param.reportInStatuses//需要的入住上报旅业状态
-      },
+      body: param.data,
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
