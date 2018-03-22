@@ -109,27 +109,19 @@
         let refundStatus = item.status;
         let refundStatusDom = ``;
         if (refundStatus) {
-//          refurndStatusDom = refurndStatus === 'FAILED'
-//            ? `<span class="cell-right warn">退款失败</span>`
-//            : refurndStatus === 'REFUNDED'
-//              //              ? `<span class="cell-right primary">已退款</span>` : ''
-//              //            : refurndStatus === 'PENDING'
-//              ? `<span class="cell-right primary">退款中</span>` : ''
-
-        if(refundStatus === 'FAILED')
-        {
-          refundStatusDom=`<span class="cell-right warn">退款中</span>`
-        }
-        else if(refundStatus === 'SUCCESS')
-        {
-          refundStatusDom=`<span class="cell-right primary">退款成功</span>`
-        }
-        else{
-          refundStatusDom=''
-        }
+          if(refundStatus === 'FAILED'||refundStatus === 'PENDING')
+          {
+            refundStatusDom=`<span class="cell-right warn">退款中</span>`
+          }
+          else if(refundStatus === 'SUCCESS')
+          {
+            refundStatusDom=`<span class="cell-right primary">退款成功</span>`
+          }
+          else{
+            refundStatusDom=''
+          }
         }
         return `<p><span class="cell-value">${item.room_numbers}</span>${refundStatusDom}</p>`
-
       },
       getCellBody(item){
         return `<p><span class="cell-value">微信支付：${this.cashHandling(item.pay_fee)}</span></p>` +

@@ -94,14 +94,23 @@ Vue.mixin({
       }
     },
     refundStatus(status){
-      return status ?
-        status === 'PENDING'
-          ? '退款中'
-          : status === "REFUNDED"
-          ? '退款完成'
-          : status === "FAILED"
-            ? '退款失败' : null
-        : null
+        if(status){
+          switch (status){
+              case 'PENDING':
+                  return '退款中';
+              case  "REFUNDED":
+                  return '退款完成';
+              case "FAILED":
+                  return '退款中';
+              case "SUCCESS":
+                  return '退款成功';
+              default:
+                  return null
+          }
+
+
+        }
+
     },
     getUUID() {
       let randomness = Math.round(Math.random() * 1e16) % Math.pow(2, 23);
