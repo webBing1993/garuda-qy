@@ -12,14 +12,7 @@
       </tab>
     </header>
 
-    <!--<scroller lock-x :scrollbar-x=false-->
-    <!--:pulldown-config="Interface.scroller"-->
-    <!--@on-pulldown-loading="refreshList"-->
-    <!--:depend="tobeHandled"-->
-    <!--height="-45"-->
-    <!--use-pulldown-->
-    <!--v-show="!currentTab">-->
-    <div class="list-wrapper">
+    <div class="list-wrapper policeWrap">
       <!--待处理列表-->
       <div v-show="!currentTab">
         <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
@@ -46,17 +39,27 @@
         </div>
       </div>
       <!--已处理列表-->
-      <div v-show="currentTab">
-        <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-        <group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">
-          <cell :title="'房间 '+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-          <cell :title="handledItem(item,item.inTime,item.outTime)"
-                @onClick="orderClick(item.lvyeReportRecordId)"></cell>
-        </group>
+      <scroller :pullup-config="Interface.scrollerUp"
+                @on-pullup-loading="loadingList"
+                lock-x
+                use-pullup
+                height="-40"
+                v-model="scrollerStatus"
+                scrollbarY bounce ref="scrollerBottom"
+                v-show="currentTab">
+        <div v-show="currentTab">
+          <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
+          <group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">
+            <cell :title="'房间'+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
+                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+            <cell :title="handledItem(item,item.inTime,item.outTime)"
+                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+          </group>
+        </div>
+      </scroller>
       </div>
-    </div>
-    <!--</scroller>-->
+
+
 
     <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
@@ -198,11 +201,11 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-  import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup} from 'vux'
+  import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller} from 'vux'
   module.exports = {
     name: 'List',
     components: {
-      XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem
+      XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller
     },
     data(){
       return {
@@ -240,7 +243,12 @@
         defaultNation: ["汉族"],
         NationId: '01',
         devaiceId: '',
-        defaultEquipment: []//默认设备名称
+        defaultEquipment: [],//默认设备名称,
+        scrollerStatus: {
+            pullupStatus: 'default',
+            pulldownStatus: 'default'
+        },
+        onFetching:false
       }
     },
     computed: {
@@ -304,6 +312,21 @@
         'getRoomNumberList',
 
       ]),
+      loadingList(){
+          if (this.onFetching) {
+              // do nothing
+              return;
+          }else{
+              this.onFetching = true;
+              setTimeout(() => {
+                  this.getList((body => {
+                      this.handled = [...body.data.content];
+                      this.handledPageIndex++;
+                  }), [], ["AGREED", "REFUSED"])
+                  this.onFetching = false
+              }, 500);
+          }
+      },
       showwithoutLicenseDialog(){
         this.Nationality();
         this.gethotelEquipment();
@@ -607,4 +630,8 @@
 
 <style lang="less">
   @import "index.less";
+  .policeWrap{
+    padding-bottom: 0;
+  }
+
 </style>
