@@ -29,6 +29,7 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 1,
+        prepay_code:'SHOPPAY',
         confirm_mode: 2
       },
       bill: {
@@ -225,6 +226,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 2,
+        prepay_code:'PRETOTALPAY',
+
         confirm_mode: 2
       },
       bill: {
@@ -281,6 +284,8 @@ module.exports = {
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
         pay_mode: 3,
+        prepay_code:'CREDITPAY',
+
         confirm_mode: 2
       },
       bill: {
@@ -397,6 +402,8 @@ module.exports = {
         staff_pay: 100,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
+        prepay_code:'COMPANYPAY',
+
         pay_mode: 1,
       },
       bill: {
@@ -475,6 +482,8 @@ module.exports = {
         staff_pay: 100,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
+        prepay_code:'FREEPAY',
+
         pay_mode: 1,
       },
       bill: {
@@ -530,6 +539,7 @@ module.exports = {
         staff_pay: 100,//营业员确认的付款金额,
         user_pay: 1000, //小程序已付金额
         deposit: 0, //应付押金
+        prepay_code:null,
         pay_mode: 1,
       },
       bill: {
