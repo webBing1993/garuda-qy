@@ -198,12 +198,12 @@
         return this.$route.params.id;
       },
       roomNumber(){
-          console.log(this.$route.params.roomNum)
+          console.log('roomNum:',this.$route.params.roomNum)
         return this.$route.params.roomNum;
       },
-      routeParameter(){
-        return this.$route.params.parameter;
-      },
+      // routeParameter(){
+      //   return this.$route.params.parameter;
+      // },
       getPath(){
         return this.$route.path.split('/')[2];
       },
@@ -322,7 +322,7 @@
       getDetail() {
         this.getorderdetail({
           order_id: this.routeId,
-          newAddParameter:this.routeParameter,
+          // newAddParameter:this.routeParameter,
           roomfee: 0,
           suborder: 1,
           invoice: 1,
@@ -330,21 +330,29 @@
           bill: 1,
           onsuccess: body => {
             this.detail = body.data;
-            console.log("zsj:"+this.detail.hotelRc_Config);
+            console.log("hasRCbtn:"+this.detail.hotelRc_Config);
             if(this.detail.hotelRc_Config){
               this.rcBtn=true;
             }else if(!this.detail.hotelRc_Config){
               this.rcBtn=false;
             };
+            this.detail.suborders.forEach(value => {
+                if (this.roomNumber==value.room_number){
+                    console.log('rcSuborders:',value)
+                    this.rcSuborders=value;
+                    return;
+                }
+            })
+
           }
         })
       },
 
-      RcPrint(suborders){
-        console.log(999)
+      RcPrint(rcSuborders){
+        console.log('rcSuborders====>:',rcSuborders)
         let guests=[];
-        if(suborders.guests){
-          suborders.guests.forEach(v=>{
+        if(rcSuborders.guests){
+            rcSuborders.guests.forEach(v=>{
             guests.push(v.name);
           });
         };
@@ -353,7 +361,7 @@
         if(this.guestList.length==1){
           this.nameList=this.guestList;
         };
-        this.suborderId=suborders.suborder_id;
+        this.suborderId=rcSuborders.suborder_id;
         this.popup=true;
         this.rcBtn=false;
       },
@@ -396,16 +404,11 @@
     },
     watch: {
       routeId(val) {
-        val ? this.getDetail() : null
+        // val ? this.getDetail() : null
       },
-      roomNumber(val){
-            this.detail.suborders.forEach(value => {
-                if (val==value.room_number){
-                    console.log('rcSuborders:',value)
-                    this.rcSuborders=value;
-                    return;
-                }
-            })
+      roomNumber(){
+          // console.log(431241)
+            // this.getDetail();
       }
     },
     mounted() {

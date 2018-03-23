@@ -61,8 +61,7 @@
 
         <div class="spaceTopApply"></div>
 
-
-        <Group class="Apply" v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
+        <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
                :title="titleFilter(index)">
           <Cell :title="checkoutCellTitle(item)"/>
           <Cell :title="getCheckoutGuestItem(item)" link

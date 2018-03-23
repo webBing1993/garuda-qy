@@ -283,6 +283,13 @@
             }else if(!this.detail.hotelRc_Config){
               this.rcBtn=false;
             };
+            this.detail.suborders.forEach(value => {
+                if (this.roomNumber==value.room_number){
+                    console.log('rcSuborders:',value)
+                    this.rcSuborders=value;
+                    return;
+                }
+            })
           }
         })
       },
@@ -333,13 +340,6 @@
         val ? this.getDetail() : null
       },
       roomNumber(val){
-        this.detail.suborders.forEach(value => {
-            if (val==value.room_number){
-                console.log('rcSuborders:',value)
-                this.rcSuborders=value;
-                return;
-            }
-        })
       }
     },
     mounted() {

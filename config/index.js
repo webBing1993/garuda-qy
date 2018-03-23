@@ -28,7 +28,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/q/master/': {
+      '/s/master/': {
         target: 'https://wqt.fortrun.cn/',
         changeOrigin: true,
         pathRewrite: {

@@ -119,7 +119,7 @@
               <x-button value="确认" @onClick="RCconfirm()" :disabled=validate></x-button>
             </div>
           </group>
-        </popup>ß
+        </popup>
       </div>
       <Dialog v-model="showDialog" @onConfirm="setInvoiceConfirm" confirm cancel>
         <p>是否已开发票？</p>
@@ -308,6 +308,13 @@
             }else if(!this.detail.hotelRc_Config){
               this.rcBtn=false;
             };
+              this.detail.suborders.forEach(value => {
+                  if (this.roomNumber==value.room_number){
+                      console.log('rcSuborders:',value)
+                      this.rcSuborders=value;
+                      return;
+                  }
+              })
           }
         })
       },
@@ -359,15 +366,7 @@
         val ? this.getDetail() : null
       },
       roomNumber(val){
-          if (val){
-              this.detail.suborders.forEach(value => {
-                  if (val==value.room_number){
-                      console.log('rcSuborders:',value)
-                      this.rcSuborders=value;
-                      return;
-                  }
-              })
-          }
+
       }
     },
     mounted() {

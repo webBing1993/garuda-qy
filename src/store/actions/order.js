@@ -38,7 +38,7 @@ module.exports = {
   //获取确认订单详情
    getorderdetail(ctx, param){
       console.log(param.order_id);
-       console.log(param.newAddParameter);
+       // console.log(param.newAddParameter);
        ctx.dispatch('resource', {
       url: '/order/detail/' + param.order_id+'/'+param.newAddParameter,
       params: {
