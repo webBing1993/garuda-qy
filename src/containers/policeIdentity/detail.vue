@@ -4,7 +4,7 @@
       <div class="report-info">
         <div class="info-item">
           <label class="item-left">房间号码:</label>
-          <input class="item-right room-number" v-model="roomNumber" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus !=='NONE'" @keyup.13="enterToLvye($event)"/>
+          <input class="item-right room-number" v-model="roomNumber" v-if="detail.reportInStatus !== 'SUCCESS'" @keyup.13="enterToLvye($event)"/>
           <span class="item-right" v-else>{{roomNumber}}</span>
         </div>
         <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
