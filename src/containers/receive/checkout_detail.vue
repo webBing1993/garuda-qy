@@ -404,7 +404,7 @@
     },
     watch: {
       routeId(val) {
-        // val ? this.getDetail() : null
+        val ? this.getDetail() : null
       },
       roomNumber(){
           // console.log(431241)

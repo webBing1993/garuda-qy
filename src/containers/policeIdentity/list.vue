@@ -12,15 +12,7 @@
       </tab>
     </header>
    <div>
-    <scroller :pullup-config="Interface.scrollerUp"
-              @on-pullup-loading="loadingList"
-              lock-x
-              use-pullup
-              height="-40"
-              v-model="scrollerStatus"
-              scrollbarY bounce ref="scrollerBottom"
-              v-show="currentTab">
-       <div class="list-wrapper policeWrap">
+      <div class="list-wrapper">
       <!--待处理列表-->
       <div v-show="!currentTab">
         <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
@@ -58,7 +50,6 @@
         </div>
 
       </div>
-    </scroller>
    </div>
     <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
