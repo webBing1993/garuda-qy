@@ -52,18 +52,18 @@
               <span class="orderCellKey">订单号：</span>
               <span>{{item.order_pmsid}}</span>
             </div>
-            <div v-if="item.payinfo.prepay_code==null">
+            <div v-if="item.prepay_code==null">
               <span class="cell-right other" v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode==1">现付 </span>
               <span class="cell-right primary" v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode==2">预付 </span>
               <span v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode!=1&&item.payinfo.pay_mode!=2">后付/挂账/公账等</span>
             </div>
-            <div v-if="item.payinfo.prepay_code&&item.payinfo.prepay_code!=null">
-              <span class="cell-right other" v-if="item.payinfo.prepay_code && item.payinfo.prepay_code=='PRETOTALPAY'">全额预付 </span>
-              <span class="cell-right other" v-if="item.payinfo.prepay_code && item.payinfo.prepay_code=='SHOPPAY'">现付</span>
-              <span class="cell-right other" v-if="item.payinfo.prepay_code && item.payinfo.prepay_code=='CREDITPAY'">信用后付</span>
-              <span class="cell-right other" v-if="item.payinfo.prepay_code && item.payinfo.prepay_code=='COMPANYPAY'">公司挂账</span>
-              <span class="cell-right other" v-if="item.payinfo.prepay_code && item.payinfo.prepay_code=='FREEPAY'">免单</span>
-              <span class="cell-right other" v-if="item.payinfo.prepay_code && item.payinfo.prepay_code=='NOTKNOWPAY'">未知</span>
+            <div v-if="item.prepay_code&&item.prepay_code!=null">
+              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='PRETOTALPAY'">全额预付 </span>
+              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='SHOPPAY'">现付</span>
+              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='CREDITPAY'">信用后付</span>
+              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='COMPANYPAY'">公司挂账</span>
+              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='FREEPAY'">免单</span>
+              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='NOTKNOWPAY'">未知</span>
 
             </div>
           </div>
