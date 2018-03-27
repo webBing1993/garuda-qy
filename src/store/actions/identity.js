@@ -90,11 +90,11 @@ module.exports = {
   },
   newIdentityList(ctx, param) {
     ctx.dispatch('resource', {
-      url: '/lvye/searchLvyeReportInfo',
+      url: '/lvye/searchLvyeReportInfo?limit='+ param.limit+'&offset='+param.offset,
       method: 'POST',
       body: param.data,
-      onSuccess: body => {
-        param.onsuccess ? param.onsuccess(body) : null
+      onSuccess: (body,headers) => {
+        param.onsuccess ? param.onsuccess(body,headers) : null
       }
     })
   },

@@ -383,7 +383,7 @@
               this.scrollerStatus.pullupStatus = 'default';
               //$nextTick是为了数据改变了等待dom渲染后使用
               this.$nextTick(() => {
-                this.$refs.scrollerBottom.reset();
+                  this.$refs.scrollerBottom.reset();
               });
               this.onFetching = false
           }, 500);

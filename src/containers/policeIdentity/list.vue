@@ -12,9 +12,16 @@
       </tab>
     </header>
    <div>
+     <scroller :pullup-config="Interface.scrollerUp"
+               @on-pullup-loading="loadingList"
+               lock-x
+               use-pullup
+               height="-40"
+               v-model="scrollerStatus"
+               scrollbarY bounce ref="scrollerBottom">
       <div class="list-wrapper">
       <!--待处理列表-->
-      <div v-show="!currentTab">
+        <div v-show="!currentTab">
         <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
         <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList"
              @click="orderClick(item.lvyeReportRecordId)">
@@ -48,8 +55,8 @@
                   @onClick="orderClick(item.lvyeReportRecordId)"></cell>
           </group>
         </div>
-
       </div>
+    </scroller>
    </div>
     <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
@@ -238,7 +245,11 @@
             pullupStatus: 'default',
             pulldownStatus: 'default'
         },
-        onFetching:false
+        onFetching:false,
+        offset:0,
+        currentPage:0,
+        tobeHandledTotal:0,
+        handledTotal:0,
       }
     },
     computed: {
@@ -256,8 +267,8 @@
       tabMenu() {
         // this.initList();
         let menu = [];
-        menu[0] = `待处理(${this.tobeHandled.length})`;
-        menu[1] = `已处理(${this.handled.length})`;
+        menu[0] = `待处理(${this.tobeHandledTotal})`;
+        menu[1] = `已处理(${this.handledTotal})`;
         return menu;
       },
       renderTodoHandelList(){
@@ -302,21 +313,6 @@
         'getRoomNumberList',
 
       ]),
-      loadingList(){
-          if (this.onFetching) {
-              // do nothing
-              return;
-          }else{
-              this.onFetching = true;
-              setTimeout(() => {
-                  this.getList((body => {
-                      this.handled = [...body.data.content];
-                      this.handledPageIndex++;
-                  }), [], ["AGREED", "REFUSED"])
-                  this.onFetching = false
-              }, 500);
-          }
-      },
       showwithoutLicenseDialog(){
         this.Nationality();
         this.gethotelEquipment();
@@ -448,7 +444,7 @@
       toggleTab(index){
         let newpath = this.route.path.replace(this.route.params.tab, index);
         this.replaceto(newpath)
-        this.initList();
+        this.tabHandelList(index);
       },
       titleHandledFilter(index){
         if (this.handled.length > 0) {
@@ -515,42 +511,82 @@
           `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
           `</div>`
       },
-      getList(callback, reportStatus, identStatus) {
+      getList(callback, reportInStatus, identStatus,pageIndex) {
           this.newIdentityList ({
               data: {
-                  createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                  // createTimeStart:1509851866000,
-                  createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-                  // createTimeEnd:1518751066000,
+                  // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                  createTimeStart:1519833600000,
+                  // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
+                  createTimeEnd:1521648000000,
                   identityStatuses: identStatus,
-                  reportInStatuses: reportStatus,//需要的入住上报旅业状态
+                  reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                   desc: true
               },
+              limit:5,
+              offset:pageIndex,
               onsuccess: callback
           })
       },
-      initList(){
-        this.getList((body => {
-          this.handled = [...body.data.content];
-          // this.handledPageIndex++;
-        }), [], ["AGREED", "REFUSED"]);
-        this.getList((body => {
-          this.tobeHandled = [...body.data.content];
-          this.tobeHandledConfig = {...body.data.config};
-          console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
-          // this.tobeHandledPageIndex++;
-        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"])
+      //tab切换时
+      tabHandelList(index){
+          this.$refs.scrollerBottom.reset();
+          this.currentPage=index;
+          console.log('当前页面：',this.currentPage)
       },
-      // refreshList(){
-      //   console.log('refreshList')
-      //   if (this.currentTab ==0) {
-      //       this.getList(body => this.tobeHandled = [...body.data], ['NONE', 'FAILED'],["AUTO_AGREED","AUTO_REFUSED","FAILED","PENDING"])
-      //   } else if (this.currentTab == 1) {
-      //       this.getSuspiciousList();
-      //   } else if(this.currentTab == 2){
-      //       this.getList(body => this.handled = [...body.data], [],["AGREED","REFUSED"])
-      //   }
-      // },
+      //初始化列表
+      initList(){
+          this.getList(((body,headers) => {
+              this.handledTotal=headers.get('x-total-count');
+              this.handled = [...this.handled,...body.data.content];
+          }), [], ["AGREED", "REFUSED"],this.handledPageIndex);
+          this.getList(((body,headers) => {
+              this.tobeHandledTotal=headers.get('x-total-count');
+              this.tobeHandled = [...this.tobeHandled,...body.data.content];
+              this.tobeHandledConfig = {...body.data.config};
+              console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
+          }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],this.tobeHandledPageIndex);
+      },
+        //下拉刷新加载
+      loadingList(){
+            let off;
+            if(this.currentPage==0){
+                 off = this.tobeHandledTotal - this.tobeHandledPageIndex;
+            }else if (this.currentPage==1){
+                 off = this.handledTotal- this.handledPageIndex;
+            };
+            if (this.onFetching||off < 5) {
+                console.log('不能再请求了')
+                // do nothing
+                return;
+            }else{
+                this.onFetching = true;
+                setTimeout(() => {
+                    if(this.currentPage==1){
+                        this.getList((body => {
+                            this.handledTotal=headers.get('x-total-count');
+                            this.handled = [...this.handled,...body.data.content];
+                            this.handledPageIndex=this.handledPageIndex+5;
+                            console.log('handled:'+this.handledPageIndex)
+                        }), [], ["AGREED", "REFUSED"],this.handledPageIndex)
+                    }else if(this.currentPage==0){
+                        console.log(55555)
+                        this.getList((body => {
+                            this.tobeHandledTotal=headers.get('x-total-count');
+                            this.tobeHandled = [...this.tobeHandled,...body.data.content];
+                            this.tobeHandledConfig = {...body.data.config};
+                            this.tobeHandledPageIndex=this.tobeHandledPageIndex+5
+                            console.log('tobeHandled:'+this.tobeHandledPageIndex)
+                        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],this.tobeHandledPageIndex)
+                    }
+                    this.scrollerStatus.pullupStatus = 'default';
+                    //$nextTick是为了数据改变了等待dom渲染后使用
+                    this.$nextTick(() => {
+                        this.$refs.scrollerBottom.reset();
+                    });
+                    this.onFetching = false
+                }, 500);
+            }
+      },
       resetList(){
         this.handled = [];
         this.tobeHandled = [];
