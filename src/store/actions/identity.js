@@ -23,8 +23,8 @@ module.exports = {
         start_time: param.start_time,
         end_time: param.end_time
       },
-      onSuccess: body => {
-        param.onsuccess ? param.onsuccess(body) : null
+      onSuccess: (body,headers) => {
+        param.onsuccess ? param.onsuccess(body,headers) : null
       },
     })
   },

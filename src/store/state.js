@@ -4,13 +4,13 @@ module.exports = {
     session: ''
   },
   Interface: {
-    scroller: {
-      content: '下拉刷新列表',
+    scrollerDown: {
+      content: '',
       height: 60,
       autoRefresh: false,
-      downContent: '下拉刷新列表',
-      upContent: '释放刷新',
-      loadingContent: '加载中...',
+      downContent: '',
+      upContent: '',
+      loadingContent: '',
       clsPrefix: 'xs-plugin-pulldown-'
     },
     scrollerUp: {

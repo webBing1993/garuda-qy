@@ -11,8 +11,8 @@
         </tab-item>
       </tab>
     </header>
-   <div>
-     <scroller :pullup-config="Interface.scrollerUp"
+   <div class="police ">
+     <scroller :pullup-config="Interface.scrollerDown"
                @on-pullup-loading="loadingList"
                lock-x
                use-pullup
@@ -514,10 +514,10 @@
       getList(callback, reportInStatus, identStatus,pageIndex) {
           this.newIdentityList ({
               data: {
-                  // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                  createTimeStart:1519833600000,
-                  // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1] : '',
-                  createTimeEnd:1521648000000,
+                  createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                  // createTimeStart:1519833600000,
+                  createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+                  // createTimeEnd:1521648000000,
                   identityStatuses: identStatus,
                   reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                   desc: true
@@ -529,7 +529,8 @@
       },
       //tab切换时
       tabHandelList(index){
-          this.$refs.scrollerBottom.reset();
+          // this.enablePullup();
+          this.$refs.scrollerBottom.reset({top: 0});
           this.currentPage=index;
           console.log('当前页面：',this.currentPage)
       },
@@ -554,7 +555,7 @@
             }else if (this.currentPage==1){
                  off = this.handledTotal- this.handledPageIndex;
             };
-            if (this.onFetching||off < 5) {
+            if (this.onFetching||off <= 5) {
                 console.log('不能再请求了')
                 // do nothing
                 return;
@@ -562,7 +563,7 @@
                 this.onFetching = true;
                 setTimeout(() => {
                     if(this.currentPage==1){
-                        this.getList((body => {
+                        this.getList(((body,headers) => {
                             this.handledTotal=headers.get('x-total-count');
                             this.handled = [...this.handled,...body.data.content];
                             this.handledPageIndex=this.handledPageIndex+5;
@@ -570,7 +571,7 @@
                         }), [], ["AGREED", "REFUSED"],this.handledPageIndex)
                     }else if(this.currentPage==0){
                         console.log(55555)
-                        this.getList((body => {
+                        this.getList(((body,headers) => {
                             this.tobeHandledTotal=headers.get('x-total-count');
                             this.tobeHandled = [...this.tobeHandled,...body.data.content];
                             this.tobeHandledConfig = {...body.data.config};
