@@ -243,7 +243,7 @@
               outTime: this.outTimeFilter,//离店时间
               onsuccess: () => {
                   this.resetFilter();
-                  this.getDetail();
+                  this.goto('/policeIdentity/handle/0')
               }
           })
       }
