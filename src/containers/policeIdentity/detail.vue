@@ -54,7 +54,7 @@
           <ul>
             <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
             <li><span><abbr>性别</abbr>{{detail.sex}}</span><span><abbr>民族</abbr>{{detail.ethnicity}}</span></li>
-            <li><span><abbr>生日</abbr>{{detail.dateOfBirth}}</span></li>
+            <!--<li><span><abbr>生日</abbr>{{detail.dateOfBirth}}</span></li>-->
             <li><span><abbr>住址</abbr>{{detail.address}}</span></li>
             <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
           </ul>
@@ -176,7 +176,8 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-            this.goto('/policeIdentity/handle/0')
+            // this.goto('/policeIdentity/handle/0')
+              this.getDetail()
             console.log('已经拒绝')
           }
         })

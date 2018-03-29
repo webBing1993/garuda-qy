@@ -532,7 +532,14 @@
           // this.enablePullup();
           this.$refs.scrollerBottom.reset({top: 0});
           this.currentPage=index;
-          console.log('当前页面：',this.currentPage)
+          this.getList(((body,headers) => {
+              this.handledTotal=headers.get('x-total-count');
+              this.handled = [...body.data.content];
+          }), [], ["AGREED", "REFUSED"],0);
+          this.getList(((body,headers) => {
+              this.tobeHandledTotal=headers.get('x-total-count');
+              this.tobeHandled = [...body.data.content];
+          }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],0);
       },
       //初始化列表
       initList(){
