@@ -1068,7 +1068,6 @@ module.exports = {
       reportInTime: 1491384458000, //成功上传旅业系统的时间时间戳
       reportOutStatus: "NONE", //NONE未上传，SUCCESS成功，FAILED失败,PENDING 未确认。离店上报公安状态
       reportOutTime: '1491384458000'//成功上传旅业系统的时间时间戳
-
     },
     {
       lvyeReportRecordId: 'id001',//旅业上报记录ID

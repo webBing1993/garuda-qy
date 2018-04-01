@@ -12,52 +12,64 @@
       </tab>
     </header>
    <div class="police ">
-     <scroller :pullup-config="Interface.scrollerDown"
-               @on-pullup-loading="loadingList"
-               lock-x
-               use-pullup
-               height="-40"
-               v-model="scrollerStatus"
-               scrollbarY bounce ref="scrollerBottom">
-      <div class="list-wrapper">
-      <!--待处理列表-->
-        <div v-show="!currentTab">
-        <!--<p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>-->
-        <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList"
-             @click="orderClick(item.lvyeReportRecordId)">
-          <div class="titleDate">{{titleFilter(index)}}</div>
-          <div class="cell-body" :class="{'fontColorTip':true}">
-            <p><span class="cell-key">姓名：</span><span class="cell-value "
-                                                      :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{item.name}}</span>
-            </p>
-            <p><span class="cell-key">身份证：</span><span class="cell-value"
-                                                       :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
-              <span class="cell-right">
-                {{datetimeparse(item.createdTime, 'hhmm')}}
-                <img src="../../../static/icon/arow.png" alt="" class="cellImg">
-              </span></p>
-            <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
-              <span class="cell-value"
-                    :class="{'redTip':item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED','blueTip':item.identityStatus=='PENDING','greenTip':item.identityStatus=='AUTO_AGREED'}">
-                无证核验 {{item.identityStatus == 'AUTO_REFUSED' ? '验证不通过' : item.identityStatus == 'PENDING' ? '验证完成' : item.identityStatus == 'AUTO_AGREED' ? '验证通过' : item.identityStatus == 'FAILED' ? '验证失败' : '验证失败'}}
-              </span>
-            </p>
+     <!--待处理列表-->
+     <div v-show="!currentTab">
+       <scroller :pullup-config="Interface.scrollerUp"
+                 @on-pullup-loading="loadingList0"
+                 lock-x
+                 use-pullup
+                 height="-40"
+                 v-model="scrollerStatus"
+                 scrollbarY bounce ref="scrollerBottom0" >
+        <div class="list-wrapper0">
+          <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
+          <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList"
+               @click="orderClick(item.lvyeReportRecordId)">
+            <div class="titleDate">{{titleFilter(index)}}</div>
+            <div class="cell-body" :class="{'fontColorTip':true}">
+              <p><span class="cell-key">姓名：</span><span class="cell-value "
+                                                        :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{item.name}}</span>
+              </p>
+              <p><span class="cell-key">身份证：</span><span class="cell-value"
+                                                         :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
+                <span class="cell-right">
+                  {{datetimeparse(item.createdTime, 'hhmm')}}
+                  <img src="../../../static/icon/arow.png" alt="" class="cellImg">
+                </span></p>
+              <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
+                <span class="cell-value"
+                      :class="{'redTip':item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED','blueTip':item.identityStatus=='PENDING','greenTip':item.identityStatus=='AUTO_AGREED'}">
+                  无证核验 {{item.identityStatus == 'AUTO_REFUSED' ? '验证不通过' : item.identityStatus == 'PENDING' ? '验证完成' : item.identityStatus == 'AUTO_AGREED' ? '验证通过' : item.identityStatus == 'FAILED' ? '验证失败' : '验证失败'}}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <!--已处理列表-->
-        <div v-show="currentTab">
-          <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-          <group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">
-            <cell :title="'房间'+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                  :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-            <cell :title="handledItem(item,item.inTime,item.outTime)"
-                  @onClick="orderClick(item.lvyeReportRecordId)"></cell>
-          </group>
-        </div>
-      </div>
-    </scroller>
+       </scroller>
+     </div>
+     <!--已处理列表-->
+     <div v-show="currentTab">
+       <scroller :pullup-config="Interface.scrollerUp"
+                 @on-pullup-loading="loadingList1"
+                 lock-x
+                 use-pullup
+                 height="-40"
+                 v-model="scrollerStatus"
+                 scrollbarY bounce ref="scrollerBottom1" >
+         <div class="list-wrapper1">
+            <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
+            <group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">
+              <cell :title="'房间'+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
+                    :value="datetimeparse(item.createdTime,'hhmm')"></cell>
+              <cell :title="handledItem(item,item.inTime,item.outTime)"
+                    @onClick="orderClick(item.lvyeReportRecordId)"></cell>
+            </group>
+         </div>
+       </scroller>
+     </div>
    </div>
+
+    <!--///////////////以下是弹窗部分-->
     <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
         <!--<div class="pick-btn-group" v-if="batch">-->
@@ -136,8 +148,7 @@
           class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
       </ul>
     </Dialog>
-
-    <!--无证核验-->
+    <!--无证核验弹窗-->
     <div class="dialog">
       <x-dialog v-model="without_license">
         <div class="withoutLicenseCon">
@@ -191,8 +202,7 @@
         </div>
       </x-dialog>
     </div>
-
-
+    <!--////////////////////弹窗部分-->
   </article>
 </template>
 
@@ -241,11 +251,9 @@
         NationId: '01',
         devaiceId: '',
         defaultEquipment: [],//默认设备名称,
-        scrollerStatus: {
-            pullupStatus: 'default',
-            pulldownStatus: 'default'
-        },
-        onFetching:false,
+        scrollerStatus: {pullupStatus: 'default'},
+        onFetching0:false,
+        onFetching1:false,
         offset:0,
         currentPage:0,
         tobeHandledTotal:0,
@@ -326,7 +334,7 @@
             this.NationId = this.getedNationList[i].nation_id
           }
         }
-        console.log('民族Id是', this.NationId)
+        // console.log('民族Id是', this.NationId)
       },
       EquipmentOnChange(val){
         console.log('val是', val)
@@ -336,7 +344,7 @@
             this.devaiceId = this.getedEquipmentList[i].id
           }
         }
-        console.log('设备Id是', this.devaiceId)
+        // console.log('设备Id是', this.devaiceId)
       },
       //民族列表
       Nationality(){
@@ -387,13 +395,13 @@
 
       },
 
-//      取消核验
+      //取消核验
       cansoleVerify(){
         console.log(this.guestName, this.idCard, this.guestAddress)
         this.without_license = false
       },
 
-//      确认核验
+      //确认核验
       makeSureVerify(){
         this.withoutIdCard({
           guest_name: this.guestName,
@@ -441,11 +449,7 @@
       daysAdd() {
         this.days <= 30 ? this.days = +this.days + 1 : null
       },
-      toggleTab(index){
-        let newpath = this.route.path.replace(this.route.params.tab, index);
-        this.replaceto(newpath)
-        this.tabHandelList(index);
-      },
+
       titleHandledFilter(index){
         if (this.handled.length > 0) {
           return index
@@ -508,16 +512,16 @@
         return `<div class="cell-body">` +
           `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
           `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-          `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
+          `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="flo=-09at: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
           `</div>`
       },
       getList(callback, reportInStatus, identStatus,pageIndex) {
           this.newIdentityList ({
               data: {
-                  createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                  // createTimeStart:1519833600000,
-                  createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
-                  // createTimeEnd:1521648000000,
+                  // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                  createTimeStart:1519833600000,
+                  // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+                  createTimeEnd:1521648000000,
                   identityStatuses: identStatus,
                   reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                   desc: true
@@ -527,13 +531,7 @@
               onsuccess: callback
           })
       },
-      //tab切换时
-      tabHandelList(index){
-          // this.enablePullup();
-          this.$refs.scrollerBottom.reset({top: 0});
-          this.currentPage=index;
-          console.log('当前页面：',this.currentPage)
-      },
+
       //初始化列表
       initList(){
           this.getList(((body,headers) => {
@@ -544,50 +542,74 @@
               this.tobeHandledTotal=headers.get('x-total-count');
               this.tobeHandled = [...this.tobeHandled,...body.data.content];
               this.tobeHandledConfig = {...body.data.config};
-              console.log(this.tobeHandledConfig.enable_identity_check_undocumented);
           }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],this.tobeHandledPageIndex);
       },
         //下拉刷新加载
-      loadingList(){
-            let off;
-            if(this.currentPage==0){
-                 off = this.tobeHandledTotal - this.tobeHandledPageIndex;
-            }else if (this.currentPage==1){
-                 off = this.handledTotal- this.handledPageIndex;
-            };
-            if (this.onFetching||off <= 5) {
-                console.log('不能再请求了')
-                // do nothing
-                return;
-            }else{
-                this.onFetching = true;
-                setTimeout(() => {
-                    if(this.currentPage==1){
-                        this.getList(((body,headers) => {
-                            this.handledTotal=headers.get('x-total-count');
-                            this.handled = [...this.handled,...body.data.content];
-                            this.handledPageIndex=this.handledPageIndex+5;
-                            console.log('handled:'+this.handledPageIndex)
-                        }), [], ["AGREED", "REFUSED"],this.handledPageIndex)
-                    }else if(this.currentPage==0){
-                        console.log(55555)
-                        this.getList(((body,headers) => {
-                            this.tobeHandledTotal=headers.get('x-total-count');
-                            this.tobeHandled = [...this.tobeHandled,...body.data.content];
-                            this.tobeHandledConfig = {...body.data.config};
-                            this.tobeHandledPageIndex=this.tobeHandledPageIndex+5
-                            console.log('tobeHandled:'+this.tobeHandledPageIndex)
-                        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],this.tobeHandledPageIndex)
-                    }
-                    this.scrollerStatus.pullupStatus = 'default';
-                    //$nextTick是为了数据改变了等待dom渲染后使用
-                    this.$nextTick(() => {
-                        this.$refs.scrollerBottom.reset();
-                    });
-                    this.onFetching = false
-                }, 500);
-            }
+      loadingList0(){
+          let off0 = this.tobeHandledTotal - this.tobeHandledPageIndex;
+          if (this.onFetching0||off0 <= 5) {
+              console.log('不能再请求0了')
+              // do nothing
+              return;
+          }else{
+              this.onFetching0 = true;
+              setTimeout(() => {
+                  this.getList(((body,headers) => {
+                      this.tobeHandledTotal=headers.get('x-total-count');
+                      this.tobeHandled = [...this.tobeHandled,...body.data.content];
+                      this.tobeHandledConfig = {...body.data.config};
+                      this.tobeHandledPageIndex=this.tobeHandledPageIndex+5;
+                      console.log('tobeHandled:'+this.tobeHandledPageIndex);
+                  }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],this.tobeHandledPageIndex)
+                  this.scrollerStatus.pullupStatus = 'default';
+                  //$nextTick是为了数据改变了等待dom渲染后使用
+                  this.$nextTick(() => {
+                      this.$refs.scrollerBottom0.reset();
+                  });
+                  this.onFetching0 = false
+              }, 500);
+          }
       },
+      loadingList1() {
+          let off2 = this.handledTotal - this.handledPageIndex;
+          if (this.onFetching1 || off2 <= 5) {
+              console.log ('不能再请求1了')
+              // do nothing
+              return;
+          } else {
+              setTimeout (() => {
+                  this.getList (((body, headers) => {
+                      this.handledTotal = headers.get ('x-total-count');
+                      this.handled = [...this.handled, ...body.data.content];
+                      this.handledPageIndex = this.handledPageIndex + 5;
+                      console.log ('handled:' + this.handledPageIndex)
+                  }), [], ["AGREED", "REFUSED"], this.handledPageIndex);
+                  this.scrollerStatus.pullupStatus = 'default';
+                  //$nextTick是为了数据改变了等待dom渲染后使用
+                  this.$nextTick (() => {
+                      this.$refs.scrollerBottom1.reset ();
+                  });
+                  this.onFetching = false
+              }, 500);
+          }
+      },
+        //切换列表
+        toggleTab(index){
+            let newpath = this.route.path.replace(this.route.params.tab, index);
+            this.replaceto(newpath)
+            this.currentPage=index;
+            let currentHandledPageIndex;
+            this.handledPageIndex>0?currentHandledPageIndex=this.handledPageIndex-5:currentHandledPageIndex=this.handledPageIndex;
+            let currentTobeHandledPageIndex=this.tobeHandledPageIndex-5;
+            this.tobeHandledPageIndex>0?currentTobeHandledPageIndex=this.tobeHandledPageIndex-5:currentTobeHandledPageIndex=this.tobeHandledPageIndex;
+
+            this.getList(((body,headers) => {
+                this.handledTotal=headers.get('x-total-count');
+            }), [], ["AGREED", "REFUSED"],currentHandledPageIndex);
+            this.getList(((body,headers) => {
+                this.tobeHandledTotal=headers.get('x-total-count');
+            }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],currentTobeHandledPageIndex);
+        },
       resetList(){
         this.handled = [];
         this.tobeHandled = [];
