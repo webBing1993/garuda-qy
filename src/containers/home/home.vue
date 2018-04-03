@@ -58,7 +58,7 @@
         <Cell v-if="absentPersonNum > 0" icon="./static/icon/ic_checkout.png" title="同住人未入住提醒" link
               :badge="absentPersonNum"
               @onClick="goto('notLiveIn/list')"></Cell>
-        <Cell v-if="suspiciousNum > 0" icon="./static/icon/ic_suspicious.png" title="可疑人员" link :badge="suspiciousNum"
+        <Cell v-if="suspiciousNum > 0" icon="./static/icon/suspicious.png" title="可疑人员" link :badge="suspiciousNum"
               @onClick="goto('suspicious/suspiciousList/0')"></Cell>
       </Group>
       <div v-else class="none-list-container">
@@ -117,8 +117,8 @@
             closeItem: './static/icon/closeAbnormity.png'
           },
           {
-            openItem:'./static/icon/ic_suspicious.png',
-            closeItem:'./static/icon/ic_suspicious.png'
+            openItem:'./static/icon/suspicious.png',
+            closeItem:'./static/icon/suspicious.png'
           }
         ]
       }

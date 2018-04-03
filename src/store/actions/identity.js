@@ -107,7 +107,6 @@ module.exports = {
     })
   },
     getSuspicious(ctx, param){
-      console.log('调用接口')
         ctx.dispatch('resource', {
             url: '/identity/illegalGuest/list?limit='+param.limit+'&offset='+param.offset,
             method: 'POST',

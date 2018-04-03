@@ -514,10 +514,10 @@
       getList(callback, reportInStatus, identStatus,pageIndex) {
           this.newIdentityList ({
               data: {
-                  // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                  createTimeStart:1519833600000,
-                  // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
-                  createTimeEnd:1521648000000,
+                  createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                  // createTimeStart:1519833600000,
+                  createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+                  // createTimeEnd:1521648000000,
                   identityStatuses: identStatus,
                   reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                   desc: true
@@ -654,7 +654,7 @@
       resultList(val, old) {
         if (old.length > 0) this.canSearch = true
       }
-    },
+    }
 //    activated(){
 //      this.refreshList();
 //    }
