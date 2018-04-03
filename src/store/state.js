@@ -15,11 +15,11 @@ module.exports = {
     },
     scrollerUp: {
       content: '获取更多数据...',
-      pullUpHeight: 100,
+      // pullUpHeight: 60,
       height: 40,
       autoRefresh: true,
       downContent: '释放刷新',
-      upContent: '上拉获取更多数据',
+      upContent: '',
       loadingContent: '加载中...',
       clsPrefix: 'xs-plugin-pullup-'
     },

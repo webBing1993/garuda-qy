@@ -577,7 +577,6 @@
                             console.log('handled:'+this.handledPageIndex)
                         }), [], ["AGREED", "REFUSED"],this.handledPageIndex)
                     }else if(this.currentPage==0){
-                        console.log(55555)
                         this.getList(((body,headers) => {
                             this.tobeHandledTotal=headers.get('x-total-count');
                             this.tobeHandled = [...this.tobeHandled,...body.data.content];

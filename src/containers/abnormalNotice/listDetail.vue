@@ -5,7 +5,7 @@
             lock-x
             use-pullup
             height="-40"
-            v-model="scrollerStatus"
+            v-model="scroller"
             scrollbarY bounce ref="scrollerBottom">
     <div class="scroller-wrap">
       <article>
@@ -149,7 +149,7 @@
         pageIndex1:1,
         pageIndex2:1,
         renderList:[],
-        scrollerStatus: {
+          scroller: {
           pullupStatus: 'default',
           pulldownStatus: 'default'
         },
@@ -340,7 +340,7 @@
               this.abPage=1;
             };
             if(this.abnormalList.length==0||this.abnormalList==null){
-              this.scrollerStatus.pullupStatus = 'disabled';
+              this.scroller.pullupStatus = 'disabled';
               return;
             }
           }
@@ -380,7 +380,7 @@
                 this.getList(false,this.pageIndex1);
               };
               console.log('第'+this.pageIndex2+'页');
-              this.scrollerStatus.pullupStatus = 'default';
+              this.scroller.pullupStatus = 'default';
               //$nextTick是为了数据改变了等待dom渲染后使用
               this.$nextTick(() => {
                   this.$refs.scrollerBottom.reset();
@@ -394,7 +394,7 @@
       {
         this.renderList=[];
         this.getList(true,this.pageIndex2);
-        this.scrollerStatus.pullupStatus = 'enabled';
+        this.scroller.pullupStatus = 'enabled';
       }
     },
     mounted()
