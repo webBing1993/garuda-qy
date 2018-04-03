@@ -56,7 +56,6 @@ module.exports = {
             param.url.match(/hotel\/config/)||
             param.url.match(/hotel\/config/)||
             param.url.match(/identity\/illegalGuest/)
-            console.log('343:',isShowToast)
           param.method && !isShowToast ? ctx.dispatch('showtoast') : null;
           param.onSuccess ? param.onSuccess(response.body, response.headers) : null
         } else {
