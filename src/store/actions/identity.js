@@ -106,6 +106,34 @@ module.exports = {
       }
     })
   },
+    getSuspicious(ctx, param){
+        ctx.dispatch('resource', {
+            url: '/identity/illegalGuest/list?limit='+param.limit+'&offset='+param.offset,
+            method: 'POST',
+            body:param.data,
+            onSuccess: (body,headers) => {
+                param.onsuccess ? param.onsuccess(body,headers) : null
+            }
+        })
+    },
+    getSuspiciousDetail(ctx, param){
+        ctx.dispatch('resource', {
+            url: '/identity/illegalGuest/'+param.illegalGuestId,
+            method: 'GET',
+            onSuccess: body => {
+                param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
+    hasChecked(ctx, param){
+        ctx.dispatch('resource', {
+            url: '/identity/illegalGuest/read/'+param.illegalGuestId,
+            method: 'PUT',
+            onSuccess: body => {
+                param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
   reportLvYe(ctx, param) {
     ctx.dispatch('resource', {
       url: '/lvye/lvyeReport',
@@ -116,6 +144,7 @@ module.exports = {
         nights: param.nights,//入住晚数
         inTime: param.inTime,//入住时间
         outTime: param.outTime,//离店时间
+        guestType:param.guestType
       },
       onSuccess: body => {
         ctx.dispatch('showtoast', '提交成功');
