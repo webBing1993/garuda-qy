@@ -265,7 +265,7 @@
                 guestType:this.guestType,
                 onsuccess: () => {
                     this.resetFilter();
-                    this.goto('/policeIdentity/handle/0')
+                    this.replaceto('/policeIdentity/handle/0')
                 }
             })
         }
