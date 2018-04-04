@@ -183,8 +183,7 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-            // this.goto('/policeIdentity/handle/0')
-              this.getDetail()
+            this.replaceto('/policeIdentity/handle/0')
             console.log('已经拒绝')
           }
         })
@@ -318,6 +317,9 @@
       }
     },
     activated(){
+        this.getDetail();
+    },
+    created(){
       this.detail = {};
       this.getDetail();
       if (this.roomNumberList.length === 0) this.getRoomNumberList();

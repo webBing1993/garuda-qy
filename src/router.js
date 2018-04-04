@@ -61,16 +61,12 @@ const policeIdentity = [{
   path: '/policeIdentity',
   component: {
     name: 'policeIdentity',
-    template: `<keep-alive><router-view/></keep-alive>`,
+    template: `<router-view/>`,
   },
   children: [{
     path: 'handle/:tab',
     component: require('./containers/policeIdentity/list')
   },
-    // {
-    //   path: 'wxPay/:identityId',
-    //   component: require('./containers/policeIdentity/wxPay')
-    // },
     {
       path: ':id',
       component: require('./containers/policeIdentity/detail')
