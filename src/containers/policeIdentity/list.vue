@@ -512,10 +512,10 @@
             getList(callback, reportInStatus, identStatus,page) {
                 this.newIdentityList ({
                     data: {
-                        // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                        createTimeStart:1519833600000,
-                        // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
-                        createTimeEnd:1521648000000,
+                        createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                        // createTimeStart:1519833600000,
+                        createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+                        // createTimeEnd:1521648000000,
                         identityStatuses: identStatus,
                         reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                         desc: true
@@ -539,7 +539,7 @@
                     return;
                 } else {
                     setTimeout(() => {
-                        this.offset0=this.offset0+2;
+                        this.offset0=this.offset0+15;
                         this.getList(((body,headers) => {
                             this.tobeHandledTotal=headers.get('x-total-count');
                             this.tobeHandled = [...this.tobeHandled,...body.data.content];
@@ -565,7 +565,7 @@
                 }else{
                     this.onFetching1 = true;
                     setTimeout(() => {
-                        this.offset1=this.offset1+2;
+                        this.offset1=this.offset1+15;
                         this.getList(((body,headers) => {
                             this.handledTotal=headers.get('x-total-count');
                             this.handled = [...this.handled,...body.data.content];
@@ -596,9 +596,8 @@
                     this.tobeHandled = [...body.data.content];
                     this.tobeHandledConfig = {...body.data.config};
                     this.tobeHandledScroller.pullupStatus='enabled';
-                    if(body.data.content=null||body.data.content.length==0||this.tobeHandledTotal<=2) {
+                    if(body.data.content=null||body.data.content.length==0||this.tobeHandledTotal<=15) {
                         this.tobeHandledScroller.pullupStatus = 'disabled';
-                        console.log(32)
                     };
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
@@ -609,9 +608,8 @@
                     this.handledTotal=headers.get('x-total-count');
                     this.handled = [...body.data.content];
                     this.handledScroller.pullupStatus = 'enabled';
-                    if(body.data.content=null||body.data.content.length==0||this.handledTotal<=2) {
+                    if(body.data.content=null||body.data.content.length==0||this.handledTotal<=15) {
                         this.handledScroller.pullupStatus = 'disabled';
-                        console.log(34)
                     };
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom1.reset({top:0});
