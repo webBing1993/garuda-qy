@@ -94,7 +94,7 @@ const suspicious = [{
     path: '/suspicious',
     component: {
         name: 'receive',
-        template: `<keep-alive><router-view/></keep-alive>`,
+        template: `<router-view/>`,
     },
     children: [{
         path: 'suspiciousList/:tab',
