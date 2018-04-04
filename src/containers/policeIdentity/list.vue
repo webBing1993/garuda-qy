@@ -520,7 +520,7 @@
                         reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                         desc: true
                     },
-                    limit:2,
+                    limit:15,
                     offset:page,
                     onsuccess: callback
                 })
