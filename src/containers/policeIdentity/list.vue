@@ -468,7 +468,7 @@
               //非批量模式下点击订单跳转至详情页面
               if (!this.batch) {
                 this.batchlist = [];
-                this.replaceto('/policeIdentity/' + orderId)
+                this.goto('/policeIdentity/' + orderId)
               }
             },
             setMultiConfirm() {
