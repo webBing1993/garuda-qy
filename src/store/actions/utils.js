@@ -8,13 +8,24 @@ import router from '../../router.js'
 
 module.exports = {
   goto: (ctx, param) => {
-    typeof param === 'number'
-      ? router.go(param)
-      : router.push(param)
+      if(typeof param === 'number'){
+          router.go(param)
+      }else {
+          router.push(param)
+      }
+      console.log('router:',router)
   },
   replaceto: (ctx, param) => {
     router.replace(param)
+      console.log('router:',router)
   },
+  // gotoNew:(ctx, param)=> {
+  //     if(typeof param === 'number'){
+  //         router.go(param)
+  //     }else {
+  //         router.push(param).
+  //     }
+  // },
   urlquery(ctx) {
     let o = {}
     // console.log("哈哈哈：",window.location.search); ?app=wqt&session=gs_lacaw2mcb4apjef06lxmzq==&hotel_id=0864f6731acb11e780ad5cb9018d9b5c
