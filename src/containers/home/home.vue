@@ -31,6 +31,10 @@
             <img :src='flag?imgList[6].openItem:imgList[6].closeItem' alt="异常提醒">
             <span class="app-title">异常提醒</span>
           </li>
+          <li class="app-item" @click="goto('/suspicious/suspiciousList/0')">
+            <img :src='flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
+            <span class="app-title">可疑人员</span>
+          </li>
         </ul>
       </Group>
       <Group title="待办事项" v-if="isHaveTodoList">
@@ -54,6 +58,8 @@
         <Cell v-if="absentPersonNum > 0" icon="./static/icon/ic_checkout.png" title="同住人未入住提醒" link
               :badge="absentPersonNum"
               @onClick="goto('notLiveIn/list')"></Cell>
+        <Cell v-if="suspiciousNum > 0" icon="./static/icon/suspicious.png" title="可疑人员" link :badge="suspiciousNum"
+              @onClick="goto('suspicious/suspiciousList/0')"></Cell>
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
@@ -79,6 +85,7 @@
         invoiceNum: 0,
         checkoutApplicationNum: 0,
         abnormalNoticeNum: 0,
+        suspiciousNum:0,
         absentPersonNum: 0,
         imgList: [
           {
@@ -108,6 +115,10 @@
           {
             openItem: './static/icon/ic_abnormity_notice.png',
             closeItem: './static/icon/closeAbnormity.png'
+          },
+          {
+            openItem:'./static/icon/suspicious.png',
+            closeItem:'./static/icon/suspicious.png'
           }
         ]
       }
@@ -125,7 +136,8 @@
           this.invoiceNum > 0 ||
           this.checkoutApplicationNum > 0 ||
           this.abnormalNoticeNum > 0||
-          this.absentPersonNum > 0
+          this.absentPersonNum > 0||
+          this.suspiciousNum>0
       }
     },
     methods: {
@@ -156,6 +168,7 @@
               if (i.type == 'EXCEPTION') this.abnormalNoticeNum = i.total;
 //                同住人未入住
               if (i.type == 'NOCHECKIN') this.absentPersonNum = i.total;
+              if(i.type == 'SUS_PERSON') this.suspiciousNum=i.total;
             })
           }
         })
@@ -197,7 +210,7 @@
             if (data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
             if (data.type == 'EXCEPITON') this.abnormalNoticeNum = data.total;
             if (data.type == 'NOCHECKIN') this.absentPersonNum = data.total;
-            console.log(this.abnormalNoticeNum)
+            if (data.type == 'SUS_PERSON') this.suspiciousNum = data.total;
           }
         })
       },

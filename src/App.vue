@@ -147,6 +147,8 @@
         path.match(/bill/) ? title = '账务管理' : null;
         path.match(/receive/) ? title = '住离信息' : null;
         path.match(/abnormalNotice\/listDetail/) ? title = '异常提醒' : null;
+        path.match(/suspicious\/suspiciousList/) ? title = '可疑人员' : null;
+        path.match(/suspicious\/suspiciousListDetail/) ? title = '可疑人员详情' : null;
         this.settitle(title)
       },
       sessionId(val){

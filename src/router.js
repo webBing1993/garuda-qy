@@ -61,16 +61,12 @@ const policeIdentity = [{
   path: '/policeIdentity',
   component: {
     name: 'policeIdentity',
-    template: `<keep-alive><router-view/></keep-alive>`,
+    template: `<router-view/>`,
   },
   children: [{
     path: 'handle/:tab',
     component: require('./containers/policeIdentity/list')
   },
-    // {
-    //   path: 'wxPay/:identityId',
-    //   component: require('./containers/policeIdentity/wxPay')
-    // },
     {
       path: ':id',
       component: require('./containers/policeIdentity/detail')
@@ -86,10 +82,24 @@ const policeIdentity = [{
      },
     children:[{
       path:'listDetail',
-      component:require('./containers/abnormalNotice/listDetail')
+      component:require('./containers/abnormalNotice/listDetail.vue')
     }]
  }];
-
+//可疑人员列表
+const suspicious = [{
+    path: '/suspicious',
+    component: {
+        name: 'receive',
+        template: `<router-view/>`,
+    },
+    children: [{
+        path: 'suspiciousList/:tab',
+        component: require('./containers/suspicious/list.vue'),
+    },{
+        path: 'susDetail/:id',
+        component: require('./containers/suspicious/suspiciousDetail.vue')
+    }]
+}];
 //身份核验
 const identity = [{
   path: '/identity',
@@ -200,7 +210,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn, ...others]
+  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...others]
 })
 
 // const precheckin = [{

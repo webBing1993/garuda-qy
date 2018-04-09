@@ -2,10 +2,15 @@
   <div class="detailPage">
     <article v-if="detail" >
       <div class="report-info">
-        <div class="info-item">
+        <div class="info-item" v-if="showGuestType">
+          <label class="item-left">住客类型:</label>
+          <selector class="item-right room-number item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'"></selector>
+          <span class="item-right" v-else>{{detail.guestType|filterGuestType}}</span>
+        </div>
+        <div class="info-item" v-if="showGuestType">
           <label class="item-left">房间号码:</label>
-          <input class="item-right room-number" v-model="roomNumber" v-if="detail.reportInStatus !== 'SUCCESS'" @keyup.13="enterToLvye($event)"/>
-          <span class="item-right" v-else>{{roomNumber}}</span>
+          <input class="item-right room-number  item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'" @keyup.13="enterToLvye($event)"/>
+          <span class="item-right">{{detail.roomNumber}}</span>
         </div>
         <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
         <div class="searchRoom">
@@ -16,38 +21,13 @@
         </div>
         <div class="info-item">
           <label class="item-left">拍照时间:</label>
-          <span class="item-right">{{datetimeparse(detail.createdTime,'YYYYMMDD hhmm')}}</span>
+          <span class="item-right">{{datetimeparse(detail.createdTime,'YYYYMMDDhhmmss')}}</span>
         </div>
-        <!--<div class="info-item">-->
-          <!--<label class="item-left">入住几晚:</label>-->
-          <!--<div class="item-right days-item" v-if="detail.reportInStatus !== 'SUCCESS'">-->
-            <!--<span class="days-reduce" @click="daysReduce">-</span>-->
-            <!--<input class="days" v-model="days"/>-->
-            <!--<span class="days-add" @click="daysAdd()">+</span>-->
-          <!--</div>-->
-          <!--<span class="item-right" v-else>{{days}}</span>-->
-        <!--</div>-->
-        <!--<div class="info-item">-->
-          <!--<label class="item-left">入住时间:</label>-->
-          <!--<span class="item-right">{{datetimeparse(inTimeFilter)}}</span>-->
-        <!--</div>-->
-
-        <!--<div class="info-item">-->
-          <!--<label class="item-left">离店时间:</label>-->
-          <!--<span class="item-right">{{datetimeparse(outTimeFilter)}}</span>-->
-        <!--</div>-->
         <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAILED'" style="margin-bottom: 10px"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'PENDING'" style="margin-bottom: 10px"><span style="color: #c4a726;padding-right: 10px;">上传中！</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
         <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
-        <!--<p v-if="detail.payInfo && detail.payInfo.payStatus === 'SUCCESS'">-->
-          <!--<span style="color: #80C435;padding-right:10px;">支付成功</span>-->
-          <!--<span style="padding-right: 10px;">预付费: {{cashHandling(detail.payInfo.payFee)}}</span>-->
-          <!--<span>{{datetimeparse(detail.payInfo.paymentTime,'YYYYMMDD hhmm')}}</span>-->
-        <!--</p>-->
-        <!--<x-button v-if="isWxPayBtnShow && detail.payInfo && detail.payInfo.payStatus !== 'SUCCESS'" value="微信支付入住" primary-->
-                  <!--@onClick="goto('/new-identity/wxPay/'+detail.identityId)"></x-button>-->
       </div>
       <div class="guestcard">
         <div class="hd">
@@ -65,10 +45,12 @@
           <img :src="detail.livePhoto" alt="现场照片">
         </div>
       </div>
-      <div class="footButton" v-if="!(detail.identityStatus == 'REFUSED'||detail.identityStatus == 'AGREED')">
+      <div class="footButton" v-if="buttonGroupShow">
         <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
                   @onClick="setMultiConfirm"
-                  :disabled="isDisabled"></x-button>
+                  :disabled="isDisabled" v-if="guestType!=='STAFF'"></x-button>
+        <x-button value="通过"
+                  @onClick="accessBtn"v-if="guestType=='STAFF'"></x-button>
         <x-button value='拒绝' @onClick="isRejectDialogShow"></x-button>
       </div>
       <!--<Dialog v-model="showDialog" @onConfirm="setMultiConfirm" confirm cancel>-->
@@ -91,7 +73,7 @@
         <p style="color: #808080;font-size: 14px">请客人重新办理公安验证</p>
       </Dialog>
 
-      <Dialog confirm cancel v-model="similarityCheck" @onConfirm="reporetLvye" confirm cancel>
+      <Dialog confirm cancel v-model="similarityCheck" @onConfirm="reporetLvyes" confirm cancel>
         <p style="color: #000000;font-size: 14px">此人相似度太低 <br> 是否确认上传</p>
       </Dialog>
     </article>
@@ -100,7 +82,7 @@
 
 <script type="text/ecmascript-6">
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-
+  import { Selector, Group} from 'vux'
   module.exports = {
     data(){
       return {
@@ -117,9 +99,26 @@
         isWxPayBtnShow: false,//微信支付入住按钮显示
         hotelConfig:{},
         rejectDialog:false,
-        similarityCheck :false
+        similarityCheck :false,
+        guestType:'LODGER',
+        guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
       }
     },
+      filters:{
+          filterGuestType(val){
+              if(val=='LODGER'){
+                  return '住客'
+              }else if(val=='VISITOR'){
+                  return '访客'
+              }else if(val=='STAFF'){
+                  return '酒店工作人员'
+              }
+          }
+      },
+      components: {
+          Group,
+          Selector
+      },
     computed: {
         // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
@@ -130,19 +129,27 @@
         return this.route.params.id
       },
       isDisabled(){
-        // if (this.roomNumberList.length > 0) {
-        //   let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-        //   return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber || !isRightInputRoomNumber
-        // } else {
-        //   return !this.roomNumber || (typeof this.days === 'string' && !this.days ) || this.days < 0 || !this.inTimeFilter || !this.outTimeFilter || this.isErrorNumber
-        // }
           if (this.roomNumberList.length > 0) {
               let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
               return !this.roomNumber  || this.isErrorNumber ||!isRightInputRoomNumber
           } else {
               return !this.roomNumber  ||  !this.isErrorNumber
           }
-      }
+      },
+        buttonGroupShow(){
+            if(this.detail.identityStatus == 'REFUSED'||this.detail.identityStatus == 'AGREED'||this.detail.reportInStatus=='PENDING'){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        showGuestType(){
+            if(this.detail.reportInStatus !== 'SUCCESS'&&this.buttonGroupShow){
+                return true;
+            }else {
+                return false
+            }
+        }
     },
     methods: {
       ...mapActions([
@@ -176,7 +183,7 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-            this.goto('/policeIdentity/handle/0')
+            this.replaceto('/policeIdentity/handle/0')
             console.log('已经拒绝')
           }
         })
@@ -193,9 +200,12 @@
       isDialogShow() {
         if (!this.isDisabled) {
           this.resultList = [];
-          this.showDialog = true;
-        } else {
-          this.showDialog = false;
+          if(this.guestType=='LODGER'){
+              this.showDialog = true;
+          }else {
+              this.showDialog = false;
+              this.setMultiConfirm()
+          }
         }
       },
       daysReduce() {
@@ -207,6 +217,7 @@
       resetFilter() {
         this.days = 1;
         this.roomNumber = '';
+        this.guestType='LODGER';
         this.inTimeFilter = Date.parse(new Date());
         this.isWxPayBtnShow = false;
       },
@@ -214,7 +225,7 @@
         this.newIdentityDetail({
           identity_id: this.identityId,
           onsuccess: body => {
-            this.hotelConfig = body.data.config;
+            this.hotelConfig=body.data.config;
             this.detail = body.data.content;
             typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
             this.detail.roomNumber && (this.roomNumber = this.detail.roomNumber);
@@ -226,28 +237,50 @@
       },
         //上传旅业前多次确认
       setMultiConfirm() {
+          if(this.isDisabled){
+              return
+          }else {
+              if (this.detail.similarity<70){
+                  this.similarityCheck=true;
+              }else {
+                  this.reporetLvyes();
+              }
+          }
+         },
+      accessBtn() {
           if (this.detail.similarity<70){
               this.similarityCheck=true;
           }else {
-              this.reporetLvye();
+              this.reporetLvyes();
           }
-      },
+      } ,
         //上传旅业
-      reporetLvye(){
-          this.reportLvYe({
-              lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
-              roomNumber: this.roomNumber,//房间号
-              nights: +this.days,//入住晚数
-              inTime: this.inTimeFilter,//入住时间
-              outTime: this.outTimeFilter,//离店时间
-              onsuccess: () => {
-                  this.resetFilter();
-                  this.goto('/policeIdentity/handle/0')
-              }
-          })
-      }
+        reporetLvyes(){
+            this.reportLvYe({
+                lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
+                roomNumber: this.roomNumber,//房间号
+                nights: +this.days,//入住晚数
+                inTime: this.inTimeFilter,//入住时间
+                outTime: this.outTimeFilter,//离店时间
+                guestType:this.guestType,
+                onsuccess: () => {
+                    this.resetFilter();
+                    this.replaceto('/policeIdentity/handle/0')
+                }
+            })
+        }
     },
     watch: {
+        buttonGroupShow(val){
+            if(val){
+                this.guestType=null;
+            }
+        },
+        guestType(val){
+            if(val=="STAFF") {
+                this.roomNumber='';
+            }
+        },
       detail(val){
          if(val.reportInStatus!=='SUCCESS') {
              console.log(333);
@@ -284,6 +317,9 @@
       }
     },
     activated(){
+        this.getDetail();
+    },
+    created(){
       this.detail = {};
       this.getDetail();
       if (this.roomNumberList.length === 0) this.getRoomNumberList();
