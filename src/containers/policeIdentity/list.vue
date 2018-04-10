@@ -314,7 +314,7 @@
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
                 'getRoomNumberList',
-
+                // 'forwardTo'
             ]),
             showwithoutLicenseDialog(){
                 this.Nationality();
@@ -468,7 +468,7 @@
               //非批量模式下点击订单跳转至详情页面
               if (!this.batch) {
                 this.batchlist = [];
-                this.goto('/policeIdentity/' + orderId)
+                this.replaceto('/policeIdentity/' + orderId)
               }
             },
             setMultiConfirm() {
