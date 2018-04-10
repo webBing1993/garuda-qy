@@ -253,6 +253,8 @@
                 currentPage:0,
                 tobeHandledTotal:0,
                 handledTotal:0,
+                todayStart:'',
+                todayEnd:''
             }
         },
         computed: {
@@ -495,6 +497,20 @@
                 })
               }
             },
+            timeFetch(){
+                var todayZero = new Date();
+                var todayEleven = new Date();
+                todayZero.setHours(0);
+                todayZero.setMinutes(0);
+                todayZero.setSeconds(0);
+                todayEleven.setHours(23);
+                todayEleven.setMinutes(59);
+                todayEleven.setSeconds(59);
+                // console.log('今天零点：' + todayZero.getTime());
+                // console.log('23:59：' + todayEleven.getTime());
+                this.todayStart=todayZero.getTime();
+                this.todayEnd=todayEleven.getTime()
+            },
             tobeHandledItem(item){
               return `<div class="cell-body">` +
                 // `<span class="cell-right warn">待处理</abbr></span>` +
@@ -509,13 +525,15 @@
                 `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
                 `</div>`
             },
-            getList(callback, reportInStatus, identStatus,page) {
+            getList(callback, reportInStatus,identStatus,timeStart,timeEnd,page) {
                 this.newIdentityList ({
                     data: {
-                        createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
+                        // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
                         // createTimeStart:1519833600000,
-                        createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
+                        // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
                         // createTimeEnd:1521648000000,
+                        createTimeStart:timeStart,
+                        createTimeEnd:timeEnd,
                         identityStatuses: identStatus,
                         reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                         desc: true
@@ -547,7 +565,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.tobeHandledScroller.pullupStatus = 'disabled';
                             };
-                        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],this.offset0);
+                        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],'','',this.offset0);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom0.reset();
@@ -573,7 +591,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.handledScroller.pullupStatus = 'disabled';
                             };
-                        }), [], ["AGREED", "REFUSED"],this.offset1);
+                        }), [], ["AGREED", "REFUSED"],this.todayStart,this.todayEnd,this.offset1);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom1.reset();
@@ -602,7 +620,7 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
                     });
-                }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],0);
+                }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],'','',0);
                 //已处理列表
                 this.getList(((body,headers) => {
                     this.handledTotal=headers.get('x-total-count');
@@ -614,7 +632,7 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom1.reset({top:0});
                     });
-                }), [], ["AGREED", "REFUSED"],0);
+                }), [], ["AGREED", "REFUSED"],this.todayStart,this.todayEnd,0);
             },
             resetList(){
                 this.handled = [];
@@ -625,6 +643,7 @@
             }
         },
         mounted(){
+            this.timeFetch()
             this.initList();
             this.getRoomNumberList();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
