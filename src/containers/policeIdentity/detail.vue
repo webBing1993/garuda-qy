@@ -297,15 +297,15 @@
         let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
         this.outTimeFilter = tempTime;
       },
-      roomNumber(val) {
+      roomNumber(val,old) {
         if (!val) {
           this.resultList = [];
           this.isErrorNumber = false;
         }
         if (!this.canSearch) return;
-        // if (val && val.split('').some(i => !/^[A-Za-z0-9]+$/.test(i))) {//验证特殊字符
-        //   this.roomNumber = old
-        // }
+        if (val && val.split('').some(i => !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(i))) {//验证特殊字符
+          this.roomNumber = old
+        }
         if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
           this.resultList = [];
           this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
