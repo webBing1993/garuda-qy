@@ -32,7 +32,8 @@
             <span class="app-title">异常提醒</span>
           </li>
           <li class="app-item" @click="flag?goto('/suspicious/suspiciousList/0'):''">
-            <img :src='flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
+            <!--<img :src='flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">-->
+            <img :src='imgList[7].openItem' alt="可疑人员">
             <span class="app-title">可疑人员</span>
           </li>
         </ul>

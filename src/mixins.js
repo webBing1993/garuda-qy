@@ -17,7 +17,7 @@ Vue.mixin({
       let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate()
       let HH = dateobj.getHours() > 9 ? dateobj.getHours() : '0' + dateobj.getHours()
       let mm = dateobj.getMinutes() > 9 ? dateobj.getMinutes() : '0' + dateobj.getMinutes()
-      let ss = dateobj.getSeconds()
+      let ss = dateobj.getSeconds()>9?dateobj.getSeconds():'0'+dateobj.getSeconds()
       let output = '';
       let separator = '/'
       if (format) {
