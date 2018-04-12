@@ -3,6 +3,9 @@ module.exports = {
   AppParams: {
     session: ''
   },
+    VersionParam:{
+        versionNum:''
+    },
   Interface: {
     scroller: {
       content: '下拉刷新列表',

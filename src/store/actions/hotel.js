@@ -5,6 +5,23 @@ module.exports = {
       onSuccess: body => ctx.commit('HOTEL', body.data)
     })
   },
+    getHotelConfigVersion(ctx,param) {
+        ctx.dispatch('resource',{
+            url:'/getHotelConfig/product_version',
+            onSuccess: body => {
+                onSuccess: param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
+    getHotelConfig(ctx,param){
+        ctx.dispatch('resource',{
+            url:'/getHotelConfig/wqt_main_control',
+            onSuccess: body => {
+                onSuccess: param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+
+    },
   hotelrefresh(ctx, param){
     ctx.dispatch('resource', {
       url: '/hotel/' + ctx.state.hotel.hotel_id + '/refresh',

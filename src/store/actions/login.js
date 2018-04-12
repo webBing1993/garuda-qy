@@ -28,15 +28,13 @@ module.exports = {
 
     login(ctx, param){
         if (sessionStorage.session_id && sessionStorage.hotel_id) {
-            // ctx.commit('SESSION', sessionStorage.session_id)
-            ctx.commit('HOTEL', {'hotel_id': sessionStorage.hotel_id});
             console.log('SESSIONSTORAGE: ', sessionStorage.session_id, sessionStorage.hotel_id)
         }else {
             console.log('LOGIN: ', param.session, param.hotel_id);
             sessionStorage.session_id = param.session;
-            // ctx.commit('SESSION', param.session);
             sessionStorage.hotel_id = param.hotel_id;
-            ctx.commit('HOTEL', {'hotel_id': param.hotel_id});
         }
+        // ctx.commit('SESSION', param.session);
+        ctx.commit('HOTEL', {'hotel_id': param.hotel_id});
     }
 }

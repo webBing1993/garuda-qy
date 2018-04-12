@@ -10,7 +10,7 @@
         <div class="info-item" v-if="showGuestType">
           <label class="item-left">房间号码:</label>
           <input class="item-right room-number  item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'" @keyup.13="enterToLvye($event)"/>
-          <span class="item-right">{{detail.roomNumber}}</span>
+          <span class="item-right" v-else>{{detail.roomNumber}}</span>
         </div>
         <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
         <div class="searchRoom">

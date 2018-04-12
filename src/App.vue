@@ -15,6 +15,7 @@
     computed: {
       ...mapState([
         'AppParams',
+        'VersionParam',
         'Interface',
         'hotel',
         'route',
@@ -33,7 +34,7 @@
         if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
             this.initMTA();
         }
-        this.urlquery()//存AppParams
+        this.urlquery()//存AppParams,开发者工具输入地址后进入此页执行查询AppParams
     },
     methods: {
       ...mapActions([
@@ -41,6 +42,7 @@
         'urlquery',
         'login',
         'replaceto',
+        'getHotelConfigVersion'
         // 'gethotelinfo'
       ]),
       crossroad(){
@@ -119,7 +121,7 @@
     },
     watch: {
       AppParams(val){
-          this.login(val);
+          this.login(val);//存sessionId和hotelId
       },
       $route(val){
         const path = val.fullPath;
@@ -148,12 +150,18 @@
         path.match(/receive/) ? title = '住离信息' : null;
         path.match(/abnormalNotice\/listDetail/) ? title = '异常提醒' : null;
         path.match(/suspicious\/suspiciousList/) ? title = '可疑人员' : null;
-        path.match(/suspicious\/suspiciousListDetail/) ? title = '可疑人员详情' : null;
+        path.match(/suspicious\/susDetail/) ? title = '可疑人员详情' : null;
         this.settitle(title)
       },
       sessionId(val){
         if (val) {
           // this.gethotelinfo(this.hotel.hotel_id)
+            // this.getHotelConfigVersion({
+            //     onsuccess:(body)=>{
+            //         console.log('version:',body.data)
+            //         this.VersionParam.versionNum=body.data
+            //     }
+            // });
           this.$nextTick(() => this.crossroad())
         }
       }
