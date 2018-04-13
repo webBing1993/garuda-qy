@@ -8,7 +8,7 @@
             <span class="app-title">公安验证</span>
           </li>
           <li class="app-item" @click="appConfig.order_view&&flag?goto('prepay/0'):''">
-            <img :src='appConfig.order_view&&flag?imgList[1].openItem:imgList[1].scloseItem' alt="订单中心">
+            <img :src='appConfig.order_view&&flag?imgList[1].openItem:imgList[1].closeItem' alt="订单中心">
             <span class="app-title">订单中心</span>
           </li>
           <li class="app-item" @click="appConfig.room_status_view&&flag?goto('receive/precheckin'):''">
