@@ -19,7 +19,7 @@
             <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
           </ul>
         </div>
-        <div class="info-item">
+        <div class="info-item photoTime" >
           <label class="item-left">拍照时间:</label>
           <span class="item-right">{{datetimeparse(detail.createdTime,'YYYYMMDDhhmmss')}}</span>
         </div>
@@ -144,10 +144,10 @@
             }
         },
         showGuestType(){
-            if(this.detail.reportInStatus !== 'SUCCESS'&&this.buttonGroupShow){
-                return true;
+            if(this.detail.reportInStatus=='PENDING'||this.detail.identityStatus == 'REFUSED'){
+                return false;
             }else {
-                return false
+                return true
             }
         }
     },
