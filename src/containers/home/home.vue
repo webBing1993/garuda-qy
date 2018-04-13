@@ -3,8 +3,8 @@
     <div class="app">
       <Group title="应用">
         <ul class="app-container">
-          <li class="app-item" @click="appConfig.check_in_identity_check_view&&flag?goto('/policeIdentity/handle/0'):''">
-            <img :src='appConfig.check_in_identity_check_view&&flag?imgList[0].openItem:imgList[0].closeItem' alt="身份核验">
+          <li class="app-item" @click="appConfig.identity_check_view&&flag?goto('/policeIdentity/handle/0'):''">
+            <img :src='appConfig.identity_check_view&&flag?imgList[0].openItem:imgList[0].closeItem' alt="身份核验">
             <span class="app-title">公安验证</span>
           </li>
           <li class="app-item" @click="appConfig.order_view&&flag?goto('prepay/0'):''">
@@ -222,7 +222,7 @@
           }
         })
       },
-//      云吧链接confi
+//      云吧链接config
       init() {
         this.getTodoList();
         this.gethotelConfig();
