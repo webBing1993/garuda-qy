@@ -4,7 +4,27 @@ Vue.mixin({
   methods: {
     datetimeparse: (timestamp, format, prefix) => {
       // console.log(timestamp, format)
-      let newtimestamp = timestamp
+       let getAbsTime=function(time) {
+            let currentZoneTime = new Date(time);
+            let currentZoneHours = currentZoneTime.getHours();
+            let offsetZone = currentZoneTime.getTimezoneOffset() / 60;
+
+            // console.log('offsetZone:',offsetZone)
+            if(offsetZone > 0) {
+                // 大于0的是西区（西区晚） 西区应该用时区绝对值加京八区 重新设置时间
+                // 西区时间比东区时间晚 所以加时区间隔
+                offsetZone = offsetZone + 8;
+                currentZoneTime.setHours(currentZoneHours - offsetZone)
+            } else {
+                // 小于0的是东区（东区早）  东区时间直接跟京八区相加
+                offsetZone += 8;
+                currentZoneTime.setHours(currentZoneHours + offsetZone);
+            }
+            return (currentZoneTime)
+        };
+       console.log('hhh',getAbsTime(timestamp))
+        // console.log('ddd',timestamp)
+      let newtimestamp = getAbsTime(timestamp)
         ? timestamp.toString().length === 13
           ? timestamp.toString()
           : timestamp.toString().length === 10

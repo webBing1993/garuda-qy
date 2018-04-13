@@ -1,15 +1,18 @@
 /**
  * Created by lisj on 2017/8/2.
+ * revise by zoe on 2018/
  */
 module.exports = {
   yunbaConnect(ctx, param) {
     ctx.state.yunbaInstance.init((success) => {
       if (success) {
         console.log('yunba init');
-        ctx.state.yunbaInstance.connect_by_customid(ctx.state.AppParams.session, (success) => {
+        ctx.state.yunbaInstance.connect_by_customid(ctx.state.AppParams.session, (success,msg) => {
           if (success) {
-            console.log('yunba connect');
+            console.log('yunba connect,连接成功！');
             ctx.commit('ISYUNBACONNECTED', true);
+          }else {
+              console.log(msg)
           }
         })
       }

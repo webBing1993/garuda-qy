@@ -150,6 +150,7 @@
         'yunbaUnsubscribe',
         'yunbaPublish',
         'setPublishCallback',
+        'yunbaDisconnect',
         'getConfig',
         'getHotelConfig'
       ]),
@@ -188,7 +189,7 @@
              this.getHotelConfig({
                  onsuccess: body =>{
                     this.appConfig=JSON.parse(body.data)
-                    console.log('2222:',JSON.parse(body.data))
+                    // console.log('2222:',JSON.parse(body.data))
                  }
              })
          }
@@ -227,7 +228,7 @@
         this.getTodoList();
         this.gethotelConfig();
         if (!this.yunbaConnected) {
-//          this.yunbaConnect();
+         this.yunbaConnect();
         }
       }
     },

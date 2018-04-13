@@ -13,11 +13,11 @@ module.exports = {
       }else {
           router.push(param)
       }
-      console.log('router:',router)
+      // console.log('router:',router)
   },
   replaceto: (ctx, param) => {
     router.replace(param)
-      console.log('router:',router)
+      // console.log('router:',router)
   },
   // gotoNew:(ctx, param)=> {
   //     if(typeof param === 'number'){
