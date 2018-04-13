@@ -19,9 +19,9 @@
             <img :src='appConfig.check_in_identity_check_view&&flag?imgList[3].openItem:imgList[3].closeItem' alt="公安验证">
             <span class="app-title">入住核验</span>
           </li>
-          <li class="app-item" @click="appConfig.nvoice_view&&flag?goto('/invoice/0'):''">
+          <li class="app-item" @click="appConfig.invoice_view&&flag?goto('/invoice/0'):''">
             <img :src='appConfig.invoice_view&&flag?imgList[4].openItem:imgList[4].closeItem' alt="闪开发票">
-            <span class="app-title">发票中心</span>
+            <span class="app-title">发票中心</span>s
           </li>
           <li class="app-item" @click="appConfig.order_bill_view&&flag?goto('/bill/0'):''">
             <img :src='appConfig.order_bill_view&&flag?imgList[5].openItem:imgList[5].closeItem' alt="账务管理">
