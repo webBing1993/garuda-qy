@@ -91,7 +91,7 @@
         imgList: [
           {
             openItem: './static/icon/ic_police.png',
-            closeItem: './static/icon/ic_police.png'
+            closeItem: './static/icon/closePolice.png'
           },
           {
             openItem: './static/icon/ic_prepay_confirm.png',
