@@ -4,10 +4,10 @@
       <div class="report-info">
         <div class="info-item" v-if="showGuestType">
           <label class="item-left">住客类型:</label>
-          <selector class="item-right room-number item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'"></selector>
+          <selector class="item-right room-number item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'&&detail.guestType!=='STAFF'"></selector>
           <span class="item-right" v-else>{{detail.guestType|filterGuestType}}</span>
         </div>
-        <div class="info-item" v-if="showGuestType">
+        <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
           <label class="item-left">房间号码:</label>
           <input class="item-right room-number  item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'" @keyup.13="enterToLvye($event)"/>
           <span class="item-right" v-else>{{detail.roomNumber}}</span>
