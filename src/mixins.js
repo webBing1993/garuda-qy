@@ -2,59 +2,49 @@ import Vue from 'vue'
 
 Vue.mixin({
   methods: {
-    datetimeparse: (timestamp, format, prefix) => {
-      // console.log(timestamp, format)
-       let getAbsTime=function(time) {
-            let currentZoneTime = new Date(time);
-            let currentZoneHours = currentZoneTime.getHours();
-            let offsetZone = currentZoneTime.getTimezoneOffset() / 60;
+      datetimeparse (timestamp, format, prefix){
+          let newtimestamp=null;
+          if(timestamp){
+              if(timestamp.toString().length === 13){
+                  newtimestamp=timestamp.toString()
+              }else if(timestamp.toString().length === 10){
+                  newtimestamp=timestamp + '000'
+              }else{
+                  newtimestamp=null
+              }
+          }else{
+              newtimestamp=null
+          };
+          let currentZoneTime = new Date(timestamp);
+          let currentZoneHours = currentZoneTime.getHours();
+          let offsetZone = currentZoneTime.getTimezoneOffset() / 60+8;
+          // console.log('offsetZone:'+offsetZone)
+          // console.log('currentZoneHours:'+currentZoneHours)
+          let dateobj = newtimestamp ? new Date(parseInt(newtimestamp)) : new Date();
+          let YYYY = dateobj.getFullYear();
+          let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1);
+          let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate();
+          let HH=currentZoneHours + offsetZone;
+              HH = HH > 9 ? HH : '0' + HH
+          let mm = dateobj.getMinutes() > 9 ? dateobj.getMinutes() : '0' + dateobj.getMinutes()
+          let ss = dateobj.getSeconds()>9?dateobj.getSeconds():'0'+dateobj.getSeconds()
+          let output = '';
+          let separator = '/'
+          if (format) {
+              separator = format.match(/-/) ? '-' : '/'
+              output += format.match(/yy/i) ? YYYY : ''
+              output += format.match(/MM/) ? (output.length ? separator : '') + MM : ''
+              output += format.match(/dd/i) ? (output.length ? separator : '') + DD : ''
+              output += format.match(/hh/i) ? (output.length ? ' ' : '') + HH : ''
+              output += format.match(/mm/) ? (output.length ? ':' : '') + mm : ''
+              output += format.match(/ss/i) ? (output.length ? ':' : '') + ss : ''
+          } else {
+              output += YYYY + separator + MM + separator + DD
+          }
+          output = prefix ? (prefix + output) : output
 
-            // console.log('offsetZone:',offsetZone)
-            if(offsetZone > 0) {
-                // 大于0的是西区（西区晚） 西区应该用时区绝对值加京八区 重新设置时间
-                // 西区时间比东区时间晚 所以加时区间隔
-                offsetZone = offsetZone + 8;
-                currentZoneTime.setHours(currentZoneHours - offsetZone)
-            } else {
-                // 小于0的是东区（东区早）  东区时间直接跟京八区相加
-                offsetZone += 8;
-                currentZoneTime.setHours(currentZoneHours + offsetZone);
-            }
-            return (currentZoneTime)
-        };
-       console.log('hhh',getAbsTime(timestamp))
-        // console.log('ddd',timestamp)
-      let newtimestamp = getAbsTime(timestamp)
-        ? timestamp.toString().length === 13
-          ? timestamp.toString()
-          : timestamp.toString().length === 10
-            ? timestamp + '000'
-            : null
-        : null
-      let dateobj = newtimestamp ? new Date(parseInt(newtimestamp)) : new Date()
-      let YYYY = dateobj.getFullYear()
-      let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1)
-      let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate()
-      let HH = dateobj.getHours() > 9 ? dateobj.getHours() : '0' + dateobj.getHours()
-      let mm = dateobj.getMinutes() > 9 ? dateobj.getMinutes() : '0' + dateobj.getMinutes()
-      let ss = dateobj.getSeconds()>9?dateobj.getSeconds():'0'+dateobj.getSeconds()
-      let output = '';
-      let separator = '/'
-      if (format) {
-        separator = format.match(/-/) ? '-' : '/'
-        output += format.match(/yy/i) ? YYYY : ''
-        output += format.match(/MM/) ? (output.length ? separator : '') + MM : ''
-        output += format.match(/dd/i) ? (output.length ? separator : '') + DD : ''
-        output += format.match(/hh/i) ? (output.length ? ' ' : '') + HH : ''
-        output += format.match(/mm/) ? (output.length ? ':' : '') + mm : ''
-        output += format.match(/ss/i) ? (output.length ? ':' : '') + ss : ''
-      } else {
-        output += YYYY + separator + MM + separator + DD
-      }
-      output = prefix ? (prefix + output) : output
-
-      return newtimestamp ? output : ''
-    },
+          return newtimestamp ? output : ''
+      },
     idnumber: id => {
       return id.replace(id.slice(3, 14), '***********')
     },
