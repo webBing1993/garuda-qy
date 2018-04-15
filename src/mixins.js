@@ -3,29 +3,32 @@ import Vue from 'vue'
 Vue.mixin({
   methods: {
       datetimeparse (timestamp, format, prefix){
+          //转换时区
+          let currentZoneTime = new Date(timestamp);
+          let currentTimestamp=currentZoneTime.getTime();
+          let offsetZone = currentZoneTime.getTimezoneOffset() / 60;//如果offsetZone>0是西区，西区晚
+          let offset=null;
+          //客户端时间与服务器时间保持一致，固定北京时间东八区。
+          offset=offsetZone + 8;
+          currentTimestamp=currentTimestamp+offset*3600*1000
+
           let newtimestamp=null;
-          if(timestamp){
-              if(timestamp.toString().length === 13){
-                  newtimestamp=timestamp.toString()
-              }else if(timestamp.toString().length === 10){
-                  newtimestamp=timestamp + '000'
+          if(currentTimestamp){
+              if(currentTimestamp.toString().length === 13){
+                  newtimestamp=currentTimestamp.toString()
+              }else if(currentTimestamp.toString().length === 10){
+                  newtimestamp=currentTimestamp + '000'
               }else{
                   newtimestamp=null
               }
           }else{
               newtimestamp=null
           };
-          let currentZoneTime = new Date(timestamp);
-          let currentZoneHours = currentZoneTime.getHours();
-          let offsetZone = currentZoneTime.getTimezoneOffset() / 60+8;
-          // console.log('offsetZone:'+offsetZone)
-          // console.log('currentZoneHours:'+currentZoneHours)
-          let dateobj = newtimestamp ? new Date(parseInt(newtimestamp)) : new Date();
-          let YYYY = dateobj.getFullYear();
-          let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1);
-          let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate();
-          let HH=currentZoneHours + offsetZone;
-              HH = HH > 9 ? HH : '0' + HH
+          let dateobj = newtimestamp ? new Date(parseInt(newtimestamp)) : new Date()
+          let YYYY = dateobj.getFullYear()
+          let MM = dateobj.getMonth() > 8 ? dateobj.getMonth() + 1 : '0' + (dateobj.getMonth() + 1)
+          let DD = dateobj.getDate() > 9 ? dateobj.getDate() : '0' + dateobj.getDate()
+          let HH = dateobj.getHours() > 9 ? dateobj.getHours() : '0' + dateobj.getHours()
           let mm = dateobj.getMinutes() > 9 ? dateobj.getMinutes() : '0' + dateobj.getMinutes()
           let ss = dateobj.getSeconds()>9?dateobj.getSeconds():'0'+dateobj.getSeconds()
           let output = '';
