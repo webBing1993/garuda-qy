@@ -106,6 +106,26 @@ module.exports = {
       }
     })
   },
+    getWhiteList(ctx, param){
+        ctx.dispatch('resource', {
+            url: '/identity/whitelist/search?limit='+param.limit+'&offset='+param.offset,
+            method: 'POST',
+            body:param.data,
+            onSuccess: body => {
+                param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
+    delWhiteItem(ctx, param){
+        ctx.dispatch('resource', {
+            url: '/identity/whitelist',
+            method: 'DELETE',
+            body:param.data,
+            onSuccess: body => {
+                param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
     getSuspicious(ctx, param){
         ctx.dispatch('resource', {
             url: '/identity/illegalGuest/list?limit='+param.limit+'&offset='+param.offset,

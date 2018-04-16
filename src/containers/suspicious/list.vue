@@ -65,12 +65,28 @@
       </scroller>
     </div>
 
+    <div div style="margin-top: 2.8rem" class="list3" v-show="currentTab==2" >
+       <ul>
+           <li v-for="(item,index) in whiteList">
+             <img src="" alt="">
+             <div class="item-check">
+               <a href="javascript:void 0" class="iconfont"
+                  :class="{'icon-roundcheck':!item.removed, 'icon-roundcheckfill': item.removed}" @click="selected(item)">
+                 <img :src="item.img_url"  :alt="null">
+               </a>
+             </div>
+           </li>
+       </ul>
+      <x-button value="删除照片" class="delBtn" @onClick="delWhiteItemList" v-show="whiteList.length>0">
+      </x-button>
+    </div>
   </article>
 </template>
 
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
     import {Tab, TabItem,Scroller} from 'vux'
+    // import "iconfont.js"
     module.exports = {
         name:'suspicious',
         components: {Scroller,Tab, TabItem},
@@ -85,7 +101,11 @@
               offset0:0,
               offset1:0,
               total0:0,
-              total1:0
+              total1:0,
+              total2:0,
+              whiteList:[{},{},{},{},{},{}],
+              flag:false,
+              idsList:[]
           }
         },
         computed: {
@@ -101,6 +121,7 @@
                 let menu = [];
                 menu[0] = `未处理(${this.total0})`;
                 menu[1] = `已处理(${this.total1})`;
+                menu[2] = `白名单(${this.total2})`;
                 return menu;
             }
         },
@@ -108,12 +129,54 @@
             ...mapActions([
                 'replaceto',
                 'goto',
-                'getSuspicious'
+                'getSuspicious',
+                'getWhiteList',
+                'delWhiteItem'
             ]),
             toggleTab(index){
                 let newpath = this.route.path.replace(this.route.params.tab, index)
                 this.replaceto(newpath);
                 this.initList();
+            },
+            getWhiteLists(){
+                this.getWhiteList({
+                    limit:20,
+                    offset:0,
+                    data:{
+                        createTimeStart:'',
+                        createTimeEnd:'',
+                        removed:false
+                    },
+                    onsuccess:(body)=>{
+                        console.log(body.data)
+                        this.whiteList=body.data;
+                    }
+                })
+
+            },
+            delWhiteItemList(){
+                this.whiteList.forEach(item=>{
+                    if(item.removed){
+                        this.idsList.push(item.id)
+                    }
+                })
+                this.delWhiteItem({
+                    data:{
+                        'ids':this.idsList
+                    },
+                    onsuccess:body=>{
+                        this.getWhiteLists();
+                    }
+                })
+            },
+            selected(item){
+                // if(typeof item.checked == 'undefined'){
+                //     this.$set(item,'checked',false)
+                // }else {
+                //     item.checked = !item.checked;
+                // }
+                item.removed = !item.removed;
+
             },
             //可疑人员详情页
             suspiciousHandel(suspiciousId){
@@ -131,7 +194,7 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
                     });
-                }),['NONE'],0)
+                }),['NONE'],0);
                 this.getSuspiciousList(((body,headers)=> {
                     this.total1 = headers.get ('x-total-count');
                     this.handledPerson = [...body.data];
@@ -143,7 +206,8 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom1.reset({top:0});
                     });
-                }),['READ'],0)
+                }),['READ'],0);
+                this.getWhiteLists();
             },
             getSuspiciousList(callback,status,page){
                 this.getSuspicious({
@@ -215,6 +279,13 @@
 </script>
 <style lang="less" scoped>
   @import "index.less";
+  @import "iconfont.css";
+  .icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
   .list-wrapper{
     position: relative;
     padding-top: 0;
@@ -223,5 +294,51 @@
   }
   .xs-container{
     padding-top: 2rem;
+  }
+  .list3{
+    position: relative;
+    width: 100%;
+    ul{
+      margin-left: 0.5rem;
+      li{
+        margin-top: 0.3rem;
+         display: inline-block;
+          width: 5.3rem;
+          height: 5.3rem;
+          border: 1px solid #9A9A9A;
+          /*background: #EC8B89;*/
+          margin-right: 0.2rem;
+        .item-check{
+          width: 1.2rem;
+          height: 1.2rem;
+          float: right;
+          margin: 0 0.5rem 0.2rem 0.2rem;
+          a{
+            /*font-size: 18px;*/
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+          }
+          a.iconfont{
+            font-size: 20px;
+          }
+          a:before{
+            width: 100%;
+            height: 100%;
+          }
+
+        }
+      }
+    }
+    .delBtn{
+      position:absolute;
+      width: 86%;
+      left:50%;
+      margin-left: -43%;
+      margin-top: 1rem;
+      background: #EC8B89;
+      color: #ffffff;
+      /*margin-left: 0.5rem;*/
+    }
   }
 </style>
