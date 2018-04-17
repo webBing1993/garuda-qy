@@ -111,8 +111,8 @@ module.exports = {
             url: '/identity/whitelist/search?limit='+param.limit+'&offset='+param.offset,
             method: 'POST',
             body:param.data,
-            onSuccess: body => {
-                param.onsuccess ? param.onsuccess(body) : null
+            onSuccess: (body,headers) => {
+                param.onsuccess ? param.onsuccess(body,headers) : null
             }
         })
     },

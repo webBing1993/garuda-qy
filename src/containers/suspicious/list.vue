@@ -68,11 +68,10 @@
     <div div style="margin-top: 2.8rem" class="list3" v-show="currentTab==2" >
        <ul>
            <li v-for="(item,index) in whiteList">
-             <img src="" alt="">
+             <img :src="item.img_url" class="bmdImg" :alt="null">
              <div class="item-check">
                <a href="javascript:void 0" class="iconfont"
                   :class="{'icon-roundcheck':!item.removed, 'icon-roundcheckfill': item.removed}" @click="selected(item)">
-                 <img :src="item.img_url"  :alt="null">
                </a>
              </div>
            </li>
@@ -150,8 +149,8 @@
                         createTimeEnd:'',
                         removed:false
                     },
-                    onsuccess:(body)=>{
-                        console.log(body.data)
+                    onsuccess:(body,headers)=>{
+                        this.total2=headers.get('x-total-count');
                         this.whiteList=body.data;
                     }
                 })
@@ -162,7 +161,7 @@
                     if(item.removed){
                         this.idsList.push(item.id)
                     }
-                })
+                });
                 this.delWhiteItem({
                     data:{
                         'ids':this.idsList
@@ -311,16 +310,19 @@
           border: 1px solid #9A9A9A;
           /*background: #EC8B89;*/
           margin-right: 0.2rem;
+          position: relative;
+        .bmdImg{
+          width: 100%;
+          height: 100%;
+        }
         .item-check{
-          width: 1.2rem;
-          height: 1.2rem;
-          float: right;
-          margin: 0 0.5rem 0.2rem 0.2rem;
+          position: absolute;
+          top: 0.1rem;
+          right: 0.3rem;
+          /*margin: 0 0.5rem 0.2rem 0.2rem;*/
           a{
             /*font-size: 18px;*/
             display: inline-block;
-            width: 100%;
-            height: 100%;
           }
           a.iconfont{
             font-size: 20px;
@@ -329,7 +331,12 @@
             width: 100%;
             height: 100%;
           }
-
+          .iconfont.icon-roundcheck{
+            color: #ffcd57;
+          }
+          .iconfont.icon-roundcheckfill{
+            color: #ffcd57;
+          }
         }
       }
     }
