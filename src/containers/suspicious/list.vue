@@ -67,11 +67,11 @@
 
     <div div style="margin-top: 2.8rem" class="list3" v-show="currentTab==2" >
        <ul>
-           <li v-for="(item,index) in whiteList">
+           <li v-for="(item,index) in whiteList" @click="selected(item)">
              <img :src="item.img_url" class="bmdImg" :alt="null">
              <div class="item-check">
                <a href="javascript:void 0" class="iconfont"
-                  :class="{'icon-roundcheck':!item.removed, 'icon-roundcheckfill': item.removed}" @click="selected(item)">
+                  :class="{'icon-roundcheck':!item.removed, 'icon-roundcheckfill': item.removed}">
                </a>
              </div>
            </li>
