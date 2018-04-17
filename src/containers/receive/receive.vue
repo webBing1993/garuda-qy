@@ -261,7 +261,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  //  import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
+   // import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   import {XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   import {VueScroller} from 'vue-scroller'
   export default {

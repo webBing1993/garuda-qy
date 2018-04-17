@@ -198,14 +198,12 @@
         handler: function (val) {
           if (val.pullupStatus === 'default' && this.currentValue.pullupStatus !== 'default') {
             this.donePullup()
-            console.log(33333)
           }
           if (val.pulldownStatus === 'default' && this.currentValue.pulldownStatus !== 'default') {
             this.donePulldown()
           }
           if (val.pullupStatus === 'disabled' && this.currentValue.pullupStatus !== 'disabled') {
             this.disablePullup()
-            console.log(22222)
           }
           if (val.pullupStatus === 'enabled' && this.currentValue.pullupStatus === 'disabled') {
             this.enablePullup()

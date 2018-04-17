@@ -77,16 +77,18 @@
              </div>
            </li>
        </ul>
-      <x-button value="删除照片" class="delBtn" @onClick="delWhiteItemList" v-show="whiteList.length>0">
+      <x-button value="删除照片" class="delBtn" @onClick="showDelDialog=true" v-show="whiteList.length>0">
       </x-button>
     </div>
+    <Dialog v-model="showDelDialog" @onConfirm="delWhiteItemList" confirm cancel>
+      <p>确认删除？</p>
+    </Dialog>
   </article>
 </template>
 
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
     import {Tab, TabItem,Scroller} from 'vux'
-    // import "iconfont.js"
     module.exports = {
         name:'suspicious',
         components: {Scroller,Tab, TabItem},
@@ -105,7 +107,8 @@
               total2:0,
               whiteList:[{},{},{},{},{},{}],
               flag:false,
-              idsList:[]
+              idsList:[],
+              showDelDialog:false
           }
         },
         computed: {
