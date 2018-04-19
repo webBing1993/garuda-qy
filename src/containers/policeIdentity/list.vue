@@ -282,9 +282,7 @@
                 // return menu;
                 let menu = [];
                 menu[0] = `待处理`;
-                if(this.showHandledList){
-                    menu[1] = `已处理`;
-                }
+                menu[1] = `已处理`;
                 return menu;
             },
             renderTodoHandelList(){
@@ -667,7 +665,7 @@
             this.timeFetch()
             this.initList();
             this.getRoomNumberList();
-            this.getConfig();
+            // this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
         },
         watch: {
