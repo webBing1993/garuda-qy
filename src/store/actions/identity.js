@@ -178,9 +178,19 @@ module.exports = {
   getRoomNumberList(ctx, param) {
     ctx.dispatch('resource', {
       url: '/room/numberList',
+        method: 'GET',
       onSuccess: body => ctx.commit('ROOMNUMBERLIST', body.data)
     })
   },
+    getConfigs(ctx, param){
+        ctx.dispatch('resource', {
+            url: '/getHotelConfig/enable_show_plice_processed',
+            method: 'GET',
+            onSuccess: body=>{
+                param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
   wxPayConfirm(ctx, param) {
     ctx.dispatch('resource', {
       url: '/order/pay',

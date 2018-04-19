@@ -281,7 +281,6 @@
 </script>
 <style lang="less" scoped>
   @import "index.less";
-  @import "iconfont.css";
   .icon {
     width: 1em; height: 1em;
     vertical-align: -0.15em;

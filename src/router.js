@@ -118,7 +118,7 @@ const identity = [{
     component: require('./containers/identity/detail')
   }]
 }];
-
+//财务管理
 const bill = [{
   path: '/bill',
   component: {

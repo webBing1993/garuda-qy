@@ -12,14 +12,14 @@
       </tab>
     </header>
       <!--待处理列表-->
-      <div v-show="!currentTab" style="margin-top: 2.8rem">
+      <div v-show="!currentTab" style="padding-top: 2.8rem">
         <scroller :pullup-config="Interface.scrollerUp"
                   @on-pullup-loading="loadingList0"
                   lock-x
                   use-pullup
                   height="-40"
                   v-model="tobeHandledScroller"
-                  scrollbarY bounce ref="scrollerBottom0" >
+                  :scrollbarY=true bounce ref="scrollerBottom0">
           <div class="list-wrapper">
             <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList"
@@ -33,7 +33,9 @@
                                                            :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
                   <span class="cell-right">
                   {{datetimeparse(item.createdTime, 'hhmm')}}
-                  <img src="../../../static/icon/arow.png" alt="" class="cellImg">
+                  <!--<img src="../../../static/icon/arow.png" alt="" class="cellImg">-->
+                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo">
+               </a>
                 </span></p>
                 <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
                 <span class="cell-value"
@@ -47,7 +49,7 @@
         </scroller>
       </div >
       <!--已处理列表-->
-      <div v-show="currentTab" style="margin-top: 2.8rem">
+      <div v-show="currentTab" style="padding-top: 2.8rem">
         <scroller :pullup-config="Interface.scrollerUp"
                   @on-pullup-loading="loadingList1"
                   lock-x
@@ -210,6 +212,7 @@
         data(){
             return {
 //        tabMenu: ['待办理', '已办理'],
+                showHandledList:false,
                 tobeHandled: [],
                 tobeHandledConfig: {},
                 handled: [],
@@ -271,9 +274,17 @@
             },
             tabMenu() {
                 // this.initList();
+                // let menu = [];
+                // menu[0] = `待处理(${this.tobeHandledTotal})`;
+                // if(this.showHandledList){
+                //     menu[1] = `已处理(${this.handledTotal})`;
+                // }
+                // return menu;
                 let menu = [];
-                menu[0] = `待处理(${this.tobeHandledTotal})`;
-                menu[1] = `已处理(${this.handledTotal})`;
+                menu[0] = `待处理`;
+                if(this.showHandledList){
+                    menu[1] = `已处理`;
+                }
                 return menu;
             },
             renderTodoHandelList(){
@@ -316,6 +327,7 @@
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
                 'getRoomNumberList',
+                'getConfigs'
                 // 'forwardTo'
             ]),
             showwithoutLicenseDialog(){
@@ -640,12 +652,22 @@
             },
             resetFilter() {
                 this.periodFilter = [null, null]
+            },
+            getConfig(){
+                this.getConfigs({
+                    onsuccess:(body)=> {
+                        if (body.data=='true') {
+                            this.showHandledList = true
+                        }
+                    }
+                });
             }
         },
         mounted(){
             this.timeFetch()
             this.initList();
             this.getRoomNumberList();
+            this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
         },
         watch: {
@@ -692,7 +714,8 @@
 <style lang="less" scoped>
   @import "index.less";
   article{
-    margin-bottom: 4rem;
+    /*margin-bottom: 4rem;*/
+    height: 100%;
   }
   .policeWrap{
     padding-bottom: 0;
@@ -705,5 +728,8 @@
   }
   .xs-container{
     /*padding-top: 2rem;*/
+  }
+  .icon-gengduo{
+    color: #4A4A4A;
   }
 </style>
