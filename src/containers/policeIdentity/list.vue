@@ -279,7 +279,7 @@
                 if(this.showHandledList){
                     menu[1] = `已处理(${this.handledTotal})`;
                 }
-                // return menu;
+                return menu;
                 // let menu = [];
                 // menu[0] = `待处理`;
                 // menu[1] = `已处理`;
