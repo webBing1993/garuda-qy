@@ -665,7 +665,7 @@
             this.timeFetch()
             this.initList();
             this.getRoomNumberList();
-            // this.getConfig();
+            this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
         },
         watch: {
