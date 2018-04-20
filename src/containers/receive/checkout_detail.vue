@@ -411,7 +411,7 @@
             // this.getDetail();
       }
     },
-    mounted() {
+      activated() {
       this.getDetail();
     }
   }
