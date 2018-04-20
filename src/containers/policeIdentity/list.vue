@@ -273,17 +273,17 @@
                 return parseInt(this.route.params.tab)//返回0，1
             },
             tabMenu() {
-                // this.initList();
-                // let menu = [];
-                // menu[0] = `待处理(${this.tobeHandledTotal})`;
-                // if(this.showHandledList){
-                //     menu[1] = `已处理(${this.handledTotal})`;
-                // }
-                // return menu;
+                this.initList();
                 let menu = [];
-                menu[0] = `待处理`;
-                menu[1] = `已处理`;
-                return menu;
+                menu[0] = `待处理(${this.tobeHandledTotal})`;
+                if(this.showHandledList){
+                    menu[1] = `已处理(${this.handledTotal})`;
+                }
+                // return menu;
+                // let menu = [];
+                // menu[0] = `待处理`;
+                // menu[1] = `已处理`;
+                // return menu;
             },
             renderTodoHandelList(){
                 return this.tobeHandled
