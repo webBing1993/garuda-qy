@@ -3,36 +3,36 @@
     <div class="app">
       <Group title="应用">
         <ul class="app-container">
-          <li class="app-item" @click="appConfig.identity_check_view&&flag?goto('/policeIdentity/handle/0'):''">
-            <img :src='appConfig.identity_check_view&&flag?imgList[0].openItem:imgList[0].closeItem' alt="身份核验">
+          <li class="app-item" @click="appConfig?appConfig.identity_check_view?goto('/policeIdentity/handle/0'):'':flag?goto('/policeIdentity/handle/0'):''">
+            <img :src='appConfig?appConfig.identity_check_view?imgList[0].openItem:imgList[0].closeItem:flag?imgList[0].openItem:imgList[0].closeItem' alt="身份核验">
             <span class="app-title">公安验证</span>
           </li>
-          <li class="app-item" @click="appConfig.order_view&&flag?goto('prepay/0'):''">
-            <img :src='appConfig.order_view&&flag?imgList[1].openItem:imgList[1].closeItem' alt="订单中心">
+          <li class="app-item" @click="appConfig?appConfig.order_view?goto('prepay/0'):'':flag?goto('prepay/0'):''">
+            <img :src='appConfig?appConfig.order_view?imgList[1].openItem:imgList[1].closeItem:flag?imgList[1].openItem:imgList[1].closeItem' alt="订单中心">
             <span class="app-title">订单中心</span>
           </li>
-          <li class="app-item" @click="appConfig.room_status_view&&flag?goto('receive/precheckin'):''">
-            <img :src='appConfig.room_status_view&&flag?imgList[2].openItem:imgList[2].closeItem' alt="接待服务">
+          <li class="app-item" @click="appConfig?appConfig.room_status_view?goto('receive/precheckin'):'':flag?goto('receive/precheckin'):''">
+            <img :src='appConfig?appConfig.room_status_view?imgList[2].openItem:imgList[2].closeItem:flag?imgList[2].openItem:imgList[2].closeItem' alt="接待服务">
             <span class="app-title">住离信息</span>
           </li>
-          <li class="app-item" @click="appConfig.check_in_identity_check_view&&flag?goto('/identity/0'):''">
-            <img :src='appConfig.check_in_identity_check_view&&flag?imgList[3].openItem:imgList[3].closeItem' alt="公安验证">
+          <li class="app-item" @click="appConfig?appConfig.check_in_identity_check_view?goto('/identity/0'):'':flag?goto('/identity/0'):''">
+            <img :src='appConfig?appConfig.check_in_identity_check_view?imgList[3].openItem:imgList[3].closeItem:flag?imgList[3].openItem:imgList[3].closeItem' alt="公安验证">
             <span class="app-title">入住核验</span>
           </li>
-          <li class="app-item" @click="appConfig.invoice_view&&flag?goto('/invoice/0'):''">
-            <img :src='appConfig.invoice_view&&flag?imgList[4].openItem:imgList[4].closeItem' alt="闪开发票">
+          <li class="app-item" @click="appConfig?appConfig.invoice_view?goto('/invoice/0'):'':flag?goto('/invoice/0'):''">
+            <img :src='appConfig?appConfig.invoice_view?imgList[4].openItem:imgList[4].closeItem:flag?imgList[4].openItem:imgList[4].closeItem' alt="闪开发票">
             <span class="app-title">发票中心</span>
           </li>
-          <li class="app-item" @click="appConfig.order_bill_view&&flag?goto('/bill/0'):''">
-            <img :src='appConfig.order_bill_view&&flag?imgList[5].openItem:imgList[5].closeItem' alt="账务管理">
+          <li class="app-item" @click="appConfig?appConfig.order_bill_view?goto('/bill/0'):'':flag?goto('/bill/0'):''">
+            <img :src='appConfig?appConfig.order_bill_view?imgList[5].openItem:imgList[5].closeItem:flag?imgList[5].openItem:imgList[5].closeItem' alt="账务管理">
             <span class="app-title">账务管理</span>
           </li>
-          <li class="app-item" @click="appConfig.exception_view&&flag?goto('abnormalNotice/listDetail'):''">
-            <img :src='appConfig.exception_view&&flag?imgList[6].openItem:imgList[6].closeItem' alt="异常提醒">
+          <li class="app-item" @click="appConfig?appConfig.exception_view?goto('abnormalNotice/listDetail'):'':flag?goto('abnormalNotice/listDetail'):''">
+            <img :src='appConfig?appConfig.exception_view?imgList[6].openItem:imgList[6].closeItem:flag?imgList[6].openItem:imgList[6].closeItem' alt="异常提醒">
             <span class="app-title">异常提醒</span>
           </li>
-          <li class="app-item" @click="appConfig.suspicious_person_view&&flag?goto('/suspicious/suspiciousList/0'):''">
-            <img :src='appConfig.suspicious_person_view&&flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
+          <li class="app-item" @click="appConfig?appConfig.suspicious_person_view?goto('/suspicious/suspiciousList/0'):'':flag?goto('/suspicious/suspiciousList/0'):''">
+            <img :src='appConfig?appConfig.suspicious_person_view?imgList[7].openItem:imgList[7].closeItem:flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
             <span class="app-title">可疑人员</span>
           </li>
         </ul>
@@ -177,23 +177,23 @@
         })
       },
       gethotelConfig(){
-       this.getConfig({
-         onsuccess: body => {
-           if(body.data){
-             if(body.data.business_mode==='WQT'){
-               this.flag=true;
-             }else if(body.data.business_mode==='IDENTITY'){
-               this.flag=false;
-             }
-           };
-             this.getHotelConfig({
-                 onsuccess: body =>{
-                    this.appConfig=JSON.parse(body.data)
-                    // console.log('2222:',JSON.parse(body.data))
+          this.getHotelConfig({
+              onsuccess: body =>{
+                  this.appConfig=JSON.parse(body.data)
+                  // console.log('2222:',JSON.parse(body.data))
+              }
+          });
+          this.getConfig({
+           onsuccess: body => {
+               if(body.data){
+                 if(body.data.business_mode==='WQT'){
+                   this.flag=true;
+                 }else if(body.data.business_mode==='IDENTITY'){
+                   this.flag=false;
                  }
-             })
-         }
-       })
+               };
+             }
+          })
       },
       subscribe() {
         this.yunbaSubscribe({
