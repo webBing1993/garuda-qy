@@ -163,15 +163,15 @@
           onsuccess: body => {
             let list = body.data;
             list.forEach(i => {
-              if (i.type == 'PREPAY') this.prepayTodoNum = i.total;
-              if (i.type == 'IDENTITY') this.identityNum = i.total;
-              if (i.type == 'LVYE') this.policeIdentityNum = i.total;
-              if (i.type == 'INVOICE') this.invoiceNum = i.total;
-              if (i.type == 'CHECKOUT') this.checkoutApplicationNum = i.total;
-              if (i.type == 'EXCEPTION') this.abnormalNoticeNum = i.total;
+              if (i.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = i.total;
+              if (i.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = i.total;
+              if (i.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag)) this.policeIdentityNum = i.total;
+              if (i.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = i.total;
+              if (i.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = i.total;
+              if (i.type == 'EXCEPTION'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = i.total;
 //                同住人未入住
-              if (i.type == 'NOCHECKIN') this.absentPersonNum = i.total;
-              if(i.type == 'SUS_PERSON') this.suspiciousNum=i.total;
+              if (i.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = i.total;
+              if(i.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum=i.total;
             })
           }
         })
@@ -212,14 +212,14 @@
             console.log('---------收到云吧消息', JSON.parse(body.msg));
             let data = JSON.parse(body.msg);
             this.setPlay();
-            if (data.type == 'PREPAY') this.prepayTodoNum = data.total;
-            if (data.type == 'IDENTITY') this.identityNum = data.total;
-            if (data.type == 'LVYE') this.policeIdentityNum = data.total;
-            if (data.type == 'INVOICE') this.invoiceNum = data.total;
-            if (data.type == 'CHECKOUT') this.checkoutApplicationNum = data.total;
-            if (data.type == 'EXCEPITON') this.abnormalNoticeNum = data.total;
-            if (data.type == 'NOCHECKIN') this.absentPersonNum = data.total;
-            if (data.type == 'SUS_PERSON') this.suspiciousNum = data.total;
+            if (data.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = data.total;
+            if (data.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = data.total;
+            if (data.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag))this.policeIdentityNum = data.total;
+            if (data.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = data.total;
+            if (data.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = data.total;
+            if (data.type == 'EXCEPITON'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = data.total;
+            if (data.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = data.total;
+            if (data.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum = data.total;
           }
         })
       },
