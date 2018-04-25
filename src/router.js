@@ -89,7 +89,7 @@ const policeIdentity = [{
 const suspicious = [{
     path: '/suspicious',
     component: {
-        name: 'receive',
+        name: 'suspicious',
         template: `<router-view/>`,
     },
     children: [{
@@ -156,6 +156,29 @@ const invoice = [{
   }]
 }];
 
+//上线工具
+const onlineTool=[{
+    path:'/onlineTool',
+    component:{
+        name:"onlineTool",
+        template:`<router-view/>`
+    },
+    children:[{
+        path:'onlineList',
+        component:require('./containers/onlineTool/list.vue')
+    },{
+        path:'onlineDetail',
+        component:require('./containers/onlineTool/onlineDetail.vue')
+    },{
+        path:'onlineDevice',
+        component:require('./containers/onlineTool/onlineDevice.vue')
+    },{
+        path:'hotelBasicInfo',
+        component:require('./containers/onlineTool/hotelBasicInfo.vue')
+    }
+    ]
+}];
+
 const unchained = [
   {
   path: '/roommanager',
@@ -210,7 +233,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...others]
+  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...onlineTool,...others]
 })
 
 // const precheckin = [{

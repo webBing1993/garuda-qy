@@ -12,5 +12,6 @@ module.exports = {
   ...require('./checkout'),
   ...require('./bill'),
   ...require('./yunba'),
-  ...require('./abnormal')
+  ...require('./abnormal'),
+  ...require('./onlineTool')
 };

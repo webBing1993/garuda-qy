@@ -35,7 +35,7 @@
             <img :src='appConfig?appConfig.suspicious_person_view?imgList[7].openItem:imgList[7].closeItem:flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
             <span class="app-title">可疑人员</span>
           </li>
-          <li class="app-item" @click="appConfig?appConfig.suspicious_person_view?goto('/suspicious/suspiciousList/0'):'':flag?goto('/suspicious/suspiciousList/0'):''">
+          <li class="app-item" @click="appConfig?appConfig.suspicious_person_view?goto('/onlineTool/onlineList'):'':flag?goto('/onlineTool/onlineList'):''">
             <img :src='appConfig?appConfig.suspicious_person_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="上线工具">
             <span class="app-title">上线工具</span>
           </li>

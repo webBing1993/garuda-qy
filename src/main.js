@@ -53,6 +53,7 @@ Vue.component('Search', require('./components/Functional/search'));
 Vue.component('Progress', require('./components/Layers/progress.vue'));
 Vue.component('XradioList', require('./components/Forms/x-radioList.vue'));
 Vue.component('Switchs', require('./components/Forms/switch.vue'));
+
 // Vue.component('MyList', require('./components/Forms/myList.vue.vue'));
 
 /* eslint-disable no-new */

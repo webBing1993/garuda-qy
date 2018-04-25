@@ -48,5 +48,6 @@ module.exports = {
     port: '443'
   }),
   yunbaConnected: false,
-  deviceId:''
+  deviceId:'',
+  searchHotelId:''
 };

@@ -4,5 +4,9 @@ module.exports = {
   },
   ROOMNUMBERLIST(state,payload){
     state.roomNumberList = [...payload]
+  },
+  SEARCHHOTELID(state,payload) {
+      state.searchHotelId = payload
+      console.log('searchHotelId:',payload)
   }
 }

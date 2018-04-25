@@ -151,6 +151,11 @@
         path.match(/abnormalNotice\/listDetail/) ? title = '异常提醒' : null;
         path.match(/suspicious\/suspiciousList/) ? title = '可疑人员' : null;
         path.match(/suspicious\/susDetail/) ? title = '可疑人员详情' : null;
+        path.match(/onlineTool\/onlineList/) ? title = '人证通上线' : null;
+        path.match(/onlineTool\/onlineList/) ? title = '人证通上线' : null;
+        path.match(/onlineTool\/onlineDetail/) ? title = '酒店详情页' : null;
+        path.match(/onlineTool\/onlineDevice/) ? title = '添加设备' : null;
+        path.match(/onlineTool\/hotelBasicInfo/) ? title = '酒店基本信息' : null;
         this.settitle(title)
       },
       sessionId(val){
