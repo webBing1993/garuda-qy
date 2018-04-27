@@ -15,6 +15,7 @@ import "babel-polyfill";
 import store from './store';
 import router from './router';
 import {sync} from 'vuex-router-sync';
+// import wx from 'weixin-js-sdk';
 sync(store, router);
 // Mixins
 import './mixins'
@@ -54,6 +55,11 @@ Vue.component('Progress', require('./components/Layers/progress.vue'));
 Vue.component('XradioList', require('./components/Forms/x-radioList.vue'));
 Vue.component('Switchs', require('./components/Forms/switch.vue'));
 
+
+router.afterEach(function (to,from) {
+    console.log('成功浏览到to: ' ,to.path);
+    console.log('成功浏览到from: ' ,from.path);
+})
 // Vue.component('MyList', require('./components/Forms/myList.vue.vue'));
 
 /* eslint-disable no-new */
