@@ -39,6 +39,10 @@
             <img :src='appConfig?appConfig.suspicious_person_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="上线工具">
             <span class="app-title">上线工具</span>
           </li>
+          <li class="app-item" @click="goto('/recharge/0')">
+            <img :src='appConfig?appConfig.order_bill_view?imgList[9].openItem:imgList[9].closeItem:flag?imgList[9].openItem:imgList[9].closeItem' alt="充值中心">
+            <span class="app-title">充值中心</span>
+          </li>
         </ul>
       </Group>
       <Group title="待办事项" v-if="isHaveTodoList">
@@ -128,6 +132,10 @@
           {
             openItem:'./static/icon/onlineTool.png',
             closeItem:'./static/icon/closeOnlineTool.png'
+          },
+          {
+            openItem: './static/icon/ic_bill.png',
+            closeItem: './static/icon/closeBill.png'
           }
         ]
       }

@@ -1,6 +1,23 @@
 module.exports = {
   // prefix: "/gemini",
-  prefix: "/q/master/gemini",
+  prefix: "/i/master/gemini",
+  // 充值记录列表接口
+  rechargelist:[
+    {
+      "recharge_time": 1511582381000,
+      "pay_way": "支付宝" ,
+      "pay_fee": 3000
+    },
+    {
+      "recharge_time": 1511582381000,
+      "pay_way": "银联" ,
+      "pay_fee": 3000
+    },
+    {
+      "recharge_time": 1511582381000,
+      "pay_way": "微信支付" ,
+      "pay_fee": 3000
+    }],
   // ===============================================================
   // 订单列表
   // ===============================================================

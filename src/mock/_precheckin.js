@@ -6,6 +6,15 @@ import data from './data'
 // ===============================================================
 Mock
   .mock(
+    /\/rechargelist/,
+    {
+      errcode: "0",
+      errmsg: "ok",
+      data: data.rechargelist
+    }
+  )
+Mock
+  .mock(
     // 获取确认订单列表 /order/precheckin/confirm
     /\/order\/precheckin\/confirm/,
     {
@@ -14,6 +23,7 @@ Mock
       data: data.orderlist
     }
   )
+
   .mock(
     // 批量确认未支付预订单 /order/multiconfirm
     data.prefix + '/order/multiconfirm',
