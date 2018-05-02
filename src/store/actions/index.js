@@ -13,5 +13,6 @@ module.exports = {
   ...require('./bill'),
   ...require('./yunba'),
   ...require('./abnormal'),
-  ...require('./onlineTool')
+  ...require('./onlineTool'),
+  ...require('./recharge')
 };
