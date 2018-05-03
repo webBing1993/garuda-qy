@@ -96,6 +96,9 @@
             case 'wqt':
               path = '/home'
               break;
+            case 'online':
+              path = '/onlineTool/onlineList'
+                break;
           }
           this.replaceto(path)
         }
