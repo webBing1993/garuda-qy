@@ -2,54 +2,53 @@
 <template>
   <article>
     <header class="tab-wrapper">
-      <Tab active-color="#5077AA">
-        <TabItem v-for="(item,index) in tabMenu"
+      <tab active-color="#5077AA">
+        <tab-item v-for="(item,index) in tabMenu"
                  :key="index"
-                 :class="{'vux-1px-r': index===0||index===1}"
                  :selected="currentTab === index"
                  @click.native="replaceto('/recharge/'+index)">{{item}}
-        </TabItem>
-      </Tab>
+        </tab-item>
+      </tab>
     </header>
     <div class="list-wrapper">
       <div v-if="currentTab === 0">
         <!--首冲-->
-        <div class="rechargeContent" v-if="isFirstRech">
+        <div class="rechargeContent" v-if="hotelRechargeInfo.is_first">
           <div class="row">
             <span class="title">酒店名称</span>
-            <span>绿云测试</span>
+            <span>{{hotelRechargeInfo.hotel_name}}</span>
           </div>
           <div class="row">
             <span class="title">充值金额</span>
             <div class="rechargeMony">
-              <x-input @on-focus="inputShow"class="monyInp" novalidate placeholder="请输入充值金额" :show-clear="true"></x-input>
+              <x-input @on-focus="inputShow" class="monyInp" novalidate placeholder="请输入充值金额" :show-clear="true"></x-input>
             </div>
             <div class="payBtn">支付</div>
           </div>
         </div>
         <!--续充-->
-        <div class="rechargeContent" v-if="!isFirstRech">
+        <div class="rechargeContent" v-if="!hotelRechargeInfo.is_first">
           <div class="row">
             <span class="title">酒店名称</span>
-            <span>{{hotelRechangeInfo.hotel_name}}</span>
+            <span>{{hotelRechargeInfo.hotel_name}}</span>
           </div>
           <div class="row">
             <span class="title">余额</span>
-            <span>￥{{hotelRechangeInfo.balance}}</span>
+            <span>￥{{hotelRechargeInfo.balance}}</span>
           </div>
           <div class="row">
             <span class="title">使用次数</span>
-            <span>{{hotelRechangeInfo.hotel_name}}</span>
+            <span>{{hotelRechargeInfo.hotel_name}}</span>
 
           </div>
           <div class="row">
             <span class="title">剩余次数</span>
-            <span>{{hotelRechangeInfo.surplus_time}}</span>
+            <span>{{hotelRechargeInfo.surplus_time}}</span>
           </div>
           <div class="row">
             <span class="title">充值金额</span>
             <div class="rechargeMony">
-              <x-input @on-focus="inputShow" class="monyInp" novalidate placeholder="      请输入充值金额" :show-clear="true"></x-input>
+              <x-input @on-focus="inputShow" class="monyInp" novalidate placeholder="请输入充值金额" :show-clear="true"></x-input>
             </div>
             <div class="payBtn">支付</div>
           </div>
@@ -63,7 +62,8 @@
         <!--扫码后支付完成-->
         <div class="rechargeContent">
           <div class="row">
-            支付完成
+            <i></i>
+            <h3 style="text-align: center">支付完成</h3>
             <div class="payBtn">申请发票</div>
           </div>
         </div>
@@ -137,7 +137,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {XDialog, PopupRadio, PopupPicker, Picker, Popup} from 'vux'
+  import {XDialog, PopupRadio, PopupPicker, Picker, Popup,Tab, TabItem} from 'vux'
 
   export default{
     name: "recharge",
@@ -147,36 +147,32 @@
       PopupRadio,
       PopupPicker,
       Picker,
-      Popup
+      Popup,
+      Tab,
+      TabItem
     },
 
     data(){
       return {
-        hotelRechangeInfo:{},
+        hotelRechargeInfo:{},
         Rechargelist: [],
         isFirstRech:true,
       }
     },
 
     computed: {
-
       ...mapState([
         'Interface',
         'route',
         'hotel'
       ]),
-
       currentTab(){
         console.log(this.route.params.tab)
         return parseInt(this.route.params.tab)
       },
-
-//      renderList(){
-////        return this.currentTab == 2 ? this.confirmed : this.tobeconfirmed
-//      },
       renderList() {
         if (this.currentTab == 0) {
-            return this.hotelRechangeInfo
+            return this.hotelRechargeInfo
         } else if (this.currentTab == 1) {
           return this.Rechargelist
         } else if (this.currentTab == 2) {
@@ -201,7 +197,6 @@
         "getRechargeInfo",
         "getRechargelist",
       ]),
-
       _getRechargelist(){
         this.Rechargelist = [];
         this.Rechargelist = [
@@ -221,15 +216,17 @@
             "pay_fee": 3000
           }]
         this.getRechargelist({
-          hotel_id: this.hotel.hotel_id,
-//            onsuccess: body => (this.Rechargelist = [...body])
+            hotel_id: this.hotel.hotel_id,
+            onsuccess: body => {
+               this.Rechargelist = [...body];
+           }
         })
-
       },
-      _getRechargeInfo(){
+        //获取充值信息
+      getRechargeInfos(){
         this.getRechargeInfo({
           hotel_id: this.hotel.hotel_id,
-            onsuccess: body => (this.hotelRechangeInfo = [body])
+            onsuccess: body => (this.hotelRechargeInfo = body.data)
         })
 
       },
@@ -241,12 +238,18 @@
       initList(){
         this._getRechargelist();
       },
-
       refreshList(){
 
       },
-
-
+      GETFAKEDATA(){
+          this.hotelRechargeInfo={
+              "hotel_name": "充值测试酒店",
+              "balance": 300,
+              "surplus_time": 30,
+              "pay_fee": 3000,
+              "is_first":false
+          }
+      }
     },
 
     watch: {
@@ -259,7 +262,9 @@
     },
 
     mounted(){
-      this.initList()
+      // this.initList();
+      // this.getRechargeInfos();
+        this.GETFAKEDATA()
     }
   }
 </script>
