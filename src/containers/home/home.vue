@@ -35,12 +35,8 @@
             <img :src='appConfig?appConfig.suspicious_person_view?imgList[7].openItem:imgList[7].closeItem:flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
             <span class="app-title">可疑人员</span>
           </li>
-          <li class="app-item" @click="appConfig?appConfig.suspicious_person_view?goto('/onlineTool/onlineList'):'':flag?goto('/onlineTool/onlineList'):''">
-            <img :src='appConfig?appConfig.suspicious_person_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="上线工具">
-            <span class="app-title">上线工具</span>
-          </li>
           <li class="app-item" @click="goto('/recharge/0')">
-            <img :src='appConfig?appConfig.order_bill_view?imgList[9].openItem:imgList[9].closeItem:flag?imgList[9].openItem:imgList[9].closeItem' alt="充值中心">
+            <img :src='appConfig?appConfig.order_bill_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="充值中心">
             <span class="app-title">充值中心</span>
           </li>
         </ul>
@@ -128,10 +124,6 @@
           {
             openItem:'./static/icon/suspicious.png',
             closeItem:'./static/icon/closeLvye.png'
-          },
-          {
-            openItem:'./static/icon/onlineTool.png',
-            closeItem:'./static/icon/closeOnlineTool.png'
           },
           {
             openItem: './static/icon/ic_bill.png',

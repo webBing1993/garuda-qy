@@ -30,12 +30,6 @@
         return this.AppParams.session
       },
     },
-    mounted(){
-        if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
-            this.initMTA();
-        }
-        this.urlquery()//存AppParams,开发者工具输入地址后进入此页执行查询AppParams
-    },
     methods: {
       ...mapActions([
         'settitle',
@@ -95,6 +89,9 @@
               break;
             case 'wqt':
               path = '/home'
+              break;
+            case 'online':
+              path = '/onlineTool/onlineList'
               break;
           }
           this.replaceto(path)
@@ -170,7 +167,13 @@
           this.$nextTick(() => this.crossroad())
         }
       }
-    }
+    },
+      mounted(){
+          if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
+              this.initMTA();
+          }
+          this.urlquery()//存AppParams,开发者工具输入地址后进入此页执行查询AppParams
+      },
   }
 </script>
 
