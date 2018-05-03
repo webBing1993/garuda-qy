@@ -54,14 +54,25 @@
              :key="'guests'+index">
         <Cell
           :title="`<div style='color: #4a4a4a'>${(item.room_number || '未选房')+ ' ' + item.room_type_name + ' ' +getBreakFast(item.breakfast)}</div>`"></Cell>
+
         <Cell :title="getGuestItem(item)" v-if="item.guests && item.guests.length > 0"/>
         <Cell :title="getNOGuestItem" v-if="!item.guests"/>
         <p v-if="isLivein && item.lvye_report_status !== 'SUCCESS'"
            style="font-size: 13px;box-sizing:border-box;/*background-color: #EAEDF0;*/">
+
+        <Cell :title="getGuestItem(item)"/>
+
+        <p style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;background-color: #EAEDF0;"
+           v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
+          当前入住房间信息尚未上传旅业系统，您可以前往‘入住核验’已通过列表进行旅业系统上传；或点击该链接进行操作。
+          <a v-if="item.identity_id" style="color: #25B8F1; border-bottom: 1px solid #25B8F1"
+             @click="goto('/identity/detail' + item.identity_id)">去上传</a>
+        </p>
+       <p style="font-size: 13px;box-sizing:border-box;/*background-color: #EAEDF0;*/">
           <span v-if="item.in_time && item.out_time" style="float: right;margin-right: 15px;margin-bottom: 5px"><b
             style="color:#9A9A9A;margin-right: 5px;letter-spacing: 1px">入离时间:</b>{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
         </p>
-        <div style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;"
+        <div style="color: #DF4A4A;padding: 15px;font-size: 13px;box-sizing:border-box;"-->
              v-if="isLivein && item.lvye_report_status !== 'SUCCESS'">
           <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'FAILED' ">入住信息上传旅业失败</span>
           <span style="margin-bottom: 5px" v-if="item.lvye_report_status === 'NONE' ">未上传旅业系统</span>

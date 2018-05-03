@@ -85,6 +85,7 @@ const policeIdentity = [{
       component:require('./containers/abnormalNotice/listDetail.vue')
     }]
  }];
+
 //可疑人员列表
 const suspicious = [{
     path: '/suspicious',
@@ -100,6 +101,7 @@ const suspicious = [{
         component: require('./containers/suspicious/suspiciousDetail.vue')
     }]
 }];
+
 //身份核验
 const identity = [{
   path: '/identity',
@@ -118,6 +120,7 @@ const identity = [{
     component: require('./containers/identity/detail')
   }]
 }];
+
 //财务管理
 const bill = [{
   path: '/bill',
@@ -212,6 +215,22 @@ const notLiveIn=[{
     component: require('./containers/notLiveIn/list.vue')
   }]
 }]
+
+// 充值中心
+const recharge=[{
+  path:'/recharge',
+  component: {
+    name: "recharge",
+    template: `<keep-alive><router-view/></keep-alive>`,
+  },
+  children: [
+    {
+      path: ':tab',
+      component: require('./containers/recharge/index.vue')
+    }]
+  }]
+
+
 const others = [
   {
     path: '/',
@@ -233,7 +252,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...onlineTool,...others]
+  routes: [...recharge,...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...onlineTool,...others]
 })
 
 // const precheckin = [{
