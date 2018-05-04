@@ -62,8 +62,8 @@
         <!--扫码后支付完成-->
         <div class="rechargeContent">
           <div class="row">
-            <i></i>
-            <h3 style="text-align: center">支付完成</h3>
+            <div class="iconfont icon-roundcheckfill" style="text-align: center;color: #5077AA;font-size: 4.5rem"></div>
+            <h3 style="text-align: center;margin-bottom: 2rem">支付完成</h3>
             <div class="payBtn">申请发票</div>
           </div>
         </div>
