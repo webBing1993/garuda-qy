@@ -190,23 +190,27 @@ footer {
   padding: 15px 10px;
   background-color: #ffffff;
   font-size: 14px;
-  box-sizing: border-box;
+  //box-sizing: border-box;
   position: relative;
   .info-item {
+    float: left;
     display: flex;
     flex-direction: row;
     align-items: center;
-    //height: 44px;
+    height: 2.5rem;
     box-sizing: border-box;
-      .weui-cell_select .weui-select{
-          padding-right: 1rem;
-          padding-left: 0;
+      .weui-cell_select {
+          .weui-select {
+              padding-right: 1rem;
+              padding-left: 0;
+              height: 1.5rem;
+              line-height: 1.5rem;
+          }
       }
       .item1.weui-cell:before{
           border: none;
       }
     .item-left {
-      margin-right: 10px;
       color: #8A8A8A;
       min-width: 5em;
     }
@@ -215,15 +219,17 @@ footer {
       text-indent: 1em;
       text-align: left;
       color: #4A4A4A;
+      height: 1.5rem;
+      line-height: 1.5rem;
       &.room-number {
         border: 1px solid #E6E6E6;
-        line-height: 2.7rem;
+        line-height: 1.5rem;
         border-radius: 4px;
         outline: none;
         -webkit-appearance: none;
         display: inline-block;
         font-size: 14px;
-        width: 40%;
+        width: 60%;
       }
       &.days-item {
         text-indent: 0;
@@ -265,6 +271,12 @@ footer {
   }
     .info-item:first-child{
         margin-bottom: 0.5rem;
+        width: 50%;
+        margin-right: 0.5rem;
+    }
+    .info-item:nth-child(2){
+        margin-bottom: 0.5rem;
+        width: 46%;
     }
   .searchRoom {
     display: flex;
