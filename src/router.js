@@ -70,7 +70,13 @@ const policeIdentity = [{
     {
       path: ':id',
       component: require('./containers/policeIdentity/detail')
-    }]
+    },
+      {
+      path: '/orderSearch',
+      component: require('./containers/policeIdentity/orderSearch.vue')
+  }],
+
+
 }];
 
 //异常提醒列表

@@ -33,7 +33,7 @@
         <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
       </div>
       <!--订单信息-->
-      <p class="orderTitle">查询其他订单</p>
+      <p class="orderTitle" @click="goto('/policeIdentity/orderSearch')">查询其他订单</p>
       <div class="orderInfo" v-for="(item,index) in orderlist">
         <div class="content">
           <div v-if="orderOpen">
@@ -122,7 +122,7 @@
         <p style="color: #000000;font-size: 14px">此人相似度太低 <br> 是否确认上传</p>
       </Dialog>
       <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
-        <h3>请确认订单状态</h3>
+        <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
         <ul v-for="(item,index) in statusList">
           <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="checkIndex=index">{{statusList[index]}}</li>
         </ul>
