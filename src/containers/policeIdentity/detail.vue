@@ -1,6 +1,7 @@
 <template>
   <div class="detailPage">
     <article v-if="detail" >
+      <!--上传旅业的信息-->
       <div class="report-info">
         <div>
           <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
@@ -10,7 +11,7 @@
           </div>
           <div class="info-item" v-if="showGuestType">
             <!--<label class="item-left">住客类型:</label>-->
-            <selector class="item-right room-number item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'&&detail.guestType!=='STAFF'"></selector>
+            <selector class="item-right guestType item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'&&detail.guestType!=='STAFF'"></selector>
             <span class="item-right" v-else>{{detail.guestType|filterGuestType}}</span>
           </div>
         </div>
@@ -31,22 +32,64 @@
         <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
         <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
       </div>
+      <!--订单信息-->
+      <p class="orderTitle">查询其他订单</p>
+      <div class="orderInfo" v-for="(item,index) in orderlist">
+        <div class="content">
+          <div v-if="orderOpen">
+            <p class="orderItem">
+              <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
+              <span class="roomStatus">{{item.roomPayStatus}}</span>
+            </p>
+            <div class="line"></div>
+            <p class="orderItem">
+              <span class="titleInfo">预定人：</span><span>{{item.orderCount}}</span><span style="margin-left: 1rem">{{item.phoneNum}}</span>
+            </p>
+            <p class="orderItem">
+              <span class="titleInfo">房型：</span><span>2222222</span>
+            </p>
+            <p class="orderItem">
+              <span class="titleInfo">预付款：</span><span>¥ {{item.preMoney}}</span>
+            </p>
+            <p class="orderItem">
+              <span class="titleInfo">入住：</span><span>{{datetimeparse(item.checkInTime)}}</span>
+              <span style="color: #8A8A8A;margin-left: 1rem">离店：</span><span>{{datetimeparse(item.checkOutTime)}}</span>
+            </p>
+            <p class="orderItem">
+              <span class="titleInfo">备注：</span><span>{{item.note}}</span>
+            </p>
+            <span class="orderButton" @click='confirmOrderStatus=true' v-if="false">入住</span>
+            <span class="orderButton" @click='confirmOrderStatus=true'>分享到屏幕</span>
+            <p class="showOrder" @click="orderOpen=!orderOpen">折起</p>
+          </div>
+          <div v-if="!orderOpen">
+            <p class="orderItem">
+              <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
+              <span style="float: right;">{{item.orderCount}}<span style="margin-left: 1rem">{{item.phoneNum}}</span></span>
+            </p>
+            <p class="showOrder" @click="orderOpen=!orderOpen">展开</p>
+          </div>
+        </div>
+
+      </div>
+      <!--人证通身份信息-->
       <div class="guestcard">
         <div class="hd">
           <ul>
             <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
             <li><span><abbr>性别</abbr>{{detail.sex}}</span><span><abbr>民族</abbr>{{detail.ethnicity}}</span></li>
-            <!--<li><span><abbr>生日</abbr>{{detail.dateOfBirth}}</span></li>-->
             <li><span><abbr>住址</abbr>{{detail.address}}</span></li>
             <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
           </ul>
           <img :src="detail.photo" alt="身份证照片" class="policeIdentityImg">
         </div>
         <div class="bd">
-          <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr>{{detail.similarity}}%</abbr></span></p>
+          <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr style="color: #56e846">{{detail.similarity}}%</abbr></span></p>
+
           <img :src="detail.livePhoto" alt="现场照片">
         </div>
       </div>
+
       <div class="footButton" v-if="buttonGroupShow">
         <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
                   @onClick="setMultiConfirm"
@@ -78,6 +121,12 @@
       <Dialog confirm cancel v-model="similarityCheck" @onConfirm="reporetLvyes" confirm cancel>
         <p style="color: #000000;font-size: 14px">此人相似度太低 <br> 是否确认上传</p>
       </Dialog>
+      <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
+        <h3>请确认订单状态</h3>
+        <ul v-for="(item,index) in statusList">
+          <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="checkIndex=index">{{statusList[index]}}</li>
+        </ul>
+      </Dialog>
     </article>
   </div>
 </template>
@@ -88,6 +137,10 @@
   module.exports = {
     data(){
       return {
+          checkIndex:0,
+          statusList:['不需现付房费','房费现付'],
+          confirmOrderStatus:false,
+        orderOpen:true,
         detail: {},
         roomNumber: '',
         days: 1,
@@ -104,6 +157,7 @@
         similarityCheck :false,
         guestType:'LODGER',
         guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
+        orderlist:[{orderNum:1241242441,phoneNum:13789242819,roomPayStatus:'房费现付',orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}]
       }
     },
       filters:{
@@ -127,6 +181,9 @@
         'route',
         'roomNumberList'
       ]),
+        confirmOrder(){
+
+        },
       identityId(){
         return this.route.params.id
       },
