@@ -9,7 +9,7 @@
             <span class="item-right" v-else>{{detail.roomNumber}}</span>
           </div>
           <div class="info-item" v-if="showGuestType">
-            <label class="item-left">住客类型:</label>
+            <!--<label class="item-left">住客类型:</label>-->
             <selector class="item-right room-number item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'&&detail.guestType!=='STAFF'"></selector>
             <span class="item-right" v-else>{{detail.guestType|filterGuestType}}</span>
           </div>
