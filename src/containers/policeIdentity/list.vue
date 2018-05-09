@@ -264,7 +264,9 @@
             ...mapState([
                 'route',
                 'Interface',
-                'roomNumberList'
+                'roomNumberList',
+                'checkedOrder',
+                'currentLvyeRecordId'
             ]),
             renderList() {
                 return NationList;
@@ -325,8 +327,13 @@
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
                 'getRoomNumberList',
-                'getConfigs'
+                'getConfigs',
+
                 // 'forwardTo'
+            ]),
+            ...mapMutations([
+                'CHECKORDERITEM',
+                'CURRENTLVYERECORDID'
             ]),
             showwithoutLicenseDialog(){
                 this.Nationality();
@@ -476,11 +483,12 @@
               this.select = true;
               this.roomNumber = '';
             },
-            orderClick: function (orderId) {
+            orderClick: function (lvyeReportRecordId) {
               //非批量模式下点击订单跳转至详情页面
+              this.CURRENTLVYERECORDID(lvyeReportRecordId)
               if (!this.batch) {
                 this.batchlist = [];
-                this.replaceto('/policeIdentity/' + orderId)
+                this.goto('/policeIdentity/' + lvyeReportRecordId)
               }
             },
             setMultiConfirm() {
@@ -667,7 +675,8 @@
             this.getRoomNumberList();
             this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
-        },
+
+            },
         watch: {
             periodFilter(){
                 this.initList();

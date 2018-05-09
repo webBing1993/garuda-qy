@@ -34,7 +34,7 @@
       </div>
       <!--订单信息-->
       <p class="orderTitle" @click="goto('/policeIdentity/orderSearch')">查询其他订单</p>
-      <div class="orderInfo" v-for="(item,index) in orderList">
+      <div class="orderInfo" v-for="(item,index) in renderOrderList">
         <div class="content">
           <div v-if="orderOpen">
             <p class="orderItem">
@@ -160,7 +160,6 @@
           confirmOrderStatus:false,
           orderStatus:0,
           orderOpen:true,
-          orderList:[{orderNum:1241242441,phoneNum:13789242819,precheckin_status:1,orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}],
           payMode:1,
           isFreeDeposit:true,
           checkItem:{}
@@ -196,8 +195,22 @@
         // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
         'route',
-        'roomNumberList'
+        'roomNumberList',
+        'orderList',
+        'checkedOrder',
+        'currentLvyeRecordId'
       ]),
+      renderOrderList(){
+          let list=[]
+          if(this.checkedOrder!==[]){
+              list= this.checkedOrder;
+          }else{
+              list= this.orderList;
+          }
+          console.log('4444:',this.checkedOrder)
+          return list;
+
+      },
       identityId(){
         return this.route.params.id
       },
@@ -234,16 +247,18 @@
           'rejectStatus',
           'changeStatus',
           'suborderCheckIn',
-          'searOrderList'
+          'searchOrderList'
 
       ]),
       ...mapMutations([
-        'DEVICEID'
+        'DEVICEID',
+        'SEARCHORDERLIST',
+        'CHECKORDERITEM'
       ]),
       ////////////////////////值房通逻辑/////////////////////////////////
 
       //查询订单列表
-      searRztOrderList(){
+      searchRztOrderList(){
           this.searOrderList({
               data:{
                   "hotel_id":this.hotel.hotel_id,//酒店ID,初始查询必给
@@ -254,9 +269,25 @@
                   "like_info":""//姓名拼音或者手机号
               },
               onsuccess:(body=>{
-                  this.orderList=body.data;
+                  this.SEARCHORDERLIST(body.data);
               })
           })
+        },
+        //房间号查订单
+        searchOrderByRoomNum(){
+            this.searchOrderList({
+                data:{
+                    "hotel_id":this.hotel.hotel_id,//酒店ID
+                    "idcard_no":'',//身份证号
+                    "idcard_name":'',//身份证姓名
+                    "room_no":this.roomNumber,//房间号
+                    "status":"",//订单状态
+                    "like_info":""//姓名拼音或者手机号
+                },
+                onsuccess:(body=>{
+                    this.SEARCHORDERLIST(body.data)
+                })
+            })
         },
       //弹出对话框改订单状态
       confirmOrder(){
@@ -269,7 +300,11 @@
                   is_free_deposit:this.isFreeDeposit
               },
               onsuccess:(body=>{
-                  this.searRztOrderList();
+                  if(this.detail.roomNumber){
+                      this.searchRztOrderList();
+                  }else {
+                      this.searchOrderByRoomNum();
+                  };
                   // this.orderList.forEach(item=>{
                   //     if(item.order_id==checkItem.order_id){
                   //         item.pay_mode=body.data.pay_mode;
@@ -305,9 +340,7 @@
                   room_no:item.rooms[0]
               },
               onsuccess:(body=>{
-
               })
-
           })
         },
         //入住
@@ -321,7 +354,10 @@
                       idcard:detail.idCard
                   }],
                   hotel_id:this.hotel.hotel_id,
-              }
+              },
+              onsuccess:(body=>{
+                  this.goto(-1);
+              })
           })
         },
 
@@ -346,7 +382,7 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-            this.replaceto('/policeIdentity/handle/0')
+            this.goto(-1)
             console.log('已经拒绝')
           }
         })
@@ -359,20 +395,7 @@
         this.roomNumber = item;
         this.resultList = [];
         this.isErrorNumber = false;
-        //房间号查订单
-        this.searOrderList({
-            data:{
-                "hotel_id":this.hotel.hotel_id,//酒店ID
-                "idcard_no":'',//身份证号
-                "idcard_name":'',//身份证姓名
-                "room_no":this.roomNumber,//房间号
-                "status":"",//订单状态
-                "like_info":""//姓名拼音或者手机号
-            },
-            onsuccess:(body=>{
-                this.orderList=body.data;
-            })
-        })
+        this.searchOrderByRoomNum()
       },
       isDialogShow() {
         if (!this.isDisabled) {
@@ -442,12 +465,25 @@
                 guestType:this.guestType,
                 onsuccess: () => {
                     this.resetFilter();
-                    this.replaceto('/policeIdentity/handle/0')
+                    this.goto(-1)
                 }
             })
+        },
+        isResetCheckedOrder(){
+          console.log(this.currentLvyeRecordId)
+          console.log(this.$route.params.id)
+            if(this.currentLvyeRecordId!==this.$route.params.id){
+                this.CHECKORDERITEM([]);
+            }
         }
     },
     watch: {
+        renderOrderList(val){
+            console.log('此时的renderOrderList：',val)
+        },
+        checkedOrder(val){
+            console.log('此时的checkedOrder：',this.checkedOrder)
+        },
         buttonGroupShow(val){
             if(val){
                 this.guestType=null;
@@ -491,13 +527,15 @@
       },
       resultList(val, old) {
         if (old.length > 0) this.canSearch = true
-      },
+      }
     },
     activated(){
         this.getDetail();
+        this.isResetCheckedOrder();
         // this.searRztOrderList()
     },
     created(){
+      this.isResetCheckedOrder();
       this.detail = {};
       this.getDetail();
       if (this.roomNumberList.length === 0) this.getRoomNumberList();
