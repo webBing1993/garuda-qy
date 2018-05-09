@@ -39,7 +39,7 @@
           <div v-if="orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
-              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.roomPayStatus|filterRoomPayStatus}}</span>
+              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':(item.pay_mode|filterRoomPayStatus)}}</span>
             </p>
             <div class="line"></div>
             <p class="orderItem">
@@ -58,7 +58,7 @@
             <p class="orderItem">
               <span class="titleInfo">备注：</span><span>{{item.note}}</span>
             </p>
-            <span class="orderButton" @click='shareSreenOrCheckIn(item)' >{{item.roomPayStatus==1?'分享到屏幕':'入住'}}</span>
+            <span class="orderButton" @click='shareSreenOrCheckIn(item)' >{{(item.precheckin_status==6&&item.config.enabled_sign==false)?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
 
           </div>
@@ -158,7 +158,7 @@
           confirmOrderStatus:false,
           orderStatus:0,
           orderOpen:true,
-          orderList:[{orderNum:1241242441,phoneNum:13789242819,roomPayStatus:1,orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}],
+          orderList:[{orderNum:1241242441,phoneNum:13789242819,precheckin_status:1,orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}],
           payMode:1,
           isFreeDeposit:false,
           checkItem:{}
@@ -178,7 +178,9 @@
           filterRoomPayStatus(val){
               switch(val){
                   case 1:
-                  return '未确认';
+                      return '房费现付';
+                  case 2:
+                      return '不需房费现付';
                   break;
               }
 
@@ -247,7 +249,7 @@
               onsuccess:(body=>{
                   this.orderList.forEach(item=>{
                       if(item.order_id==checkItem.order_id){
-                          item.pay_mode=body.data;
+                          item.pay_mode=body.data.pay_mode;
                           return;
                       }
                   })
@@ -256,12 +258,22 @@
       },
         //点击分享到屏幕或入住
         shareSreenOrCheckIn(item){
-            if(item.pay_mode==2){
-                this.confirmOrderStatus=true
+            if(item.precheckin_status==1){
+                this.confirmOrderStatus=true;
+                return
+            }else {
+
             }
         },
+        //分享到屏幕
+        shareSreen(){
 
-      ////////////////////////认证通逻辑/////////////////////////////////
+        },
+        //入住
+        CheckIn(){
+
+        },
+  ////////////////////////认证通逻辑/////////////////////////////////
         //enter键事件上传旅业
       enterToLvye (event) {
           if(this.detail.identityStatus === 'REFUSED'){
