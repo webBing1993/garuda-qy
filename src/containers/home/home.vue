@@ -39,6 +39,10 @@
             <img :src='appConfig?appConfig.order_bill_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="充值中心">
             <span class="app-title">充值中心</span>
           </li>
+          <li class="app-item" @click="appConfig?appConfig.dirty_room_view?goto('/dirtyroom/0'):'':flag?goto('/dirtyroom/0'):''">
+            <img :src='appConfig?appConfig.dirty_room_view?imgList[9].openItem:imgList[9].closeItem:flag?imgList[9].openItem:imgList[9].closeItem' alt="脏房处理">
+            <span class="app-title">脏房处理</span>
+          </li>
         </ul>
       </Group>
       <Group title="待办事项" v-if="isHaveTodoList">
@@ -64,6 +68,8 @@
               @onClick="goto('notLiveIn/list')"></Cell>
         <Cell v-if="suspiciousNum > 0" icon="./static/icon/suspicious.png" title="可疑人员" link :badge="suspiciousNum"
               @onClick="goto('suspicious/suspiciousList/0')"></Cell>
+        <Cell v-if="dirtyroomNum > 0" icon="./static/icon/suspicious.png" title="有脏房需要打扫" link :badge="dirtyroomNum"
+              @onClick="goto('dirtyroom/0')"></Cell>
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
@@ -91,6 +97,7 @@
         checkoutApplicationNum: 0,
         abnormalNoticeNum: 0,
         suspiciousNum:0,
+        dirtyroomNum:0,
         absentPersonNum: 0,
         imgList: [
           {
@@ -128,6 +135,10 @@
           {
             openItem: './static/icon/ic_bill.png',
             closeItem: './static/icon/closeBill.png'
+          },
+          {
+            openItem: './static/icon/ic_bill.png',
+            closeItem: './static/icon/closeBill.png'
           }
         ]
       }
@@ -146,7 +157,8 @@
           this.checkoutApplicationNum > 0 ||
           this.abnormalNoticeNum > 0||
           this.absentPersonNum > 0||
-          this.suspiciousNum>0
+          this.suspiciousNum>0||
+          this.dirtyroomNum>0
       }
     },
     methods: {
@@ -180,6 +192,8 @@
 //                同住人未入住
               if (i.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = i.total;
               if(i.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum=i.total;
+
+              if(i.type == 'DIRTY_ROOM'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.dirtyroomNum=i.total;
             })
           }
         })
@@ -228,6 +242,7 @@
             if (data.type == 'EXCEPITON'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = data.total;
             if (data.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = data.total;
             if (data.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum = data.total;
+            if (data.type == 'dirtyroomNum'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.dirtyroomNum = data.total;
           }
         })
       },

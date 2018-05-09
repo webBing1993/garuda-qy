@@ -30,5 +30,34 @@ module.exports = {
         param.onsuccess ? param.onsuccess() : null
       }
     })
-  }
+  },
+  //脏房列列表
+  getDirtyRoomList(ctx, param) {
+    ctx.dispatch('resource', {
+      url: '/room/dirtyRoomRemind',
+      body:{
+        hotel_id:param.hotel_id,
+        is_deal_with:param.is_deal_with
+      },
+      method:"POST",
+      onSuccess: (body) => {
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
+  // 修改脏房处理状态
+  handleDirtyRoom(ctx,param){
+    ctx.dispatch('resource',{
+      url:'/room/setDirtyRoomStatus',
+      body:{
+        hotel_id:param.hotel_id,
+        sub_id:param.order_id,
+        is_deal_with:param.is_deal_with
+      },
+      method:"post",
+      onSuccess:(body)=>{
+        param.onsuccess ? param.onsuccess(body) : null
+      }
+    })
+  },
 }

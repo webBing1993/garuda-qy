@@ -55,6 +55,7 @@ module.exports = {
       response => {
         if (response.body.errcode && +response.body.errcode === 0) {
           let isShowToast = param.url.match(/identities/) ||
+            param.url.match(/dirtyRoomRemind/) ||
             param.url.match(/precheckin/) ||
             param.url.match(/login/) ||
             param.url.match(/refund_apply_list/) ||
