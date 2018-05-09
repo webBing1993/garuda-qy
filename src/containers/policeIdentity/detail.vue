@@ -38,34 +38,34 @@
         <div class="content">
           <div v-if="orderOpen">
             <p class="orderItem">
-              <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
+              <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
               <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':(item.pay_mode|filterRoomPayStatus)}}</span>
             </p>
             <div class="line"></div>
             <p class="orderItem">
-              <span class="titleInfo">预定人：</span><span>{{item.orderCount}}</span><span style="margin-left: 1rem">{{item.phoneNum}}</span>
+              <span class="titleInfo">预定人：</span><span>{{item.owner}}</span><span style="margin-left: 1rem">{{item.owner_tel}}</span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">房型：</span><span>2222222</span>
+              <span class="titleInfo">房型：</span><span>{{item.room_type_info}}</span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">预付款：</span><span>¥ {{item.preMoney}}</span>
+              <span class="titleInfo">预付款：</span><span>¥ {{item.pms_prepay*1000}}</span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">入住：</span><span>{{datetimeparse(item.checkInTime)}}</span>
-              <span style="color: #8A8A8A;margin-left: 1rem">离店：</span><span>{{datetimeparse(item.checkOutTime)}}</span>
+              <span class="titleInfo">入住：</span><span>{{datetimeparse(item.in_time)}}</span>
+              <span style="color: #8A8A8A;margin-left: 1rem">离店：</span><span>{{datetimeparse(item.out_time)}}</span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">备注：</span><span>{{item.note}}</span>
+              <span class="titleInfo">备注：</span><span>{{item.remark}}</span>
             </p>
-            <span class="orderButton" @click='shareSreenOrCheckIn(item)' >{{(item.precheckin_status==6&&item.config.enabled_sign==false)?'入住':'分享到屏幕'}}</span>
+            <span class="orderButton" @click='shareSreenOrCheckIn(item)' >{{(item.precheckin_status==6&&item.config.enabled_sign==false&&item.rooms.length==1)?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
 
           </div>
           <div v-if="!orderOpen">
             <p class="orderItem">
-              <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
-              <span style="float: right;">{{item.orderCount}}<span style="margin-left: 1rem">{{item.phoneNum}}</span></span>
+              <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
+              <span style="float: right;">{{item.owner}}<span style="margin-left: 1rem">{{item.owner_tel}}</span></span>
             </p>
             <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-down"  size="25"></x-icon></p>
           </div>
@@ -73,6 +73,10 @@
       </div>
       <!--人证通身份信息-->
       <div class="guestcard">
+        <div class="bd">
+          <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr style="color: #56e846">{{detail.similarity}}%</abbr></span></p>
+          <img :src="detail.livePhoto" alt="现场照片">
+        </div>
         <div class="hd">
           <ul>
             <li><span><abbr>姓名</abbr>{{detail.name}}</span></li>
@@ -81,11 +85,6 @@
             <li><span><abbr>身份证号</abbr>{{detail.idCard ? idnumber(detail.idCard) : ''}}</span></li>
           </ul>
           <img :src="detail.photo" alt="身份证照片" class="policeIdentityImg">
-        </div>
-        <div class="bd">
-          <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr style="color: #56e846">{{detail.similarity}}%</abbr></span></p>
-
-          <img :src="detail.livePhoto" alt="现场照片">
         </div>
       </div>
 
@@ -124,6 +123,9 @@
         <ul v-for="(item,index) in statusList">
           <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="(checkIndex=index,payMode=item.value)">{{item.name}}</li>
         </ul>
+        <div style="text-align: left;color: #000000;margin-bottom: 2rem">
+          <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="isFreeDeposit">
+        </div>
       </Dialog>
     </article>
   </div>
@@ -160,7 +162,7 @@
           orderOpen:true,
           orderList:[{orderNum:1241242441,phoneNum:13789242819,precheckin_status:1,orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}],
           payMode:1,
-          isFreeDeposit:false,
+          isFreeDeposit:true,
           checkItem:{}
 
       }
@@ -230,13 +232,32 @@
           'reportLvYe',
           'getRoomNumberList',
           'rejectStatus',
-          'changeStatus'
+          'changeStatus',
+          'suborderCheckIn',
+          'searOrderList'
 
       ]),
       ...mapMutations([
         'DEVICEID'
       ]),
       ////////////////////////值房通逻辑/////////////////////////////////
+
+      //查询订单列表
+      searRztOrderList(){
+          this.searOrderList({
+              data:{
+                  "hotel_id":this.hotel.hotel_id,//酒店ID,初始查询必给
+                  "idcard_no":detail.idCard,//身份证号，初始查询必给
+                  "idcard_name":detail.name,//身份证姓名，初始查询必给
+                  "room_no":detail.roomNumber?detail.roomNumber:'',//房间号
+                  "status":"",//订单状态
+                  "like_info":""//姓名拼音或者手机号
+              },
+              onsuccess:(body=>{
+                  this.orderList=body.data;
+              })
+          })
+        },
       //弹出对话框改订单状态
       confirmOrder(){
           console.log('checkItem:',this.checkItem)
@@ -245,14 +266,17 @@
                   order_id:checkItem.order_id,
                   hotel_id:this.hotel.hotel_id,
                   pay_Mode:this.payMode,
+                  is_free_deposit:this.isFreeDeposit
               },
               onsuccess:(body=>{
-                  this.orderList.forEach(item=>{
-                      if(item.order_id==checkItem.order_id){
-                          item.pay_mode=body.data.pay_mode;
-                          return;
-                      }
-                  })
+                  this.searRztOrderList();
+                  // this.orderList.forEach(item=>{
+                  //     if(item.order_id==checkItem.order_id){
+                  //         item.pay_mode=body.data.pay_mode;
+                  //         item.precheckin_status=body.data.precheckin_status
+                  //         return;
+                  //     }
+                  // })
               })
           })
       },
@@ -262,17 +286,45 @@
                 this.confirmOrderStatus=true;
                 return
             }else {
-
+                if(item.precheckin_status==6&&item.config.enabled_sign==false&&item.rooms.length==1){
+                    this.CheckIn(item);
+                }else {
+                    this.shareSreen(item);
+                }
             }
         },
         //分享到屏幕
-        shareSreen(){
+        shareSreen(item){
+          this.shareQrCode({
+              data:{
+                  "order_id":item.order_id,
+                  "hotel_id":this.hotel.hotel_id,
+                  "idcard_no":detail.idCard,
+                  "idcard_name":detail.name,
+                  suborder_id:item.suboder_id,
+                  room_no:item.rooms[0]
+              },
+              onsuccess:(body=>{
 
+              })
+
+          })
         },
         //入住
-        CheckIn(){
-
+        CheckIn(item){
+          this.suborderCheckIn({
+              data:{
+                  suborder_id:item.suboder_id,
+                  room_no:item.rooms[0].is_select,
+                  guests:[{
+                      name:detail.name,
+                      idcard:detail.idCard
+                  }],
+                  hotel_id:this.hotel.hotel_id,
+              }
+          })
         },
+
   ////////////////////////认证通逻辑/////////////////////////////////
         //enter键事件上传旅业
       enterToLvye (event) {
@@ -306,7 +358,21 @@
         this.canSearch = false;
         this.roomNumber = item;
         this.resultList = [];
-        this.isErrorNumber = false
+        this.isErrorNumber = false;
+        //房间号查订单
+        this.searOrderList({
+            data:{
+                "hotel_id":this.hotel.hotel_id,//酒店ID
+                "idcard_no":'',//身份证号
+                "idcard_name":'',//身份证姓名
+                "room_no":this.roomNumber,//房间号
+                "status":"",//订单状态
+                "like_info":""//姓名拼音或者手机号
+            },
+            onsuccess:(body=>{
+                this.orderList=body.data;
+            })
+        })
       },
       isDialogShow() {
         if (!this.isDisabled) {
@@ -429,6 +495,7 @@
     },
     activated(){
         this.getDetail();
+        // this.searRztOrderList()
     },
     created(){
       this.detail = {};
