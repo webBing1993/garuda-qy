@@ -1,0 +1,1 @@
+//值房通接口交互module.exports ={    changeStatus(ctx,param){        ctx.dispatch('resource', {            method:'POST',            url: '/order/update/paymode',            body:param.data,            onSuccess: body => {                param.onsuccess ? param.onsuccess(body) : null            },        })    }}

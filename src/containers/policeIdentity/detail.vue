@@ -34,12 +34,12 @@
       </div>
       <!--订单信息-->
       <p class="orderTitle" @click="goto('/policeIdentity/orderSearch')">查询其他订单</p>
-      <div class="orderInfo" v-for="(item,index) in orderlist">
+      <div class="orderInfo" v-for="(item,index) in orderList">
         <div class="content">
           <div v-if="orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
-              <span class="roomStatus">{{item.roomPayStatus}}</span>
+              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.roomPayStatus|filterRoomPayStatus}}</span>
             </p>
             <div class="line"></div>
             <p class="orderItem">
@@ -58,19 +58,18 @@
             <p class="orderItem">
               <span class="titleInfo">备注：</span><span>{{item.note}}</span>
             </p>
-            <span class="orderButton" @click='confirmOrderStatus=true' v-if="false">入住</span>
-            <span class="orderButton" @click='confirmOrderStatus=true'>分享到屏幕</span>
-            <p class="showOrder" @click="orderOpen=!orderOpen">折起</p>
+            <span class="orderButton" @click='shareSreenOrCheckIn(item)' >{{item.roomPayStatus==1?'分享到屏幕':'入住'}}</span>
+            <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
+
           </div>
           <div v-if="!orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.orderNum}}</span>
               <span style="float: right;">{{item.orderCount}}<span style="margin-left: 1rem">{{item.phoneNum}}</span></span>
             </p>
-            <p class="showOrder" @click="orderOpen=!orderOpen">展开</p>
+            <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-down"  size="25"></x-icon></p>
           </div>
         </div>
-
       </div>
       <!--人证通身份信息-->
       <div class="guestcard">
@@ -111,7 +110,6 @@
             <!--class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>-->
         <!--</ul>-->
       <!--</Dialog>-->
-
       <Dialog confirm cancel v-model="rejectDialog" @onConfirm="rejectConfirm" confirm cancel>
         <p>是否确认拒绝</p>
         <br>
@@ -124,7 +122,7 @@
       <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
         <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
         <ul v-for="(item,index) in statusList">
-          <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="checkIndex=index">{{statusList[index]}}</li>
+          <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="(checkIndex=index,payMode=item.value)">{{item.name}}</li>
         </ul>
       </Dialog>
     </article>
@@ -137,10 +135,7 @@
   module.exports = {
     data(){
       return {
-          checkIndex:0,
-          statusList:['不需现付房费','房费现付'],
-          confirmOrderStatus:false,
-        orderOpen:true,
+        //认证通状态数据
         detail: {},
         roomNumber: '',
         days: 1,
@@ -157,7 +152,17 @@
         similarityCheck :false,
         guestType:'LODGER',
         guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
-        orderlist:[{orderNum:1241242441,phoneNum:13789242819,roomPayStatus:'房费现付',orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}]
+          //值房通状态数据
+          checkIndex:0,
+          statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
+          confirmOrderStatus:false,
+          orderStatus:0,
+          orderOpen:true,
+          orderList:[{orderNum:1241242441,phoneNum:13789242819,roomPayStatus:1,orderCount:'郑斯洁',roomType:[],preMoney:500,checkInTime:1535225221246,checkOutTime:1537867429488,note:'携程预付'}],
+          payMode:1,
+          isFreeDeposit:false,
+          checkItem:{}
+
       }
     },
       filters:{
@@ -169,6 +174,14 @@
               }else if(val=='STAFF'){
                   return '酒店工作人员'
               }
+          },
+          filterRoomPayStatus(val){
+              switch(val){
+                  case 1:
+                  return '未确认';
+                  break;
+              }
+
           }
       },
       components: {
@@ -181,9 +194,6 @@
         'route',
         'roomNumberList'
       ]),
-        confirmOrder(){
-
-        },
       identityId(){
         return this.route.params.id
       },
@@ -212,16 +222,46 @@
     },
     methods: {
       ...mapActions([
-        'goto',
-        'replaceto',
-        'newIdentityDetail',
-        'reportLvYe',
-        'getRoomNumberList',
-        'rejectStatus'
+          'goto',
+          'replaceto',
+          'newIdentityDetail',
+          'reportLvYe',
+          'getRoomNumberList',
+          'rejectStatus',
+          'changeStatus'
+
       ]),
       ...mapMutations([
         'DEVICEID'
       ]),
+      ////////////////////////值房通逻辑/////////////////////////////////
+      //弹出对话框改订单状态
+      confirmOrder(){
+          console.log('checkItem:',this.checkItem)
+          this.changeStatus({
+              data:{
+                  order_id:checkItem.order_id,
+                  hotel_id:this.hotel.hotel_id,
+                  pay_Mode:this.payMode,
+              },
+              onsuccess:(body=>{
+                  this.orderList.forEach(item=>{
+                      if(item.order_id==checkItem.order_id){
+                          item.pay_mode=body.data;
+                          return;
+                      }
+                  })
+              })
+          })
+      },
+        //点击分享到屏幕或入住
+        shareSreenOrCheckIn(item){
+            if(item.pay_mode==2){
+                this.confirmOrderStatus=true
+            }
+        },
+
+      ////////////////////////认证通逻辑/////////////////////////////////
         //enter键事件上传旅业
       enterToLvye (event) {
           if(this.detail.identityStatus === 'REFUSED'){
