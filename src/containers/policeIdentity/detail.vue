@@ -39,26 +39,34 @@
           <div v-if="orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
-              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':(item.pay_mode|filterRoomPayStatus)}}</span>
+              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.pay_mode==2" class="iconfont icon-huodongbiaoqian"></i></span>
+
             </p>
             <div class="line"></div>
             <p class="orderItem">
               <span class="titleInfo">预定人：</span><span>{{item.owner}}</span><span style="margin-left: 1rem">{{item.owner_tel}}</span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">房型：</span><span>{{item.room_type_info}}</span>
+              <span class="titleInfo" style="vertical-align: top">房型：</span>
+              <!--<span>{{item.room_type_info}}</span>-->
+              <span class="ItemValue">
+               <!--<span style="margin-right: 1rem" ></span>-->
+                <ul v-for="room in item.room_type_info">
+                  <li style="list-style: none">{{room.room_type_name}}X{{room.room_count}}</li>
+                </ul>
+              </span>
             </p>
             <p class="orderItem">
               <span class="titleInfo">预付款：</span><span>¥ {{item.pms_prepay*1000}}</span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">入住：</span><span>{{datetimeparse(item.in_time)}}</span>
-              <span style="color: #8A8A8A;margin-left: 1rem">离店：</span><span>{{datetimeparse(item.out_time)}}</span>
+              <span class="titleInfo">入住：</span><span>{{datetimeparse(item.in_time,'YYYYMMDD')}}</span>
+              <span style="color: #8A8A8A;margin-left: 1rem">离店：</span><span>{{datetimeparse(item.out_time,'YYYYMMDD')}}</span>
             </p>
             <p class="orderItem">
               <span class="titleInfo">备注：</span><span>{{item.remark}}</span>
             </p>
-            <span class="orderButton" @click='shareSreenOrCheckIn(item)' >{{(item.precheckin_status==6&&item.config.enabled_sign==false&&item.rooms.length==1)?'入住':'分享到屏幕'}}</span>
+            <span class="orderButton" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
 
           </div>
@@ -176,15 +184,17 @@
                   return '酒店工作人员'
               }
           },
-          filterRoomPayStatus(val){
-              switch(val){
-                  case 1:
-                      return '房费现付';
-                  case 2:
-                      return '不需房费现付';
-                  break;
-              }
-
+          filterRoomsNum(val){
+              let str='收费服务';
+              // switch(val){
+              //     case 1:
+              //     str= '房费现付';
+              //     break;
+              //     case 2:
+              //     str= '不需房费现付';
+              //     break;
+              // }
+              return str;
           }
       },
       components: {
@@ -198,16 +208,48 @@
         'roomNumberList',
         'orderList',
         'checkedOrder',
-        'currentLvyeRecordId'
+        'currentLvyeRecordId',
+        'hotel'
       ]),
       renderOrderList(){
           let list=[]
-          if(this.checkedOrder!==[]){
-              list= this.checkedOrder;
-          }else{
-              list= this.orderList;
-          }
-          console.log('4444:',this.checkedOrder)
+          let fakeList=[{
+              order_no:"1245253525",//订单号,
+              order_id:"52523552",//订单ID
+              owner_tel:"1873155253",//手机号
+              owner:"郑斯斯",//预订人姓名
+              hotel_id:"",//酒店ID
+              remark:"携程预定",//备注
+              in_time:1538471246118,//入住时间
+              out_time:1539784184264,//离店时间
+              in_day:"",//入住天数
+              show_checkin:true,
+              rooms:[{
+                  room_type_name:"大床房",
+                  room_no:"",//房间号
+                  suboder_id:"",//子单ID
+                  is_select:""//如果通过身份证查询 则会选择身份证入住的房间 如果通过房间号查询，则会显示该房间号
+              }],
+              room_type_info:[
+                  {room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2}
+              ],
+              config:{
+                  support_zft:"",//是否支持值房通
+                  enabled_sign:true,//是否支持签名
+              },
+              prepay_code:"",
+              pay_mode:2, //订单已确认 可以有两种 1为现付 2为预付
+              precheckin_status:3,//确认状态  只有为6的订单并且不需要签名的订单，并且rooms的数量为1，才可以出现入住按钮  1为未确认 大于1都为已确认订单
+              pms_prepay: 5.3//预付金额 单位是分
+          }]
+
+          list=fakeList;
+          // if(this.checkedOrder!==[]){
+          //     list= this.checkedOrder;
+          // }else{
+          //     list= this.orderList;
+          // }
+          // console.log('renderOrderList:',list)
           return list;
 
       },
@@ -237,6 +279,61 @@
             }
         }
     },
+      watch: {
+          renderOrderList(val){
+              console.log('此时的renderOrderList：',val)
+          },
+          checkedOrder(val){
+              console.log('此时的checkedOrder：',this.checkedOrder)
+          },
+          buttonGroupShow(val){
+              if(val){
+                  this.guestType=null;
+              }
+          },
+          guestType(val){
+              if(val=="STAFF") {
+                  this.roomNumber='';
+              }
+          },
+          detail(val){
+              if(val.reportInStatus!=='SUCCESS') {
+                  console.log(333);
+                  this.roomNumber='';
+              }
+          },
+          identityId(val){
+              val ? this.resetFilter() : null
+          },
+          days(val, old) {
+              if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;//非负整数，数字
+              if (val > 31) this.days = 31;
+              let nowDate = new Date();
+              let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
+              this.outTimeFilter = tempTime;
+          },
+          roomNumber(val,old) {
+              if (!val) {
+                  this.resultList = [];
+                  this.isErrorNumber = false;
+              }
+              if (!this.canSearch) return;
+              if (val && val.split('').some(i => !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(i))) {//验证特殊字符
+                  this.roomNumber = old
+              }
+              if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
+                  this.resultList = [];
+                  this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
+                  if (this.resultList.length === 0) this.isErrorNumber = true;
+              }
+          },
+          resultList(val, old) {
+              if (old.length > 0) this.canSearch = true
+          },
+          // routeParam(val){
+          //     console.log('val:',val)
+          // }
+      },
     methods: {
       ...mapActions([
           'goto',
@@ -253,20 +350,38 @@
       ...mapMutations([
         'DEVICEID',
         'SEARCHORDERLIST',
-        'CHECKORDERITEM'
+        'CHECKORDERITEM',
+        'CURRENTLVYERECORDID'
+          // this.CURRENTLVYERECORDID(lvyeReportRecordId)
       ]),
       ////////////////////////值房通逻辑/////////////////////////////////
-
+      //查选中情况
+        isResetCheckedOrder(){
+          if(this.currentLvyeRecordId==''){
+              console.log('currentLvyeRecordId为空！！')
+              this.CURRENTLVYERECORDID(this.$route.params.id);
+          }else {
+              if(this.currentLvyeRecordId!==this.$route.params.id){
+                  console.log('this.currentLvyeRecordId:',this.currentLvyeRecordId)
+                  console.log('this.$route.params.id:',this.$route.params.id)
+                  this.CHECKORDERITEM([]);
+                  this.CURRENTLVYERECORDID(this.$route.params.id);
+              }else {
+                  return
+              }
+          }
+      },
       //查询订单列表
       searchRztOrderList(){
-          this.searOrderList({
+          this.searchOrderList({
               data:{
                   "hotel_id":this.hotel.hotel_id,//酒店ID,初始查询必给
-                  "idcard_no":detail.idCard,//身份证号，初始查询必给
-                  "idcard_name":detail.name,//身份证姓名，初始查询必给
-                  "room_no":detail.roomNumber?detail.roomNumber:'',//房间号
+                  "idcard_no":this.detail.idCard,//身份证号，初始查询必给
+                  "idcard_name":this.detail.name,//身份证姓名，初始查询必给
+                  "room_no":this.detail.roomNumber?this.detail.roomNumber:'',//房间号
                   "status":"",//订单状态
-                  "like_info":""//姓名拼音或者手机号
+                  "like_info":"",//姓名拼音或者手机号
+                  "order_id":''
               },
               onsuccess:(body=>{
                   this.SEARCHORDERLIST(body.data);
@@ -282,13 +397,22 @@
                     "idcard_name":'',//身份证姓名
                     "room_no":this.roomNumber,//房间号
                     "status":"",//订单状态
-                    "like_info":""//姓名拼音或者手机号
+                    "like_info":"",//姓名拼音或者手机号
+                    "order_id":''
                 },
                 onsuccess:(body=>{
                     this.SEARCHORDERLIST(body.data)
                 })
             })
         },
+      initOrderList(){
+          if(this.detail.roomNumber){
+              this.searchRztOrderList();
+          }else {
+              this.searchOrderByRoomNum();
+          };
+          //如果是查订单呢？？？？？？
+      },
       //弹出对话框改订单状态
       confirmOrder(){
           console.log('checkItem:',this.checkItem)
@@ -300,18 +424,7 @@
                   is_free_deposit:this.isFreeDeposit
               },
               onsuccess:(body=>{
-                  if(this.detail.roomNumber){
-                      this.searchRztOrderList();
-                  }else {
-                      this.searchOrderByRoomNum();
-                  };
-                  // this.orderList.forEach(item=>{
-                  //     if(item.order_id==checkItem.order_id){
-                  //         item.pay_mode=body.data.pay_mode;
-                  //         item.precheckin_status=body.data.precheckin_status
-                  //         return;
-                  //     }
-                  // })
+                  this.initOrderList();
               })
           })
       },
@@ -321,7 +434,7 @@
                 this.confirmOrderStatus=true;
                 return
             }else {
-                if(item.precheckin_status==6&&item.config.enabled_sign==false&&item.rooms.length==1){
+                if(item.show_checkin){
                     this.CheckIn(item);
                 }else {
                     this.shareSreen(item);
@@ -421,6 +534,7 @@
         this.inTimeFilter = Date.parse(new Date());
         this.isWxPayBtnShow = false;
       },
+        //公安验证详情
       getDetail(){
         this.newIdentityDetail({
           identity_id: this.identityId,
@@ -432,6 +546,8 @@
             this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
             if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
             this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
+            //拿订单
+            this.initOrderList();
           }
         })
       },
@@ -468,76 +584,18 @@
                     this.goto(-1)
                 }
             })
-        },
-        isResetCheckedOrder(){
-          console.log(this.currentLvyeRecordId)
-          console.log(this.$route.params.id)
-            if(this.currentLvyeRecordId!==this.$route.params.id){
-                this.CHECKORDERITEM([]);
-            }
         }
-    },
-    watch: {
-        renderOrderList(val){
-            console.log('此时的renderOrderList：',val)
-        },
-        checkedOrder(val){
-            console.log('此时的checkedOrder：',this.checkedOrder)
-        },
-        buttonGroupShow(val){
-            if(val){
-                this.guestType=null;
-            }
-        },
-        guestType(val){
-            if(val=="STAFF") {
-                this.roomNumber='';
-            }
-        },
-      detail(val){
-         if(val.reportInStatus!=='SUCCESS') {
-             console.log(333);
-             this.roomNumber='';
-         }
-      },
-      identityId(val){
-        val ? this.resetFilter() : null
-      },
-      days(val, old) {
-        if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) this.days = 0;//非负整数，数字
-        if (val > 31) this.days = 31;
-        let nowDate = new Date();
-        let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
-        this.outTimeFilter = tempTime;
-      },
-      roomNumber(val,old) {
-        if (!val) {
-          this.resultList = [];
-          this.isErrorNumber = false;
-        }
-        if (!this.canSearch) return;
-        if (val && val.split('').some(i => !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(i))) {//验证特殊字符
-          this.roomNumber = old
-        }
-        if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
-          this.resultList = [];
-          this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-          if (this.resultList.length === 0) this.isErrorNumber = true;
-        }
-      },
-      resultList(val, old) {
-        if (old.length > 0) this.canSearch = true
-      }
     },
     activated(){
         this.getDetail();
         this.isResetCheckedOrder();
-        // this.searRztOrderList()
+
     },
     created(){
-      this.isResetCheckedOrder();
+        this.searchRztOrderList()
       this.detail = {};
       this.getDetail();
+      this.isResetCheckedOrder();
       if (this.roomNumberList.length === 0) this.getRoomNumberList();
       this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
     }

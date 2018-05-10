@@ -266,7 +266,6 @@
                 'Interface',
                 'roomNumberList',
                 'checkedOrder',
-                'currentLvyeRecordId'
             ]),
             renderList() {
                 return NationList;
@@ -332,8 +331,7 @@
                 // 'forwardTo'
             ]),
             ...mapMutations([
-                'CHECKORDERITEM',
-                'CURRENTLVYERECORDID'
+                'CHECKORDERITEM'
             ]),
             showwithoutLicenseDialog(){
                 this.Nationality();
@@ -485,7 +483,6 @@
             },
             orderClick: function (lvyeReportRecordId) {
               //非批量模式下点击订单跳转至详情页面
-              this.CURRENTLVYERECORDID(lvyeReportRecordId)
               if (!this.batch) {
                 this.batchlist = [];
                 this.goto('/policeIdentity/' + lvyeReportRecordId)

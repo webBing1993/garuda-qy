@@ -14,5 +14,6 @@ module.exports = {
   ...require('./yunba'),
   ...require('./abnormal'),
   ...require('./onlineTool'),
-  ...require('./recharge')
+  ...require('./recharge'),
+  ...require('./orderManage')
 };
