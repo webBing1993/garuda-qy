@@ -17,7 +17,18 @@ const prepay = [{
     component: require('./containers/prepay/detail.vue')
   }]
 }];
-
+//
+const dirtyroom = [{
+  path: '/dirtyroom',
+  component: {
+    name: "dirtyroom",
+    template: `<keep-alive><router-view/></keep-alive>`,
+  },
+  children: [{
+    path: ':tab',
+    component: require('./containers/dirtyRoom/list.vue')
+  }]
+}];
 //住离信息
 const receive = [{
   path: '/receive',
@@ -67,10 +78,19 @@ const policeIdentity = [{
     path: 'handle/:tab',
     component: require('./containers/policeIdentity/list')
   },
+      {
+          path: 'orderSearch',
+          component: require('./containers/policeIdentity/orderSearch.vue')
+      },
+
     {
       path: ':id',
       component: require('./containers/policeIdentity/detail')
-    }]
+    },
+
+  ],
+
+
 }];
 
 //异常提醒列表
@@ -252,7 +272,7 @@ const others = [
 
 export default new VueRouter({
   mode: 'history',
-  routes: [...recharge,...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...onlineTool,...others]
+  routes: [...dirtyroom,...recharge,...unchained, ...prepay, ...receive, ...policeIdentity, ...identity, ...invoice, ...bill,...abnormalNotice,...notLiveIn,...suspicious, ...onlineTool,...others]
 })
 
 // const precheckin = [{

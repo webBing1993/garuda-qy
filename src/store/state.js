@@ -49,5 +49,8 @@ module.exports = {
   }),
   yunbaConnected: false,
   deviceId:'',
-  searchHotelId:''
+  searchHotelId:'',
+  orderList:[],
+  checkedOrder:[],
+  currentLvyeRecordId:''
 };

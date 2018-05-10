@@ -136,6 +136,7 @@
         path.match(/identity\/todo/) ? title = '待核验' : null
         path.match(/policeIdentity\/./) ? title = '公安验证详情' : null
         path.match(/policeIdentity\/handle/) ? title = '公安验证' : null
+        path.match(/policeIdentity\/orderSearch/) ? title = '查询订单' : null
 
 //        path.match(/new-policeIdentity\/wxPay/) ? title = '微信支付入住' : null
         path.match(/livein\/./) ? title = '入住单详情' : null
