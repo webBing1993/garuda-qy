@@ -10,7 +10,7 @@ module.exports = {
       console.log('searchHotelId:',payload)
   },
   SEARCHORDERLIST(state,payload) {
-      state.orderList = [...payload]
+      state.orderList = payload
       console.log('orderList:',payload)
   },
   CHECKORDERITEM(state,payload) {

@@ -48,11 +48,14 @@
             </p>
             <p class="orderItem">
               <span class="titleInfo" style="vertical-align: top">房型：</span>
-              <!--<span>{{item.room_type_info}}</span>-->
               <span class="ItemValue">
-               <!--<span style="margin-right: 1rem" ></span>-->
                 <ul v-for="room in item.room_type_info">
-                  <li style="list-style: none">{{room.room_type_name}}X{{room.room_count}}</li>
+                  <li style="list-style: none">
+                    <span>{{room.room_type_name}}X{{room.room_count}}</span>
+                    <ul v-for="i in item.rooms" style="display: inline-block;margin-left: 1rem">
+                      <li style="list-style: none;margin-right: 0.5rem" v-if="i.room_type_name==room.room_type_name">{{i.room_no}}</li>
+                    </ul>
+                  </li>
                 </ul>
               </span>
             </p>
@@ -170,7 +173,8 @@
           orderOpen:true,
           payMode:1,
           isFreeDeposit:true,
-          checkItem:{}
+          checkItem:{},
+          list:[]
 
       }
     },
@@ -212,45 +216,38 @@
         'hotel'
       ]),
       renderOrderList(){
-          let list=[]
-          let fakeList=[{
-              order_no:"1245253525",//订单号,
-              order_id:"52523552",//订单ID
-              owner_tel:"1873155253",//手机号
-              owner:"郑斯斯",//预订人姓名
-              hotel_id:"",//酒店ID
-              remark:"携程预定",//备注
-              in_time:1538471246118,//入住时间
-              out_time:1539784184264,//离店时间
-              in_day:"",//入住天数
-              show_checkin:true,
-              rooms:[{
-                  room_type_name:"大床房",
-                  room_no:"",//房间号
-                  suboder_id:"",//子单ID
-                  is_select:""//如果通过身份证查询 则会选择身份证入住的房间 如果通过房间号查询，则会显示该房间号
-              }],
-              room_type_info:[
-                  {room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2}
-              ],
-              config:{
-                  support_zft:"",//是否支持值房通
-                  enabled_sign:true,//是否支持签名
-              },
-              prepay_code:"",
-              pay_mode:2, //订单已确认 可以有两种 1为现付 2为预付
-              precheckin_status:3,//确认状态  只有为6的订单并且不需要签名的订单，并且rooms的数量为1，才可以出现入住按钮  1为未确认 大于1都为已确认订单
-              pms_prepay: 5.3//预付金额 单位是分
-          }]
-
-          list=fakeList;
-          // if(this.checkedOrder!==[]){
-          //     list= this.checkedOrder;
-          // }else{
-          //     list= this.orderList;
-          // }
-          // console.log('renderOrderList:',list)
-          return list;
+          // let fakeList=[{
+          //     order_no:"1245253525",//订单号,
+          //     order_id:"52523552",//订单ID
+          //     owner_tel:"1873155253",//手机号
+          //     owner:"郑斯斯",//预订人姓名
+          //     hotel_id:"",//酒店ID
+          //     remark:"携程预定",//备注
+          //     in_time:1538471246118,//入住时间
+          //     out_time:1539784184264,//离店时间
+          //     in_day:"",//入住天数
+          //     show_checkin:true,
+          //     rooms:[{
+          //         room_type_name:"大床房",
+          //         room_no:"",//房间号
+          //         suboder_id:"",//子单ID
+          //         is_select:""//如果通过身份证查询 则会选择身份证入住的房间 如果通过房间号查询，则会显示该房间号
+          //     }],
+          //     room_type_info:[
+          //         {room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2}
+          //     ],
+          //     config:{
+          //         support_zft:"",//是否支持值房通
+          //         enabled_sign:true,//是否支持签名
+          //     },
+          //     prepay_code:"",
+          //     pay_mode:2, //订单已确认 可以有两种 1为现付 2为预付
+          //     precheckin_status:3,//确认状态  只有为6的订单并且不需要签名的订单，并且rooms的数量为1，才可以出现入住按钮  1为未确认 大于1都为已确认订单
+          //     pms_prepay: 5.3//预付金额 单位是分
+          // }]
+          // list=fakeList;
+          // console.log('renderOrderList:',this.list)
+          return this.list;
 
       },
       identityId(){
@@ -281,7 +278,7 @@
     },
       watch: {
           renderOrderList(val){
-              console.log('此时的renderOrderList：',val)
+              // console.log('此时的renderOrderList：',val)
           },
           checkedOrder(val){
               console.log('此时的checkedOrder：',this.checkedOrder)
@@ -298,7 +295,6 @@
           },
           detail(val){
               if(val.reportInStatus!=='SUCCESS') {
-                  console.log(333);
                   this.roomNumber='';
               }
           },
@@ -344,27 +340,28 @@
           'rejectStatus',
           'changeStatus',
           'suborderCheckIn',
-          'searchOrderList'
-
+          'searchOrderList',
+          'shareQrCode'
       ]),
       ...mapMutations([
         'DEVICEID',
         'SEARCHORDERLIST',
         'CHECKORDERITEM',
         'CURRENTLVYERECORDID'
-          // this.CURRENTLVYERECORDID(lvyeReportRecordId)
       ]),
       ////////////////////////值房通逻辑/////////////////////////////////
       //查选中情况
         isResetCheckedOrder(){
+          let arr=[];
           if(this.currentLvyeRecordId==''){
               console.log('currentLvyeRecordId为空！！')
+              this.CHECKORDERITEM(arr);
               this.CURRENTLVYERECORDID(this.$route.params.id);
           }else {
               if(this.currentLvyeRecordId!==this.$route.params.id){
                   console.log('this.currentLvyeRecordId:',this.currentLvyeRecordId)
                   console.log('this.$route.params.id:',this.$route.params.id)
-                  this.CHECKORDERITEM([]);
+                  this.CHECKORDERITEM(arr);
                   this.CURRENTLVYERECORDID(this.$route.params.id);
               }else {
                   return
@@ -385,6 +382,14 @@
               },
               onsuccess:(body=>{
                   this.SEARCHORDERLIST(body.data);
+                  if(this.checkedOrder.length!==0){
+                      this.list= this.checkedOrder;
+                      console.log('有checkedOrder！！！！')
+                  }else{
+                      this.list= this.orderList;
+                      console.log('没有checkedOrder')
+                  }
+                  console.log('zsj####this.list:',this.list)
               })
           })
         },
@@ -401,15 +406,23 @@
                     "order_id":''
                 },
                 onsuccess:(body=>{
-                    this.SEARCHORDERLIST(body.data)
+                    this.SEARCHORDERLIST(body.data);
+                    if(this.checkedOrder!==[]){
+                        this.list= this.checkedOrder;
+                    }else{
+                        this.list= this.orderList;
+                        console.log('zsj')
+                    }
                 })
             })
         },
       initOrderList(){
-          if(this.detail.roomNumber){
-              this.searchRztOrderList();
-          }else {
+          if(this.roomNumber){
+              console.log('手动输入房间')
               this.searchOrderByRoomNum();
+          }else {
+              console.log('没有输入房间')
+              this.searchRztOrderList();
           };
           //如果是查订单呢？？？？？？
       },
@@ -418,7 +431,7 @@
           console.log('checkItem:',this.checkItem)
           this.changeStatus({
               data:{
-                  order_id:checkItem.order_id,
+                  order_id:this.checkItem.order_id,
                   hotel_id:this.hotel.hotel_id,
                   pay_Mode:this.payMode,
                   is_free_deposit:this.isFreeDeposit
@@ -447,10 +460,10 @@
               data:{
                   "order_id":item.order_id,
                   "hotel_id":this.hotel.hotel_id,
-                  "idcard_no":detail.idCard,
-                  "idcard_name":detail.name,
+                  "idcard_no":this.detail.idCard,
+                  "idcard_name":this.detail.name,
                   suborder_id:item.suboder_id,
-                  room_no:item.rooms[0]
+                  room_no:item.rooms[0].room_no
               },
               onsuccess:(body=>{
               })
@@ -461,10 +474,10 @@
           this.suborderCheckIn({
               data:{
                   suborder_id:item.suboder_id,
-                  room_no:item.rooms[0].is_select,
+                  room_no:item.rooms[0].room_no,
                   guests:[{
-                      name:detail.name,
-                      idcard:detail.idCard
+                      name:this.detail.name,
+                      idcard:this.detail.idCard
                   }],
                   hotel_id:this.hotel.hotel_id,
               },
@@ -592,7 +605,6 @@
 
     },
     created(){
-        this.searchRztOrderList()
       this.detail = {};
       this.getDetail();
       this.isResetCheckedOrder();
