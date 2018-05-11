@@ -22,6 +22,14 @@ module.exports = {
         })
 
     },
+    getServiceConfigs(ctx,param){
+      ctx.dispatch('resource',{
+          url:'/productConfig/getproductConfig/'+param.hotelId,
+          onSuccess: body => {
+              onSuccess: param.onsuccess ? param.onsuccess(body) : null
+          }
+      })
+    },
   hotelrefresh(ctx, param){
     ctx.dispatch('resource', {
       url: '/hotel/' + ctx.state.hotel.hotel_id + '/refresh',

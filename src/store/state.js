@@ -52,5 +52,6 @@ module.exports = {
   searchHotelId:'',
   orderList:[],
   checkedOrder:[],
-  currentLvyeRecordId:''
+  currentLvyeRecordId:'',
+  serviceConfig:{}
 };

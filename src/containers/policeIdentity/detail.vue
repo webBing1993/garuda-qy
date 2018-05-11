@@ -32,14 +32,15 @@
         <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
         <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
       </div>
-      <!--订单信息-->
-      <p class="orderTitle" @click="goto('/policeIdentity/orderSearch')">查询其他订单</p>
-      <div class="orderInfo" v-for="(item,index) in renderOrderList">
+      <!--值房通订单信息-->
+      <div v-if="serviceConfig.ZHIFANGTONG">
+        <p class="orderTitle" @click="goto('/policeIdentity/orderSearch')">查询其他订单</p>
+        <div class="orderInfo" v-for="(item,index) in renderOrderList">
         <div class="content">
           <div v-if="orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
-              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.pay_mode==2" class="iconfont icon-huodongbiaoqian"></i></span>
+              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
 
             </p>
             <div class="line"></div>
@@ -81,6 +82,7 @@
             <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-down"  size="25"></x-icon></p>
           </div>
         </div>
+      </div>
       </div>
       <!--人证通身份信息-->
       <div class="guestcard">
@@ -208,12 +210,13 @@
     computed: {
         // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
+        'hotel',
         'route',
         'roomNumberList',
         'orderList',
         'checkedOrder',
         'currentLvyeRecordId',
-        'hotel'
+        'serviceConfig'
       ]),
       renderOrderList(){
           // let fakeList=[{
@@ -418,7 +421,7 @@
         },
       initOrderList(){
           if(this.roomNumber){
-              console.log('手动输入房间')
+              console.log('手动输入了房间')
               this.searchOrderByRoomNum();
           }else {
               console.log('没有输入房间')
@@ -433,7 +436,7 @@
               data:{
                   order_id:this.checkItem.order_id,
                   hotel_id:this.hotel.hotel_id,
-                  pay_Mode:this.payMode,
+                  pay_mode:this.payMode,
                   is_free_deposit:this.isFreeDeposit
               },
               onsuccess:(body=>{
@@ -521,7 +524,9 @@
         this.roomNumber = item;
         this.resultList = [];
         this.isErrorNumber = false;
-        this.searchOrderByRoomNum()
+        if(this.serviceConfig.ZHIFANGTONG){
+            this.searchOrderByRoomNum()
+        };
       },
       isDialogShow() {
         if (!this.isDisabled) {
