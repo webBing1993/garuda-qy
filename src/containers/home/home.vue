@@ -172,8 +172,12 @@
         'setPublishCallback',
         'yunbaDisconnect',
         'getConfig',
-        'getHotelConfig'
+        'getHotelConfig',
+        'getServiceConfigs'
       ]),
+        ...mapMutations([
+           'SERVICECONFIG'
+        ]),
       setPlay(){
         document.querySelector('#audio').play();
       },
@@ -198,6 +202,16 @@
           }
         })
       },
+      //获取酒店业务模块配置
+      getServiceConfig(){
+          this.getServiceConfigs({
+              hotelId:this.hotel.hotel_id,
+              onsuccess: body =>{
+                    this.SERVICECONFIG(body.data)
+              }
+          })
+      },
+      //获取酒店应用功能配置
       gethotelConfig(){
           this.getHotelConfig({
               onsuccess: body =>{
@@ -248,6 +262,7 @@
       },
 //      云吧链接config
       init() {
+        this.getServiceConfig()
         this.getTodoList();
         this.gethotelConfig();
         if (!this.yunbaConnected) {
