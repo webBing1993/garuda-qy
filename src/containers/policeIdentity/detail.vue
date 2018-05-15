@@ -213,7 +213,6 @@
                   val.forEach(item=>{
                       console.log(item.orderOpen)
                       if(typeof item.orderOpen=='undefined'){
-                          console.log(44141241)
                           this.$set(item,'orderOpen',true);;
                       }
                   })

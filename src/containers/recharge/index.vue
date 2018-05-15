@@ -15,7 +15,7 @@
         <!--首冲-->
         <div class="rechargeContent">
           <div class="row">
-            <span class="title">酒店名称</span>``````````````````````````
+            <span class="title">酒店名称</span>
             <span>{{hotelRechargeInfo.hotel_name}}</span>
           </div>
           <!--续冲-->
@@ -58,15 +58,15 @@
         <div class="rechargeContent1" v-for="item in noIdentityDetailList">
           <div class="clo">
             <p class="title">姓名</p>
-            <p class="cont">张三的歌</p>
+            <p class="cont">{{item.name}}</p>
           </div>
           <div class="clo">
             <p class="title">身份证号码</p>
-            <p class="cont">1233456767890987654</p>
+            <p class="cont">{{item.idcard}}}</p>
           </div>
           <div class="clo">
             <p class="title">查验结果</p>
-            <p class="cont">isOK</p>
+            <p class="cont">{{item.status|filterResult}}</p>
           </div>
         </div>
       </div>
@@ -112,6 +112,18 @@
           noIdentityDetailList:[]
       }
     },
+    filters:{
+        filterResult(val){
+            switch (val){
+                case 'REFUSED':
+                    return '拒绝' ;
+                case 'PENDING':
+                    return '待审核';
+                case 'AGREED':
+                    return '通过';
+            }
+        }
+    },
 
     computed: {
       ...mapState([
@@ -151,6 +163,7 @@
         //获取充值信息
       getRechargeInfos(){
           try{
+              console.log(222);
               this.getRechargeInfo({
                   hotel_id: this.hotel.hotel_id,
                   onsuccess: body => (this.hotelRechargeInfo = body.data)
@@ -176,7 +189,10 @@
         //无证核验详情列表
         getNoIdentityDetailLists(){
           this.getNoIdentityDetailList({
-
+              page:1,
+              onsuccess:body=>{
+                  this.noIdentityDetailList=body.data.list;
+              }
           })
         },
         //充值使用次数
@@ -193,18 +209,10 @@
           })
         },
       initList(){
-        this.getRechargeInfos;
+        this.getRechargeInfos();
         this.getUsedNum();
         this.getRechargelists();
-      },
-      GETFAKEDATA(){
-          this.hotelRechargeInfo={
-              "hotel_name": "充值测试酒店",
-              "balance": 300,
-              "surplus_time": 30,
-              "pay_fee": 3000,
-              "is_first":false
-          }
+        this.getNoIdentityDetailLists()
       }
     },
 
@@ -224,8 +232,6 @@
 
     mounted(){
       this.initList();
-
-      // this.GETFAKEDATA()
     }
   }
 </script>

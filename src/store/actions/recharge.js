@@ -22,7 +22,7 @@ module.exports = {
 ////充值核验详情列表
     getNoIdentityDetailList(ctx, param){
         ctx.dispatch ('resource', {
-            url: '/rechargelist/' + param.hotel_id+'?offset='+param.offset+'&limit='+param.limit,
+            url: '/undocumented/list?page='+param.page,
             method: 'GET',
             onSuccess: body => {
                 param.onsuccess ? param.onsuccess (body) : null
@@ -53,7 +53,7 @@ module.exports = {
     getRechargeUsedNum(ctx,param){
         ctx.dispatch ('resource', {
             url: '/usetime/'+param.hotelId,
-            method: 'POST',
+            method: 'GET',
             body: param.data,
             onSuccess: (body, headers) => {
                 param.onsuccess ? param.onsuccess (body, headers) : null
