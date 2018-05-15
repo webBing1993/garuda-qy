@@ -39,5 +39,15 @@ module.exports = {
                 param.onsuccess ? param.onsuccess (body, headers) : null
             }
         })
+    },
+    getRechargeUsedNum(ctx,param){
+        ctx.dispatch ('resource', {
+            url: '/usetime/'+param.hotelId,
+            method: 'POST',
+            body: param.data,
+            onSuccess: (body, headers) => {
+                param.onsuccess ? param.onsuccess (body, headers) : null
+            }
+        })
     }
 }

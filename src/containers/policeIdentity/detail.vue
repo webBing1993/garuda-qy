@@ -37,11 +37,10 @@
         <p class="orderTitle" @click="goto('/policeIdentity/orderSearch')">查询其他订单</p>
         <div class="orderInfo" v-for="(item,index) in renderOrderList">
         <div class="content">
-          <div v-if="orderOpen">
+          <div v-if="item.orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
               <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
-
             </p>
             <div class="line"></div>
             <p class="orderItem">
@@ -71,15 +70,15 @@
               <span class="titleInfo">备注：</span><span>{{item.remark}}</span>
             </p>
             <span class="orderButton" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
-            <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
+            <p class="showOrder" @click="item.orderOpen=!item.orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
 
           </div>
-          <div v-if="!orderOpen">
+          <div v-if="!item.orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
               <span style="float: right;">{{item.owner}}<span style="margin-left: 1rem">{{item.owner_tel}}</span></span>
             </p>
-            <p class="showOrder" @click="orderOpen=!orderOpen"><x-icon type="ios-arrow-down"  size="25"></x-icon></p>
+            <p class="showOrder" @click="item.orderOpen=!item.orderOpen"><x-icon type="ios-arrow-down"  size="25"></x-icon></p>
           </div>
         </div>
       </div>
@@ -172,7 +171,7 @@
           statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
           confirmOrderStatus:false,
           orderStatus:0,
-          orderOpen:true,
+          // orderOpen:true,
           payMode:1,
           isFreeDeposit:true,
           checkItem:{},
@@ -282,6 +281,13 @@
       watch: {
           renderOrderList(val){
               // console.log('此时的renderOrderList：',val)
+              if(val.length!==0){
+                  val.forEach(item=>{
+                      if(item.orderOpen=='undefined'){
+                         this.$set(item,'orderOpen',true);;
+                      }
+                  })
+              }
           },
           checkedOrder(val){
               console.log('此时的checkedOrder：',this.checkedOrder)

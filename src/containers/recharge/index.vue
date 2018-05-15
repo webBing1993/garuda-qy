@@ -13,91 +13,30 @@
     <div class="list-wrapper">
       <div v-if="currentTab === 0">
         <!--首冲-->
-        <div class="rechargeContent" v-if="hotelRechargeInfo.is_first">
+        <div class="rechargeContent">
           <div class="row">
-            <span class="title">酒店名称</span>
+            <span class="title">酒店名称</span>``````````````````````````
             <span>{{hotelRechargeInfo.hotel_name}}</span>
           </div>
-          <div class="row">
-            <span class="title">充值金额</span>
-            <div class="rechargeMony">
-              <x-input @on-focus="inputShow" class="monyInp" novalidate placeholder="请输入充值金额" :show-clear="true"></x-input>
+          <div  v-if="!hotelRechargeInfo.is_first">
+            <div class="row">
+              <span class="title">余额</span>
+              <span>￥{{hotelRechargeInfo.balance}}</span>
             </div>
-            <div class="payBtn">支付</div>
-          </div>
-        </div>
-        <!--续充-->
-        <div class="rechargeContent" v-if="!hotelRechargeInfo.is_first">
-          <div class="row">
-            <span class="title">酒店名称</span>
-            <span>{{hotelRechargeInfo.hotel_name}}</span>
-          </div>
-          <div class="row">
-            <span class="title">余额</span>
-            <span>￥{{hotelRechargeInfo.balance}}</span>
-          </div>
-          <div class="row">
-            <span class="title">使用次数</span>
-            <span>{{hotelRechargeInfo.hotel_name}}</span>
-
-          </div>
-          <div class="row">
-            <span class="title">剩余次数</span>
-            <span>{{hotelRechargeInfo.surplus_time}}</span>
-          </div>
-          <div class="row">
-            <span class="title">充值金额</span>
-            <div class="rechargeMony">
-              <x-input @on-focus="inputShow" class="monyInp" novalidate placeholder="请输入充值金额" :show-clear="true"></x-input>
+            <div class="row">
+              <span class="title">使用次数</span>
+              <span>{{usedNum}}</span>
+              <span class="dateShow" @click="isCalendarShow=true">
+               {{datetimeparse(periodFilter[0],'YYYYMMDD')-datetimeparse(periodFilter[1],'YYYYMMDD')}} <x-icon type="ios-arrow-down"  size="18" class="chargeIcon"></x-icon>
+              </span>
             </div>
-            <div class="payBtn">支付</div>
+            <div class="row">
+              <span class="title">剩余次数</span>
+              <span>{{hotelRechargeInfo.surplus_time}}</span>
+            </div>
           </div>
         </div>
-        <!--点击支付显示二维码-->
-        <div class="rechargeContent">
-          <div class="row" style="line-height: 300px;text-align: center;font-size: 20px">
-            二维码
-          </div>
         </div>
-        <!--扫码后支付完成-->
-        <div class="rechargeContent">
-          <div class="row">
-            <div class="iconfont icon-roundcheckfill" style="text-align: center;color: #5077AA;font-size: 4.5rem"></div>
-            <h3 style="text-align: center;margin-bottom: 2rem">支付完成</h3>
-            <div class="payBtn">申请发票</div>
-          </div>
-        </div>
-        <!--选择发票-->
-        <div class="rechargeContent">
-          <div class="row">
-            <span class="title">发票类型</span>
-            <span>个票</span>
-          </div>
-          <div class="row">
-            <span class="title">抬头名称</span>
-            <span>上海复创</span>
-          </div>
-          <div class="row">
-            <span class="title">税号</span>
-            <span>234567890987654323456789</span>
-          </div>
-          <div class="row">
-            <span class="title">单位地址</span>
-            <span>上海市杨浦区控江路1550号1706</span>
-          </div>
-          <div class="row">
-            <span class="title">电话号码</span>
-            <span>3456787654345678</span>
-          </div>
-          <div class="row">
-            <span class="title">开户银行</span>
-            <span>绿云测试</span>
-          </div>
-          <div class="row">
-            <div class="payBtn">提交</div>
-          </div>
-        </div>
-      </div>
       <div v-if="currentTab === 1">
         <div class="rechargeContent1" v-for="(item,index) in Rechargelist">
           <div class="clo">
@@ -113,7 +52,6 @@
             <p class="cont">{{item.pay_way}}</p>
           </div>
         </div>
-
       </div>
       <div v-if="currentTab === 2">
         <div class="rechargeContent1">
@@ -132,12 +70,19 @@
         </div>
       </div>
     </div>
+    <popup v-model="isCalendarShow"
+           maskShow
+           bottom
+           animationTopBottom>
+      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+    </popup>
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {XDialog, PopupRadio, PopupPicker, Picker, Popup,Tab, TabItem} from 'vux'
+  import {XDialog, PopupRadio, PopupPicker, Picker,Tab, TabItem,Group
+  } from 'vux'
 
   export default{
     name: "recharge",
@@ -147,16 +92,21 @@
       PopupRadio,
       PopupPicker,
       Picker,
-      Popup,
       Tab,
-      TabItem
+      TabItem,
+      Group,
     },
 
     data(){
       return {
-        hotelRechargeInfo:{},
-        Rechargelist: [],
-        isFirstRech:true,
+          hotelRechargeInfo:{},
+          Rechargelist: [],
+          isFirstRech:true,
+          usedNum:'',
+          date:'',
+          isCalendarShow:false,
+          periodFilter:[]
+
       }
     },
 
@@ -196,6 +146,7 @@
         'replaceto',
         "getRechargeInfo",
         "getRechargelist",
+        "getRechargeUsedNum"
       ]),
       _getRechargelist(){
         this.Rechargelist = [];
@@ -223,16 +174,25 @@
         })
       },
         //获取充值信息
+        resetFilter(){
+          this.periodFilter='';
+          this.isCalendarShow=false
+        },
       getRechargeInfos(){
         this.getRechargeInfo({
           hotel_id: this.hotel.hotel_id,
-            onsuccess: body => (this.hotelRechargeInfo = body.data)
+          onsuccess: body => (this.hotelRechargeInfo = body.data)
         })
 
       },
-      _mackSurePay(){
-          console.log('确认支付')
-      },
+        getUsedNum(){
+          this.getRechargeUsedNum({
+              hotelId:this.hotel.hotel_id,
+              onsuccess:body=>{
+                  this.usedNum=body.data;
+              }
+          })
+        },
       inputShow(){
       },
       initList(){
@@ -249,6 +209,9 @@
               "pay_fee": 3000,
               "is_first":false
           }
+      },
+      onChange(){
+
       }
     },
 
@@ -259,12 +222,18 @@
 //          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
 //          : null;
 //      }
+        periodFilter(val){
+            if(val!==''){
+                this.getUsedNum()
+            }
+        }
     },
 
     mounted(){
       // this.initList();
       // this.getRechargeInfos();
-        this.GETFAKEDATA()
+        this.getUsedNum();
+      this.GETFAKEDATA()
     }
   }
 </script>
