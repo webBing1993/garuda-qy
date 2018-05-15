@@ -18,16 +18,17 @@
             <span class="title">酒店名称</span>``````````````````````````
             <span>{{hotelRechargeInfo.hotel_name}}</span>
           </div>
+          <!--续冲-->
           <div  v-if="!hotelRechargeInfo.is_first">
             <div class="row">
               <span class="title">余额</span>
-              <span>￥{{hotelRechargeInfo.balance}}</span>
+              <span>￥{{hotelRechargeInfo.balance*1000}}</span>
             </div>
             <div class="row">
               <span class="title">使用次数</span>
               <span>{{usedNum}}</span>
               <span class="dateShow" @click="isCalendarShow=true">
-               {{datetimeparse(periodFilter[0],'YYYYMMDD')-datetimeparse(periodFilter[1],'YYYYMMDD')}} <x-icon type="ios-arrow-down"  size="18" class="chargeIcon"></x-icon>
+               {{datetimeparse(periodFilter[0],'YYYYMMDD')+' - '+datetimeparse(periodFilter[1],'YYYYMMDD')}} <x-icon type="ios-arrow-down"  size="18" class="chargeIcon"></x-icon>
               </span>
             </div>
             <div class="row">
@@ -45,7 +46,7 @@
           </div>
           <div class="clo">
             <p class="title">充值金额</p>
-            <p class="cont">{{item.pay_fee}}</p>
+            <p class="cont">{{item.pay_fee*1000}}</p>
           </div>
           <div class="clo">
             <p class="title">充值方式</p>
@@ -105,8 +106,10 @@
           usedNum:'',
           date:'',
           isCalendarShow:false,
-          periodFilter:[]
-
+          periodFilter:[null, null],
+          offset:0,
+          limit:0,
+          noIdentityDetailList:[]
       }
     },
 
@@ -119,15 +122,6 @@
       currentTab(){
         console.log(this.route.params.tab)
         return parseInt(this.route.params.tab)
-      },
-      renderList() {
-        if (this.currentTab == 0) {
-            return this.hotelRechargeInfo
-        } else if (this.currentTab == 1) {
-          return this.Rechargelist
-        } else if (this.currentTab == 2) {
-
-        }
       },
       tabMenu() {
         let menu = [];
@@ -146,38 +140,15 @@
         'replaceto',
         "getRechargeInfo",
         "getRechargelist",
-        "getRechargeUsedNum"
+        "getRechargeUsedNum",
+        'getNoIdentityDetailList'
       ]),
-      _getRechargelist(){
-        this.Rechargelist = [];
-        this.Rechargelist = [
-          {
-            "recharge_time": 1511582381000,
-            "pay_way": "支付宝",
-            "pay_fee": 3000
-          },
-          {
-            "recharge_time": 1511582381000,
-            "pay_way": "银联",
-            "pay_fee": 3000
-          },
-          {
-            "recharge_time": 1511582381000,
-            "pay_way": "微信支付",
-            "pay_fee": 3000
-          }]
-        this.getRechargelist({
-            hotel_id: this.hotel.hotel_id,
-            onsuccess: body => {
-               this.Rechargelist = [...body];
-           }
-        })
-      },
-        //获取充值信息
+        //
         resetFilter(){
-          this.periodFilter='';
+          this.periodFilter=[null,null];
           this.isCalendarShow=false
         },
+        //获取充值信息
       getRechargeInfos(){
         this.getRechargeInfo({
           hotel_id: this.hotel.hotel_id,
@@ -185,6 +156,25 @@
         })
 
       },
+        //充值列表
+      getRechargelists(){
+        this.getRechargelist({
+            offset:this.offset,
+            limit:this.limit,
+            hotel_id: this.hotel.hotel_id,
+            onsuccess: body => {
+                this.Rechargelist = [...body];
+            }
+
+        })
+      },
+        //无证核验详情列表
+        getNoIdentityDetailLists(){
+          this.getNoIdentityDetailList({
+            
+          })
+        },
+        //充值使用次数
         getUsedNum(){
           this.getRechargeUsedNum({
               hotelId:this.hotel.hotel_id,
@@ -193,13 +183,10 @@
               }
           })
         },
-      inputShow(){
-      },
       initList(){
-        this._getRechargelist();
-      },
-      refreshList(){
-
+        this.getRechargeInfos;
+        this.getUsedNum();
+        this.getRechargelists();
       },
       GETFAKEDATA(){
           this.hotelRechargeInfo={
@@ -209,9 +196,6 @@
               "pay_fee": 3000,
               "is_first":false
           }
-      },
-      onChange(){
-
       }
     },
 
@@ -223,17 +207,16 @@
 //          : null;
 //      }
         periodFilter(val){
-            if(val!==''){
-                this.getUsedNum()
+            if(val.length!==0){
+                // this.getUsedNum()
             }
         }
     },
 
     mounted(){
       // this.initList();
-      // this.getRechargeInfos();
-        this.getUsedNum();
-      this.GETFAKEDATA()
+
+      // this.GETFAKEDATA()
     }
   }
 </script>

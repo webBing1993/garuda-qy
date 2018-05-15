@@ -2,7 +2,7 @@ module.exports = {
     //充值记录列表接口
     getRechargelist (ctx, param) {
         ctx.dispatch ('resource', {
-            url: '/rechargelist/' + param.hotel_id,
+            url: '/rechargelist/' + param.hotel_id+'?offset='+param.offset+'&limit='+param.limit,
             method: 'GET',
             onSuccess: body => {
                 param.onsuccess ? param.onsuccess (body) : null
@@ -19,7 +19,16 @@ module.exports = {
             }
         })
     },
-
+//充值核验详情列表
+    getNoIdentityDetailList(ctx, param){
+        ctx.dispatch ('resource', {
+            url: '/rechargelist/' + param.hotel_id+'?offset='+param.offset+'&limit='+param.limit,
+            method: 'GET',
+            onSuccess: body => {
+                param.onsuccess ? param.onsuccess (body) : null
+            }
+        })
+    },
     pmscheckout (ctx, param) {
         ctx.dispatch ('resource', {
             url: '/checkout/' + param.id + '/pms',
@@ -40,6 +49,7 @@ module.exports = {
             }
         })
     },
+    //充值使用次数
     getRechargeUsedNum(ctx,param){
         ctx.dispatch ('resource', {
             url: '/usetime/'+param.hotelId,
