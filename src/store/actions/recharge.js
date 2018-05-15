@@ -9,7 +9,7 @@ module.exports = {
             }
         })
     },
-// 续充展示
+// //续充展示
     getRechargeInfo (ctx, param) {
         ctx.dispatch ('resource', {
             url: '/recharge/' + param.hotel_id,
@@ -19,7 +19,7 @@ module.exports = {
             }
         })
     },
-//充值核验详情列表
+////充值核验详情列表
     getNoIdentityDetailList(ctx, param){
         ctx.dispatch ('resource', {
             url: '/rechargelist/' + param.hotel_id+'?offset='+param.offset+'&limit='+param.limit,

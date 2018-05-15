@@ -55,7 +55,7 @@
         </div>
       </div>
       <div v-if="currentTab === 2">
-        <div class="rechargeContent1">
+        <div class="rechargeContent1" v-for="item in noIdentityDetailList">
           <div class="clo">
             <p class="title">姓名</p>
             <p class="cont">张三的歌</p>
@@ -171,7 +171,7 @@
         //无证核验详情列表
         getNoIdentityDetailLists(){
           this.getNoIdentityDetailList({
-            
+
           })
         },
         //充值使用次数
