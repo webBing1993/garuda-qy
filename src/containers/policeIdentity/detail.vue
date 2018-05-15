@@ -71,7 +71,6 @@
             </p>
             <span class="orderButton" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="item.orderOpen=!item.orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
-
           </div>
           <div v-if="!item.orderOpen">
             <p class="orderItem">
@@ -206,85 +205,16 @@
           Group,
           Selector
       },
-    computed: {
-        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
-      ...mapState([
-        'hotel',
-        'route',
-        'roomNumberList',
-        'orderList',
-        'checkedOrder',
-        'currentLvyeRecordId',
-        'serviceConfig'
-      ]),
-      renderOrderList(){
-          // let fakeList=[{
-          //     order_no:"1245253525",//订单号,
-          //     order_id:"52523552",//订单ID
-          //     owner_tel:"1873155253",//手机号
-          //     owner:"郑斯斯",//预订人姓名
-          //     hotel_id:"",//酒店ID
-          //     remark:"携程预定",//备注
-          //     in_time:1538471246118,//入住时间
-          //     out_time:1539784184264,//离店时间
-          //     in_day:"",//入住天数
-          //     show_checkin:true,
-          //     rooms:[{
-          //         room_type_name:"大床房",
-          //         room_no:"",//房间号
-          //         suboder_id:"",//子单ID
-          //         is_select:""//如果通过身份证查询 则会选择身份证入住的房间 如果通过房间号查询，则会显示该房间号
-          //     }],
-          //     room_type_info:[
-          //         {room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2},{room_type_name:"温馨圆房", room_count:3,},{room_type_name:"大床房", room_count:2}
-          //     ],
-          //     config:{
-          //         support_zft:"",//是否支持值房通
-          //         enabled_sign:true,//是否支持签名
-          //     },
-          //     prepay_code:"",
-          //     pay_mode:2, //订单已确认 可以有两种 1为现付 2为预付
-          //     precheckin_status:3,//确认状态  只有为6的订单并且不需要签名的订单，并且rooms的数量为1，才可以出现入住按钮  1为未确认 大于1都为已确认订单
-          //     pms_prepay: 5.3//预付金额 单位是分
-          // }]
-          // list=fakeList;
-          // console.log('renderOrderList:',this.list)
-          return this.list;
-
-      },
-      identityId(){
-        return this.route.params.id
-      },
-      isDisabled(){
-          if (this.roomNumberList.length > 0) {
-              let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-              return !this.roomNumber  || this.isErrorNumber ||!isRightInputRoomNumber
-          } else {
-              return !this.roomNumber
-          }
-      },
-        buttonGroupShow(){
-            if(this.detail.identityStatus == 'REFUSED'||this.detail.identityStatus == 'AGREED'||this.detail.reportInStatus=='PENDING'){
-                return false;
-            }else {
-                return true;
-            }
-        },
-        showGuestType(){
-            if(this.detail.reportInStatus=='PENDING'||this.detail.identityStatus == 'REFUSED'){
-                return false;
-            }else {
-                return true
-            }
-        }
-    },
       watch: {
           renderOrderList(val){
-              // console.log('此时的renderOrderList：',val)
+              console.log('renderOrderList变动：',val)
               if(val.length!==0){
+
                   val.forEach(item=>{
-                      if(item.orderOpen=='undefined'){
-                         this.$set(item,'orderOpen',true);;
+                      console.log(item.orderOpen)
+                      if(typeof item.orderOpen=='undefined'){
+                          console.log(44141241)
+                          this.$set(item,'orderOpen',true);;
                       }
                   })
               }
@@ -339,6 +269,47 @@
           //     console.log('val:',val)
           // }
       },
+    computed: {
+        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
+      ...mapState([
+        'hotel',
+        'route',
+        'roomNumberList',
+        'orderList',
+        'checkedOrder',
+        'currentLvyeRecordId',
+        'serviceConfig'
+      ]),
+      renderOrderList(){
+          return this.list;
+
+      },
+      identityId(){
+        return this.route.params.id
+      },
+      isDisabled(){
+          if (this.roomNumberList.length > 0) {
+              let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
+              return !this.roomNumber  || this.isErrorNumber ||!isRightInputRoomNumber
+          } else {
+              return !this.roomNumber
+          }
+      },
+        buttonGroupShow(){
+            if(this.detail.identityStatus == 'REFUSED'||this.detail.identityStatus == 'AGREED'||this.detail.reportInStatus=='PENDING'){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        showGuestType(){
+            if(this.detail.reportInStatus=='PENDING'||this.detail.identityStatus == 'REFUSED'){
+                return false;
+            }else {
+                return true
+            }
+        }
+    },
     methods: {
       ...mapActions([
           'goto',
@@ -420,7 +391,6 @@
                         this.list= this.checkedOrder;
                     }else{
                         this.list= this.orderList;
-                        console.log('zsj')
                     }
                 })
             })

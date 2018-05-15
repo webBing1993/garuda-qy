@@ -215,19 +215,33 @@
       gethotelConfig(){
           this.getHotelConfig({
               onsuccess: body =>{
-                  this.appConfig=JSON.parse(body.data)
+                  try{
+                      if(body.data){
+                          this.appConfig=JSON.parse(body.data);
+                      }
+
+                  }catch (err){
+                      console.log('getHotelConfig:',err)
+                  }
                   // console.log('2222:',JSON.parse(body.data))
               }
           });
           this.getConfig({
            onsuccess: body => {
-               if(body.data){
-                 if(body.data.business_mode==='WQT'){
-                   this.flag=true;
-                 }else if(body.data.business_mode==='IDENTITY'){
-                   this.flag=false;
-                 }
-               };
+               try {
+                   if(body.data){
+                       if(body.data.business_mode==='WQT'){
+                           this.flag=true;
+                       }else if(body.data.business_mode==='IDENTITY'){
+                           this.flag=false;
+                       }
+                   }else {
+                       this.flag=true;
+                   }
+               }catch(err) {
+                   console.log('getConfig',err)
+               }
+
              }
           })
       },

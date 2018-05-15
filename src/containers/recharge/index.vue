@@ -150,10 +150,15 @@
         },
         //获取充值信息
       getRechargeInfos(){
-        this.getRechargeInfo({
-          hotel_id: this.hotel.hotel_id,
-          onsuccess: body => (this.hotelRechargeInfo = body.data)
-        })
+          try{
+              this.getRechargeInfo({
+                  hotel_id: this.hotel.hotel_id,
+                  onsuccess: body => (this.hotelRechargeInfo = body.data)
+              })
+          }catch (err){
+              console.log('zsj',err)
+          }
+
 
       },
         //充值列表
@@ -178,6 +183,10 @@
         getUsedNum(){
           this.getRechargeUsedNum({
               hotelId:this.hotel.hotel_id,
+              data:{
+                  start_time:this.periodFilter[0]?this.periodFilter[0]:'',
+                  end_time:this.periodFilter[1]?this.periodFilter[1]:'',
+              },
               onsuccess:body=>{
                   this.usedNum=body.data;
               }
@@ -208,13 +217,13 @@
 //      }
         periodFilter(val){
             if(val.length!==0){
-                // this.getUsedNum()
+                this.getUsedNum()
             }
         }
     },
 
     mounted(){
-      // this.initList();
+      this.initList();
 
       // this.GETFAKEDATA()
     }
