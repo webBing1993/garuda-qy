@@ -17,17 +17,17 @@
         <Cell class="key" title="免押金" :value="isfreeDeposit ? '是' : '否'"/>
       </Group>
 
-      <div class="button-group">
-        <x-button value="预付"
-                  primary
-                  @onClick="staffpayConfirm(2)"/>
-        <x-button value="后付/挂账/公付等"
-                  warn
-                  @onClick="staffpayConfirm(3)"/>
-        <x-button value="现付"
-                  @onClick="staffpayConfirm(1)"
-                  plain/>
-      </div>
+      <!--<div class="button-group">-->
+        <!--<x-button value="预付"-->
+                  <!--primary-->
+                  <!--@onClick="staffpayConfirm(2)"/>-->
+        <!--<x-button value="后付/挂账/公付等"-->
+                  <!--warn-->
+                  <!--@onClick="staffpayConfirm(3)"/>-->
+        <!--<x-button value="现付"-->
+                  <!--@onClick="staffpayConfirm(1)"-->
+                  <!--plain/>-->
+      <!--</div>-->
     </div>
     <Dialog v-model="showDialog"
             @onConfirm="setSingleConfirm"

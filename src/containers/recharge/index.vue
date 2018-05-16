@@ -199,9 +199,12 @@
         getUsedNum(){
           this.getRechargeUsedNum({
               hotelId:this.hotel.hotel_id,
+              // data:{
+              //     start_time:this.periodFilter[0]?this.periodFilter[0]:new Date().getTime(),
+              //     end_time:this.periodFilter[1]?this.periodFilter[1]:new Date().getTime()
+              // },
               data:{
-                  start_time:this.periodFilter[0]?this.periodFilter[0]:'',
-                  end_time:this.periodFilter[1]?this.periodFilter[1]:'',
+                  aaa:1
               },
               onsuccess:body=>{
                   this.usedNum=body.data;
