@@ -125,7 +125,7 @@
             closeItem: './static/icon/closeBill.png'
           },
           {
-            openItem: './static/icon/ic_abnormity_notice.png',
+            openItem: './static/icon/abnormity_notice.png',
             closeItem: './static/icon/closeAbnormity.png'
           },
           {
@@ -133,12 +133,12 @@
             closeItem:'./static/icon/closeLvye.png'
           },
           {
-            openItem: './static/icon/ic_bill.png',
-            closeItem: './static/icon/closeBill.png'
+            openItem: './static/icon/charge.png',
+            closeItem: './static/icon/closeCharge.png'
           },
           {
-            openItem: './static/icon/ic_bill.png',
-            closeItem: './static/icon/closeBill.png'
+            openItem: './static/icon/clean.png',
+            closeItem: './static/icon/closeClean.png'
           }
         ]
       }

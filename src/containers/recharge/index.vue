@@ -163,7 +163,7 @@
         //获取充值信息
       getRechargeInfos(){
           try{
-              console.log(222);
+              // console.log(222);
               this.getRechargeInfo({
                   hotel_id: this.hotel.hotel_id,
                   onsuccess: body => (this.hotelRechargeInfo = body.data)
