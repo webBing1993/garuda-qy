@@ -2,14 +2,12 @@
 <template>
   <article>
     <header class="tab-wrapper">
-      <Tab active-color="#5077AA">
-        <TabItem v-for="(item,index) in tabMenu"
-                 :key="index"
-                 :class="{'vux-1px-r': index===0}"
-                 :selected="currentTab === index"
-                 @click.native="replaceto('/prepay/'+index)">{{item}}
-        </TabItem>
-      </Tab>
+      <tab active-color="#5077AA">
+        <tab-item v-for="(item,index) in tabMenu"
+                  :selected="currentTab === index"
+                  :key="index" @on-item-click="tabToggle(index)">{{item}}
+        </tab-item>
+      </tab>
       <div class="batchbar" v-if="batch">
         <span class="allpick" :class="{batch:batchlist.length === tobeconfirmed.length}" @click="allPick">全选</span>
         <span @click="cancelPick">取消操作</span>
@@ -19,10 +17,14 @@
 
     <!--<switchs title="aa"></switchs>-->
     <div class="list-wrapper">
-      <p class="synchronize">
-        <x-button mini value="同步" @onClick="syncTime"></x-button>
-        上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}
-      </p>
+        <div class="orderTitle">
+          <span @click="syncTime">同步</span>
+          <span>
+            <x-input  placeholder="输入手机号或姓名拼音快速索引" v-model="searchOrder">
+            <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
+            </x-input>
+          </span>
+        </div>
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
         <checker type="checkbox" v-model="batchlist"
@@ -30,6 +32,7 @@
           <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
             <Group>
               <Cell :title="getCellTitle(item)"></Cell>
+
               <Cell :title="getTobeConfirmedCellBody(item)" link @onClick="orderClick(item.order_id)"/>
               <Cell v-if="item.remark" :title="getCellFooter(item)"/>
             </Group>
@@ -38,14 +41,6 @@
       </div>
 
       <div v-show="currentTab">
-        <!--<p v-show="(!confirmed||confirmed.length === 0) && confirmedPageIndex > 0" class="no-data">暂无数据</p>-->
-        <!--<Group v-for="(item,index) in confirmed" :key="index">-->
-        <!--<Cell :title="getCellTitle(item)"/>-->
-        <!--<Cell :title="getCellBody(item)" link @onClick="orderClick(item.order_id)"/>-->
-        <!--<Cell v-if="item.remark" :title="getCellFooter(item)"/>-->
-        <!--</Group>-->
-
-
         <div class="orderCell" v-for="(item,index) in confirmed" :key="index">
           <div class="orderCellTitle">
             <div>
@@ -53,19 +48,17 @@
               <span>{{item.order_pmsid}}</span>
             </div>
             <div v-if="item.prepay_code==null">
-              <span class="cell-right other" v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode==1">现付 </span>
-              <span class="cell-right primary" v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode==2">预付 </span>
-              <span v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode!=1&&item.payinfo.pay_mode!=2">后付/挂账/公账等</span>
+              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
+              <!--<span v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode!=1&&item.payinfo.pay_mode!=2">后付/挂账/公账等</span>-->
             </div>
-            <div v-if="item.prepay_code&&item.prepay_code!=null">
-              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='PRETOTALPAY'">全额预付 </span>
-              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='SHOPPAY'">现付</span>
-              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='CREDITPAY'">信用后付</span>
-              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='COMPANYPAY'">公司挂账</span>
-              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='FREEPAY'">免单</span>
-              <span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='NOTKNOWPAY'">未知</span>
-
-            </div>
+            <!--<div v-if="item.prepay_code&&item.prepay_code!=null">-->
+              <!--<span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='PRETOTALPAY'">全额预付 </span>-->
+              <!--<span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='SHOPPAY'">现付</span>-->
+              <!--<span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='CREDITPAY'">信用后付</span>-->
+              <!--<span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='COMPANYPAY'">公司挂账</span>-->
+              <!--<span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='FREEPAY'">免单</span>-->
+              <!--<span class="cell-right other" v-if="item.prepay_code && item.prepay_code=='NOTKNOWPAY'">未知</span>-->
+            <!--</div>-->
           </div>
           <div class="space"></div>
           <div class="orderCellBody">
@@ -92,7 +85,6 @@
           </div>
           <Cell v-if="item.remark" :title="getCellFooter(item)"/>
         </div>
-
       </div>
     </div>
 
@@ -147,13 +139,22 @@
         <div id="qrcode" ref="qrcode"></div>
       </div>
     </div>
+    <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
+      <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
+      <ul v-for="(item,index) in statusList">
+        <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="(checkIndex=index,payMode=item.value)">{{item.name}}</li>
+      </ul>
+      <div style="text-align: left;color: #000000;margin-bottom: 2rem">
+        <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="isFreeDeposit">
+      </div>
+    </Dialog>
     <!--<div id="qrcode" ref="qrcode"></div>-->
   </article>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {XDialog, PopupRadio, PopupPicker, Picker, Popup} from 'vux'
+  import {XDialog, PopupRadio, PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
 
   export default{
     name: "prepay",
@@ -163,7 +164,10 @@
       PopupRadio,
       PopupPicker,
       Picker,
-      Popup
+      Popup,
+      XInput,
+      Tab,
+      TabItem
     },
 
     data(){
@@ -189,7 +193,15 @@
         isTimerConterShow: false,
         periodFilter: [null, null],
         showQrcode: false,
-        i: false
+        i: false,
+        confirmOrderStatus:false,
+        checkIndex:0,
+        statusList:[{name:'不需现付房费',value:1},{name:'房费现付',value:2}],
+        payMode:1,
+        isFreeDeposit:true,
+        checkItem:{},
+          searchOrder:'',
+          resultList:[]
       }
     },
 
@@ -200,14 +212,12 @@
         'route',
         'hotel'
       ]),
-
       currentTab(){
-        console.log(this.route.params.tab)
         return parseInt(this.route.params.tab)
       },
 
       renderList(){
-        return this.currentTab == 2 ? this.confirmed : this.tobeconfirmed
+          return this.resultList;
       },
 
       tabMenu() {
@@ -227,8 +237,32 @@
         'multiconfirm',
         'hotelrefresh',
         'searchRoom',
+        'changeStatus'
       ]),
-
+        //弹出对话框改订单状态
+        confirmOrder(){
+            console.log('checkItem:',this.checkItem)
+            this.changeStatus({
+                data:{
+                    order_id:this.checkItem.order_id,
+                    hotel_id:this.hotel.hotel_id,
+                    pay_mode:this.payMode,
+                    is_free_deposit:this.isFreeDeposit
+                },
+                onsuccess:(body=>{
+                    this.initList();
+                })
+            })
+        },
+        tabToggle(index){
+            this.replaceto('/prepay/'+index);
+            if(this.currentTab==1){
+                this.resultList =this.confirmed;
+            }else if(this.currentTab==0){
+                this.resultList =this.tobeconfirmed;
+            }
+            console.log('this.resultList:',this.resultList);
+        },
       confirmMode(item){
         return item.payinfo
           ? item.payinfo.confirm_mode === 2 ? '(手动确认)' : ''
@@ -236,16 +270,19 @@
       },
 
       getCellTitle(item){
-        let paystatus = item.payinfo.pay_mode;
+        // let paystatus = item.payinfo.pay_mode;
         let paystatusdom = ``
-        if (paystatus) {
-          paystatusdom = paystatus === 1
-            ? `<span class="cell-right other">现付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-            : paystatus === 2
-              ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-              : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-        }
-        return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
+        // if (paystatus) {
+          // paystatusdom = paystatus === 1
+          //   ? `<span class="cell-right other">现付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+          //   : paystatus === 2
+          //     ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+          //     : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+        // }
+          paystatusdom=`<span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">${item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>`
+
+
+          return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
       },
 
       getTobeConfirmedCellBody(item){
@@ -349,7 +386,6 @@
       },
 
       refreshList(){
-        console.log(this.currentTab)
         this.tobeconfirmed = []
         this.confirmed = []
         if (this.currentTab == 0) {
@@ -457,11 +493,27 @@
     },
 
     watch: {
-      currentTab: function (val, oldval) {
+        searchOrder(val,old) {
+            // console.log(old)
+            console.log(val)
+            if (val=='') {
+                this.resultList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
+            }
+            if (val && val.split('').some(i => !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(i))) {//验证特殊字符
+                console.log('特殊字符')
+                this.searchOrder = old;
+            }
+            if (this.resultList.length > 0 && val) {
+                console.log(222)
+                this.resultList = this.resultList.filter(item=> item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1);
+            }
+        },
+      currentTab(val) {
         this.cancelPick();
-        typeof val === 'number' && !isNaN(val)
-          ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
-          : null;
+        // typeof val === 'number' && !isNaN(val)
+        //   ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
+        //   : null;
+          this.initList()
       }
     },
 
@@ -473,4 +525,5 @@
 
 <style scoped lang="less">
   @import "index.less";
+
 </style>
