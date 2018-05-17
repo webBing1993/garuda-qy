@@ -22,7 +22,7 @@ module.exports = {
 ////充值核验详情列表
     getNoIdentityDetailList(ctx, param){
         ctx.dispatch ('resource', {
-            url: '/undocumented/list?page='+param.page,
+            url: '/undocumented/list?page='+param.page+'&limit='+param.limit,
             method: 'GET',
             onSuccess: body => {
                 param.onsuccess ? param.onsuccess (body) : null

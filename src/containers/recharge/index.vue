@@ -108,7 +108,9 @@
           isCalendarShow:false,
           periodFilter:[null, null],
           offset:0,
-          limit:0,
+          page:1,
+          limit:50,
+          limit2:50,
           noIdentityDetailList:[]
       }
     },
@@ -121,6 +123,12 @@
                     return '待审核';
                 case 'AGREED':
                     return '通过';
+                case 'AUTO_AGREED':
+                    return '自动通过';
+                case 'AUTO_REFUSED':
+                    return '自动拒绝';
+                case 'FAILED':
+                    return '验证失败'
             }
         }
     },
@@ -189,7 +197,8 @@
         //无证核验详情列表
         getNoIdentityDetailLists(){
           this.getNoIdentityDetailList({
-              page:1,
+              page:this.page,
+              limit:this.limit2,
               onsuccess:body=>{
                   this.noIdentityDetailList=body.data.list;
               }
