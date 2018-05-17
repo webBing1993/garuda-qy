@@ -52,9 +52,8 @@ module.exports = {
     //充值使用次数
     getRechargeUsedNum(ctx,param){
         ctx.dispatch ('resource', {
-            url: '/usetime/'+param.hotelId,
+            url: '/usetime/'+param.hotelId+'?start_time='+param.start_time+'&end_time='+param.end_time,
             method: 'GET',
-            body: param.data,
             onSuccess: (body, headers) => {
                 param.onsuccess ? param.onsuccess (body, headers) : null
             }

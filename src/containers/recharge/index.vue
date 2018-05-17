@@ -139,9 +139,9 @@
         let menu = [];
 //        menu[0] = `待确认(${this.tobeconfirmed.length})`;
 //        menu[1] = `已确认(${this.confirmed.length})`;
-        menu[0] = `充值()`;
-        menu[1] = `充值详情()`;
-        menu[2] = `核验详情(1)`;
+        menu[0] = `充值`;
+        menu[1] = `充值详情(${this.Rechargelist.length})`;
+        menu[2] = `核验详情(${this.noIdentityDetailList.length})`;
         return menu;
       }
     },
@@ -163,7 +163,7 @@
         //获取充值信息
       getRechargeInfos(){
           try{
-              console.log(222);
+              // console.log(222);
               this.getRechargeInfo({
                   hotel_id: this.hotel.hotel_id,
                   onsuccess: body => (this.hotelRechargeInfo = body.data)
@@ -199,13 +199,8 @@
         getUsedNum(){
           this.getRechargeUsedNum({
               hotelId:this.hotel.hotel_id,
-              // data:{
-              //     start_time:this.periodFilter[0]?this.periodFilter[0]:new Date().getTime(),
-              //     end_time:this.periodFilter[1]?this.periodFilter[1]:new Date().getTime()
-              // },
-              data:{
-                  aaa:1
-              },
+              start_time:this.periodFilter[0]?this.periodFilter[0]:new Date().getTime(),
+              end_time:this.periodFilter[1]?this.periodFilter[1]:new Date().getTime(),
               onsuccess:body=>{
                   this.usedNum=body.data;
               }
