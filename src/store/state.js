@@ -53,5 +53,6 @@ module.exports = {
   orderList:[],
   checkedOrder:[],
   currentLvyeRecordId:'',
-  serviceConfig:{}
+  serviceConfig:{},
+    isFreeDeposit:''
 };

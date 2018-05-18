@@ -30,6 +30,15 @@ module.exports = {
           }
       })
     },
+    get_is_free_deposit_config(ctx,param){
+        ctx.dispatch('resource',{
+            url:'/hotel/config/is_free_deposit',
+            onSuccess: body => {
+                ctx.commit('ISFREEDEPOSIT', body.data)
+                onSuccess: param.onsuccess ? param.onsuccess(body) : null
+            }
+        })
+    },
   hotelrefresh(ctx, param){
     ctx.dispatch('resource', {
       url: '/hotel/' + ctx.state.hotel.hotel_id + '/refresh',

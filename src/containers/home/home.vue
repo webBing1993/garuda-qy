@@ -60,7 +60,7 @@
         <Cell v-if="checkoutApplicationNum > 0" icon="./static/icon/ic_checkout.png" title="离店申请待处理" link
               :badge="checkoutApplicationNum"
               @onClick="goto('receive/checkout-application')"></Cell>
-        <Cell v-if="abnormalNoticeNum > 0" icon="./static/icon/ic_abnormity_notice.png" title="异常提醒" link
+        <Cell v-if="abnormalNoticeNum > 0" icon="./static/icon/abnormity.png" title="异常提醒" link
               :badge="abnormalNoticeNum"
               @onClick="goto('abnormalNotice/listDetail')"></Cell>
         <Cell v-if="absentPersonNum > 0" icon="./static/icon/ic_checkout.png" title="同住人未入住提醒" link
@@ -125,7 +125,7 @@
             closeItem: './static/icon/closeBill.png'
           },
           {
-            openItem: './static/icon/abnormity_notice.png',
+            openItem: './static/icon/abnormity.png',
             closeItem: './static/icon/closeAbnormity.png'
           },
           {
@@ -173,7 +173,8 @@
         'yunbaDisconnect',
         'getConfig',
         'getHotelConfig',
-        'getServiceConfigs'
+        'getServiceConfigs',
+        'get_is_free_deposit_config'
       ]),
         ...mapMutations([
            'SERVICECONFIG'
@@ -243,7 +244,8 @@
                }
 
              }
-          })
+          });
+          this.get_is_free_deposit_config()
       },
       subscribe() {
         this.yunbaSubscribe({

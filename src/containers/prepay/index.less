@@ -156,7 +156,8 @@ article.prepay{
 }
 
 .orderCell{
-  font-size: 17px;
+    position: relative;
+  font-size: 15px;
   background-color: #ffffff;
   margin: 20px 0;
   display: flex;
@@ -164,6 +165,9 @@ article.prepay{
   //height: 200px;
   .orderCellKey{
     color: #8a8a8a;
+      display: inline-block;
+      width: 4rem;
+      text-align: right;
   }
   .orderCellTitle{
     display: flex;
@@ -186,6 +190,7 @@ article.prepay{
     .space10{
       height: 10px;
     }
+
     .setArrowRight{
         display: inline-block;
         height: 25px;
@@ -194,7 +199,7 @@ article.prepay{
         border-width: 2px 2px 0 0;
         border-color: #E6E6E6;
         border-style: solid;
-      margin-top: 20px;
+        margin-top: 4rem;
        transform: matrix(0.71,0.71,-0.71,0.71,0,0);
     }
   }
@@ -310,6 +315,13 @@ article.prepay{
             color: #959595;
         }
     }
+}
+.icon-erweima1{
+    color: #5077AA;
+    position: absolute;
+    right: 1rem;
+    top:3rem;
+    font-size: 30px;
 }
 #qrcode{
   //width: 180px;

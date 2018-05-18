@@ -133,8 +133,8 @@
         <ul v-for="(item,index) in statusList">
           <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="(checkIndex=index,payMode=item.value)">{{item.name}}</li>
         </ul>
-        <div style="text-align: left;color: #000000;margin-bottom: 2rem">
-          <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="isFreeDeposit">
+        <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
+          <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
         </div>
       </Dialog>
     </article>
@@ -171,7 +171,7 @@
           orderStatus:0,
           // orderOpen:true,
           payMode:1,
-          isFreeDeposit:true,
+          freeDeposit:false,
           checkItem:{},
           list:[]
 
@@ -275,8 +275,12 @@
         'orderList',
         'checkedOrder',
         'currentLvyeRecordId',
-        'serviceConfig'
+        'serviceConfig',
+          'isFreeDeposit'
       ]),
+      freeDepositCheck(){
+          return this.isFreeDeposit!==null&&this.isFreeDeposit=='true'?true:false
+      },
       renderOrderList(){
           return this.list;
       },
@@ -409,7 +413,7 @@
                   order_id:this.checkItem.order_id,
                   hotel_id:this.hotel.hotel_id,
                   pay_mode:this.payMode,
-                  is_free_deposit:this.isFreeDeposit
+                  is_free_deposit:this.freeDeposit
               },
               onsuccess:(body=>{
                   this.initOrderList();
@@ -448,7 +452,7 @@
         CheckIn(item){
           this.suborderCheckIn({
               data:{
-                  suborder_id:item.suboder_id,
+                  suborder_id:item.rooms[0].suboder_id,
                   room_no:item.rooms[0].room_no,
                   guests:[{
                       name:this.detail.name,

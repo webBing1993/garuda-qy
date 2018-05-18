@@ -27,21 +27,70 @@
         </div>
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
-        <checker type="checkbox" v-model="batchlist"
-                 default-item-class="checker-item" selected-item-class="selected">
-          <checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
-            <Group>
-              <Cell :title="getCellTitle(item)"></Cell>
-
-              <Cell :title="getTobeConfirmedCellBody(item)" link @onClick="orderClick(item.order_id)"/>
-              <Cell v-if="item.remark" :title="getCellFooter(item)"/>
-            </Group>
-          </checker-item>
-        </checker>
+        <!--<checker type="checkbox" v-model="batchlist"-->
+                 <!--default-item-class="checker-item" selected-item-class="selected">-->
+          <!--<checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">-->
+            <!--<Group>-->
+              <!--<Cell :title="getCellTitle(item)"></Cell>-->
+              <!--<Cell :title="getTobeConfirmedCellBody(item)" link @onClick="orderClick(item.order_id)"/>-->
+              <!---->
+              <!--<Cell v-if="item.remark" :title="getCellFooter(item)"/>-->
+            <!--</Group>-->
+          <!--</checker-item>-->
+        <!--</checker>-->
+        <div class="orderCell" v-for="(item,index) in renderList" :key="index">
+          <div class="orderCellTitle">
+            <div>
+              <span class="orderCellKey">订单号：</span>
+              <span>{{item.order_pmsid}}</span>
+            </div>
+            <div v-if="item.prepay_code==null">
+              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
+            </div>
+          </div>
+          <div class="space"></div>
+          <div class="orderCellBody">
+            <div>
+              <p>
+                <span class="orderCellKey">预订人：</span>
+                <span>{{item.owner}} {{item.owner_tel}}</span>
+              </p>
+              <p class="space10"></p>
+              <p v-for="(i,k) in item.rooms_plan" :key="k">
+                <span class="orderCellKey">房型：</span>
+                <span>{{i.room_type}}X{{i.room_count}}</span>
+              </p>
+              <p class="space10"></p>
+              <p>
+                <span class="orderCellKey">预付款：</span>
+                <span>¥{{item.payinfo.pms_pay*1000}}</span>
+              </p>
+              <p class="space10"></p>
+              <p>
+                <span class="orderCellKey">入住：</span>
+                <span>{{datetimeparse(item.in_time,'YYMMDD')}}</span>
+                <span style="margin-left: 1rem;color: #959595">离店：</span><span>{{datetimeparse(item.out_time,'YYMMDD')}}</span>
+              </p>
+              <p class="space10"></p>
+            </div>
+            <div class="iconfont icon-erweima1" @click="_getQart(item)"></div>
+            <div class="setArrowRight" @click="orderClick(item.order_id)"></div>
+          </div>
+          <!--<div class="orderCellFooter">-->
+            <!--<p>-->
+              <!--<span class="orderCellKey">分享码：</span>-->
+              <!--<span>{{item.share_code}}</span>-->
+            <!--</p>-->
+            <!--<x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>-->
+            <!--&lt;!&ndash;<button v-on:click="_getQart(item,index)">生成二维码1</button>&ndash;&gt;-->
+          <!--</div>-->
+          <Cell v-if="item.remark" :title="getCellFooter(item)"/>
+        </div>
       </div>
 
+
       <div v-show="currentTab">
-        <div class="orderCell" v-for="(item,index) in confirmed" :key="index">
+        <div class="orderCell" v-for="(item,index) in renderList" :key="index">
           <div class="orderCellTitle">
             <div>
               <span class="orderCellKey">订单号：</span>
@@ -72,22 +121,35 @@
                 <span class="orderCellKey">房型：</span>
                 <span>{{i.room_type}}X{{i.room_count}}</span>
               </p>
+              <p class="space10"></p>
+              <p>
+                <span class="orderCellKey">预付款：</span>
+                <span>¥{{item.payinfo.pms_pay*1000}}</span>
+              </p>
+              <p class="space10"></p>
+              <p>
+                <span class="orderCellKey">入住：</span>
+                <span>{{datetimeparse(item.in_time,'YYMMDD')}}</span>
+                <span style="margin-left: 1rem;color: #959595">离店：</span><span>{{datetimeparse(item.out_time,'YYMMDD')}}</span>
+              </p>
+              <p class="space10"></p>
             </div>
+            <div class="iconfont icon-erweima1" @click="_getQart(item)"></div>
             <div class="setArrowRight" @click="orderClick(item.order_id)"></div>
           </div>
-          <div class="orderCellFooter">
-            <p>
-              <span class="orderCellKey">分享码：</span>
-              <span>{{item.share_code}}</span>
-            </p>
-            <x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>
-            <!--<button v-on:click="_getQart(item,index)">生成二维码1</button>-->
-          </div>
+          <!--<div class="orderCellFooter">-->
+            <!--<p>-->
+              <!--<span class="orderCellKey">分享码：</span>-->
+              <!--<span>{{item.share_code}}</span>-->
+            <!--</p>-->
+            <!--<x-button mini value="生成二维码" @onClick="_getQart(item)"></x-button>-->
+            <!--&lt;!&ndash;<button v-on:click="_getQart(item,index)">生成二维码1</button>&ndash;&gt;-->
+          <!--</div>-->
           <Cell v-if="item.remark" :title="getCellFooter(item)"/>
         </div>
       </div>
-    </div>
 
+    </div>
     <footer v-show="route.params.tab == 0 && tobeconfirmed.length !== 0 && tobeConfirmedPageIndex > 0">
       <div class="button-group">
         <x-button v-if="batch" value="未支付" @onClick="setMultiConfirm" warn/>
@@ -144,8 +206,8 @@
       <ul v-for="(item,index) in statusList">
         <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="(checkIndex=index,payMode=item.value)">{{item.name}}</li>
       </ul>
-      <div style="text-align: left;color: #000000;margin-bottom: 2rem">
-        <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="isFreeDeposit">
+      <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
+        <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
       </div>
     </Dialog>
     <!--<div id="qrcode" ref="qrcode"></div>-->
@@ -155,6 +217,7 @@
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
   import {XDialog, PopupRadio, PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
+
 
   export default{
     name: "prepay",
@@ -198,7 +261,7 @@
         checkIndex:0,
         statusList:[{name:'不需现付房费',value:1},{name:'房费现付',value:2}],
         payMode:1,
-        isFreeDeposit:true,
+        freeDeposit:false,
         checkItem:{},
           searchOrder:'',
           resultList:[]
@@ -206,12 +269,15 @@
     },
 
     computed: {
-
       ...mapState([
         'Interface',
         'route',
-        'hotel'
+        'hotel',
+          'isFreeDeposit'
       ]),
+        freeDepositCheck(){
+            return this.isFreeDeposit!==null&&this.isFreeDeposit=='true'?true:false
+        },
       currentTab(){
         return parseInt(this.route.params.tab)
       },
@@ -247,7 +313,7 @@
                     order_id:this.checkItem.order_id,
                     hotel_id:this.hotel.hotel_id,
                     pay_mode:this.payMode,
-                    is_free_deposit:this.isFreeDeposit
+                    is_free_deposit:this.freeDeposit
                 },
                 onsuccess:(body=>{
                     this.initList();
@@ -279,7 +345,7 @@
           //     ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
           //     : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
         // }
-          paystatusdom=`<span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">${item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>`
+          paystatusdom=`<span class="cell-right other" @click="confirmOrderStatus=true,checkIndex=0,checkItem=item">${item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>`
 
 
           return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
@@ -380,7 +446,11 @@
         this.tobeConfirmedPageIndex = 0
         this.confirmedPageIndex = 0
         if (this.renderList.length === 0) {
-          this.getList(1, body => (this.tobeconfirmed = [...body.data], this.tobeConfirmedPageIndex++))
+          this.getList(1, body => {
+              this.tobeconfirmed = [...body.data];
+              this.tobeConfirmedPageIndex++;
+              this.resultList=this.tobeconfirmed;
+          })
           this.getList(2, body => (this.confirmed = [...body.data], this.confirmedPageIndex++))
         }
       },
@@ -504,8 +574,8 @@
                 this.searchOrder = old;
             }
             if (this.resultList.length > 0 && val) {
-                console.log(222)
                 this.resultList = this.resultList.filter(item=> item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1);
+                console.log(this.resultList)
             }
         },
       currentTab(val) {

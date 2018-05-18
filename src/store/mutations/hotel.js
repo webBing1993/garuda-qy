@@ -20,6 +20,9 @@ module.exports = {
   CURRENTLVYERECORDID(state,payload){
     state.currentLvyeRecordId=payload;
   },
+    ISFREEDEPOSIT(state,payload){
+      state.isFreeDeposit=payload;
+    } ,
   SERVICECONFIG(state,payload){
       let arr={'ZHIFANGTONG':false,'FAPIAOTONG':false,'ZHIDINGTONG':false,'KEKONGTONG':false,'RENZHENGTONG':false,'ZHIFUTONG':false,'EKATONG':false};
       if(payload.length!==0){
