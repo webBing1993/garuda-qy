@@ -6,7 +6,7 @@
         <div>
           <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
             <label class="item-left">房间号码:</label>
-            <input class="item-right room-number  item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'" @keyup.13="enterToLvye($event)"/>
+            <input class="item-right room-number  item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)"/>
             <span class="item-right" v-else>{{detail.roomNumber}}</span>
           </div>
           <div class="info-item" v-if="showGuestType">
@@ -21,10 +21,6 @@
           <ul class="searchRoom-result" v-if="resultList.length > 0">
             <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
           </ul>
-        </div>
-        <div class="info-item photoTime" >
-          <label class="item-left">拍照时间:</label>
-          <span class="item-right">{{datetimeparse(detail.createdTime,'YYYYMMDDhhmmss')}}</span>
         </div>
         <p class="fail-tip" v-if="detail.reportInStatus && detail.reportInStatus === 'FAILED'" style="margin-bottom: 10px"><span style="color: #ff2d0c;padding-right: 10px;">上传旅业系统失败，请重试</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
@@ -85,7 +81,10 @@
       <!--人证通身份信息-->
       <div class="guestcard">
         <div class="bd">
-          <p><span>现场图片</span><span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr style="color: #56e846">{{detail.similarity}}%</abbr></span></p>
+          <p>
+             <span style="color: #8A8A8A;font-size: 14px"><label>拍照时间:</label> {{datetimeparse(detail.createdTime,'YYYYMMDDhhmmss')}}</span>
+             <span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr style="color: #56e846">{{detail.similarity}}%</abbr></span>
+          </p>
           <img :src="detail.livePhoto" alt="现场照片">
         </div>
         <div class="hd">
@@ -208,8 +207,7 @@
       watch: {
           renderOrderList(val){
               console.log('renderOrderList变动：',val)
-              if(val.length!==0){
-
+              if(val&&val.length!==0){
                   val.forEach(item=>{
                       console.log(item.orderOpen)
                       if(typeof item.orderOpen=='undefined'){
@@ -281,7 +279,6 @@
       ]),
       renderOrderList(){
           return this.list;
-
       },
       identityId(){
         return this.route.params.id
@@ -386,7 +383,7 @@
                 },
                 onsuccess:(body=>{
                     this.SEARCHORDERLIST(body.data);
-                    if(this.checkedOrder!==[]){
+                    if(this.checkedOrder.length!==0){
                         this.list= this.checkedOrder;
                     }else{
                         this.list= this.orderList;
@@ -500,6 +497,7 @@
         this.resultList = [];
         this.isErrorNumber = false;
         if(this.serviceConfig.ZHIFANGTONG){
+            console.log(this.serviceConfig.ZHIFANGTONG)
             this.searchOrderByRoomNum()
         };
       },
