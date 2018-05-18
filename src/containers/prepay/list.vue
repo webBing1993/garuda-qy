@@ -150,12 +150,12 @@
       </div>
 
     </div>
-    <footer v-show="route.params.tab == 0 && tobeconfirmed.length !== 0 && tobeConfirmedPageIndex > 0">
-      <div class="button-group">
-        <x-button v-if="batch" value="未支付" @onClick="setMultiConfirm" warn/>
-        <x-button class="blue-btn" v-else @onClick="goPick" value="未支付批量处理"/>
-      </div>
-    </footer>
+    <!--<footer v-show="route.params.tab == 0 && tobeconfirmed.length !== 0 && tobeConfirmedPageIndex > 0">-->
+      <!--<div class="button-group">-->
+        <!--<x-button v-if="batch" value="未支付" @onClick="setMultiConfirm" warn/>-->
+        <!--<x-button class="blue-btn" v-else @onClick="goPick" value="未支付批量处理"/>-->
+      <!--</div>-->
+    <!--</footer>-->
 
     <footer v-show="route.params.tab == 1">
       <div class="listFilter">
