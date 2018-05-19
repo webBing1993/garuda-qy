@@ -69,7 +69,7 @@
               <p>
                 <span class="orderCellKey">入住：</span>
                 <span>{{datetimeparse(item.in_time,'YYMMDD')}}</span>
-                <span style="margin-left: 1rem;color: #959595">离店：</span><span>{{datetimeparse(item.out_time,'YYMMDD')}}</span>
+                <span style="margin-left:1rem;color: #959595">离店：</span><span>{{datetimeparse(item.out_time,'YYMMDD')}}</span><span class="dayCount">{{item|filterStayDay}}</span>
               </p>
               <p class="space10"></p>
             </div>
@@ -130,7 +130,7 @@
               <p>
                 <span class="orderCellKey">入住：</span>
                 <span>{{datetimeparse(item.in_time,'YYMMDD')}}</span>
-                <span style="margin-left: 1rem;color: #959595">离店：</span><span>{{datetimeparse(item.out_time,'YYMMDD')}}</span>
+                <span style="margin-left: 1rem;color: #959595">离店：</span><span>{{datetimeparse(item.out_time,'YYMMDD')}}</span><span class="dayCount">{{item|filterStayDay}}</span>
               </p>
               <p class="space10"></p>
             </div>
@@ -267,7 +267,11 @@
           resultList:[]
       }
     },
-
+    filters:{
+        filterStayDay(val){
+            return Math.ceil((val.out_time-val.in_time)/3600000/24)+'晚'
+        }
+    },
     computed: {
       ...mapState([
         'Interface',
@@ -459,9 +463,15 @@
         this.tobeconfirmed = []
         this.confirmed = []
         if (this.currentTab == 0) {
-          this.getList(1, body => this.tobeconfirmed = [...body.data])
+          this.getList(1, body => {
+              this.tobeconfirmed = [...body.data];
+              this.resultList=this.tobeconfirmed
+          })
         } else if (this.currentTab == 1) {
-          this.getList(2, body => this.confirmed = [...body.data])
+          this.getList(2, body => {
+              this.confirmed = [...body.data];
+              this.resultList=this.confirmed
+          })
         }
 //        this.getList(this.currentTab+1, body => this.currentTab==2 ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
 

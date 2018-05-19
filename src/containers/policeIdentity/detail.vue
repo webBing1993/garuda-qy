@@ -442,6 +442,7 @@
                   "idcard_no":this.detail.idCard,
                   "idcard_name":this.detail.name,
                   suborder_id:item.suboder_id,
+                  identity_id:item.identityId,
                   room_no:item.rooms[0].room_no
               },
               onsuccess:(body=>{
@@ -454,6 +455,7 @@
               data:{
                   suborder_id:item.rooms[0].suboder_id,
                   room_no:item.rooms[0].room_no,
+                  identity_id:item.identityId,
                   guests:[{
                       name:this.detail.name,
                       idcard:this.detail.idCard
