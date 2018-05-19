@@ -61,10 +61,10 @@
                 <span>{{i.room_type}}X{{i.room_count}}</span>
               </p>
               <p class="space10"></p>
-              <p>
-                <span class="orderCellKey">预付款：</span>
-                <span>¥{{item.payinfo.pms_pay*1000}}</span>
-              </p>
+              <!--<p>-->
+                <!--<span class="orderCellKey">预付款：</span>-->
+                <!--<span>¥{{item.payinfo.pms_pay*1000}}</span>-->
+              <!--</p>-->
               <p class="space10"></p>
               <p>
                 <span class="orderCellKey">入住：</span>
@@ -122,10 +122,10 @@
                 <span>{{i.room_type}}X{{i.room_count}}</span>
               </p>
               <p class="space10"></p>
-              <p>
-                <span class="orderCellKey">预付款：</span>
-                <span>¥{{item.payinfo.pms_pay*1000}}</span>
-              </p>
+              <!--<p>-->
+                <!--<span class="orderCellKey">预付款：</span>-->
+                <!--<span>¥{{item.payinfo.pms_pay*1000}}</span>-->
+              <!--</p>-->
               <p class="space10"></p>
               <p>
                 <span class="orderCellKey">入住：</span>

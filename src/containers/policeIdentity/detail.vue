@@ -435,15 +435,16 @@
         },
         //分享到屏幕
         shareSreen(item){
+          // console.log(item.rooms[0].suborder_id)
           this.shareQrCode({
               data:{
                   "order_id":item.order_id,
+                  "suborder_id":item.rooms[0].suborder_id,
                   "hotel_id":this.hotel.hotel_id,
                   "idcard_no":this.detail.idCard,
                   "idcard_name":this.detail.name,
-                  suborder_id:item.suboder_id,
-                  identity_id:item.identityId,
-                  room_no:item.rooms[0].room_no
+                  "identity_id":this.detail.identityId,
+                  "room_no":item.rooms[0].room_no,
               },
               onsuccess:(body=>{
               })
@@ -455,7 +456,7 @@
               data:{
                   suborder_id:item.rooms[0].suboder_id,
                   room_no:item.rooms[0].room_no,
-                  identity_id:item.identityId,
+                  identity_id:this.detail.identityId,
                   guests:[{
                       name:this.detail.name,
                       idcard:this.detail.idCard
