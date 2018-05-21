@@ -46,7 +46,7 @@
           </div>
           <div class="clo">
             <p class="title">充值金额</p>
-            <p class="cont">{{item.pay_fee*1000}}</p>
+            <p class="cont">{{item.pay_fee/100}}</p>
           </div>
           <div class="clo">
             <p class="title">充值方式</p>
