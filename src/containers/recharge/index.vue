@@ -22,7 +22,7 @@
           <div  v-if="!hotelRechargeInfo.is_first">
             <div class="row">
               <span class="title">余额</span>
-              <span>￥{{hotelRechargeInfo.balance*1000}}</span>
+              <span>￥{{hotelRechargeInfo.balance/1000}}</span>
             </div>
             <div class="row">
               <span class="title">使用次数</span>
