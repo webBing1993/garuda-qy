@@ -45,7 +45,7 @@
               <span>{{item.order_pmsid}}</span>
             </div>
             <div v-if="item.prepay_code==null">
-              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
+              <span class="cell-right other" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.payinfo.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
             </div>
           </div>
           <div class="space"></div>
@@ -97,7 +97,7 @@
               <span>{{item.order_pmsid}}</span>
             </div>
             <div v-if="item.prepay_code==null">
-              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
+              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.payinfo.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
               <!--<span v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode!=1&&item.payinfo.pay_mode!=2">后付/挂账/公账等</span>-->
             </div>
             <!--<div v-if="item.prepay_code&&item.prepay_code!=null">-->
@@ -204,7 +204,7 @@
     <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
       <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
       <ul v-for="(item,index) in statusList">
-        <li class="orderStatusBtn" :class="{checkStatus:index==checkIndex}" @click="(checkIndex=index,payMode=item.value)">{{item.name}}</li>
+        <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)">{{item.name}}</li>
       </ul>
       <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
         <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
@@ -258,7 +258,7 @@
         showQrcode: false,
         i: false,
         confirmOrderStatus:false,
-        checkIndex:0,
+        checkIndex:1,
         statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
         payMode:1,
         freeDeposit:false,
@@ -309,6 +309,12 @@
         'searchRoom',
         'changeStatus'
       ]),
+        showStatusDialog(item){
+            this.confirmOrderStatus=true,
+            this.payMode=item.payinfo.pay_mode,
+            this.checkIndex=0,
+            this.checkItem=item
+        },
         //弹出对话框改订单状态
         confirmOrder(){
             console.log('checkItem:',this.checkItem)
