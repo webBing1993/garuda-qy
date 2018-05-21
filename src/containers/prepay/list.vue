@@ -259,7 +259,7 @@
         i: false,
         confirmOrderStatus:false,
         checkIndex:0,
-        statusList:[{name:'不需现付房费',value:1},{name:'房费现付',value:2}],
+        statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
         payMode:1,
         freeDeposit:false,
         checkItem:{},
