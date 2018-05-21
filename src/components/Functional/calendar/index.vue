@@ -1,8 +1,8 @@
 <template>
 
   <div class="calendar" style="">
-    <div class="tools-bar">
-      <span class="clear" @click="reset">清除筛选</span>
+    <div class="tools-bar" v-if="titleBar">
+      <span class="clear" @click="reset" >清除筛选</span>
       <span class="cancel" @click="$emit('onCancel',false)">取消</span>
     </div>
 
@@ -30,7 +30,8 @@
     props: {
       value: null,
       max: null,
-      min: null
+      min: null,
+      titleBar:true
     },
     data(){
       return {

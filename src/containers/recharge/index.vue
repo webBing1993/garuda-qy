@@ -75,7 +75,7 @@
            maskShow
            bottom
            animationTopBottom>
-      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+      <calendar v-model="periodFilter"  :titleBar=false  @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
 </template>
@@ -164,10 +164,10 @@
         'getNoIdentityDetailList'
       ]),
         //
-        resetFilter(){
-          this.periodFilter=[null,null];
-          this.isCalendarShow=false
-        },
+        // resetFilter(){
+        //   this.periodFilter=[null,null];
+        //   this.isCalendarShow=false
+        // },
         //获取充值信息
       getRechargeInfos(){
           try{
