@@ -320,7 +320,7 @@
                     is_free_deposit:this.freeDeposit
                 },
                 onsuccess:(body=>{
-                    this.initList();
+                    this.refreshList()
                 })
             })
         },

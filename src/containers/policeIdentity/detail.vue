@@ -452,9 +452,9 @@
         },
         //入住
         CheckIn(item){
+          console.log(item)
           this.suborderCheckIn({
               data:{
-                  suborder_id:item.rooms[0].suboder_id,
                   room_no:item.rooms[0].room_no,
                   identity_id:this.detail.identityId,
                   guests:[{
@@ -462,6 +462,7 @@
                       idcard:this.detail.idCard
                   }],
                   hotel_id:this.hotel.hotel_id,
+                  "suborder_id":item.rooms[0].suborder_id
               },
               onsuccess:(body=>{
                   this.goto(-1);

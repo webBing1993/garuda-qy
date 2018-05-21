@@ -9,7 +9,7 @@ module.exports = {
         ctx.dispatch('resource',{
             url:'/getHotelConfig/product_version',
             onSuccess: body => {
-                onSuccess: param.onsuccess ? param.onsuccess(body) : null
+                 param.onsuccess ? param.onsuccess(body) : null
             }
         })
     },
@@ -17,7 +17,7 @@ module.exports = {
         ctx.dispatch('resource',{
             url:'/getHotelConfig/wqt_main_control',
             onSuccess: body => {
-                onSuccess: param.onsuccess ? param.onsuccess(body) : null
+                param.onsuccess ? param.onsuccess(body) : null
             }
         })
 
@@ -26,7 +26,7 @@ module.exports = {
       ctx.dispatch('resource',{
           url:'/productConfig/getproductConfig/'+param.hotelId,
           onSuccess: body => {
-              onSuccess: param.onsuccess ? param.onsuccess(body) : null
+               param.onsuccess ? param.onsuccess(body) : null
           }
       })
     },
@@ -35,7 +35,7 @@ module.exports = {
             url:'/hotel/config/is_free_deposit',
             onSuccess: body => {
                 ctx.commit('ISFREEDEPOSIT', body.data)
-                onSuccess: param.onsuccess ? param.onsuccess(body) : null
+               // param.onsuccess ? param.onsuccess(body) : null
             }
         })
     },

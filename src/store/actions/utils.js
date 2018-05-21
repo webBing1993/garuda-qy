@@ -68,7 +68,8 @@ module.exports = {
             param.url.match(/hotel\/config/)||
             param.url.match(/hotel\/config/)||
             param.url.match(/identity\/illegalGuest/)
-            param.url.match(/online/)
+            param.url.match(/online/)||
+            param.url.match(/policeIdentity\/handle/)
           param.method && !isShowToast ? ctx.dispatch('showtoast','') : null;
           param.onSuccess ? param.onSuccess(response.body, response.headers) : null
         } else {
@@ -79,14 +80,13 @@ module.exports = {
     ).catch(
       error => {
         //ErrorCallback
-        console.log(error);
+        console.log('error:',error);
         let hint = '';
         if (error.status === 401) {
           hint = '登录失效!'
         } else if (error.status === 1) {
           hint = '请求超时!';
         } else {
-          // hint = 'Request Error'
           hint = '请求失败'
         }
         ctx.dispatch('showtoast', hint);

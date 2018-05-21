@@ -197,17 +197,20 @@
         </div>
       </x-dialog>
     </div>
+    <div class="noCheckAlert">
+      <alert v-model="showAlert" title="提示" content="金额不足暂无法使用，请及时充值！"></alert>
+    </div>
     <!--////////////////////弹窗部分-->
   </article>
 </template>
 
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-    import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller} from 'vux'
+    import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Alert} from 'vux'
     module.exports = {
         name: 'List',
         components: {
-            XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller
+            XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller,Alert
         },
         data(){
             return {
@@ -257,7 +260,8 @@
                 tobeHandledTotal:0,
                 handledTotal:0,
                 todayStart:'',
-                todayEnd:''
+                todayEnd:'',
+                showAlert:false
             }
         },
         computed: {
@@ -327,6 +331,7 @@
                 'withoutIdCard',//设备列表
                 'getRoomNumberList',
                 'getConfigs',
+                'showtoast'
 
                 // 'forwardTo'
             ]),
@@ -334,9 +339,10 @@
                 'CHECKORDERITEM'
             ]),
             showwithoutLicenseDialog(){
-                this.Nationality();
-                this.gethotelEquipment();
-                this.without_license = true
+                this.showAlert=true;
+                // this.Nationality();
+                // this.gethotelEquipment();
+                // this.without_license = true
             },
             nationOnChange(val){
                 console.log('val是', val)
