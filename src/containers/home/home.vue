@@ -174,7 +174,8 @@
         'getConfig',
         'getHotelConfig',
         'getServiceConfigs',
-        'get_is_free_deposit_config'
+        'get_is_free_deposit_config',
+        'getRechargeInfo'
       ]),
         ...mapMutations([
            'SERVICECONFIG'
@@ -281,6 +282,9 @@
         this.getServiceConfig()
         this.getTodoList();
         this.gethotelConfig();
+        this.getRechargeInfo({
+            hotel_id:this.hotel.hotel_id
+        });
         if (!this.yunbaConnected) {
          this.yunbaConnect();
         }

@@ -15,6 +15,7 @@ module.exports = {
             url: '/recharge/' + param.hotel_id,
             method: 'GET',
             onSuccess: body => {
+                ctx.commit('SURPLUS',body.data.surplus_time)
                 param.onsuccess ? param.onsuccess (body) : null
             }
         })

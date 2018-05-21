@@ -7,22 +7,26 @@ module.exports = {
   },
   SEARCHHOTELID(state,payload) {
       state.searchHotelId = payload
-      console.log('searchHotelId:',payload)
+      // console.log('searchHotelId:',payload)
   },
   SEARCHORDERLIST(state,payload) {
       state.orderList = payload
-      console.log('orderList:',payload)
+      // console.log('orderList:',payload)
   },
   CHECKORDERITEM(state,payload) {
      state.checkedOrder=[...payload];
-     console.log('checkedOrder',payload)
+     // console.log('checkedOrder',payload)
   },
   CURRENTLVYERECORDID(state,payload){
-    state.currentLvyeRecordId=payload;
+     state.currentLvyeRecordId=payload;
   },
-    ISFREEDEPOSIT(state,payload){
-      state.isFreeDeposit=payload;
-    } ,
+  ISFREEDEPOSIT(state,payload){
+     state.isFreeDeposit=payload;
+  },
+  SURPLUS(state,payload){
+     state.surplusTime=payload;
+     console.log('剩余次数：',payload)
+  },
   SERVICECONFIG(state,payload){
       let arr={'ZHIFANGTONG':false,'FAPIAOTONG':false,'ZHIDINGTONG':false,'KEKONGTONG':false,'RENZHENGTONG':false,'ZHIFUTONG':false,'EKATONG':false};
       if(payload.length!==0){
@@ -67,7 +71,7 @@ module.exports = {
               // }
           })
       };
-      console.log('arr:',arr)
+      console.log('serviceConfig:',arr)
       state.serviceConfig={...arr}
   }
 }

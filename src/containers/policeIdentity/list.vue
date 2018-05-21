@@ -270,6 +270,7 @@
                 'Interface',
                 'roomNumberList',
                 'checkedOrder',
+                'surplusTime'
             ]),
             renderList() {
                 return NationList;
@@ -339,10 +340,13 @@
                 'CHECKORDERITEM'
             ]),
             showwithoutLicenseDialog(){
-                this.showAlert=true;
-                // this.Nationality();
-                // this.gethotelEquipment();
-                // this.without_license = true
+                if(this.surplusTime==0){
+                    this.showAlert=true;
+                }else {
+                    this.Nationality();
+                    this.gethotelEquipment();
+                    this.without_license = true
+                }
             },
             nationOnChange(val){
                 console.log('val是', val)

@@ -54,5 +54,6 @@ module.exports = {
   checkedOrder:[],
   currentLvyeRecordId:'',
   serviceConfig:{},
-    isFreeDeposit:''
+    isFreeDeposit:'',
+    surplusTime:''
 };
