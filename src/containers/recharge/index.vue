@@ -106,7 +106,7 @@
           usedNum:'',
           date:'',
           isCalendarShow:false,
-          periodFilter:[null, null],
+          periodFilter:[new Date().getTime(),new Date().getTime()],
           offset:0,
           page:1,
           limit:50,
@@ -208,8 +208,8 @@
         getUsedNum(){
           this.getRechargeUsedNum({
               hotelId:this.hotel.hotel_id,
-              start_time:this.periodFilter[0]?this.periodFilter[0]:new Date().getTime(),
-              end_time:this.periodFilter[1]?this.periodFilter[1]:new Date().getTime(),
+              start_time:this.periodFilter[0],
+              end_time:this.periodFilter[1],
               onsuccess:body=>{
                   this.usedNum=body.data;
               }
