@@ -48,10 +48,10 @@
             <p class="title">充值金额</p>
             <p class="cont">{{item.pay_fee/100}}</p>
           </div>
-          <div class="clo">
-            <p class="title">充值方式</p>
-            <p class="cont">{{item.pay_way}}</p>
-          </div>
+          <!--<div class="clo">-->
+            <!--<p class="title">充值方式</p>-->
+            <!--<p class="cont">{{item.pay_way}}</p>-->
+          <!--</div>-->
         </div>
       </div>
       <div v-if="currentTab === 2">
@@ -62,7 +62,7 @@
           </div>
           <div class="clo">
             <p class="title">身份证号码</p>
-            <p class="cont">{{item.idcard}}}</p>
+            <p class="cont">{{idnumber(item.idcard)}}</p>
           </div>
           <div class="clo">
             <p class="title">查验结果</p>
