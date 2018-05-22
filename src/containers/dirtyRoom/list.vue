@@ -156,6 +156,7 @@
       },
       handle(obj){
         let hotel_id = this.hotel.hotel_id
+        console.log(obj)
         this.handleDirtyRoom({
           hotel_id:hotel_id,
           sub_id:obj,

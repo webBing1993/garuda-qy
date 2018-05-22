@@ -51,7 +51,7 @@ module.exports = {
       url:'/room/setDirtyRoomStatus',
       body:{
         hotel_id:param.hotel_id,
-        sub_id:param.order_id,
+        sub_id:param.sub_id,
         is_deal_with:param.is_deal_with
       },
       method:"post",
