@@ -58,7 +58,7 @@ module.exports = {
       }
     })
   },
-  getConfig(ctx, param){
+  getAppConfig(ctx, param){
     ctx.dispatch('resource', {
       url: '/hotel/config',
       method: "GET",

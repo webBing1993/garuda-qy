@@ -331,7 +331,7 @@
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
                 'getRoomNumberList',
-                'getConfigs',
+                'getShowPoliceConfigs',
                 'showtoast'
 
                 // 'forwardTo'
@@ -522,20 +522,6 @@
                 })
               }
             },
-            timeFetch(){
-                var todayZero = new Date();
-                var todayEleven = new Date();
-                todayZero.setHours(0);
-                todayZero.setMinutes(0);
-                todayZero.setSeconds(0);
-                todayEleven.setHours(23);
-                todayEleven.setMinutes(59);
-                todayEleven.setSeconds(59);
-                // console.log('今天零点：' + todayZero.getTime());
-                // console.log('23:59：' + todayEleven.getTime());
-                this.todayStart=todayZero.getTime();
-                this.todayEnd=todayEleven.getTime()
-            },
             tobeHandledItem(item){
               return `<div class="cell-body">` +
                 // `<span class="cell-right warn">待处理</abbr></span>` +
@@ -667,7 +653,7 @@
                 this.periodFilter = [null, null]
             },
             getConfig(){
-                this.getConfigs({
+                this.getShowPoliceConfigs({
                     onsuccess:(body)=> {
                         if (body.data=='true') {
                             this.showHandledList = true
@@ -677,7 +663,8 @@
             }
         },
         mounted(){
-            this.timeFetch()
+            this.todayStart=this.timeFetch().todayStart;
+            this.todayEnd=this.timeFetch().todayEnd;
             this.initList();
             this.getRoomNumberList();
             this.getConfig();

@@ -182,7 +182,7 @@ module.exports = {
       onSuccess: body => ctx.commit('ROOMNUMBERLIST', body.data)
     })
   },
-    getConfigs(ctx, param){
+    getShowPoliceConfigs(ctx, param){
         ctx.dispatch('resource', {
             url: '/getHotelConfig/enable_show_plice_processed',
             method: 'GET',

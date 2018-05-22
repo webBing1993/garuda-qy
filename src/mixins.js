@@ -125,6 +125,20 @@ Vue.mixin({
         }
 
     },
+      timeFetch(){
+          var todayZero = new Date();
+          var todayEleven = new Date();
+          var today={};
+          todayZero.setHours(0);
+          todayZero.setMinutes(0);
+          todayZero.setSeconds(0);
+          todayEleven.setHours(23);
+          todayEleven.setMinutes(59);
+          todayEleven.setSeconds(59);
+          console.log('今天零点：' + todayZero.getTime());
+          console.log('23:59：' + todayEleven.getTime());
+          return today={todayStart:todayZero.getTime(),todayEnd:todayEleven.getTime()}
+      },
     getUUID() {
       let randomness = Math.round(Math.random() * 1e16) % Math.pow(2, 23);
       randomness = randomness.toString(2).length > 23

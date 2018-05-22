@@ -31,90 +31,102 @@
       },
     },
     methods: {
-      ...mapActions([
-        'settitle',
-        'urlquery',
-        'login',
-        'replaceto',
-        'getHotelConfigVersion'
-        // 'gethotelinfo'
-      ]),
-      crossroad(){
-        if (this.currentMsg) {
-          this.replaceto(this.currentMsg)
-        } else {
-          let path = ''
-          switch (this.currentApp) {
-            case 'prepay':
-              path = '/precheckin/prepay/0'
-              break;
-            case 'record':
-              path = '/record'
-              break;
-            case 'precheckin-today':
-              path = '/precheckin/order/today/0'
-              break;
-            case 'precheckin-history':
-              path = '/precheckin/order/history/0'
-              break;
-            case 'roommanager':
-              path = '/roommanager'
-              break;
-            case 'verification':
-              path = '/new-policeIdentity/handle/0'
-              break;
-            case 'policeIdentity-today':
-              path = '/policeIdentity/today/0'
-              break;
-            case 'policeIdentity-history':
-              path = '/policeIdentity/history/0'
-              break;
-            case 'livein-today':
-              path = '/livein/today'
-              break;
-            case 'livein':
-              path = '/livein/all'
-              break;
-            case 'invoice':
-              path = '/invoice/0'
-              break;
-            case 'checkout':
-              path = '/checkout/0';
-              break;
-            case 'refund':
-              path = '/refund';
-              break;
-            case 'setting':
-              path = '/setting'
-              break;
-            case 'wqt':
-              path = '/home'
-              break;
-            case 'online':
-              path = '/onlineTool/onlineList'
-              break;
-          }
-          this.replaceto(path)
-        }
-      },
-      initMTA() {
-        let sid;
-        if (process.env.NODE_ENV === 'test') {
-          sid = "500509944";
-        } else if (process.env.NODE_ENV === 'production') {
-          sid = "500434237";
-        }
+        ...mapActions ([
+            'settitle',
+            'urlquery',
+            'login',
+            'replaceto',
+            'getHotelConfigVersion',
+            'getServiceConfigs'
+        ]),
+        ...mapMutations ([
+            'SERVICECONFIG'
+        ]),
+        crossroad () {
+            if (this.currentMsg) {
+                this.replaceto (this.currentMsg)
+            } else {
+                let path = ''
+                switch (this.currentApp) {
+                    case 'prepay':
+                        path = '/precheckin/prepay/0'
+                        break;
+                    case 'record':
+                        path = '/record'
+                        break;
+                    case 'precheckin-today':
+                        path = '/precheckin/order/today/0'
+                        break;
+                    case 'precheckin-history':
+                        path = '/precheckin/order/history/0'
+                        break;
+                    case 'roommanager':
+                        path = '/roommanager'
+                        break;
+                    case 'verification':
+                        path = '/new-policeIdentity/handle/0'
+                        break;
+                    case 'policeIdentity-today':
+                        path = '/policeIdentity/today/0'
+                        break;
+                    case 'policeIdentity-history':
+                        path = '/policeIdentity/history/0'
+                        break;
+                    case 'livein-today':
+                        path = '/livein/today'
+                        break;
+                    case 'livein':
+                        path = '/livein/all'
+                        break;
+                    case 'invoice':
+                        path = '/invoice/0'
+                        break;
+                    case 'checkout':
+                        path = '/checkout/0';
+                        break;
+                    case 'refund':
+                        path = '/refund';
+                        break;
+                    case 'setting':
+                        path = '/setting'
+                        break;
+                    case 'wqt':
+                        path = '/home'
+                        break;
+                    case 'online':
+                        path = '/onlineTool/onlineList'
+                        break;
+                }
+                this.replaceto (path)
+            }
+        },
+        initMTA () {
+            let sid;
+            if (process.env.NODE_ENV === 'test') {
+                sid = "500509944";
+            } else if (process.env.NODE_ENV === 'production') {
+                sid = "500434237";
+            }
 
-        var _mtac = {};
-        (function () {
-          var mta = document.createElement("script");
-          mta.src = "http://pingjs.qq.com/h5/stats.js?v2.0.4";
-          mta.setAttribute("name", "MTAH5");
-          mta.setAttribute("sid", sid);
-          var s = document.getElementsByTagName("script")[0];
-          s.parentNode.insertBefore(mta, s);
-        })();
-      }
+            var _mtac = {};
+            (function () {
+                var mta = document.createElement ("script");
+                mta.src = "http://pingjs.qq.com/h5/stats.js?v2.0.4";
+                mta.setAttribute ("name", "MTAH5");
+                mta.setAttribute ("sid", sid);
+                var s = document.getElementsByTagName ("script")[0];
+                s.parentNode.insertBefore (mta, s);
+            }) ();
+        },
+        //获取酒店业务模块配置
+        getServiceConfig () {
+            this.getServiceConfigs ({
+                hotelId: this.hotel.hotel_id,
+                onsuccess: body => {
+                    this.SERVICECONFIG (body.data)
+                }
+            })
+        },
     },
     watch: {
       AppParams(val){
@@ -158,13 +170,7 @@
       },
       sessionId(val){
         if (val) {
-          // this.gethotelinfo(this.hotel.hotel_id)
-            // this.getHotelConfigVersion({
-            //     onsuccess:(body)=>{
-            //         console.log('version:',body.data)
-            //         this.VersionParam.versionNum=body.data
-            //     }
-            // });
+          this.getServiceConfig()
           this.$nextTick(() => this.crossroad())
         }
       }
@@ -173,8 +179,12 @@
           if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'prod') {
               this.initMTA();
           }
-          this.urlquery()//存AppParams,开发者工具输入地址后进入此页执行查询AppParams
-      },
+          this.urlquery({   //存AppParams,开发者工具输入地址后进入此页执行查询AppParams
+              callback:()=>{
+                  // console.log('zhengsijieCallBack')
+              }
+          })
+      }
   }
 </script>
 

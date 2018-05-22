@@ -162,133 +162,119 @@
       }
     },
     methods: {
-      ...mapActions([
-        'goto',
-        'hoteltodolist',
-        'yunbaConnect',
-        'yunbaSubscribe',
-        'yunbaUnsubscribe',
-        'yunbaPublish',
-        'setPublishCallback',
-        'yunbaDisconnect',
-        'getConfig',
-        'getHotelConfig',
-        'getServiceConfigs',
-        'get_is_free_deposit_config',
-        'getRechargeInfo'
-      ]),
-        ...mapMutations([
-           'SERVICECONFIG'
+        ...mapActions ([
+            'goto',
+            'hoteltodolist',
+            'yunbaConnect',
+            'yunbaSubscribe',
+            'yunbaUnsubscribe',
+            'yunbaPublish',
+            'setPublishCallback',
+            'yunbaDisconnect',
+            'getRechargeInfo',
+            'getAppConfig',
+            'getHotelConfig',
+            'get_is_free_deposit_config'
         ]),
-      setPlay(){
-        document.querySelector('#audio').play();
-      },
-      //获取待办事项列表
-      getTodoList() {
-        this.hoteltodolist({
-          onsuccess: body => {
-            let list = body.data;
-            list.forEach(i => {
-              if (i.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = i.total;
-              if (i.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = i.total;
-              if (i.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag)) this.policeIdentityNum = i.total;
-              if (i.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = i.total;
-              if (i.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = i.total;
-              if (i.type == 'EXCEPTION'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = i.total;
+        setPlay () {
+            document.querySelector ('#audio').play ();
+        },
+        //获取待办事项列表
+        getTodoList () {
+            this.hoteltodolist ({
+                onsuccess: body => {
+                    let list = body.data;
+                    list.forEach (i => {
+                        if (i.type == 'PREPAY' && (this.appConfig ? this.appConfig.order_view : this.flag)) this.prepayTodoNum = i.total;
+                        if (i.type == 'IDENTITY' && (this.appConfig ? this.appConfig.check_in_identity_check_view : this.flag)) this.identityNum = i.total;
+                        if (i.type == 'LVYE' && (this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.policeIdentityNum = i.total;
+                        if (i.type == 'INVOICE' && (this.appConfig ? this.appConfig.invoice_view : this.flag)) this.invoiceNum = i.total;
+                        if (i.type == 'CHECKOUT' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.checkoutApplicationNum = i.total;
+                        if (i.type == 'EXCEPTION' && (this.appConfig ? this.appConfig.exception_view : this.flag)) this.abnormalNoticeNum = i.total;
 //                同住人未入住
-              if (i.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = i.total;
-              if(i.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum=i.total;
+                        if (i.type == 'NOCHECKIN' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.absentPersonNum = i.total;
+                        if (i.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.suspiciousNum = i.total;
 
-              if(i.type == 'DIRTY_ROOM'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.dirtyroomNum=i.total;
+                        if (i.type == 'DIRTY_ROOM' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.dirtyroomNum = i.total;
+                    })
+                }
             })
-          }
-        })
-      },
-      //获取酒店业务模块配置
-      getServiceConfig(){
-          this.getServiceConfigs({
-              hotelId:this.hotel.hotel_id,
-              onsuccess: body =>{
-                    this.SERVICECONFIG(body.data)
-              }
-          })
-      },
-      //获取酒店应用功能配置
-      gethotelConfig(){
-          this.getHotelConfig({
-              onsuccess: body =>{
-                  try{
-                      if(body.data){
-                          this.appConfig=JSON.parse(body.data);
-                      }
+        },
+        //获取酒店应用功能配置
+        gethotelConfigs () {
+            this.getHotelConfig ({
+                onsuccess: body => {
+                    try {
+                        if (body.data) {
+                            this.appConfig = JSON.parse (body.data);
+                        }
 
-                  }catch (err){
-                      console.log('getHotelConfig:',err)
-                  }
-                  // console.log('2222:',JSON.parse(body.data))
-              }
-          });
-          this.getConfig({
-           onsuccess: body => {
-               try {
-                   if(body.data){
-                       if(body.data.business_mode==='WQT'){
-                           this.flag=true;
-                       }else if(body.data.business_mode==='IDENTITY'){
-                           this.flag=false;
-                       }
-                   }else {
-                       this.flag=true;
-                   }
-               }catch(err) {
-                   console.log('getConfig',err)
-               }
+                    } catch (err) {
+                        console.log ('getHotelConfig:', err)
+                    }
+                    // console.log('2222:',JSON.parse(body.data))
+                }
+            });
+            this.getAppConfig ({
+                onsuccess: body => {
+                    try {
+                        if (body.data) {
+                            if (body.data.business_mode === 'WQT') {
+                                this.flag = true;
+                            } else if (body.data.business_mode === 'IDENTITY') {
+                                this.flag = false;
+                            }
+                        } else {
+                            this.flag = true;
+                        }
+                    } catch (err) {
+                        console.log ('getConfig', err)
+                    }
 
-             }
-          });
-          this.get_is_free_deposit_config()
-      },
-      subscribe() {
-        this.yunbaSubscribe({
-          info: {
-            'topic': `hotels/${this.hotel.hotel_id}/todo`
-          },
-          subscribeCallback: () => {
-            console.log('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
-            this.publishCallback();
-          }
-        })
-      },
-      publishCallback() {
-        this.setPublishCallback({
-          onSuccess: (body) => {
-            console.log('---------收到云吧消息', JSON.parse(body.msg));
-            let data = JSON.parse(body.msg);
-            this.setPlay();
-            if (data.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = data.total;
-            if (data.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = data.total;
-            if (data.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag))this.policeIdentityNum = data.total;
-            if (data.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = data.total;
-            if (data.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = data.total;
-            if (data.type == 'EXCEPITON'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = data.total;
-            if (data.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = data.total;
-            if (data.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum = data.total;
-            if (data.type == 'dirtyroomNum'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.dirtyroomNum = data.total;
-          }
-        })
-      },
+                }
+            });
+            this.get_is_free_deposit_config ()
+        },
+        subscribe () {
+            this.yunbaSubscribe ({
+                info: {
+                    'topic': `hotels/${this.hotel.hotel_id}/todo`
+                },
+                subscribeCallback: () => {
+                    console.log ('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
+                    this.publishCallback ();
+                }
+            })
+        },
+        publishCallback () {
+            this.setPublishCallback ({
+                onSuccess: (body) => {
+                    console.log ('---------收到云吧消息', JSON.parse (body.msg));
+                    let data = JSON.parse (body.msg);
+                    this.setPlay ();
+                    if (data.type == 'PREPAY' && (this.appConfig ? this.appConfig.order_view : this.flag)) this.prepayTodoNum = data.total;
+                    if (data.type == 'IDENTITY' && (this.appConfig ? this.appConfig.check_in_identity_check_view : this.flag)) this.identityNum = data.total;
+                    if (data.type == 'LVYE' && (this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.policeIdentityNum = data.total;
+                    if (data.type == 'INVOICE' && (this.appConfig ? this.appConfig.invoice_view : this.flag)) this.invoiceNum = data.total;
+                    if (data.type == 'CHECKOUT' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.checkoutApplicationNum = data.total;
+                    if (data.type == 'EXCEPITON' && (this.appConfig ? this.appConfig.exception_view : this.flag)) this.abnormalNoticeNum = data.total;
+                    if (data.type == 'NOCHECKIN' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.absentPersonNum = data.total;
+                    if (data.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.suspiciousNum = data.total;
+                    if (data.type == 'dirtyroomNum' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.dirtyroomNum = data.total;
+                }
+            })
+        },
 //      云吧链接config
-      init() {
-        this.getServiceConfig()
-        this.getTodoList();
-        this.gethotelConfig();
-        this.getRechargeInfo({
-            hotel_id:this.hotel.hotel_id
-        });
-        if (!this.yunbaConnected) {
-         this.yunbaConnect();
-        }
-      }
+        init () {
+            this.getTodoList ();
+            this.gethotelConfigs()
+            this.getRechargeInfo ({
+                hotel_id: this.hotel.hotel_id
+            });
+            if (!this.yunbaConnected) {
+                this.yunbaConnect ();
+            }
+        },
     },
     mounted(){
       this.init();

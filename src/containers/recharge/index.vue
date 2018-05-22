@@ -66,7 +66,7 @@
           </div>
           <div class="clo">
             <p class="title">查验结果</p>
-            <p class="cont">{{item.status|filterResult}}</p>
+            <p class="cont" :class="{redTip:item.status=='REFUSED'||item.status=='AUTO_REFUSED'||item.status=='FAILED','blueTip':item.status=='PENDING','greenTip':item.status=='AUTO_AGREED'||item.status=='AGREED'}">{{item.status|filterResult}}</p>
           </div>
         </div>
       </div>
