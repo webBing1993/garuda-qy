@@ -25,7 +25,7 @@
               <span>￥{{hotelRechargeInfo.balance/100}}</span>
             </div>
             <div class="row">
-              <span class="title">使用次数</span>
+              <span class="title">总的使用次数</span>
               <span>{{usedNum}}</span>
               <span class="dateShow" @click="isCalendarShow=true">
                {{datetimeparse(periodFilter[0],'YYYYMMDD')+' - '+datetimeparse(periodFilter[1],'YYYYMMDD')}} <x-icon type="ios-arrow-down"  size="18" class="chargeIcon"></x-icon>
