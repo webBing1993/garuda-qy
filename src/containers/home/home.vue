@@ -195,7 +195,7 @@
                         if (i.type == 'NOCHECKIN' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.absentPersonNum = i.total;
                         if (i.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.suspiciousNum = i.total;
 
-                        if (i.type == 'DIRTY_ROOM' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.dirtyroomNum = i.total;
+                        if (i.type == 'DIRTY_ROOM' && (this.appConfig ? this.appConfig.dirty_room_view : this.flag)) this.dirtyroomNum = i.total;
                     })
                 }
             })
