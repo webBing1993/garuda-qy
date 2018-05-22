@@ -260,7 +260,7 @@
                     if (data.type == 'EXCEPITON' && (this.appConfig ? this.appConfig.exception_view : this.flag)) this.abnormalNoticeNum = data.total;
                     if (data.type == 'NOCHECKIN' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.absentPersonNum = data.total;
                     if (data.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.suspiciousNum = data.total;
-                    if (data.type == 'dirtyroomNum' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.dirtyroomNum = data.total;
+                    if (data.type == 'DIRTY_ROOM' && (this.appConfig ? this.appConfig.dirty_room_view : this.flag)) this.dirtyroomNum = data.total;
                 }
             })
         },
