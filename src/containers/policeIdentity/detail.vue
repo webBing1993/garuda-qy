@@ -6,7 +6,7 @@
         <div>
           <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
             <label class="item-left">房间号码:</label>
-            <input class="item-right room-number  item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)"/>
+            <input class="item-right room-number  item2" v-model="detail.chekcinRoomNo?detail.chekcinRoomNo:roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)"/>
             <span class="item-right" v-else>{{detail.roomNumber}}</span>
           </div>
           <div class="info-item" v-if="showGuestType">
