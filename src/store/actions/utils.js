@@ -54,23 +54,24 @@ module.exports = {
     }).then(
       response => {
         if (response.body.errcode && +response.body.errcode === 0) {
-          let isShowToast = param.url.match(/identities/) ||
-            param.url.match(/dirtyRoomRemind/) ||
-            param.url.match(/precheckin/) ||
-            param.url.match(/login/) ||
-            param.url.match(/refund_apply_list/) ||
-            param.url.match(/searchLvyeReportInfo/) ||
-            param.url.match(/lvyeReport/) ||
-            param.url.match(/order\/pay/) ||
-            param.url.match(/hotel\/.+\/refresh/) ||
-            param.url.match(/suborder\/search/) ||
-            param.url.match(/exceptions/)||
-            param.url.match(/hotel\/config/)||
-            param.url.match(/hotel\/config/)||
-            param.url.match(/identity\/illegalGuest/)
-            param.url.match(/online/)||
-            param.url.match(/policeIdentity\/handle/)
-          param.method && !isShowToast ? ctx.dispatch('showtoast','') : null;
+          // let isShowToast = param.url.match(/identities/) ||
+          //   param.url.match(/dirtyRoomRemind/) ||
+          //   param.url.match(/precheckin/) ||
+          //   param.url.match(/login/) ||
+          //   param.url.match(/refund_apply_list/) ||
+          //   param.url.match(/searchLvyeReportInfo/) ||
+          //   param.url.match(/lvyeReport/) ||
+          //   param.url.match(/order\/pay/) ||
+          //   param.url.match(/hotel\/.+\/refresh/) ||
+          //   param.url.match(/suborder\/search/) ||
+          //   param.url.match(/exceptions/)||
+          //   param.url.match(/hotel\/config/)||
+          //   param.url.match(/hotel\/config/)||
+          //   param.url.match(/identity\/illegalGuest/)
+          //   param.url.match(/online/)||
+          //   param.url.match(/policeIdentity\/handle/)
+          // param.method && !isShowToast ? ctx.dispatch('showtoast','') : null;
+          //   ctx.dispatch('showtoast','')
           param.onSuccess ? param.onSuccess(response.body, response.headers) : null
         } else {
           ctx.dispatch('showtoast', response.body.errmsg);
