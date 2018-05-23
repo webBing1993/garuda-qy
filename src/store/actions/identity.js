@@ -90,7 +90,7 @@ module.exports = {
   },
   newIdentityList(ctx, param) {
     ctx.dispatch('resource', {
-      url: '/lvye/searchLvyeReportInfo?limit='+ param.limit+'&offset='+param.offset,
+      url: '/lvye/searchLvyeReportInfos?limit='+ param.limit+'&offset='+param.offset,
       method: 'POST',
       body: param.data,
       onSuccess: (body,headers) => {

@@ -536,7 +536,7 @@
                 `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
                 `</div>`
             },
-            getList(callback, reportInStatus,identStatus,timeStart,timeEnd,page) {
+            getList(callback, reportInStatus,timeStart,timeEnd,page) {
                 this.newIdentityList ({
                     data: {
                         // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
@@ -545,7 +545,7 @@
                         // createTimeEnd:1521648000000,
                         createTimeStart:timeStart,
                         createTimeEnd:timeEnd,
-                        identityStatuses: identStatus,
+                        // identityStatuses: identStatus,
                         reportInStatuses: reportInStatus,//需要的入住上报旅业状态
                         desc: true
                     },
@@ -576,7 +576,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.tobeHandledScroller.pullupStatus = 'disabled';
                             };
-                        }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],'','',this.offset0);
+                        }), ["NONE","PENDING","FAIL"],'','',this.offset0);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom0.reset();
@@ -602,7 +602,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.handledScroller.pullupStatus = 'disabled';
                             };
-                        }), [], ["AGREED", "REFUSED"],this.todayStart,this.todayEnd,this.offset1);
+                        }), [], ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.offset1);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom1.reset();
@@ -631,7 +631,7 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
                     });
-                }), ['NONE', 'FAILED', "PENDING"], ["AUTO_AGREED", "AUTO_REFUSED", "FAILED", "PENDING"],'','',0);
+                }), ["NONE","PENDING","FAIL"],'','',0);
                 //已处理列表
                 this.getList(((body,headers) => {
                     this.handledTotal=headers.get('x-total-count');
@@ -643,7 +643,7 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom1.reset({top:0});
                     });
-                }), [], ["AGREED", "REFUSED"],this.todayStart,this.todayEnd,0);
+                }), ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,0);
             },
             resetList(){
                 this.handled = [];
