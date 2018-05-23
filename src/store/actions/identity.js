@@ -238,10 +238,22 @@ module.exports = {
     })
   },
   // 无证核验获取设备名称
+  // hotelEquipment(ctx, param){
+  //   ctx.dispatch('resource', {
+  //     url: '/hotel/device/bottom',
+  //     method: 'GET',
+  //     onSuccess: body => {
+  //       param.onsuccess ? param.onsuccess(body) : null
+  //     }
+  //   })
+  // },
   hotelEquipment(ctx, param){
     ctx.dispatch('resource', {
-      url: '/hotel/device/bottom',
-      method: 'GET',
+      url: '/hotel/device',
+      method: 'POST',
+      body: {
+        deviceTypes:["31","21"]
+      },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
       }
