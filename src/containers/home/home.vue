@@ -175,10 +175,8 @@
             'yunbaPublish',
             'setPublishCallback',
             'yunbaDisconnect',
-            'getRechargeInfo',
             'getAppConfig',
-            'getHotelConfig',
-            'get_is_free_deposit_config'
+            'getHotelConfig'
         ]),
         setPlay () {
             document.querySelector ('#audio').play ();
@@ -219,7 +217,7 @@
                   // console.log('2222:',JSON.parse(body.data))
               }
           });
-          this.getConfig({
+          this.getAppConfig({
            onsuccess: body => {
                try {
                    if(body.data){
@@ -237,7 +235,6 @@
 
              }
           });
-          this.get_is_free_deposit_config()
       },
       subscribe() {
         this.yunbaSubscribe({
@@ -273,9 +270,6 @@
         init () {
             this.getTodoList ();
             this.gethotelConfigs()
-            this.getRechargeInfo ({
-                hotel_id: this.hotel.hotel_id
-            });
             if (!this.yunbaConnected) {
                 this.yunbaConnect ();
             }

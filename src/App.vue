@@ -37,14 +37,16 @@
             'login',
             'replaceto',
             'getHotelConfigVersion',
-            'getServiceConfigs'
+            'getServiceConfigs',
+            'getRechargeInfo',
+            'get_is_free_deposit_config'
         ]),
         ...mapMutations ([
             'SERVICECONFIG'
         ]),
         crossroad () {
             if (this.currentMsg) {
-                this.replaceto (this.currentMsg)
+                this.replaceto (this.currentMsg);
             } else {
                 let path = ''
                 switch (this.currentApp) {
@@ -170,8 +172,12 @@
       },
       sessionId(val){
         if (val) {
-          this.getServiceConfig()
-          this.$nextTick(() => this.crossroad())
+          this.getServiceConfig();
+          this.get_is_free_deposit_config();
+          this.getRechargeInfo ({
+              hotel_id: this.hotel.hotel_id
+          });
+          this.$nextTick(() => this.crossroad());
         }
       }
     },

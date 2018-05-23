@@ -65,7 +65,7 @@
             <p class="orderItem">
               <span class="titleInfo">备注：</span><span>{{item.remark}}</span>
             </p>
-            <span class="orderButton" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
+            <span class="orderButton" v-if="detail.identityStatus !== 'REFUSED'" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="item.orderOpen=!item.orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
           </div>
           <div v-if="!item.orderOpen">
