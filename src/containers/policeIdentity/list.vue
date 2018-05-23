@@ -399,6 +399,7 @@
               this.hotelEquipment({
                 onsuccess: body => {
                   temp = body.data;
+//                  console.log('设备列表是',temp)
                   if (temp && temp != null) {
                     this.getedEquipmentList = body.data;
                     this.sinerEquipmentName = body.data[0].name;
