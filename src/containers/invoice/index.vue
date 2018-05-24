@@ -355,9 +355,9 @@
 
 </script>
 <style lang="less">
-  .dialog .weui-dialog{
-    text-align: left;
-  }
+  /*.dialog .weui-dialog{*/
+    /*text-align: left;*/
+  /*}*/
   .scroller-wrap {
     padding-bottom: 0;
   }

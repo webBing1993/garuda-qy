@@ -144,7 +144,7 @@
       </ul>
     </Dialog>
     <!--无证核验弹窗-->
-    <div class="dialogs">
+    <div class="nocheckDialogs">
       <x-dialog v-model="without_license">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
