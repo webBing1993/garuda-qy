@@ -205,6 +205,10 @@
           Selector
       },
       watch: {
+          roomNo(val){
+
+              console.log('zsj:',this.roomNo)
+          },
           renderOrderList(val){
               console.log('renderOrderList变动：',val)
               if(val&&val.length!==0){
@@ -233,6 +237,8 @@
               if(val.reportInStatus!=='SUCCESS') {
                   this.roomNumber='';
               }
+              if(val.chekcinRoomNo!=''){}
+                  this.roomNumber=val.chekcinRoomNo
           },
           identityId(val){
               val ? this.resetFilter() : null
@@ -278,6 +284,10 @@
         'serviceConfig',
           'isFreeDeposit'
       ]),
+
+      roomNo(){
+          return this.detail.chekcinRoomNo
+      },
       freeDepositCheck(){
           return this.isFreeDeposit!==null&&this.isFreeDeposit=='true'?true:false
       },
