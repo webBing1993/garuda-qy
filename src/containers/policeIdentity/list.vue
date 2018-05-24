@@ -603,7 +603,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.handledScroller.pullupStatus = 'disabled';
                             };
-                        }), [], ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.offset1);
+                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.offset1);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom1.reset();
