@@ -14,11 +14,14 @@
             <selector class="item-right guestType item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'&&detail.guestType!=='STAFF'"></selector>
             <span class="item-right" v-else>{{detail.guestType|filterGuestType}}</span>
           </div>
+          <div class="refresh" v-if="showGuestType&&detail.guestType!=='STAFF'">
+            <label class="item-left">刷新 <i class="iconfont icon-shuaxin" @click="refreshDetail"></i></label>
+          </div>
         </div>
         <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
         <div class="searchRoom">
           <label>搜索结果</label>
-          <ul class="searchRoom-result" v-if="resultList.length > 0">
+          <ul class="searchRoom-result" v-if="resultList.length > 0&&showGuestType&&detail.guestType!=='STAFF'">
             <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
           </ul>
         </div>
@@ -65,7 +68,7 @@
             <p class="orderItem">
               <span class="titleInfo">备注：</span><span>{{item.remark}}</span>
             </p>
-            <span class="orderButton" v-if="detail.identityStatus !== 'REFUSED'" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
+            <span class="orderButton" v-if="buttonGroupShow" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="item.orderOpen=!item.orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
           </div>
           <div v-if="!item.orderOpen">
@@ -306,7 +309,7 @@
           }
       },
         buttonGroupShow(){
-            if(this.detail.identityStatus == 'REFUSED'||this.detail.identityStatus == 'AGREED'||this.detail.reportInStatus=='PENDING'){
+            if(this.detail.reportInStatus == 'SUCCES'||this.detail.reportInStatus == 'UNREPORTED'||this.detail.reportInStatus=='PENDING'){
                 return false;
             }else {
                 return true;
@@ -343,19 +346,11 @@
       //查选中情况
         isResetCheckedOrder(){
           let arr=[];
-          if(this.currentLvyeRecordId==''){
-              console.log('currentLvyeRecordId为空！！')
+          if(this.currentLvyeRecordId==''||this.currentLvyeRecordId!==this.$route.params.id){
               this.CHECKORDERITEM(arr);
               this.CURRENTLVYERECORDID(this.$route.params.id);
           }else {
-              if(this.currentLvyeRecordId!==this.$route.params.id){
-                  console.log('this.currentLvyeRecordId:',this.currentLvyeRecordId)
-                  console.log('this.$route.params.id:',this.$route.params.id)
-                  this.CHECKORDERITEM(arr);
-                  this.CURRENTLVYERECORDID(this.$route.params.id);
-              }else {
-                  return
-              }
+              return
           }
       },
       //查询订单列表
@@ -593,6 +588,16 @@
                     this.goto(-1)
                 }
             })
+        },
+        init(){
+            this.detail = {};
+            this.getDetail();
+            this.isResetCheckedOrder();
+            if (this.roomNumberList.length === 0) this.getRoomNumberList();
+            this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
+        },
+        refreshDetail(){
+            this.init()
         }
     },
     activated(){
@@ -600,12 +605,8 @@
         this.isResetCheckedOrder();
 
     },
-    created(){
-      this.detail = {};
-      this.getDetail();
-      this.isResetCheckedOrder();
-      if (this.roomNumberList.length === 0) this.getRoomNumberList();
-      this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
+    mounted(){
+        this.init()
     }
   }
 </script>
