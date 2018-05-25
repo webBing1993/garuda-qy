@@ -22,8 +22,7 @@
                   :scrollbarY=true bounce ref="scrollerBottom0">
           <div class="list-wrapper">
             <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
-            <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList"
-                 @click="orderClick(item.lvyeReportRecordId)">
+            <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList">
               <div class="titleDate">{{titleFilter(index)}}</div>
               <div class="cell-body" :class="{'fontColorTip':true}">
                 <p><span class="cell-key">姓名：</span><span class="cell-value "
@@ -34,7 +33,7 @@
                   <span class="cell-right">
                   {{datetimeparse(item.createdTime, 'hhmm')}}
                   <!--<img src="../../../static/icon/arow.png" alt="" class="cellImg">-->
-                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo">
+                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)">
                </a>
                 </span></p>
                 <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
@@ -59,12 +58,32 @@
                   scrollbarY bounce ref="scrollerBottom1" >
           <div class="list-wrapper">
             <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
-            <group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">
-              <cell :title="'房间'+ ' '+ (item.roomNumber ?  item.roomNumber : '')"
-                    :value="datetimeparse(item.createdTime,'hhmm')"></cell>
-              <cell :title="handledItem(item,item.inTime,item.outTime)"
-                    @onClick="orderClick(item.lvyeReportRecordId)"></cell>
-            </group>
+            <div class="handledListGroup" v-for="(item,index) in renderHandelList">
+              <div class="titleDate">{{titleHandledFilter(index)}}</div>
+              <div class="cell-body" :class="{'fontColorTip':true}">
+                <p>
+                  <span class="cell-key">姓名：<span class="cell-value" >{{item.name}}</span></span>
+                </p>
+                <p>
+                  <span class="cell-key">身份证：<span class="cell-value" >{{idnumber(item.idCard)}}</span></span>
+                  <span class="cell-right">
+                    <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)"></a>
+                  </span>
+                </p>
+                <p style="height: 1rem">
+                  <span style="float:right;color: #DF4A4A">{{item.identityStatus === 'REFUSED' ? '已拒绝' : ''}}</span>
+                  <span style="float: right;color: #2986df">{{item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}}</span>
+                  <span style="float: right;color: #dfb321">{{item.reportInStatus === 'PENDING' ? '上传中' : ''}}</span>
+                </p>
+              </div>
+            </div>
+
+            <!--<group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">-->
+              <!--<cell :title="'房间'+ ' '+ (item.roomNumber ?  item.roomNumber : '')"-->
+                    <!--:value="datetimeparse(item.createdTime,'hhmm')"></cell>-->
+              <!--<cell :title="handledItem(item,item.inTime,item.outTime)"-->
+                    <!--@onClick="orderClick(item.lvyeReportRecordId)"></cell>-->
+            <!--</group>-->
           </div>
         </scroller>
       </div>
@@ -524,20 +543,6 @@
                 })
               }
             },
-            tobeHandledItem(item){
-              return `<div class="cell-body">` +
-                // `<span class="cell-right warn">待处理</abbr></span>` +
-                `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
-                `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span><span class="cell-right">${this.datetimeparse(item.createdTime, 'hhmm')}</span></p>` +
-                `</div>`;
-            },
-            handledItem(item, in_time, out_time){
-              return `<div class="cell-body">` +
-                `<p><span class="cell-key">姓名：</span><span class="cell-value">${item.name}</span></p>` +
-                `<p><span class="cell-key">身份证：</span><span class="cell-value">${this.idnumber(item.idCard)}</span></p>` +
-                `<p><span style="float:right;color: #DF4A4A">${item.identityStatus === 'REFUSED' ? '已拒绝' : ''}</span><span style="float: right;color: #2986df">${item.reportInStatus === 'SUCCESS' ? '已上传旅业' : ''}</span><span style="float: right;color: #dfb321">${item.reportInStatus === 'PENDING' ? '上传中' : ''}</span></p>` +
-                `</div>`
-            },
             getList(callback, reportInStatus,timeStart,timeEnd,page) {
                 this.newIdentityList ({
                     data: {
@@ -733,6 +738,12 @@
     /*padding-top: 2rem;*/
   }
   .icon-gengduo{
+    display: inline-block;
+
     color: #4A4A4A;
+    &:before{
+      width: 2rem;
+      height: 2rem;
+    }
   }
 </style>
