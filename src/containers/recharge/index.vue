@@ -25,9 +25,10 @@
               <span>￥{{hotelRechargeInfo.balance/100}}</span>
             </div>
             <div class="row">
-              <span class="title">总的使用次数</span>
+              <span class="title">总使用次数</span>
               <span>{{usedNum}}</span>
-              <span class="dateShow" @click="isCalendarShow=true">
+              <span class="filterBtn" @click="isCalendarShow=true" v-if="flag">筛选</span>
+              <span class="dateShow" @click="isCalendarShow=true" v-if="!flag">
                {{datetimeparse(periodFilter[0],'YYYYMMDD')+' - '+datetimeparse(periodFilter[1],'YYYYMMDD')}} <x-icon type="ios-arrow-down"  size="18" class="chargeIcon"></x-icon>
               </span>
             </div>
@@ -106,12 +107,13 @@
           usedNum:'',
           date:'',
           isCalendarShow:false,
-          periodFilter:[new Date().getTime(),new Date().getTime()],
+          periodFilter:[null,null],
           offset:0,
           page:1,
           limit:50,
           limit2:50,
-          noIdentityDetailList:[]
+          noIdentityDetailList:[],
+          flag:true
       }
     },
     filters:{
@@ -171,10 +173,14 @@
         //获取充值信息
       getRechargeInfos(){
           try{
-              // console.log(222);
               this.getRechargeInfo({
                   hotel_id: this.hotel.hotel_id,
-                  onsuccess: body => (this.hotelRechargeInfo = body.data)
+                  onsuccess: body => {
+                      if(body.data){
+                          this.hotelRechargeInfo = body.data;
+                          this.usedNum= body.data.use_time;
+                      }
+                  }
               })
           }catch (err){
               console.log('zsj',err)
@@ -212,12 +218,12 @@
               end_time:this.periodFilter[1],
               onsuccess:body=>{
                   this.usedNum=body.data;
+                  console.log('this.usedNum:',this.usedNum)
               }
           })
         },
       initList(){
         this.getRechargeInfos();
-        this.getUsedNum();
         this.getRechargelists();
         this.getNoIdentityDetailLists()
       }
@@ -231,7 +237,9 @@
 //          : null;
 //      }
         periodFilter(val){
+            console.log('zsjhhhh')
             if(val.length!==0){
+                this.flag=false
                 this.getUsedNum()
             }
         }
