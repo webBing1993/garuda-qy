@@ -516,22 +516,18 @@ footer {
 .pick-btn-group .weui-btn_plain-default {
   margin-top: 15px;
 }
-
 .nocheckDialogs{
-  .weui-dialog{
-    width: 96%;
-    max-width: 370px;
-    z-index:200;
-    margin: auto;
-  }
-  .weui-mask {
-    z-index: 1000;
-  }
+    .UIdialog{
+        .UIdialog_bd{
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+    }
 }
-
 .withoutLicenseCon {
   width: 100%;
-  min-height: 300px;
+  //min-height: 300px;
+    margin-bottom: 1rem;
   background-color: #FFFFFF;
   border-radius: 10px;
   .onspace {
@@ -541,6 +537,7 @@ footer {
   }
   .weui-cell {
     text-align: left;
+    font-size: 15px;
   }
   .title {
     color: #000000;
@@ -550,15 +547,9 @@ footer {
     line-height: 30px;
     margin-left: 1rem;
   }
-  .popup .weui-label{
-    margin-left: 8px;
-    font-size: 17px;
-  }
-  .popup .weui-label {
-    //margin-left: 0px;
-    //text-align: left;
-    font-size: 14px;
-  }
+    .popup{
+        .weui-cell
+    }
   .Equipment {
     display: flex;
     flex-direction: row;

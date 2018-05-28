@@ -167,7 +167,6 @@
       <Dialog v-model="without_license" confirm cancel cancelVal="取消" confirmVal="确定">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
-          <div class="space"></div>
           <group>
             <x-input title="姓名：" placeholder="核验人姓名"
                      :show-clear="true"
