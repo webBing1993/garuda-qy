@@ -164,7 +164,7 @@
     </Dialog>
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license" confirm cancel cancelVal="取消" confirmVal="确定">
+      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <group>
