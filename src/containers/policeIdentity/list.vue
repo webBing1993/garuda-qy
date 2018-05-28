@@ -164,7 +164,7 @@
     </Dialog>
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <x-dialog v-model="without_license">
+      <Dialog v-model="without_license">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <div class="space"></div>
@@ -214,7 +214,7 @@
             <div v-if="guestName==''|| idCard==''||guestAddress=='' " class="invoiceBtn2" @click=''>确定</div>
           </div>
         </div>
-      </x-dialog>
+      </Dialog>
     </div>
 
     <div class="noCheckAlert">

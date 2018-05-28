@@ -166,7 +166,7 @@
     </footer>
 
     <div class="dialog">
-      <x-dialog v-model="IsshowDialog" mask-z-index="1">
+      <Dialog v-model="IsshowDialog" mask-z-index="1">
         <p class="filterTop">筛选</p>
         <group>
           <!--<x-input title="房号" novalidate placeholder="请输入房号" v-model="roomNum" placeholder-align="left"></x-input>-->
@@ -187,7 +187,7 @@
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
           </div>
         </group>
-      </x-dialog>
+      </Dialog>
     </div>
 
     <div class="QrCode" v-model="showQrcode" v-show="showQrcode">

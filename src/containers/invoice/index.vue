@@ -67,7 +67,7 @@
       </div>
     </footer>
     <div class="dialog">
-      <x-dialog v-model="showDialog"
+      <Dialog v-model="showDialog"
                 :hide-on-blur=false
                  mask-z-index="1"
       >
@@ -84,7 +84,7 @@
             <div class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</div>
           </div>
         </group>
-      </x-dialog>
+      </Dialog>
      </div>
     <!--日历控件-->
     <popup v-model="isCalendarShow"
