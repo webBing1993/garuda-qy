@@ -30,7 +30,7 @@
                 </p>
                 <p><span class="cell-key">身份证：</span><span class="cell-value"
                                                            :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
-                  <span class="cell-right">
+                  <span class="cell-right arrowRight">
                   {{datetimeparse(item.createdTime, 'hhmm')}}
                   <!--<img src="../../../static/icon/arow.png" alt="" class="cellImg">-->
                   <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)">
@@ -66,8 +66,8 @@
                 </p>
                 <p>
                   <span class="cell-key">身份证：<span class="cell-value" >{{idnumber(item.idCard)}}</span></span>
-                  <span class="cell-right">
-                    <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)"></a>
+                  <span class="cell-right arrowRight"  @click="orderClick(item.lvyeReportRecordId)">
+                    <a href="javascript:void 0"class="cellImg iconfont icon-gengduo"></a>
                   </span>
                 </p>
                 <p style="height: 1rem">
