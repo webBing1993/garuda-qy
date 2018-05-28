@@ -309,7 +309,7 @@
           }
       },
         buttonGroupShow(){
-            if(this.detail.reportInStatus == 'SUCCES'||this.detail.reportInStatus == 'UNREPORTED'||this.detail.reportInStatus=='PENDING'){
+            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||this.detail.reportInStatus=='PENDING'){
                 return false;
             }else {
                 return true;
