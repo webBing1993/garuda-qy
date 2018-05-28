@@ -97,7 +97,7 @@
     <!--筛选弹窗-->
     <div class="dialog">
 
-      <x-dialog v-if="tempPage == '预登记'" v-model="showDialog"
+      <Dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
         <p class="filterTop">筛选</p>
@@ -119,9 +119,9 @@
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
           </div>
         </group>
-      </x-dialog>
+      </Dialog>
 
-      <x-dialog v-if="tempPage == '在住'" v-model="showDialog"
+      <Dialog v-if="tempPage == '在住'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
         <p class="filterTop">筛选</p>
@@ -137,9 +137,9 @@
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
           </div>
         </group>
-      </x-dialog>
+      </Dialog>
 
-      <x-dialog v-if="tempPage == '退房申请'" v-model="showDialog"
+      <Dialog v-if="tempPage == '退房申请'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
         <p class="filterTop">筛选</p>
@@ -155,9 +155,9 @@
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
           </div>
         </group>
-      </x-dialog>
+      </Dialog>
 
-      <x-dialog v-if="tempPage == '已离店'" v-model="showDialog"
+      <Dialog v-if="tempPage == '已离店'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
         <p class="filterTop">筛选</p>
@@ -183,7 +183,7 @@
             <div class="invoiceBtn" @click=confirmHandle>确定</div>
           </div>
         </group>
-      </x-dialog>
+      </Dialog>
     </div>
     <!--日历控件-->
     <popup hide-on-deactivated :popup-style="{'z-index':'5003','borderTop':'1px solid #eeeeee'}"
