@@ -95,7 +95,7 @@
     </footer>
 
     <!--筛选弹窗-->
-    <div class="dialog">
+    <div class="receiveDialog">
 
       <Dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false

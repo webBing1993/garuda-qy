@@ -7,8 +7,8 @@
         <slot>弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内</slot>
       </div>
       <div class="UIdialog_ft">
-        <a v-if="cancel" class="UIdialog_btn UIdialog_btn_default" @click="onCancel">{{cancelVal}}</a>
-        <a v-if="confirm" class="UIdialog_btn UIdialog_btn_default" @click="onConfirm">{{confirmVal}}</a>
+        <a v-if="cancel" class="UIdialog_btn UIdialog_btn_default left" @click="onCancel">{{cancelVal}}</a>
+        <a v-if="confirm" class="UIdialog_btn UIdialog_btn_default right" @click="onConfirm">{{confirmVal}}</a>
       </div>
     </div>
   </div>
@@ -81,8 +81,9 @@
        transform: translate(-50%, -50%);
        background-color:@weuiDialogBackgroundColor;
        text-align: center;
-       border-radius: 3px;
+       border-radius: 8px;
        overflow: hidden;
+       border: 1px solid @weuiDialogLinkActiveBc;
    }
     .UIdialog_hd {
       padding: 1.3em @weuiDialogGapWidth .5em;
@@ -172,6 +173,9 @@
         display: inline-block;
         vertical-align: top;
         padding:0 .8em;
+        &.left{
+          color: @weuiDialogLinkColor
+        }
         &:after{
           display: none;
         }
@@ -188,6 +192,9 @@
       }
       .UIdialog_btn_default {
         color: #808080;
+      }
+      .left{
+        color: @weuiDialogLinkColor
       }
     }
 

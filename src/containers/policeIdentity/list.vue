@@ -164,7 +164,7 @@
     </Dialog>
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license">
+      <Dialog v-model="without_license" confirm cancel cancelVal="取消" confirmVal="确定">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <div class="space"></div>
@@ -204,15 +204,8 @@
               <!--<p>11111</p>-->
               <p>{{sinerEquipmentName}}</p>
             </div>
-
           </group>
-          <div class="footer">
-            <div class="" @click='cansoleVerify'>取消</div>
-            <p class="aLine"></p>
-            <div v-if="guestName!=''&& idCard!=''&& guestAddress!='' " class="invoiceBtn1" @click='makeSureVerify'>确定
-            </div>
-            <div v-if="guestName==''|| idCard==''||guestAddress=='' " class="invoiceBtn2" @click=''>确定</div>
-          </div>
+
         </div>
       </Dialog>
     </div>
@@ -446,16 +439,22 @@
 
       //      确认核验
             makeSureVerify(){
-              this.withoutIdCard({
-                guest_name: this.guestName,
-                id_card: this.idCard,
-                nation_id: this.NationId,
-                address: this.guestAddress,
-                device_id: this.devaiceId,
-                onsuccess: (body) => {
-                  this.without_license = false
+                if(this.guestName!=''&& this.idCard!=''&& this.guestAddress!=''){
+                    this.withoutIdCard({
+                        guest_name: this.guestName,
+                        id_card: this.idCard,
+                        nation_id: this.NationId,
+                        address: this.guestAddress,
+                        device_id: this.devaiceId,
+                        onsuccess: (body) => {
+                            this.without_license = false
+                        }
+                    })
+                }else {
+                    return
                 }
-              })
+
+
             },
 
             //标题日期筛选

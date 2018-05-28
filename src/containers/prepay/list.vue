@@ -166,7 +166,7 @@
     </footer>
 
     <div class="dialog">
-      <Dialog v-model="IsshowDialog" mask-z-index="1">
+      <Dialog v-model="IsshowDialog" mask-z-index="1" confirm cancel cancelVal="取消" confirmVal="确定" @onConfirm="confirmHandle" @onCancel="cancel">
         <p class="filterTop">筛选</p>
         <group>
           <!--<x-input title="房号" novalidate placeholder="请输入房号" v-model="roomNum" placeholder-align="left"></x-input>-->
@@ -182,10 +182,6 @@
           <!--:value="datetimeparse(periodFilter[0],'YYMMDD')"></cell>-->
           <!--<cell title="截止日期" @onClick="isTimerConterShow = true" link-->
           <!--:value="datetimeparse(periodFilter[1],'YYMMDD')"></cell>-->
-          <div>
-            <div class="invoiceBtn" @click=cancel>取消</div>
-            <div class="invoiceBtn" @click=confirmHandle>确定</div>
-          </div>
         </group>
       </Dialog>
     </div>
