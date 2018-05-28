@@ -78,15 +78,15 @@ const policeIdentity = [{
     path: 'handle/:tab',
     component: require('./containers/policeIdentity/list')
   },
-      {
-          path: 'orderSearch',
-          component: require('./containers/policeIdentity/orderSearch.vue')
-      },
-
-    {
+  {
       path: ':id',
       component: require('./containers/policeIdentity/detail')
-    },
+  },
+  {
+      path: 'orderSearch',
+      component: require('./containers/policeIdentity/orderSearch.vue')
+  },
+
 
   ],
 

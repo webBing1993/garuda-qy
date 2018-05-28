@@ -512,11 +512,11 @@
               this.select = true;
               this.roomNumber = '';
             },
-            orderClick: function (lvyeReportRecordId) {
+            orderClick (lvyeReportRecordId) {
               //非批量模式下点击订单跳转至详情页面
               if (!this.batch) {
                 this.batchlist = [];
-                this.goto('/policeIdentity/' + lvyeReportRecordId)
+                this.goto('/policeIdentity/'+lvyeReportRecordId)
               }
             },
             setMultiConfirm() {
