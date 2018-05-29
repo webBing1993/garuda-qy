@@ -15,9 +15,10 @@
         <span v-for="item in renderdays"
               @click="dateclick(item)"
               class="day-item"
-              :class="{checked:item.checked,disabled:item.disabled}"
+              :class="{checked:item.checked}"
         >{{item.day}}</span>
     </div>
+    <!--:class="{checked:item.checked,disabled:item.disabled}"-->
   </div>
 </template>
 

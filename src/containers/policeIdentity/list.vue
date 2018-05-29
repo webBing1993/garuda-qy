@@ -33,14 +33,17 @@
                   <span class="cell-right arrowRight">
                   {{datetimeparse(item.createdTime, 'hhmm')}}
                   <!--<img src="../../../static/icon/arow.png" alt="" class="cellImg">-->
-                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)">
-               </a>
-                </span></p>
+                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)"></a>
+                  </span>
+                </p>
                 <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
                 <span class="cell-value"
                       :class="{'redTip':item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED','blueTip':item.identityStatus=='PENDING','greenTip':item.identityStatus=='AUTO_AGREED'}">
                   无证核验 {{item.identityStatus == 'AUTO_REFUSED' ? '验证不通过' : item.identityStatus == 'PENDING' ? '验证完成' : item.identityStatus == 'AUTO_AGREED' ? '验证通过' : item.identityStatus == 'FAILED' ? '验证失败' : '验证失败'}}
                 </span>
+                <p v-if="item.reportInStatus === 'FAILED'" class="redTip" style="border-top: 1px solid #eeeeee;margin-top: 0.5rem;padding-top: 0.5rem">
+                    旅业上传失败
+                  <span class="reportLvyeBtn">重新上传</span>
                 </p>
               </div>
             </div>
@@ -77,13 +80,6 @@
                 </p>
               </div>
             </div>
-
-            <!--<group v-for="(item,index) in renderHandelList" :key="index" :title="titleHandledFilter(index)">-->
-              <!--<cell :title="'房间'+ ' '+ (item.roomNumber ?  item.roomNumber : '')"-->
-                    <!--:value="datetimeparse(item.createdTime,'hhmm')"></cell>-->
-              <!--<cell :title="handledItem(item,item.inTime,item.outTime)"-->
-                    <!--@onClick="orderClick(item.lvyeReportRecordId)"></cell>-->
-            <!--</group>-->
           </div>
         </scroller>
       </div>
@@ -200,7 +196,6 @@
             <!--<div class="onspace"></div>-->
             <div class="Equipment" v-if="getedEquipmentList.length==1">
               <p>设备：</p>
-              <!--<p>11111</p>-->
               <p>{{sinerEquipmentName}}</p>
             </div>
           </group>
@@ -583,7 +578,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.tobeHandledScroller.pullupStatus = 'disabled';
                             };
-                        }), ["NONE","PENDING","FAIL"],'','',this.offset0);
+                        }), ["NONE","PENDING","FAILED"],'','',this.offset0);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom0.reset();
@@ -638,7 +633,7 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
                     });
-                }), ["NONE","PENDING","FAIL"],'','',0);
+                }), ["NONE","PENDING","FAILED"],'','',0);
                 //已处理列表
                 this.getList(((body,headers) => {
                     this.handledTotal=headers.get('x-total-count');
@@ -746,4 +741,18 @@
       height: 2rem;
     }
   }
+  .reportLvyeBtn{
+    display: inline-block;
+    width: 5rem;
+    height: 1.8rem;
+    background: #3F6CA5;
+    color: #FFFFFF;
+    text-align: center;
+    float: right;
+    border-radius: 3px;
+  }
+  /*.icon-gengduo{*/
+    /*color: #3F6CA5;*/
+    /*font-size: 18px;*/
+  /*}*/
 </style>
