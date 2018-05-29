@@ -43,7 +43,7 @@
                 </span>
                 <p v-if="item.reportInStatus === 'FAILED'" class="redTip" style="border-top: 1px solid #eeeeee;margin-top: 0.5rem;padding-top: 0.5rem">
                     旅业上传失败
-                  <span class="reportLvyeBtn">重新上传</span>
+                  <span class="reportLvyeBtn" @click="reporetLvyes(item)">重新上传</span>
                 </p>
               </div>
             </div>
@@ -236,9 +236,6 @@
                 periodFilter: [null, null],
                 isCalendarShow: false,
                 roomNumber: '',
-                days: 1,
-                inTimeFilter: Date.parse(new Date()),
-                outTimeFilter: '',
                 showDialog: false,
                 showInfoDialog: false,
                 select: true,
@@ -270,7 +267,10 @@
                 handledTotal:0,
                 todayStart:'',
                 todayEnd:'',
-                showAlert:false
+                showAlert:false,
+                days: 1,
+                inTimeFilter: Date.parse(new Date()),
+                outTimeFilter: '',
             }
         },
         computed: {
@@ -348,6 +348,19 @@
             ...mapMutations([
                 'CHECKORDERITEM'
             ]),
+            reporetLvyes(item){
+                this.reportLvYe({
+                    lvyeReportRecordIds: item.lvyeReportRecordId.split(' '),//旅业上报记录Id
+                    roomNumber: item.roomNumber,//房间号
+                    nights: +this.days,//入住晚数
+                    inTime: this.inTimeFilter,//入住时间
+                    outTime: this.outTimeFilter,//离店时间
+                    guestType:item.guestType,
+                    onsuccess: () => {
+                        this.initList();
+                    }
+                })
+            },
             showwithoutLicenseDialog(){
                 if(this.surplusTime==0){
                     this.showAlert=true;
@@ -677,6 +690,7 @@
             periodFilter(){
                 this.initList();
             },
+
             days(val, old) {
                 if (val && !/^\d+$/.test(val) && !/^[0-9]*$ /.test(val)) {
                     this.days = 0;
