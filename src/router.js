@@ -17,7 +17,7 @@ const prepay = [{
     component: require('./containers/prepay/detail.vue')
   }]
 }];
-//
+//脏房处理
 const dirtyroom = [{
   path: '/dirtyroom',
   component: {

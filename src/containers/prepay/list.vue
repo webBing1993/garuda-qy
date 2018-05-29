@@ -157,13 +157,13 @@
       <!--</div>-->
     <!--</footer>-->
 
-    <footer v-show="route.params.tab == 1">
-      <div class="listFilter">
-         <span class="filter" @click="showDialog">
-            <abbr>筛选</abbr>
-         </span>
-      </div>
-    </footer>
+    <!--<footer v-show="route.params.tab == 1">-->
+      <!--<div class="listFilter">-->
+         <!--<span class="filter" @click="showDialog">-->
+            <!--<abbr>筛选</abbr>-->
+         <!--</span>-->
+      <!--</div>-->
+    <!--</footer>-->
 
     <div class="dialog">
       <Dialog v-model="IsshowDialog" mask-z-index="1" confirm cancel cancelVal="取消" confirmVal="确定" @onConfirm="confirmHandle" @onCancel="cancel">

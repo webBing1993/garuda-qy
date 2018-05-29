@@ -182,7 +182,7 @@
             },
             //可疑人员详情页
             suspiciousHandel(suspiciousId){
-                this.replaceto('/suspicious/susDetail/'+suspiciousId)
+                this.goto('/suspicious/susDetail/'+suspiciousId)
             },
             initList(){
                 this.getSuspiciousList(((body,headers)=>{

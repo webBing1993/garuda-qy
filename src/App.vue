@@ -140,20 +140,13 @@
         path.match(/record/) ? title = '录入修改' : null
         path.match(/roommanager/) ? title = '房态管理' : null
         path.match(/prepay/) ? title = '订单中心' : null
-//        path.match(/order\/today/) ? title = '当日登记' : null
-//        path.match(/order\/history/) ? title = '历史登记' : null
-//        path.match(/order\/detail/) ? title = '预登记订单详情' : null
         path.match(/identity\/\d+/) ? title = '入住核验' : null
         path.match(/identity\/detail/) ? title = '入住核验详情' : null
-//        path.match(/identity\/today/) ? title = '当日验证' : null
-//        path.match(/identity\/history/) ? title = '历史验证' : null
         path.match(/identity\/todo/) ? title = '待核验' : null
         path.match(/policeIdentity\/./) ? title = '公安验证详情' : null
         path.match(/policeIdentity\/handle/) ? title = '公安验证' : null
         path.match(/policeIdentity\/orderSearch/) ? title = '查询订单' : null
-
-//        path.match(/new-policeIdentity\/wxPay/) ? title = '微信支付入住' : null
-        path.match(/livein\/./) ? title = '入住单详情' : null
+          path.match(/livein\/./) ? title = '入住单详情' : null
         path.match(/livein\/today/) ? title = '当日入住' : null
         path.match(/livein\/all/) ? title = '全部在住' : null
         path.match(/invoice/) ? title = '发票中心' : null
@@ -168,6 +161,8 @@
         path.match(/onlineTool\/onlineDetail/) ? title = '酒店详情页' : null;
         path.match(/onlineTool\/onlineDevice/) ? title = '添加设备' : null;
         path.match(/onlineTool\/hotelBasicInfo/) ? title = '酒店基本信息' : null;
+        path.match(/recharge/) ? title = '充值中心' : null;
+        path.match(/dirtyroom/) ? title = '脏房处理' : null;
         this.settitle(title)
       },
       sessionId(val){

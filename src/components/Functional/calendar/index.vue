@@ -31,7 +31,10 @@
       value: null,
       max: null,
       min: null,
-      titleBar:true
+      titleBar:{
+          type:Boolean ,
+          default: true,
+      },
     },
     data(){
       return {

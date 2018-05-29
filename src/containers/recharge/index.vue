@@ -76,7 +76,7 @@
            maskShow
            bottom
            animationTopBottom>
-      <calendar v-model="periodFilter"  :titleBar=false  @onCancel="isCalendarShow = false"></calendar>
+      <calendar v-model="periodFilter"  :titleBar=true  @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
   </article>
 </template>
@@ -165,11 +165,13 @@
         "getRechargeUsedNum",
         'getNoIdentityDetailList'
       ]),
-        //
-        // resetFilter(){
-        //   this.periodFilter=[null,null];
-        //   this.isCalendarShow=false
-        // },
+
+        resetFilter(){
+          this.flag=true;
+          this.periodFilter=[];
+          console.log(this.periodFilter.length)
+          this.isCalendarShow=false;
+        },
         //获取充值信息
       getRechargeInfos(){
           try{
@@ -237,7 +239,6 @@
 //          : null;
 //      }
         periodFilter(val){
-            console.log('zsjhhhh')
             if(val.length!==0){
                 this.flag=false
                 this.getUsedNum()

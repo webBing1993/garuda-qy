@@ -210,7 +210,7 @@
     </div>
 
     <div class="noCheckAlert">
-      <alert v-model="showAlert" title="提示" content="金额不足暂无法使用，请及时充值！"></alert>
+      <Dialog v-model="showAlert" title="提示" content="金额不足暂无法使用，请及时充值！"></Dialog>
     </div>
     <!--////////////////////弹窗部分-->
   </article>

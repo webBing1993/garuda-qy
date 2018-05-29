@@ -70,8 +70,8 @@
               @onClick="goto('suspicious/suspiciousList/0')"></Cell>
         <Cell v-if="dirtyroomNum > 0" icon="./static/icon/clean.png" title="有脏房需要打扫" link :badge="dirtyroomNum"
               @onClick="goto('dirtyroom/0')"></Cell>
-        <Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"
-              @onClick="goto('recharge/0')"></Cell>
+        <!--<Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"-->
+              <!--@onClick="goto('recharge/0')"></Cell>-->
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
@@ -195,7 +195,7 @@
                         if (i.type == 'EXCEPTION' && (this.appConfig ? this.appConfig.exception_view : this.flag)) this.abnormalNoticeNum = i.total;
 //                同住人未入住
                         if (i.type == 'NOCHECKIN' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.absentPersonNum = i.total;
-                        if (i.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.suspiciousNum = i.total;
+                        if (i.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.recharge_view : this.flag)) this.chargeNum = i.total;
 
                         if (i.type == 'DIRTY_ROOM' && (this.appConfig ? this.appConfig.dirty_room_view : this.flag)) this.dirtyroomNum = i.total;
                     })
