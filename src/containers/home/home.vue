@@ -43,6 +43,7 @@
             <img :src='appConfig?appConfig.dirty_room_view?imgList[9].openItem:imgList[9].closeItem:flag?imgList[9].openItem:imgList[9].closeItem' alt="脏房处理">
             <span class="app-title">脏房处理</span>
           </li>
+          <li @click='goto("/onlineTool/onlineList")'>上线工具</li>
         </ul>
       </Group>
       <Group title="待办事项" v-if="isHaveTodoList">
