@@ -9,7 +9,7 @@
     "prod": "node build/build.js --basePath /p/master/",
     "test": "node build/build.js --basePath /q/master/",
     "intg": "node build/build.js --basePath /i/master/",
-    "stg": "node build/build.js --basePath /s/master/",
+    "stg": "node build/build.js --basePath /p/master/",
     "build": "node build/build.js --basePath /q/master/"
   },
   "dependencies": {

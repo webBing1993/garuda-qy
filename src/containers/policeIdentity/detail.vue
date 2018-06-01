@@ -87,6 +87,7 @@
           <p>
              <span style="color: #8A8A8A;font-size: 14px"><label>拍照时间:</label> {{datetimeparse(detail.createdTime,'YYYYMMDDhhmmss')}}</span>
              <span v-if="this.hotelConfig.show_similarity==='true'">相似度： <abbr style="color: #56e846">{{detail.similarity}}%</abbr></span>
+            {{currentTime}}
           </p>
           <img :src="detail.livePhoto" alt="现场照片">
         </div>
@@ -102,7 +103,7 @@
       </div>
 
       <div class="footButton" v-if="buttonGroupShow">
-        <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
+        <x-button :value="detail.reportInStatus && (detail.reportInStatus === 'FAILED'||(detail.reportInStatus == 'PENDING'&&(currentTime-detail.reportInTime>600000)))? '重新上传旅业系统' : '上传旅业系统'"
                   @onClick="setMultiConfirm"
                   :disabled="isDisabled" v-if="guestType!=='STAFF'"></x-button>
         <x-button value="通过"
@@ -176,8 +177,8 @@
           payMode:1,
           freeDeposit:false,
           checkItem:{},
-          list:[]
-
+          list:[],
+          currentTime:new Date().getTime()
       }
     },
       filters:{
@@ -309,7 +310,7 @@
           }
       },
         buttonGroupShow(){
-            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||this.detail.reportInStatus=='PENDING'){
+            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||(this.detail.reportInStatus=='PENDING'&&(this.currentTime-this.detail.reportInTime>600000))){
                 return false;
             }else {
                 return true;
