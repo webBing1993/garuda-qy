@@ -6,7 +6,7 @@
         <div>
           <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
             <label class="item-left">房间号码:</label>
-            <input class="item-right room-number item2" v-model="roomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)"/>
+            <input class="item-right room-number item2" v-model="inputRoomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)"/>
             <span class="item-right" v-else>{{detail.roomNumber}}</span>
           </div>
           <div class="info-item" v-if="showGuestType">
@@ -29,7 +29,7 @@
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'PENDING'" style="margin-bottom: 10px"><span style="color: #c4a726;padding-right: 10px;">上传中！</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
-        <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
+        <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>{{detail.sys_time}}
       </div>
       <!--值房通订单信息-->
       <div v-if="serviceConfig.ZHIFANGTONG">
@@ -102,7 +102,7 @@
       </div>
 
       <div class="footButton" v-if="buttonGroupShow">
-        <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAILED' ? '重新上传旅业系统' : '上传旅业系统'"
+        <x-button :value="detail.reportInStatus && (detail.reportInStatus === 'FAILED'||(detail.reportInStatus == 'PENDING'&&hotelConfig.sys_time>600000))? '重新上传旅业系统' : '上传旅业系统'"
                   @onClick="setMultiConfirm"
                   :disabled="isDisabled" v-if="guestType!=='STAFF'"></x-button>
         <x-button value="通过"
@@ -152,7 +152,7 @@
       return {
         //认证通状态数据
         detail: {},
-        roomNumber: '',
+        inputRoomNumber: '',
         days: 1,
         inTimeFilter: Date.parse(new Date()),
         outTimeFilter: '',
@@ -176,8 +176,8 @@
           payMode:1,
           freeDeposit:false,
           checkItem:{},
-          list:[]
-
+          list:[],
+          currentTime:new Date().getTime()
       }
     },
       filters:{
@@ -233,15 +233,15 @@
           },
           guestType(val){
               if(val=="STAFF") {
-                  this.roomNumber='';
+                  this.inputRoomNumber='';
               }
           },
           detail(val){
               if(val.reportInStatus!=='SUCCESS') {
-                  this.roomNumber='';
+                  this.inputRoomNumber='';
               }
               if(val.chekcinRoomNo!=''){}
-                  this.roomNumber=val.chekcinRoomNo
+                  this.inputRoomNumber=val.chekcinRoomNo
           },
           identityId(val){
               val ? this.resetFilter() : null
@@ -253,14 +253,14 @@
               let tempTime = nowDate.setTime(nowDate.getTime() + 24 * 60 * 60 * 1000 * this.days);
               this.outTimeFilter = tempTime;
           },
-          roomNumber(val,old) {
+          inputRoomNumber(val,old) {
               if (!val) {
                   this.resultList = [];
                   this.isErrorNumber = false;
               }
               if (!this.canSearch) return;
               if (val && val.split('').some(i => !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(i))) {//验证特殊字符
-                  this.roomNumber = old
+                  this.inputRoomNumber = old
               }
               if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
                   this.resultList = [];
@@ -301,15 +301,17 @@
         return this.route.params.id
       },
       isDisabled(){
-          if (this.roomNumberList.length > 0) {
-              let isRightInputRoomNumber = this.roomNumberList.some(i => i === this.roomNumber);
-              return !this.roomNumber  || this.isErrorNumber ||!isRightInputRoomNumber
-          } else {
-              return !this.roomNumber
+          if(this.detail.reportInStatus=='PENDING'&&this.hotelConfig.sys_time>600000){
+              return false;
+          }else {
+              if (this.roomNumberList.length > 0) {
+                  let hasRightRoomNumber = this.roomNumberList.some(i => i === this.inputRoomNumber);
+                  return !hasRightRoomNumber
+              }
           }
       },
         buttonGroupShow(){
-            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||this.detail.reportInStatus=='PENDING'){
+            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||(this.detail.reportInStatus=='PENDING'&&this.hotelConfig.sys_time<600000)){
                 return false;
             }else {
                 return true;
@@ -385,7 +387,7 @@
                     "hotel_id":this.hotel.hotel_id,//酒店ID
                     "idcard_no":'',//身份证号
                     "idcard_name":'',//身份证姓名
-                    "room_no":this.roomNumber,//房间号
+                    "room_no":this.inputRoomNumber,//房间号
                     "status":"",//订单状态
                     "like_info":"",//姓名拼音或者手机号
                     "order_id":''
@@ -401,7 +403,7 @@
             })
         },
       initOrderList(){
-          if(this.roomNumber){
+          if(this.inputRoomNumber){
               console.log('手动输入了房间')
               this.searchOrderByRoomNum();
           }else {
@@ -506,7 +508,7 @@
       },
       resultPick(item) {
         this.canSearch = false;
-        this.roomNumber = item;
+        this.inputRoomNumber = item;
         this.resultList = [];
         this.isErrorNumber = false;
         if(this.serviceConfig.ZHIFANGTONG){
@@ -533,7 +535,7 @@
       },
       resetFilter() {
         this.days = 1;
-        this.roomNumber = '';
+        this.inputRoomNumber = '';
         this.guestType='LODGER';
         this.inTimeFilter = Date.parse(new Date());
         this.isWxPayBtnShow = false;
@@ -546,7 +548,7 @@
             this.hotelConfig=body.data.config;
             this.detail = body.data.content;
             typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
-            this.detail.roomNumber && (this.roomNumber = this.detail.roomNumber);
+            this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
             this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
             if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
             this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
@@ -578,7 +580,7 @@
         reporetLvyes(){
             this.reportLvYe({
                 lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
-                roomNumber: this.roomNumber,//房间号
+                roomNumber: this.inputRoomNumber?this.inputRoomNumber:this.detail.roomNumber,//房间号
                 nights: +this.days,//入住晚数
                 inTime: this.inTimeFilter,//入住时间
                 outTime: this.outTimeFilter,//离店时间

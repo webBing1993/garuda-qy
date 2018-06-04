@@ -75,7 +75,7 @@
         let remindId=item.remind_noshow_id
         this.setRemindStatus({
           remindId: remindId,
-          onsuccess: body => this.replaceto('notLiveIn/list')
+          onsuccess: body => this.goto(-1)
         })
 
       }

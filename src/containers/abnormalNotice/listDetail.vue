@@ -326,23 +326,24 @@
           is_history:isHistory,
           currentPage:page,
           onsuccess:body => {
-            this.abnormalList =  body.data.list;
-//            console.log('长度：'+this.abnormalList.length)
-            this.renderList=[...this.renderList,...this.abnormalList];
-            if(body.data.record){
-              this.isShowRecord=body.data.record;
-            };
-            //判断请求的是异常页面还是历史记录页面
-            if(isHistory){
-              this.isShowRecord=false;
-              this.abPage=2;
-            }else if(!isHistory){
-              this.abPage=1;
-            };
-            if(this.abnormalList.length==0||this.abnormalList==null){
-              this.scroller.pullupStatus = 'disabled';
-              return;
-            }
+              if(body.data.list){
+                  this.abnormalList =  body.data.list;
+                  this.renderList=[...this.renderList,...this.abnormalList];
+                  if(body.data.record){
+                      this.isShowRecord=body.data.record;
+                  };
+                  //判断请求的是异常页面还是历史记录页面
+                  if(isHistory){
+                      this.isShowRecord=false;
+                      this.abPage=2;
+                  }else if(!isHistory){
+                      this.abPage=1;
+                  };
+                  if(this.abnormalList.length==0||this.abnormalList==null){
+                      this.scroller.pullupStatus = 'disabled';
+                      return;
+                  }
+              }
           }
         })
       },

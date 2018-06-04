@@ -11,8 +11,16 @@
         </tab-item>
       </tab>
     </header>
+    <!--<div class="searchTitle">-->
+      <!--<span>-->
+            <!--<x-input  placeholder="输入手机号或姓名拼音快速索引" v-model="searchName">-->
+            <!--<i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>-->
+            <!--</x-input>-->
+      <!--</span>-->
+      <!--<span @click="searchItem">查询</span>-->
+    <!--</div>-->
       <!--待处理列表-->
-      <div v-show="!currentTab" style="padding-top: 2.8rem">
+      <div v-show="!currentTab ">
         <scroller :pullup-config="Interface.scrollerUp"
                   @on-pullup-loading="loadingList0"
                   lock-x
@@ -20,7 +28,7 @@
                   height="-40"
                   v-model="tobeHandledScroller"
                   :scrollbarY=true bounce ref="scrollerBottom0">
-          <div class="list-wrapper">
+          <div class="list-wrapper" style="margin-top: 3rem">
             <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList">
               <div class="titleDate">{{titleFilter(index)}}</div>
@@ -51,7 +59,7 @@
         </scroller>
       </div >
       <!--已处理列表-->
-      <div v-show="currentTab" style="padding-top: 2.8rem">
+      <div v-show="currentTab" >
         <scroller :pullup-config="Interface.scrollerUp"
                   @on-pullup-loading="loadingList1"
                   lock-x
@@ -59,7 +67,7 @@
                   height="-40"
                   v-model="handledScroller"
                   scrollbarY bounce ref="scrollerBottom1" >
-          <div class="list-wrapper">
+          <div class="list-wrapper" style="margin-top: 3rem">
             <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="handledListGroup" v-for="(item,index) in renderHandelList">
               <div class="titleDate">{{titleHandledFilter(index)}}</div>
@@ -103,48 +111,6 @@
     <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
-
-    <!--<Dialog v-show="select" v-model="showDialog">-->
-      <!--<div class="dialog-report-info">-->
-        <!--<div class="report-info ">-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">入住人:</label>-->
-            <!--<span class="item-right">{{selectedName.join()}}</span>-->
-          <!--</div>-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">房间号码:</label>-->
-            <!--<input class="item-right room-number" v-model="roomNumber"/>-->
-          <!--</div>-->
-          <!--<div class="search">-->
-            <!--<label>搜索结果</label>-->
-            <!--<ul class="search-result" v-if="resultList.length > 0">-->
-              <!--<li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>-->
-            <!--</ul>-->
-          <!--</div>-->
-          <!--<p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">入住几晚:</label>-->
-            <!--<div class="item-right days-item">-->
-              <!--<span class="days-reduce" @click="daysReduce">-</span>-->
-              <!--<input class="days" v-model="days"/>-->
-              <!--<span class="days-add" @click="daysAdd()">+</span>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">入住时间:</label>-->
-            <!--<span class="item-right">{{datetimeparse(inTimeFilter)}}</span>-->
-          <!--</div>-->
-
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">离店时间:</label>-->
-            <!--<span class="item-right">{{datetimeparse(outTimeFilter)}}</span>-->
-          <!--</div>-->
-          <!--<x-button value="上传旅业系统" @onClick="isInfoDialogShow"-->
-                    <!--:disabled="isDisabled"></x-button>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</Dialog>-->
-
     <Dialog v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel"
             @onConfirm="setMultiConfirm">
       <ul class="dialog-info">
@@ -271,6 +237,7 @@
                 days: 1,
                 inTimeFilter: Date.parse(new Date()),
                 outTimeFilter: '',
+                searchName:""
             }
         },
         computed: {
@@ -348,6 +315,9 @@
             ...mapMutations([
                 'CHECKORDERITEM'
             ]),
+            searchItem(){
+
+            },
             reporetLvyes(item){
                 this.reportLvYe({
                     lvyeReportRecordIds: item.lvyeReportRecordId.split(' '),//旅业上报记录Id
