@@ -169,9 +169,9 @@
         if (val) {
           this.getServiceConfig();
           this.get_is_free_deposit_config();
-          this.getRechargeInfo ({
-              hotel_id: this.hotel.hotel_id
-          });
+          // this.getRechargeInfo ({
+          //     hotel_id: this.hotel.hotel_id
+          // });
           this.$nextTick(() => this.crossroad());
         }
       }
