@@ -13,7 +13,7 @@
     </header>
     <div class="searchTitle">
       <span>
-            <x-input  placeholder="输入姓名索引" v-model="searchName">
+            <x-input  placeholder="输入姓名查找" v-model="searchName">
             <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
             </x-input>
       </span>
