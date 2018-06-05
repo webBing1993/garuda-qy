@@ -13,7 +13,7 @@
     </header>
     <div class="searchTitle">
       <span>
-          <x-input  placeholder="输入姓名查找" v-model="searchName"  @on-change="clearInput">
+          <x-input  placeholder="输入姓名查找" v-model="searchName"  @on-click-clear-icon="clearInput" @on-enter="searchItem">
           <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
           </x-input>
       </span>
@@ -557,7 +557,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.tobeHandledScroller.pullupStatus = 'disabled';
                             };
-                        }), ["NONE","PENDING","FAILED"],'','','',this.offset0);
+                        }), ["NONE","PENDING","FAILED"],'','',this.searchName,this.offset0);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom0.reset();
@@ -568,6 +568,7 @@
             },
             //已处理下拉刷新加载
             loadingList1(){
+                let searchName='';
                 if (this.onFetching1) {
                     console.log('不能再请求0了')
                     // do nothing
@@ -583,7 +584,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.handledScroller.pullupStatus = 'disabled';
                             };
-                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,'',this.offset1);
+                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.searchName,this.offset1);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom1.reset();
