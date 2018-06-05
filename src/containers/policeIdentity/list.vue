@@ -49,9 +49,9 @@
                       :class="{'redTip':item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED','blueTip':item.identityStatus=='PENDING','greenTip':item.identityStatus=='AUTO_AGREED'}">
                   无证核验 {{item.identityStatus == 'AUTO_REFUSED' ? '验证不通过' : item.identityStatus == 'PENDING' ? '验证完成' : item.identityStatus == 'AUTO_AGREED' ? '验证通过' : item.identityStatus == 'FAILED' ? '验证失败' : '验证失败'}}
                 </span>
-                <!--<p v-if="item.reportInStatus === 'FAILED'" class="redTip" style="border-top: 1px solid #eeeeee;margin-top: 0.5rem;padding-top: 0.5rem">-->
-                    <!--旅业上传失败-->
-                  <!--<span class="reportLvyeBtn" @click="reporetLvyes(item)">重新上传</span>-->
+                <p v-if="item.reportInStatus === 'FAILED'" class="redTip" style="border-top: 1px solid #eeeeee;margin-top: 0.5rem;padding-top: 0.5rem">
+                    旅业上传失败
+                  <span class="reportLvyeBtn" @click="reporetLvyes(item)">重新上传</span>
                 </p>
               </div>
             </div>
