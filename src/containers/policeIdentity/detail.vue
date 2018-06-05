@@ -547,11 +547,14 @@
           onsuccess: body => {
             this.hotelConfig=body.data.config;
             this.detail = body.data.content;
-            typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
-            this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
-            this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
-            if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
-            this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
+              this.days = this.detail.nights;
+              this.inputRoomNumber = this.detail.roomNumber;
+              this.inTimeFilter = this.detail.reportInTime;
+            // typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
+            // this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
+            // this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
+            // if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
+            // this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
             //拿订单
             this.initOrderList();
           }

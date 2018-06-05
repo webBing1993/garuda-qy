@@ -13,9 +13,9 @@
     </header>
     <div class="searchTitle">
       <span>
-            <x-input  placeholder="输入姓名查找" v-model="searchName">
-            <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
-            </x-input>
+          <x-input  placeholder="输入姓名查找" v-model="searchName"  @on-change="clearInput">
+          <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
+          </x-input>
       </span>
       <span @click="searchItem">查询</span>
     </div>
@@ -28,7 +28,7 @@
                   height="-40"
                   v-model="tobeHandledScroller"
                   :scrollbarY=true bounce ref="scrollerBottom0">
-          <div class="list-wrapper" style="margin-top: 3rem">
+          <div class="list-wrapper" >
             <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList">
               <div class="titleDate">{{titleFilter(index)}}</div>
@@ -67,7 +67,7 @@
                   height="-40"
                   v-model="handledScroller"
                   scrollbarY bounce ref="scrollerBottom1" >
-          <div class="list-wrapper" style="margin-top: 3rem">
+          <div class="list-wrapper" >
             <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="handledListGroup" v-for="(item,index) in renderHandelList">
               <div class="titleDate">{{titleHandledFilter(index)}}</div>
@@ -255,7 +255,6 @@
                 return parseInt(this.route.params.tab)//返回0，1
             },
             tabMenu() {
-                this.initList();
                 let menu = [];
                 menu[0] = `待处理(${this.tobeHandledTotal})`;
                 if(this.showHandledList){
@@ -315,12 +314,8 @@
             ...mapMutations([
                 'CHECKORDERITEM'
             ]),
-            searchItem(){
-                if(this.currentTab==0){
-                    this.initTobeHandled(this.searchName);
-                }else {
-                    this.initHandled(this.searchName);
-                }
+            clearInput(){
+                console.log(2324)
             },
             reporetLvyes(item){
                 this.reportLvYe({
@@ -602,6 +597,13 @@
                 let newpath = this.route.path.replace(this.route.params.tab, index);
                 this.replaceto(newpath)
                 this.initList();
+            },
+            searchItem(){
+                if(this.currentTab==0){
+                    this.initTobeHandled(this.searchName);
+                }else {
+                    this.initHandled(this.searchName);
+                }
             },
             //待处理列表
             initTobeHandled(searchName){
