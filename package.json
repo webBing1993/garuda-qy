@@ -5,8 +5,9 @@
   "author": "fe@fortrun",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js --basePath /p/v2.6.0/",
-    "prod": "node build/build.js --basePath /p/master/",
+    "dev": "node build/dev-server.js --basePath /q/master/",
+    "build":"node build/dev-server.js --basePath /p/v2.6.0/",
+    "prod": "node build/build.js --basePath /p/v2.6.0/",
     "test": "node build/build.js --basePath /q/master/",
     "intg": "node build/build.js --basePath /i/master/",
     "stg": "node build/build.js --basePath /p/master/",

@@ -128,7 +128,7 @@
                     this.SERVICECONFIG (body.data)
                 }
             })
-        },
+        }
     },
     watch: {
       AppParams(val){
