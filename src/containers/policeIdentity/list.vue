@@ -255,7 +255,6 @@
                 return parseInt(this.route.params.tab)//返回0，1
             },
             tabMenu() {
-                this.initList();
                 let menu = [];
                 menu[0] = `待处理(${this.tobeHandledTotal})`;
                 if(this.showHandledList){
