@@ -4,11 +4,15 @@ article {
   box-sizing: border-box;
   user-select: none;
   touch-callout:none;
+    //padding-top: 3.5rem;
     .searchTitle{
         height: 3rem;
         background: #FFFFFF;
-        margin-top: 3.5rem;
         line-height: 3rem;
+        //position: fixed;
+        //top: 3.5rem;
+        //z-index: 4444;
+        margin-top: 3.5rem;
         text-align:center ;
         span:nth-child(2){
             display: inline-block;
@@ -85,6 +89,11 @@ article {
       padding: 1rem;
       margin-bottom: 0.5rem;
     }
+    &:last-child{
+        .cell-body{
+            margin-bottom: 2rem;
+        }
+    }
   }
     .handledListGroup {
         .cell-body {
@@ -93,6 +102,11 @@ article {
             margin-bottom: 0.5rem;
             .cell-value{
                 color: #000000;
+            }
+        }
+        &:last-child{
+            .cell-body{
+                margin-bottom: 2rem;
             }
         }
     }

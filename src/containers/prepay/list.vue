@@ -20,7 +20,7 @@
         <div class="orderTitle">
           <span @click="syncTime">同步</span>
           <span>
-            <x-input  placeholder="输入手机号或姓名拼音快速索引" v-model="searchOrder">
+            <x-input  placeholder="输入手机号或姓名快速索引" v-model="searchOrder">
             <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
             </x-input>
           </span>
@@ -215,269 +215,267 @@
   import {XDialog, PopupRadio, PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
 
 
-  export default{
-    name: "prepay",
+  export default {
+      name: "prepay",
+      components: {
+          XDialog,
+          PopupRadio,
+          PopupPicker,
+          Picker,
+          Popup,
+          XInput,
+          Tab,
+          TabItem
+      },
 
-    components: {
-      XDialog,
-      PopupRadio,
-      PopupPicker,
-      Picker,
-      Popup,
-      XInput,
-      Tab,
-      TabItem
-    },
-
-    data(){
-      return {
+      data () {
+          return {
 //        tabmenu: ["待确认", "已确认"],
-        batch: false,
-        batchlist: [],
-        tobeconfirmed: [],
-        confirmed: [],
-        tobeConfirmedPageIndex: 0,
-        confirmedPageIndex: 0,
-        roomNum: '',
-        customerName: '',
-        roomTitle: "房型",
-        roomTypeShow: false,
-        roomList: [],
-        roomType: '',
-        roomTypeId: '',
-        getedRoomList: [],
-        defaultRoomType: ['全部房型'],
-        selectedRoomType: '',
-        IsshowDialog: false,
-        isTimerConterShow: false,
-        periodFilter: [null, null],
-        showQrcode: false,
-        i: false,
-        confirmOrderStatus:false,
-        checkIndex:1,
-        statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
-        payMode:1,
-        freeDeposit:false,
-        checkItem:{},
-          searchOrder:'',
-          resultList:[]
-      }
-    },
-    filters:{
-        filterStayDay(val){
-            return Math.ceil((val.out_time-val.in_time)/3600000/24)+'晚'
-        }
-    },
-    computed: {
-      ...mapState([
-        'Interface',
-        'route',
-        'hotel',
-          'isFreeDeposit'
-      ]),
-        freeDepositCheck(){
-            return this.isFreeDeposit!==null&&this.isFreeDeposit=='true'?true:false
-        },
-      currentTab(){
-        return parseInt(this.route.params.tab)
+              batch: false,
+              batchlist: [],
+              tobeconfirmed: [],
+              confirmed: [],
+              tobeConfirmedPageIndex: 0,
+              confirmedPageIndex: 0,
+              roomNum: '',
+              customerName: '',
+              roomTitle: "房型",
+              roomTypeShow: false,
+              roomList: [],
+              roomType: '',
+              roomTypeId: '',
+              getedRoomList: [],
+              defaultRoomType: ['全部房型'],
+              selectedRoomType: '',
+              IsshowDialog: false,
+              isTimerConterShow: false,
+              periodFilter: [null, null],
+              showQrcode: false,
+              i: false,
+              confirmOrderStatus: false,
+              checkIndex: 1,
+              statusList: [{name: '房费现付', value: 1}, {name: '不需现付房费', value: 2}],
+              payMode: 1,
+              freeDeposit: false,
+              checkItem: {},
+              searchOrder: '',
+              resultList: []
+          }
+      },
+      filters: {
+          filterStayDay (val) {
+              return Math.ceil ((val.out_time - val.in_time) / 3600000 / 24) + '晚'
+          }
+      },
+      computed: {
+          ...mapState ([
+              'Interface',
+              'route',
+              'hotel',
+              'isFreeDeposit'
+          ]),
+          freeDepositCheck () {
+              return this.isFreeDeposit !== null && this.isFreeDeposit == 'true' ? true : false
+          },
+          currentTab () {
+              return parseInt (this.route.params.tab)
+          },
+
+          renderList () {
+              return this.resultList;
+          },
+
+          tabMenu () {
+              let menu = [];
+              menu[0] = `待确认(${this.tobeconfirmed.length})`;
+              menu[1] = `已确认(${this.confirmed.length})`;
+              return menu;
+          }
       },
 
-      renderList(){
-          return this.resultList;
-      },
+      methods: {
+          ...mapActions ([
+              'goto',
+              'replaceto',
+              'getconfirmelist',
+              'filtrateConfirmelist',
+              'multiconfirm',
+              'hotelrefresh',
+              'searchRoom',
+              'changeStatus'
+          ]),
+          showStatusDialog (item) {
+              this.confirmOrderStatus = true,
+                  this.payMode = item.payinfo.pay_mode,
+                  this.checkIndex = 0,
+                  this.checkItem = item
+          },
+          //弹出对话框改订单状态
+          confirmOrder () {
+              console.log ('checkItem:', this.checkItem)
+              this.changeStatus ({
+                  data: {
+                      order_id: this.checkItem.order_id,
+                      hotel_id: this.hotel.hotel_id,
+                      pay_mode: this.payMode,
+                      is_free_deposit: this.freeDeposit
+                  },
+                  onsuccess: (body => {
+                      this.refreshList ()
+                  })
+              })
+          },
+          tabToggle (index) {
+              this.replaceto ('/prepay/' + index);
+              if (this.currentTab == 1) {
+                  this.resultList = this.confirmed;
+              } else if (this.currentTab == 0) {
+                  this.resultList = this.tobeconfirmed;
+              }
+              console.log ('this.resultList:', this.resultList);
+          },
+          confirmMode (item) {
+              return item.payinfo
+                  ? item.payinfo.confirm_mode === 2 ? '(手动确认)' : ''
+                  : ''
+          },
 
-      tabMenu() {
-        let menu = [];
-        menu[0] = `待确认(${this.tobeconfirmed.length})`;
-        menu[1] = `已确认(${this.confirmed.length})`;
-        return menu;
-      }
-    },
-
-    methods: {
-      ...mapActions([
-        'goto',
-        'replaceto',
-        'getconfirmelist',
-        'filtrateConfirmelist',
-        'multiconfirm',
-        'hotelrefresh',
-        'searchRoom',
-        'changeStatus'
-      ]),
-        showStatusDialog(item){
-            this.confirmOrderStatus=true,
-            this.payMode=item.payinfo.pay_mode,
-            this.checkIndex=0,
-            this.checkItem=item
-        },
-        //弹出对话框改订单状态
-        confirmOrder(){
-            console.log('checkItem:',this.checkItem)
-            this.changeStatus({
-                data:{
-                    order_id:this.checkItem.order_id,
-                    hotel_id:this.hotel.hotel_id,
-                    pay_mode:this.payMode,
-                    is_free_deposit:this.freeDeposit
-                },
-                onsuccess:(body=>{
-                    this.refreshList()
-                })
-            })
-        },
-        tabToggle(index){
-            this.replaceto('/prepay/'+index);
-            if(this.currentTab==1){
-                this.resultList =this.confirmed;
-            }else if(this.currentTab==0){
-                this.resultList =this.tobeconfirmed;
-            }
-            console.log('this.resultList:',this.resultList);
-        },
-      confirmMode(item){
-        return item.payinfo
-          ? item.payinfo.confirm_mode === 2 ? '(手动确认)' : ''
-          : ''
-      },
-
-      getCellTitle(item){
-        // let paystatus = item.payinfo.pay_mode;
-        let paystatusdom = ``
-        // if (paystatus) {
-          // paystatusdom = paystatus === 1
-          //   ? `<span class="cell-right other">现付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-          //   : paystatus === 2
-          //     ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-          //     : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-        // }
-          paystatusdom=`<span class="cell-right other" @click="confirmOrderStatus=true,checkIndex=0,checkItem=item">${item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>`
+          getCellTitle (item) {
+              // let paystatus = item.payinfo.pay_mode;
+              let paystatusdom = ``
+              // if (paystatus) {
+              // paystatusdom = paystatus === 1
+              //   ? `<span class="cell-right other">现付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+              //   : paystatus === 2
+              //     ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+              //     : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
+              // }
+              paystatusdom = `<span class="cell-right other" @click="confirmOrderStatus=true,checkIndex=0,checkItem=item">${item.precheckin_status == 1 ? '未确认' : item.pay_mode == 1 ? '房费现付' : '不需房费现付'}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>`
 
 
-          return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
-      },
+              return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
+          },
 
-      getTobeConfirmedCellBody(item){
-        let roomtypewords = ''
-        item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
-        let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
+          getTobeConfirmedCellBody (item) {
+              let roomtypewords = ''
+              item.rooms_plan.forEach (i => roomtypewords += (i.room_type + 'x' + i.room_count))
+              let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
 
-        return `<div class="cell-body">` +
-          `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
-          `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-          `</div>`
-      },
+              return `<div class="cell-body">` +
+                  `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
+                  `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+                  `</div>`
+          },
 
-      getCellBody(item){
-        let roomtypewords = ''
-        item.rooms_plan.forEach(i => roomtypewords += (i.room_type + 'x' + i.room_count))
-        let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
+          getCellBody (item) {
+              let roomtypewords = ''
+              item.rooms_plan.forEach (i => roomtypewords += (i.room_type + 'x' + i.room_count))
+              let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
 
-        return `<div class="cell-body">` +
-          `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
-          `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-          `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code ? item.share_code : '暂无分享码'}</span></p>` +
-          `</div>`
-      },
+              return `<div class="cell-body">` +
+                  `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
+                  `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
+                  `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code ? item.share_code : '暂无分享码'}</span></p>` +
+                  `</div>`
+          },
 
-      getCellFooter(item){
-        return `<p><span class="cell-key">备注：</span><span class="cell-value">${item.remark}</span></p>`
-      },
+          getCellFooter (item) {
+              return `<p><span class="cell-key">备注：</span><span class="cell-value">${item.remark}</span></p>`
+          },
 
-      goPick(){
-        // 批量选择
-        this.batchlist = []
-        this.batch = true
-      },
+          goPick () {
+              // 批量选择
+              this.batchlist = []
+              this.batch = true
+          },
 
-      cancelPick(){
-        // 退出批量选择
-        this.batchlist = []
-        this.batch ? this.batch = false : null
-      },
+          cancelPick () {
+              // 退出批量选择
+              this.batchlist = []
+              this.batch ? this.batch = false : null
+          },
 
-      allPick(){
-        // 全选和取消全选
-        if (this.batchlist.length === this.tobeconfirmed.length) {
-          this.batchlist = []
-        } else {
-          this.batchlist = [];
-          this.tobeconfirmed.forEach(
-            item => this.batchlist.push(item.order_id)
-          )
-        }
-      },
+          allPick () {
+              // 全选和取消全选
+              if (this.batchlist.length === this.tobeconfirmed.length) {
+                  this.batchlist = []
+              } else {
+                  this.batchlist = [];
+                  this.tobeconfirmed.forEach (
+                      item => this.batchlist.push (item.order_id)
+                  )
+              }
+          },
 
-      orderClick: function (orderId) {
-        //非批量模式下点击订单跳转至详情页面
-        if (!this.batch) {
-          this.batchlist = []
-          this.goto('/prepay/detail/' + orderId)
-        }
-      },
+          orderClick: function (orderId) {
+              //非批量模式下点击订单跳转至详情页面
+              if (!this.batch) {
+                  this.batchlist = []
+                  this.goto ('/prepay/detail/' + orderId)
+              }
+          },
 
-      setMultiConfirm() {
-        if (this.batchlist.length != 0) {
-          this.multiconfirm({
-            order_ids: this.batchlist,
-            onsuccess: () => {
-              this.batchlist.forEach(item => {
-                let tempIndex = this.tobeconfirmed.findIndex(i => i.order_id === item);
-                tempIndex > -1
-                  ? this.tobeconfirmed.splice(tempIndex, 1)
-                  : null
+          setMultiConfirm () {
+              if (this.batchlist.length != 0) {
+                  this.multiconfirm ({
+                      order_ids: this.batchlist,
+                      onsuccess: () => {
+                          this.batchlist.forEach (item => {
+                              let tempIndex = this.tobeconfirmed.findIndex (i => i.order_id === item);
+                              tempIndex > -1
+                                  ? this.tobeconfirmed.splice (tempIndex, 1)
+                                  : null
+                          });
+                          this.cancelPick ()
+                      }
+                  })
+              }
+          },
+
+          syncTime () {
+              this.hotelrefresh ({
+                  onsuccess: (body => {
+                      this.refreshList ();
+                  })
+              })
+          },
+          getList (status, callback) {
+              this.getconfirmelist ({
+                  precheckin_status: status,
+                  like_owner: '',
+                  pms_room_type_id: '',
+                  onsuccess: callback
+              })
+          },
+          initList () {
+              this.tobeConfirmedPageIndex = 0
+              this.confirmedPageIndex = 0
+              this.getList (1, body => {
+                  this.tobeconfirmed = [...body.data];
+                  this.tobeConfirmedPageIndex++;
+                  this.resultList = this.tobeconfirmed;
+              })
+              this.getList (2, body => {
+                  this.confirmed = [...body.data], this.confirmedPageIndex++
+              })
+          },
+
+          refreshList () {
+              this.tobeconfirmed = []
+              this.confirmed = []
+              this.getList (1, body => {
+                  this.tobeconfirmed = [...body.data];
               });
-              this.cancelPick()
-            }
-          })
-        }
-      },
-
-      syncTime(){
-        this.hotelrefresh({
-          onsuccess: (body) => this.refreshList()
-        })
-      },
-
-      getList(status, callback){
-        this.getconfirmelist({
-          precheckin_status: status,
-          like_owner: '',
-          pms_room_type_id: '',
-          onsuccess: callback
-        })
-      },
-
-      initList(){
-        this.tobeConfirmedPageIndex = 0
-        this.confirmedPageIndex = 0
-        if (this.renderList.length === 0) {
-          this.getList(1, body => {
-              this.tobeconfirmed = [...body.data];
-              this.tobeConfirmedPageIndex++;
-              this.resultList=this.tobeconfirmed;
-          })
-          this.getList(2, body => (this.confirmed = [...body.data], this.confirmedPageIndex++))
-        }
-      },
-
-      refreshList(){
-        this.tobeconfirmed = []
-        this.confirmed = []
-        if (this.currentTab == 0) {
-          this.getList(1, body => {
-              this.tobeconfirmed = [...body.data];
-              this.resultList=this.tobeconfirmed
-          })
-        } else if (this.currentTab == 1) {
-          this.getList(2, body => {
-              this.confirmed = [...body.data];
-              this.resultList=this.confirmed
-          })
-        }
+              this.getList (2, body => {
+                  this.confirmed = [...body.data];
+              });
+              if (this.currentTab == 0) {
+                  this.resultList = this.tobeconfirmed;
+              } else if (this.currentTab == 1) {
+                  this.resultList = this.confirmed;
+              }
+          },
 //        this.getList(this.currentTab+1, body => this.currentTab==2 ? this.confirmed = [...body.data] : this.tobeconfirmed = [...body.data])
-
-      },
 
       getRoomTypeList(){
         this.roomList = []
