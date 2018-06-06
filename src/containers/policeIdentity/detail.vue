@@ -6,7 +6,7 @@
         <div>
           <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
             <label class="item-left">房间号码:</label>
-            <input class="item-right room-number item2" v-model="inputRoomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)"/>
+            <input class="item-right room-number item2" v-model="inputRoomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)" v-on:input="flagHandle=true"/>
             <span class="item-right" v-else>{{detail.roomNumber}}</span>
           </div>
           <div class="info-item" v-if="showGuestType">
@@ -21,7 +21,7 @@
         <p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>
         <div class="searchRoom">
           <label>搜索结果</label>
-          <ul class="searchRoom-result" v-if="resultList.length > 0&&showGuestType&&detail.guestType!=='STAFF'">
+          <ul class="searchRoom-result" v-if="searchResultShow">
             <li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>
           </ul>
         </div>
@@ -177,7 +177,8 @@
           freeDeposit:false,
           checkItem:{},
           list:[],
-          currentTime:new Date().getTime()
+          currentTime:new Date().getTime(),
+          flagHandle:false
       }
     },
       filters:{
@@ -241,7 +242,8 @@
                   this.inputRoomNumber='';
               }
               if(val.chekcinRoomNo!=''){}
-                  this.inputRoomNumber=val.chekcinRoomNo
+                  this.inputRoomNumber=val.chekcinRoomNo;
+                  this.flagHandle=false;
           },
           identityId(val){
               val ? this.resetFilter() : null
@@ -263,10 +265,12 @@
                   this.inputRoomNumber = old
               }
               if (this.roomNumberList.length > 0 && val && this.detail.reportInStatus !== 'SUCCESS' && this.detail.reportInStatus !== 'FAIL') {
-                  this.resultList = [];
-                  this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
-                  if (this.resultList.length === 0) this.isErrorNumber = true;
-              }
+                      this.resultList = [];
+                      this.resultList = this.roomNumberList.filter(room => room.toString().indexOf(val) > -1);
+                      if (this.resultList.length == 0) {
+                          this.isErrorNumber = true;
+                      }
+                  }
           },
           resultList(val, old) {
               if (old.length > 0) this.canSearch = true
@@ -287,7 +291,9 @@
         'serviceConfig',
           'isFreeDeposit'
       ]),
-
+      searchResultShow(){
+          return this.resultList.length > 0&&this.showGuestType&&this.detail.guestType!=='STAFF'&&this.flagHandle
+      },
       roomNo(){
           return this.detail.chekcinRoomNo
       },
@@ -547,14 +553,11 @@
           onsuccess: body => {
             this.hotelConfig=body.data.config;
             this.detail = body.data.content;
-              this.days = this.detail.nights;
-              this.inputRoomNumber = this.detail.roomNumber;
-              this.inTimeFilter = this.detail.reportInTime;
-            // typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
-            // this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
-            // this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
-            // if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
-            // this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
+            typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
+            this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
+            this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
+            if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
+            this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
             //拿订单
             this.initOrderList();
           }
@@ -581,6 +584,7 @@
       } ,
         //上传旅业
         reporetLvyes(){
+          let aa=''
             this.reportLvYe({
                 lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
                 roomNumber: this.inputRoomNumber?this.inputRoomNumber:this.detail.roomNumber,//房间号
