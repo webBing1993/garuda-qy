@@ -587,6 +587,7 @@
       } ,
         //上传旅业
         reporetLvyes(){
+          let aa=''
             this.reportLvYe({
                 lvyeReportRecordIds: this.detail.lvyeReportRecordId.split(' '),//旅业上报记录Id
                 roomNumber: this.inputRoomNumber?this.inputRoomNumber:this.detail.roomNumber,//房间号

@@ -11,14 +11,14 @@
         </tab-item>
       </tab>
     </header>
-    <!--<div class="searchTitle">-->
-      <!--<span>-->
-            <!--<x-input  placeholder="输入手机号或姓名拼音快速索引" v-model="searchName">-->
-            <!--<i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>-->
-            <!--</x-input>-->
-      <!--</span>-->
-      <!--<span @click="searchItem">查询</span>-->
-    <!--</div>-->
+    <div class="searchTitle">
+      <span>
+          <x-input  placeholder="请输入姓名模糊查找" v-model="searchName"  @on-click-clear-icon="clearInput" @on-enter="searchItem">
+          <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
+          </x-input>
+      </span>
+      <span @click="searchItem">查询</span>
+    </div>
       <!--待处理列表-->
       <div v-show="!currentTab ">
         <scroller :pullup-config="Interface.scrollerUp"
@@ -28,7 +28,7 @@
                   height="-40"
                   v-model="tobeHandledScroller"
                   :scrollbarY=true bounce ref="scrollerBottom0">
-          <div class="list-wrapper" style="margin-top: 3rem">
+          <div class="list-wrapper" >
             <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList">
               <div class="titleDate">{{titleFilter(index)}}</div>
@@ -67,7 +67,7 @@
                   height="-40"
                   v-model="handledScroller"
                   scrollbarY bounce ref="scrollerBottom1" >
-          <div class="list-wrapper" style="margin-top: 3rem">
+          <div class="list-wrapper" >
             <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="handledListGroup" v-for="(item,index) in renderHandelList">
               <div class="titleDate">{{titleHandledFilter(index)}}</div>
@@ -314,8 +314,8 @@
             ...mapMutations([
                 'CHECKORDERITEM'
             ]),
-            searchItem(){
-
+            clearInput(){
+                console.log(2324)
             },
             reporetLvyes(item){
                 this.reportLvYe({
@@ -523,18 +523,15 @@
                 })
               }
             },
-            getList(callback, reportInStatus,timeStart,timeEnd,page) {
+            getList(callback, reportInStatus,timeStart,timeEnd,searchName,page) {
                 this.newIdentityList ({
                     data: {
-                        // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                        // createTimeStart:1519833600000,
-                        // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
-                        // createTimeEnd:1521648000000,
                         createTimeStart:timeStart,
                         createTimeEnd:timeEnd,
                         // identityStatuses: identStatus,
                         reportInStatuses: reportInStatus,//需要的入住上报旅业状态
-                        desc: true
+                        desc: true,
+                        name:searchName
                     },
                     limit:15,
                     offset:page,
@@ -563,7 +560,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.tobeHandledScroller.pullupStatus = 'disabled';
                             };
-                        }), ["NONE","PENDING","FAILED"],'','',this.offset0);
+                        }), ["NONE","PENDING","FAILED"],'','',this.searchName,this.offset0);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom0.reset();
@@ -574,6 +571,7 @@
             },
             //已处理下拉刷新加载
             loadingList1(){
+                let searchName='';
                 if (this.onFetching1) {
                     console.log('不能再请求0了')
                     // do nothing
@@ -589,7 +587,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.handledScroller.pullupStatus = 'disabled';
                             };
-                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.offset1);
+                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.searchName,this.offset1);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom1.reset();
@@ -604,9 +602,15 @@
                 this.replaceto(newpath)
                 this.initList();
             },
-            //初始化列表
-            initList(){
-                //待处理列表
+            searchItem(){
+                if(this.currentTab==0){
+                    this.initTobeHandled(this.searchName);
+                }else {
+                    this.initHandled(this.searchName);
+                }
+            },
+            //待处理列表
+            initTobeHandled(searchName){
                 this.getList(((body,headers) => {
                     this.tobeHandledTotal=headers.get('x-total-count');
                     this.tobeHandled = [...body.data.content];
@@ -618,8 +622,10 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
                     });
-                }), ["NONE","PENDING","FAILED"],'','',0);
-                //已处理列表
+                }), ["NONE","PENDING","FAILED"],'','',searchName,0);
+            },
+            //已处理列表
+            initHandled(searchName){
                 this.getList(((body,headers) => {
                     this.handledTotal=headers.get('x-total-count');
                     this.handled = [...body.data.content];
@@ -630,7 +636,13 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom1.reset({top:0});
                     });
-                }), ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,0);
+                }), ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,searchName,0);
+            },
+            //初始化列表
+            initList(){
+                let str='';
+                this.initTobeHandled(str);
+                this.initHandled(str);
             },
             resetList(){
                 this.handled = [];
@@ -705,22 +717,23 @@
   article{
     /*margin-bottom: 4rem;*/
     height: 100%;
+    .list-wrapper{
+      position: relative;
+      padding-top: 0;
+      margin-bottom: 2rem;
+      /*padding-bottom: 2rem;*/
+    }
+    /*.xs-container{*/
+      /*margin-bottom: 2rem;*/
+    /*}*/
   }
   .policeWrap{
     padding-bottom: 0;
   }
-  .list-wrapper{
-    position: relative;
-    padding-top: 0;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-  }
-  .xs-container{
-    /*padding-top: 2rem;*/
-  }
+
+
   .icon-gengduo{
     display: inline-block;
-
     color: #4A4A4A;
     &:before{
       width: 2rem;
