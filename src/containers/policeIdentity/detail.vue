@@ -6,12 +6,12 @@
         <div>
           <div class="info-item" v-if="showGuestType&&detail.guestType!=='STAFF'">
             <label class="item-left">房间号码:</label>
-            <input class="item-right room-number item2" v-model="inputRoomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!=='PENDING'" @keyup.13="enterToLvye($event)" v-on:input="flagHandle=true"/>
+            <input class="item-right room-number item2" v-model="inputRoomNumber" :disabled="guestType=='STAFF'" v-if="detail.reportInStatus!=='SUCCESS'" @keyup.13="enterToLvye($event)" v-on:input="flagHandle=true"/>
             <span class="item-right" v-else>{{detail.roomNumber}}</span>
           </div>
           <div class="info-item" v-if="showGuestType">
             <!--<label class="item-left">住客类型:</label>-->
-            <selector class="item-right guestType item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.reportInStatus!='PENDING'&&detail.guestType!=='STAFF'"></selector>
+            <selector class="item-right guestType item1"  placeholder="请选择" v-model="guestType" name="district" :options="guestTypelist" v-if="detail.reportInStatus !== 'SUCCESS'&&detail.guestType!=='STAFF'"></selector>
             <span class="item-right" v-else>{{detail.guestType|filterGuestType}}</span>
           </div>
           <div class="refresh" v-if="showGuestType&&detail.guestType!=='STAFF'">
@@ -29,7 +29,7 @@
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'SUCCESS'" style="margin-bottom: 10px"><span style="color: #80C435;padding-right: 10px;">旅业系统上传成功</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.reportInStatus === 'PENDING'" style="margin-bottom: 10px"><span style="color: #c4a726;padding-right: 10px;">上传中！</span> {{datetimeparse(detail.reportInTime,'YYYYMMDD hhmm')}}</p>
         <p v-if="detail.reportInStatus &&detail.identityStatus === 'REFUSED'" style="margin-bottom: 10px;"><span style="color: #ff2d0c;padding-right: 10px;">已拒绝</span>
-        <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>{{detail.sys_time}}
+        <p v-if="detail.scene==='UNDOCUMENTED_CHECK'&&detail.identityStatus==='FAILED'" style="color: #df3200;margin-top: 0.5rem">验证失败</p>
       </div>
       <!--值房通订单信息-->
       <div v-if="serviceConfig.ZHIFANGTONG">
@@ -193,14 +193,6 @@
           },
           filterRoomsNum(val){
               let str='收费服务';
-              // switch(val){
-              //     case 1:
-              //     str= '房费现付';
-              //     break;
-              //     case 2:
-              //     str= '不需房费现付';
-              //     break;
-              // }
               return str;
           }
       },
@@ -214,7 +206,6 @@
               console.log('zsj:',this.roomNo)
           },
           renderOrderList(val){
-              console.log('renderOrderList变动：',val)
               if(val&&val.length!==0){
                   val.forEach(item=>{
                       console.log(item.orderOpen)
@@ -238,12 +229,11 @@
               }
           },
           detail(val){
-              if(val.reportInStatus!=='SUCCESS') {
-                  this.inputRoomNumber='';
-              }
-              if(val.chekcinRoomNo!=''){}
+              this.inputRoomNumber = this.detail.roomNumber;
+              if(val.chekcinRoomNo){
                   this.inputRoomNumber=val.chekcinRoomNo;
-                  this.flagHandle=false;
+              }
+              this.flagHandle=false;
           },
           identityId(val){
               val ? this.resetFilter() : null
@@ -274,13 +264,9 @@
           },
           resultList(val, old) {
               if (old.length > 0) this.canSearch = true
-          },
-          // routeParam(val){
-          //     console.log('val:',val)
-          // }
+          }
       },
     computed: {
-        // reportInStatus === 'SUCCESS' &&  payInfo.payStatus !== 'NONE' && isCheckIn === false 显示入住按钮
       ...mapState([
         'hotel',
         'route',
@@ -550,7 +536,7 @@
             this.hotelConfig=body.data.config;
             this.detail = body.data.content;
             typeof this.detail.nights === 'number' && (this.days = this.detail.nights);
-            this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
+            // this.detail.roomNumber && (this.inputRoomNumber = this.detail.roomNumber);
             this.detail.reportInTime && (this.inTimeFilter = this.detail.reportInTime);
             if (this.detail.roomNumber && (typeof this.detail.nights === 'number' && this.detail.nights >= 0)) this.isWxPayBtnShow = true;
             this.detail.deviceId && this.DEVICEID(this.detail.deviceId);
