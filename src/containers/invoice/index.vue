@@ -79,9 +79,9 @@
           <popup-picker :show=isShowPP show-name hide-on-deactivated :popup-style="{'z-index':'5002','max-height':'200px'}" title="开票类型" :data="invoTypeList" v-model=invoType></popup-picker>
           <cell v-show="tabIndex === 1" title= "起始日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[0],'YYMMDD')" ></cell>
           <cell v-show="tabIndex === 1" title= "截止日期" @onClick="isCalendarShow = true" link :value="datetimeparse(periodFilter[1],'YYMMDD')" ></cell>
-          <div>
-            <div class="invoiceBtn" @click="cancel">取消</div>
-            <div class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</div>
+          <div style="height: 3rem;line-height:3rem;">
+            <span class="invoiceBtn" @click="cancel">取消</span>
+            <span class="invoiceBtn" @click=confirmHandle(tabIndex)>确定</span>
           </div>
         </group>
       </Dialog>
@@ -354,7 +354,7 @@
   }
 
 </script>
-<style lang="less">
+<style lang="less" scoped>
   /*.dialog .weui-dialog{*/
     /*text-align: left;*/
   /*}*/
@@ -362,12 +362,12 @@
     padding-bottom: 0;
   }
   .invoiceBtn{
+    display: inline-block;
     width: 49%;
-    height: 2rem;
-    float: left;
+    height: 100%;
     border-top: 1px solid #EEEEEE;
-    padding-top: 1rem;
     text-align: center;
+    padding-top: 0;
   }
   .invoiceBtn:nth-child(2){
     border-left: 1px solid #EEEEEE;
@@ -390,4 +390,12 @@
   .dialog .vux-popup-dialog{
     z-index: 5001;
   }
+  .weui-cell{
+    text-align: left;
+  }
+  .weui-cells{
+    margin-bottom: -1rem;
+    border: none;
+  }
+
 </style>

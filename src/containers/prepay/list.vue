@@ -457,8 +457,9 @@
           },
 
           refreshList () {
-              this.tobeconfirmed = []
-              this.confirmed = []
+              this.tobeconfirmed = [];
+              this.confirmed = [];
+              this.searchOrder='';
               this.getList (1, body => {
                   this.tobeconfirmed = [...body.data];
                   this.getList (2, body => {
@@ -568,7 +569,6 @@
 
     watch: {
         searchOrder(val,old) {
-            // console.log(old)
             console.log(val)
             if (val=='') {
                 this.resultList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
@@ -577,8 +577,10 @@
                 console.log('特殊字符')
                 this.searchOrder = old;
             }
-            if (this.resultList.length > 0 && val) {
-                this.resultList = this.resultList.filter(item=> item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1);
+            if (val) {
+                let filterList=[];
+                filterList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
+                this.resultList = filterList.filter(item=> item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1);
                 console.log(this.resultList)
             }
         },
