@@ -346,9 +346,6 @@
         'CHECKORDERITEM',
         'CURRENTLVYERECORDID'
       ]),
-        aaa(){
-          console.log(33333)
-        },
       ////////////////////////值房通逻辑/////////////////////////////////
       //查选中情况
         isResetCheckedOrder(){

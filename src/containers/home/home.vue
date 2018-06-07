@@ -70,8 +70,8 @@
               @onClick="goto('suspicious/suspiciousList/0')"></Cell>
         <Cell v-if="dirtyroomNum > 0" icon="./static/icon/clean.png" title="有脏房需要打扫" link :badge="dirtyroomNum"
               @onClick="goto('dirtyroom/0')"></Cell>
-        <!--<Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"-->
-              <!--@onClick="goto('recharge/0')"></Cell>-->
+        <Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"
+              @onClick="goto('recharge/0')"></Cell>
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
