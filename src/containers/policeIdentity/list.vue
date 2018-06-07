@@ -99,14 +99,14 @@
       </div>
     </footer>
 
-    <footer v-if="currentTab">
-      <div class="listFilter">
-    <span class="filter" @click="isCalendarShow = true">
-    <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
-    <abbr v-else>筛选</abbr>
-    </span>
-      </div>
-    </footer>
+    <!--<footer v-if="currentTab">-->
+      <!--<div class="listFilter">-->
+    <!--<span class="filter" @click="isCalendarShow = true">-->
+    <!--<abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>-->
+    <!--<abbr v-else>筛选</abbr>-->
+    <!--</span>-->
+      <!--</div>-->
+    <!--</footer>-->
 
     <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
