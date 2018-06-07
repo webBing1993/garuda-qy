@@ -327,11 +327,7 @@
           },
           tabToggle (index) {
               this.replaceto ('/prepay/' + index);
-              if (this.currentTab == 1) {
-                  this.resultList = this.confirmed;
-              } else if (this.currentTab == 0) {
-                  this.resultList = this.tobeconfirmed;
-              }
+              this.refreshList();
               console.log ('this.resultList:', this.resultList);
           },
           confirmMode (item) {
@@ -465,14 +461,14 @@
               this.confirmed = []
               this.getList (1, body => {
                   this.tobeconfirmed = [...body.data];
-              });
-              this.getList (2, body => {
-                  this.confirmed = [...body.data];
-                  if (this.currentTab == 0) {
-                      this.resultList = this.tobeconfirmed;
-                  } else if (this.currentTab == 1) {
-                      this.resultList = this.confirmed;
-                  }
+                  this.getList (2, body => {
+                      this.confirmed = [...body.data];
+                      if (this.currentTab == 0) {
+                          this.resultList = this.tobeconfirmed;
+                      } else if (this.currentTab == 1) {
+                          this.resultList = this.confirmed;
+                      }
+                  });
               });
           },
       getRoomTypeList(){
@@ -591,7 +587,7 @@
         // typeof val === 'number' && !isNaN(val)
         //   ? this.tobeConfirmedPageIndex == 0 || this.confirmedPageIndex == 0 ? this.initList() : this.refreshList()
         //   : null;
-          this.initList()
+
       }
     },
 
