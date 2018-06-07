@@ -102,7 +102,7 @@
       </div>
 
       <div class="footButton" v-if="buttonGroupShow">
-        <x-button :value="detail.reportInStatus && (detail.reportInStatus === 'FAILED'||(detail.reportInStatus == 'PENDING'&&hotelConfig.sys_time>600000))? '重新上传旅业系统' : '上传旅业系统'"
+        <x-button :value="detail.reportInStatus && detail.reportInStatus === 'FAILED'? '重新上传旅业系统' : '上传旅业系统'"
                   @onClick="setMultiConfirm"
                   :disabled="isDisabled" v-if="guestType!=='STAFF'"></x-button>
         <x-button value="通过"
@@ -307,17 +307,13 @@
         return this.route.params.id
       },
       isDisabled(){
-          if(this.detail.reportInStatus=='PENDING'&&this.hotelConfig.sys_time>600000){
-              return false;
-          }else {
-              if (this.roomNumberList.length > 0) {
-                  let hasRightRoomNumber = this.roomNumberList.some(i => i === this.inputRoomNumber);
-                  return !hasRightRoomNumber
-              }
+          if (this.roomNumberList.length > 0) {
+              let hasRightRoomNumber = this.roomNumberList.some(i => i === this.inputRoomNumber);
+              return !hasRightRoomNumber
           }
       },
         buttonGroupShow(){
-            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||(this.detail.reportInStatus=='PENDING'&&this.hotelConfig.sys_time<600000)){
+            if(this.detail.reportInStatus == 'SUCCESS'||this.detail.reportInStatus == 'UNREPORTED'||this.detail.reportInStatus=='PENDING'){
                 return false;
             }else {
                 return true;
