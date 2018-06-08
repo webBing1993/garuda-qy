@@ -38,10 +38,10 @@
                 </p>
                 <p><span class="cell-key">身份证：</span><span class="cell-value"
                                                            :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
-                  <span class="cell-right arrowRight">
+                  <span class="cell-right arrowRight" @click="orderClick(item.lvyeReportRecordId)">
                   {{datetimeparse(item.createdTime, 'hhmm')}}
                   <!--<img src="../../../static/icon/arow.png" alt="" class="cellImg">-->
-                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)"></a>
+                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" ></a>
                   </span>
                 </p>
                 <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
