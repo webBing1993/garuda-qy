@@ -59,7 +59,7 @@
               </span>
             </p>
             <p class="orderItem">
-              <span class="titleInfo">预付款：</span><span>¥ {{item.pms_prepay*1000}}</span>
+              <span class="titleInfo">预付款：</span><span>¥ {{item.pms_prepay/1000}}</span>
             </p>
             <p class="orderItem">
               <span class="titleInfo">入住：</span><span>{{datetimeparse(item.in_time,'YYYYMMDD')}}</span>
