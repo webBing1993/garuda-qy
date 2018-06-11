@@ -131,7 +131,7 @@
       <Dialog confirm cancel v-model="similarityCheck" @onConfirm="reporetLvyes" confirm cancel>
         <p style="color: #000000;font-size: 14px">此人相似度太低 <br> 是否确认上传</p>
       </Dialog>
-      <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
+      <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder(payMode)" confirm cancel>
         <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
         <ul v-for="(item,index) in statusList">
           <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)">{{item.name}}</li>
@@ -401,19 +401,21 @@
           //如果是查订单呢？？？？？？
       },
       //弹出对话框改订单状态
-      confirmOrder(){
-          console.log('checkItem:',this.checkItem)
-          this.changeStatus({
-              data:{
-                  order_id:this.checkItem.order_id,
-                  hotel_id:this.hotel.hotel_id,
-                  pay_mode:this.payMode,
-                  is_free_deposit:this.freeDeposit
-              },
-              onsuccess:(body=>{
-                  this.initOrderList();
-              })
-          })
+      confirmOrder(payMode){
+          // console.log('checkItem:',this.checkItem)
+          // console.log('payMode',payMode)
+          this.checkItem.pay_mode=payMode
+          // this.changeStatus({
+          //     data:{
+          //         order_id:this.checkItem.order_id,
+          //         hotel_id:this.hotel.hotel_id,
+          //         pay_mode:this.payMode,
+          //         is_free_deposit:this.freeDeposit
+          //     },
+          //     onsuccess:(body=>{
+          //         this.initOrderList();
+          //     })
+          // })
       },
         //点击分享到屏幕或入住
         shareSreenOrCheckIn(item){
