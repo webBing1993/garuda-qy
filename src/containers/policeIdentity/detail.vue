@@ -488,7 +488,7 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-            this.goto(-1)
+            this.goto(-1)||this.goto('policeIdentity/handle/0')
             console.log('已经拒绝')
           }
         })
@@ -578,7 +578,7 @@
                 guestType:this.guestType,
                 onsuccess: () => {
                     this.resetFilter();
-                    this.goto(-1)
+                    this.goto(-1)||this.goto('policeIdentity/handle/0')
                 }
             })
         },
