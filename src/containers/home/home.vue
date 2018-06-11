@@ -35,10 +35,10 @@
             <img :src='appConfig?appConfig.suspicious_person_view?imgList[7].openItem:imgList[7].closeItem:flag?imgList[7].openItem:imgList[7].closeItem' alt="可疑人员">
             <span class="app-title">可疑人员</span>
           </li>
-          <li class="app-item" @click="appConfig?appConfig.recharge_view?goto('/recharge/0'):'':flag?goto('/recharge/0'):''">
-            <img :src='appConfig?appConfig.recharge_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="充值中心">
-            <span class="app-title">充值中心</span>
-          </li>
+          <!--<li class="app-item" @click="appConfig?appConfig.recharge_view?goto('/recharge/0'):'':flag?goto('/recharge/0'):''">-->
+            <!--<img :src='appConfig?appConfig.recharge_view?imgList[8].openItem:imgList[8].closeItem:flag?imgList[8].openItem:imgList[8].closeItem' alt="充值中心">-->
+            <!--<span class="app-title">充值中心</span>-->
+          <!--</li>-->
           <li class="app-item" @click="appConfig?appConfig.dirty_room_view?goto('/dirtyroom/0'):'':flag?goto('/dirtyroom/0'):''">
             <img :src='appConfig?appConfig.dirty_room_view?imgList[9].openItem:imgList[9].closeItem:flag?imgList[9].openItem:imgList[9].closeItem' alt="脏房处理">
             <span class="app-title">脏房处理</span>
@@ -70,8 +70,8 @@
               @onClick="goto('suspicious/suspiciousList/0')"></Cell>
         <Cell v-if="dirtyroomNum > 0" icon="./static/icon/clean.png" title="有脏房需要打扫" link :badge="dirtyroomNum"
               @onClick="goto('dirtyroom/0')"></Cell>
-        <Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"
-              @onClick="goto('recharge/0')"></Cell>
+        <!--<Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"-->
+              <!--@onClick="goto('recharge/0')"></Cell>-->
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
