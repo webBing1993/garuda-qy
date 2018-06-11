@@ -275,8 +275,9 @@
         'checkedOrder',
         'currentLvyeRecordId',
         'serviceConfig',
-          'isFreeDeposit'
-      ]),
+        'isFreeDeposit',
+        'AppParams'
+    ]),
       searchResultShow(){
           return this.resultList.length > 0&&this.showGuestType&&this.detail.guestType!=='STAFF'&&this.flagHandle
       },
@@ -462,7 +463,12 @@
                   "suborder_id":item.rooms[0].suborder_id
               },
               onsuccess:(body=>{
-                  this.goto(-1);
+                  if(this.AppParams.msg){
+                      this.replaceto('policeIdentity/handle/0')
+                  }else {
+                      this.goto(-1);
+                  }
+
               })
           })
         },
@@ -483,12 +489,17 @@
               }
           }
       },
+        //拒绝按钮
       rejectConfirm(){
         this.rejectStatus({
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-            this.goto(-1)||this.goto('policeIdentity/handle/0')
+              if(this.AppParams.msg){
+                  this.replaceto('policeIdentity/handle/0')
+              }else {
+                  this.goto(-1);
+              }
             console.log('已经拒绝')
           }
         })
@@ -578,7 +589,11 @@
                 guestType:this.guestType,
                 onsuccess: () => {
                     this.resetFilter();
-                    this.goto(-1)||this.goto('policeIdentity/handle/0')
+                    if(this.AppParams.msg){
+                        this.replaceto('policeIdentity/handle/0')
+                    }else {
+                        this.goto(-1);
+                    }
                 }
             })
         },
