@@ -464,7 +464,7 @@
               },
               onsuccess:(body=>{
                   if(this.AppParams.msg){
-                      this.replaceto('policeIdentity/handle/0')
+                      this.replaceto('/policeIdentity/handle/0')
                   }else {
                       this.goto(-1);
                   }
@@ -495,8 +495,9 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
+              console.log(7777)
               if(this.AppParams.msg){
-                  this.replaceto('policeIdentity/handle/0')
+                  this.replaceto('/policeIdentity/handle/0')
               }else {
                   this.goto(-1);
               }
@@ -590,7 +591,7 @@
                 onsuccess: () => {
                     this.resetFilter();
                     if(this.AppParams.msg){
-                        this.replaceto('policeIdentity/handle/0')
+                        this.replaceto('/policeIdentity/handle/0')
                     }else {
                         this.goto(-1);
                     }
