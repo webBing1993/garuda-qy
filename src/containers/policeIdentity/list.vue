@@ -172,7 +172,7 @@
 
     <div class="noCheckAlert">
       <Dialog v-model="showAlert" title="提示" @onConfirm="showAlert=false" confirm confirmVal="确定">
-        <div>金额不足暂无法使用，请及时充值！</div>
+        <div>金额不足暂无法使用，请联系旅业公司！</div>
       </Dialog>
     </div>
     <!--////////////////////弹窗部分-->
