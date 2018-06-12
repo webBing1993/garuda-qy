@@ -7,8 +7,8 @@
         <slot>弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内</slot>
       </div>
       <div class="UIdialog_ft">
-        <a v-if="cancel" class="UIdialog_btn UIdialog_btn_default left" @click="onCancel">{{cancelVal}}</a>
-        <a v-if="confirm" class="UIdialog_btn UIdialog_btn_default right" @click="onConfirm">{{confirmVal}}</a>
+        <span v-if="cancel" class="UIdialog_btn UIdialog_btn_default left" @click="onCancel" >{{cancelVal}}</span>
+        <span v-if="confirm" class="UIdialog_btn UIdialog_btn_default right " :class={UIdialog_btn_disabled:isDisabled} @click="onConfirm">{{confirmVal}}</span>
       </div>
     </div>
   </div>
@@ -41,11 +41,17 @@
         type: String,
         default: '否'
       },
+      isDisabled: {
+        type: Boolean,
+        default: false
+      }
     },
     methods: {
       onConfirm(){
-        this.$emit('onConfirm')
-        this.$emit('input', false)
+          if(!this.isDisabled){
+              this.$emit('onConfirm')
+              this.$emit('input', false)
+          }
       },
       onCancel(){
         this.$emit('onCancel')
@@ -133,10 +139,17 @@
         }
       }
     }
-    .UIdialog_btn_default {
+    .left {
       color: #353535;
     }
-
+    .right{
+      background-color: #2c5fc3;
+      color: #FFFFFF;
+    }
+    .UIdialog_btn_disabled{
+      background-color: #d7d7d7;
+      color: #a4a4a4;
+    }
 
     .weui-skin_android{
       .UIdialog{
@@ -190,11 +203,16 @@
           margin-right: -.8em;
         }
       }
-      .UIdialog_btn_default {
-        color: #808080;
+      .left {
+        color: #353535;
       }
-      .left{
-        color: @weuiDialogLinkColor
+      .right{
+        background-color: #2c5fc3;
+        color: #FFFFFF;
+      }
+      .UIdialog_btn_disabled{
+        background-color: #d7d7d7;
+        color: #a4a4a4;
       }
     }
 

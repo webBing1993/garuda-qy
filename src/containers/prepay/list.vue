@@ -197,7 +197,7 @@
         <div id="qrcode" ref="qrcode"></div>
       </div>
     </div>
-    <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel>
+    <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder" confirm cancel  :isDisabled='checkIndex==0'>
       <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
       <ul v-for="(item,index) in statusList">
         <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)">{{item.name}}</li>
@@ -212,13 +212,12 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {XDialog, PopupRadio, PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
+  import { PopupRadio, PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
 
 
   export default {
       name: "prepay",
       components: {
-          XDialog,
           PopupRadio,
           PopupPicker,
           Picker,
@@ -253,7 +252,7 @@
               showQrcode: false,
               i: false,
               confirmOrderStatus: false,
-              checkIndex: 1,
+              checkIndex: 0,
               statusList: [{name: '房费现付', value: 1}, {name: '不需现付房费', value: 2}],
               payMode: 1,
               freeDeposit: false,
