@@ -406,17 +406,17 @@
           // console.log('checkItem:',this.checkItem)
           // console.log('payMode',payMode)
           this.checkItem.pay_mode=payMode
-          // this.changeStatus({
-          //     data:{
-          //         order_id:this.checkItem.order_id,
-          //         hotel_id:this.hotel.hotel_id,
-          //         pay_mode:this.payMode,
-          //         is_free_deposit:this.freeDeposit
-          //     },
-          //     onsuccess:(body=>{
-          //         this.initOrderList();
-          //     })
-          // })
+          this.changeStatus({
+              data:{
+                  order_id:this.checkItem.order_id,
+                  hotel_id:this.hotel.hotel_id,
+                  pay_mode:this.payMode,
+                  is_free_deposit:this.freeDeposit
+              },
+              onsuccess:(body=>{
+
+              })
+          })
       },
         //点击分享到屏幕或入住
         shareSreenOrCheckIn(item){
