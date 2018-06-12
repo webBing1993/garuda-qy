@@ -402,8 +402,10 @@
           //如果是查订单呢？？？？？？
       },
       //弹出对话框改订单状态
-      confirmOrder(){
-          console.log('checkItem:',this.checkItem)
+      confirmOrder(payMode){
+          // console.log('checkItem:',this.checkItem)
+          // console.log('payMode',payMode)
+          this.checkItem.pay_mode=payMode
           this.changeStatus({
               data:{
                   order_id:this.checkItem.order_id,
@@ -412,7 +414,7 @@
                   is_free_deposit:this.freeDeposit
               },
               onsuccess:(body=>{
-                  this.initOrderList();
+
               })
           })
       },
