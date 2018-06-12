@@ -143,7 +143,7 @@
       color: #353535;
     }
     .right{
-      background-color: #2c5fc3;
+      background-color: #3d72c3;
       color: #FFFFFF;
     }
     .UIdialog_btn_disabled{
