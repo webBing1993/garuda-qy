@@ -39,7 +39,7 @@
           <div v-if="item.orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
-              <span class="roomStatus" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
+              <span class="roomStatus" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
             </p>
             <div class="line"></div>
             <p class="orderItem">
@@ -60,6 +60,7 @@
             </p>
             <p class="orderItem">
               <span class="titleInfo">预付款：</span><span>¥ {{item.pms_prepay/100}}</span>
+              <span class="orderButton" v-if="buttonGroupShow" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
             </p>
             <p class="orderItem">
               <span class="titleInfo">入住：</span><span>{{datetimeparse(item.in_time,'YYYYMMDD')}}</span>
@@ -68,7 +69,6 @@
             <p class="orderItem">
               <span class="titleInfo">备注：</span><span>{{item.remark}}</span>
             </p>
-            <span class="orderButton" v-if="buttonGroupShow" @click='shareSreenOrCheckIn(item)'>{{item.show_checkin?'入住':'分享到屏幕'}}</span>
             <p class="showOrder" @click="item.orderOpen=!item.orderOpen"><x-icon type="ios-arrow-up"  size="25"></x-icon></p>
           </div>
           <div v-if="!item.orderOpen">
@@ -334,6 +334,12 @@
         'CURRENTLVYERECORDID'
       ]),
       ////////////////////////值房通逻辑/////////////////////////////////
+      //状态弹框处理
+        showStatusDialog(item){
+            this.confirmOrderStatus=true,
+            this.checkIndex=0,
+            this.checkItem=item;
+        },
       //查选中情况
         isResetCheckedOrder(){
           let arr=[];
@@ -406,6 +412,7 @@
           // console.log('checkItem:',this.checkItem)
           // console.log('payMode',payMode)
           this.checkItem.pay_mode=payMode
+          this.checkItem.precheckin_status=2;
           this.changeStatus({
               data:{
                   order_id:this.checkItem.order_id,
@@ -421,7 +428,7 @@
         //点击分享到屏幕或入住
         shareSreenOrCheckIn(item){
             if(item.precheckin_status==1){
-                this.confirmOrderStatus=true;
+                this.showStatusDialog(item);
                 return
             }else {
                 if(item.show_checkin){
