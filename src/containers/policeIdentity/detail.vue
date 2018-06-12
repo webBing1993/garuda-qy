@@ -131,10 +131,10 @@
       <Dialog confirm cancel v-model="similarityCheck" @onConfirm="reporetLvyes" confirm cancel>
         <p style="color: #000000;font-size: 14px">此人相似度太低 <br> 是否确认上传</p>
       </Dialog>
-      <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder(payMode)" confirm cancel>
+      <Dialog confirm cancel v-model="confirmOrderStatus" @onConfirm="confirmOrder(payMode)" confirm cancel :isDisabled="checkIndex==0">
         <h3 style="text-align: left;color: #000000;margin-bottom: 2rem">请确认订单状态</h3>
         <ul v-for="(item,index) in statusList">
-          <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)">{{item.name}}</li>
+          <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)" >{{item.name}}</li>
         </ul>
         <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
           <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
@@ -168,12 +168,12 @@
         guestType:'LODGER',
         guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
           //值房通状态数据
-          checkIndex:1,
+          checkIndex:0,
           statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
           confirmOrderStatus:false,
           orderStatus:0,
           // orderOpen:true,
-          payMode:1,
+          payMode:0,
           freeDeposit:false,
           checkItem:{},
           list:[],
