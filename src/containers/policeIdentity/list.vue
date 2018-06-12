@@ -143,14 +143,12 @@
                      type="text"
                      v-model="guestAddress"
                      placeholder-align="right"></x-input>
-            <!--<div class="onspace"></div>-->
             <div class="popup">
               <popup-picker title="民族："
                             :data="NationList"
                             v-model="defaultNation"
                             @on-change="nationOnChange"
                             :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
-              <!--<div class="onspace"></div>-->
               <div v-if="getedEquipmentList.length>1">
                 <popup-picker title="设备："
                               :data="EquipmentList"
@@ -161,8 +159,6 @@
               <cell  v-if="getedEquipmentList.length==1" title="设备：" :value="sinerEquipmentName">
               </cell>
             </div>
-            <!--<div class="onspace"></div>-->
-
           </group>
         </div>
       </Dialog>
