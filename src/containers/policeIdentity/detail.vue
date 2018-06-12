@@ -173,7 +173,7 @@
           confirmOrderStatus:false,
           orderStatus:0,
           // orderOpen:true,
-          payMode:0,
+          payMode:1,
           freeDeposit:false,
           checkItem:{},
           list:[],
