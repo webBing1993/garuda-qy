@@ -1,6 +1,16 @@
 import Vue from 'vue'
+import strTool from './tool/strTool.js'
+import objTool from './tool/objTool.js'
+import arrTool from './tool/arrTool.js'
 
 Vue.mixin({
+  data(){
+      return{
+          strTool:strTool,
+          objTool:objTool,
+          arrTool:arrTool
+      }
+  },
   methods: {
       datetimeparse (timestamp, format, prefix){
           //转换时区

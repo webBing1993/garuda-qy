@@ -126,7 +126,7 @@
     </Dialog>
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="validateNoIdCard">
+      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="!validateNoIdCard">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <group>
@@ -166,7 +166,7 @@
 
     <div class="noCheckAlert">
       <Dialog v-model="showAlert" title="提示" @onConfirm="showAlert=false" confirm confirmVal="确定">
-        <div>金额不足暂无法使用，请联系旅业公司！</div>
+        <div style="text-align: left">金额不足,暂无法使用，请联系旅业公司！</div>
       </Dialog>
     </div>
     <!--////////////////////弹窗部分-->
@@ -176,7 +176,7 @@
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
     import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Alert} from 'vux'
-    import strTool from './../../tool/strTool.js'
+    // import strTool from '../../tool/strTool.js'
     module.exports = {
         name: 'List',
         components: {
@@ -244,7 +244,7 @@
                 'surplusTime'
             ]),
             validateNoIdCard(){
-                return strTool.isNotBlank(this.guestName)&&strTool.isNotBlank(this.idCard)&&strTool.isNotBlank(this.guestAddress)&&strTool.isNotBlank(this.defaultNation)&&strTool.isNotBlank(this.defaultEquipment)
+                return (this.strTool.isNotBlank(this.guestName)&&this.strTool.isNotBlank(this.idCard)&&this.strTool.isNotBlank(this.guestAddress)&&this.strTool.isNotBlank(this.defaultNation)&&this.arrTool.isEmptyArr(this.defaultEquipment))
             },
             renderList() {
                 return NationList;
@@ -328,10 +328,17 @@
                     }
                 })
             },
+            reset(){
+                this.guestName=='',
+                this.idCard=='',
+                this.guestAddress=='',
+                this.defaultNation==''
+            },
             showwithoutLicenseDialog(){
                 if(this.surplusTime==0){
                     this.showAlert=true;
                 }else {
+                    this.reset();
                     this.Nationality();
                     this.gethotelEquipment();
                     this.without_license = true
