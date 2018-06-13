@@ -329,10 +329,9 @@
                 })
             },
             reset(){
-                this.guestName=='',
-                this.idCard=='',
-                this.guestAddress=='',
-                this.defaultNation==''
+                this.guestName='',
+                this.idCard='',
+                this.guestAddress=''
             },
             showwithoutLicenseDialog(){
                 if(this.surplusTime==0){
