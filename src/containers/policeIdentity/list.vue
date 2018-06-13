@@ -126,7 +126,7 @@
     </Dialog>
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定">
+      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="validateNoIdCard">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <group>
@@ -176,6 +176,7 @@
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
     import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Alert} from 'vux'
+    import strTool from './../../tool/strTool.js'
     module.exports = {
         name: 'List',
         components: {
@@ -242,6 +243,9 @@
                 'checkedOrder',
                 'surplusTime'
             ]),
+            validateNoIdCard(){
+                return strTool.isNotBlank(this.guestName)&&strTool.isNotBlank(this.idCard)&&strTool.isNotBlank(this.guestAddress)&&strTool.isNotBlank(this.defaultNation)&&strTool.isNotBlank(this.defaultEquipment)
+            },
             renderList() {
                 return NationList;
             },
@@ -411,7 +415,7 @@
 
       //      确认核验
             makeSureVerify(){
-                if(this.guestName!=''&& this.idCard!=''&& this.guestAddress!=''){
+                if(this.validateNoIdCard){
                     this.withoutIdCard({
                         guest_name: this.guestName,
                         id_card: this.idCard,
@@ -425,8 +429,6 @@
                 }else {
                     return;
                 }
-
-
             },
 
             //标题日期筛选

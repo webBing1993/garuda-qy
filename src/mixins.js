@@ -157,6 +157,11 @@ Vue.mixin({
     idCardParse:()=>{
       // suborder.guests[j]['cardStar'] = suborder.guests[j].idcard.replace(/^(.{3})(?:\d+)(.{4})$/, "$1*******$2")
 
+    },
+    isNotEmpty:(val)=>{
+          if(val!==''){
+              return true
+          }
     }
   }
 })
