@@ -169,7 +169,7 @@
     </Dialog>
     <Dialog v-model="showIdcardAlert" title="" @onConfirm="showIdcardAlert=false" confirm confirmVal="确定">
       <icon type="warn"></icon>
-      <div style="margin:2rem 0">身份证位数要18位！</div>
+      <div style="margin:2rem 0">身份证位数少于18位！</div>
     </Dialog>
   </article>
 </template>
