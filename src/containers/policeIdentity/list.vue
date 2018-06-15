@@ -330,7 +330,7 @@
                     }
                 })
             },
-            reset(){
+            resetCard(){
                 this.guestName='',
                 this.idCard='',
                 this.guestAddress=''
@@ -339,7 +339,7 @@
                 if(this.surplusTime==0){
                     this.showAlert=true;
                 }else {
-                    this.reset();
+                    this.resetCard();
                     this.Nationality();
                     this.gethotelEquipment();
                     this.without_license = true
@@ -426,6 +426,7 @@
                 if(this.validateNoIdCard){
                     let len=this.idCard.split('').length;
                     if(len<18){
+                        this.without_license=true;
                         this.showIdcardAlert=true;
                     } else if(len==18){
                         this.withoutIdCard({
