@@ -270,7 +270,7 @@
       ...mapState([
         'hotel',
         'route',
-        'roomNumberList',
+        'roomNoList',
         'orderList',
         'checkedOrder',
         'currentLvyeRecordId',
@@ -278,6 +278,26 @@
         'isFreeDeposit',
         'AppParams'
     ]),
+      roomNumberList(){
+          let flag=true;
+          let letters='1234567890';
+          let roomNo=this.roomNoList[0];
+          let c;
+          for (let i=0;i<letters.length;i++){
+              c = letters.charAt( i );
+              if(roomNo.indexOf(c)==-1){
+                  flag=false;//有非数字
+              }else {
+                  flag=true;//纯数字
+              }
+          };
+          if(flag){
+              return this.arrTool.bubbleSort(this.roomNoList)
+          }else {
+              return this.roomNoList;
+          }
+
+      },
       searchResultShow(){
           return this.resultList.length > 0&&this.showGuestType&&this.detail.guestType!=='STAFF'&&this.flagHandle
       },
@@ -621,7 +641,7 @@
     },
     mounted(){
         this.init()
-    }
+    },
   }
 </script>
 

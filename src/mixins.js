@@ -2,13 +2,14 @@ import Vue from 'vue'
 import strTool from './tool/strTool.js'
 import objTool from './tool/objTool.js'
 import arrTool from './tool/arrTool.js'
-
+import pinYing from './tool/pinying.js'
 Vue.mixin({
   data(){
       return{
           strTool:strTool,
           objTool:objTool,
-          arrTool:arrTool
+          arrTool:arrTool,
+          pinYing:pinYing
       }
   },
   methods: {

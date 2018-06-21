@@ -17,9 +17,9 @@
 
     <div class="list-wrapper">
         <div class="orderTitle">
-          <span @click="syncTime">同步</span>
+          <span @click="syncTime">同步</span>s
           <span>
-            <x-input  placeholder="输入手机号或姓名" v-model="searchOrder">
+            <x-input  placeholder="输入手机号或姓名拼音" v-model="searchOrder">
             <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
             </x-input>
           </span>
@@ -292,6 +292,15 @@
               'searchRoom',
               'changeStatus'
           ]),
+          convertlist(list){
+              list.forEach(item=>{
+                  if(typeof item.ownerPinYing == 'undefined'){
+                      this.$set(item,'ownerPinYing','');
+                  }
+                  item.ownerPinYing=this.pinYing.pinyinConvert(item.owner);
+              })
+              return list
+          },
           showStatusDialog (item) {
               this.confirmOrderStatus = true,
                   this.payMode = item.payinfo.pay_mode,
@@ -397,13 +406,16 @@
               this.tobeConfirmedPageIndex = 0
               this.confirmedPageIndex = 0
               this.getList (1, body => {
-                  this.tobeconfirmed = [...body.data];
+                  this.tobeconfirmed = this.convertlist(body.data);
                   this.tobeConfirmedPageIndex++;
                   this.resultList = this.tobeconfirmed;
               })
               this.getList (2, body => {
-                  this.confirmed = [...body.data], this.confirmedPageIndex++
+                  this.confirmed = this.convertlist(body.data),
+                  this.confirmedPageIndex++
               })
+              console.log('zzz:',this.tobeconfirmed )
+              console.log('sss:',this.confirmed)
           },
 
           refreshList () {
@@ -411,9 +423,9 @@
               this.confirmed = [];
               this.searchOrder='';
               this.getList (1, body => {
-                  this.tobeconfirmed = [...body.data];
+                  this.tobeconfirmed = this.convertlist(body.data);
                   this.getList (2, body => {
-                      this.confirmed = [...body.data];
+                      this.confirmed = this.convertlist(body.data);
                       if (this.currentTab == 0) {
                           this.resultList = this.tobeconfirmed;
                       } else if (this.currentTab == 1) {
@@ -530,8 +542,12 @@
             if (val) {
                 let filterList=[];
                 filterList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
-                this.resultList = filterList.filter(item=> item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1);
-                console.log(this.resultList)
+                this.resultList = filterList.filter(item=> {
+                    console.log(item.ownerPinYing.indexOf(val) )
+                   return item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1||item.ownerPinYing.indexOf(val) > -1;
+
+                })
+
             }
         },
       currentTab(val) {

@@ -3,7 +3,7 @@ module.exports = {
     state.hotel = {...state.hotel,...payload}
   },
   ROOMNUMBERLIST(state,payload){
-    state.roomNumberList = [...payload]
+    state.roomNoList = [...payload]
   },
   SEARCHHOTELID(state,payload) {
       state.searchHotelId = payload
