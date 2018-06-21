@@ -12,7 +12,8 @@ Vue.mixin({
       }
   },
   methods: {
-      datetimeparse (timestamp, format, prefix){
+      //时间格式处理
+        datetimeparse (timestamp, format, prefix){
           //转换时区
           let currentZoneTime = new Date(timestamp);
           let currentTimestamp=currentZoneTime.getTime();
@@ -58,84 +59,74 @@ Vue.mixin({
 
           return newtimestamp ? output : ''
       },
-    idnumber: id => {
-      return id.replace(id.slice(3, 14), '***********')
-    },
-    getGuestItem(item){
-      let dom = ``;
-      if (item.guests) {
-        item.guests.length > 0
-          ? item.guests.forEach(i => {
-          dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
-        })
-          : dom += `<div>无入住人</div>`
-      } else {
-        dom += `<div>无入住人</div>`
-      }
-      return dom
-    },
-    getRoomType(item){
-      let temp = ``;
-      item.rooms_plan ? item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`) : null;
-      return temp;
-    },
-    getShareCode(item){
-      let temp = ``;
-      item ? temp += `<div style="color: #32ABE5">${item}</div>` : '暂无分享码';
-      return temp;
-    },
-    invoiceType(type){
-      let typeStr = '';
-      if (type === 'PERSONAL') {
-        typeStr = '个人发票'
-      } else if (type === 'GENERAL') {
-        typeStr = '增值税普通发票'
-      } else if (type === 'VAT') {
-        typeStr = '增值税专用发票'
-      }
-      return typeStr
-    },
-    roomInfoTitleIndex(detail){
-      return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
-    },
-    cashHandling(val, prefix){
-      return typeof val === 'number' && !isNaN(val)
-        ? prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100) : ''
+        //身份证处理
+        idnumber: id => {
+          return id.replace(id.slice(3, 14), '***********')
+        },
 
-    },
-    getBreakFast(breakfastStatus){
-      if (breakfastStatus === 0) {
-        return '(无早)'
-      } else if (breakfastStatus === 1) {
-        return '(单早)'
-      } else if (breakfastStatus === 2) {
-        return '(双早)'
-      } else if (breakfastStatus === 3) {
-        return '(全早)'
-      } else {
-        return ''
-      }
-    },
-    refundStatus(status){
-        if(status){
-          switch (status){
-              case 'PENDING':
-                  return '退款中';
-              case  "REFUNDED":
-                  return '退款完成';
-              case "FAILED":
-                  return '退款中';
-              case "SUCCESS":
-                  return '退款成功';
-              default:
-                  return null
+        getRoomType(item){
+          let temp = ``;
+          item.rooms_plan ? item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`) : null;
+          return temp;
+        },
+        getShareCode(item){
+          let temp = ``;
+          item ? temp += `<div style="color: #32ABE5">${item}</div>` : '暂无分享码';
+          return temp;
+        },
+        //发票类型
+        invoiceType(type){
+          let typeStr = '';
+          if (type === 'PERSONAL') {
+            typeStr = '个人发票'
+          } else if (type === 'GENERAL') {
+            typeStr = '增值税普通发票'
+          } else if (type === 'VAT') {
+            typeStr = '增值税专用发票'
           }
+          return typeStr
+        },
+        roomInfoTitleIndex(detail){
+          return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
+        },
+        cashHandling(val, prefix){
+          return typeof val === 'number' && !isNaN(val)
+            ? prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100) : ''
+
+        },
+        getBreakFast(breakfastStatus){
+          if (breakfastStatus === 0) {
+            return '(无早)'
+          } else if (breakfastStatus === 1) {
+            return '(单早)'
+          } else if (breakfastStatus === 2) {
+            return '(双早)'
+          } else if (breakfastStatus === 3) {
+            return '(全早)'
+          } else {
+            return ''
+          }
+        },
+        refundStatus(status){
+            if(status){
+              switch (status){
+                  case 'PENDING':
+                      return '退款中';
+                  case  "REFUNDED":
+                      return '退款完成';
+                  case "FAILED":
+                      return '退款中';
+                  case "SUCCESS":
+                      return '退款成功';
+                  default:
+                      return null
+              }
 
 
-        }
+            }
 
-    },
-      timeFetch(){
+        },
+        timeFetch(){
           var todayZero = new Date();
           var todayEleven = new Date();
           var today={};
@@ -148,30 +139,35 @@ Vue.mixin({
           console.log('今天零点：' + todayZero.getTime());
           console.log('23:59：' + todayEleven.getTime());
           return today={todayStart:todayZero.getTime(),todayEnd:todayEleven.getTime()}
-      },
-    getUUID() {
-      let randomness = Math.round(Math.random() * 1e16) % Math.pow(2, 23);
-      randomness = randomness.toString(2).length > 23
-        ? (randomness >>> (randomness.toString(2).length - 23)).toString(2)
-        : (randomness << (23 - randomness.toString(2).length)).toString(2);
-      let timestamp = (new Date().getTime()).toString(2);
-      return parseInt(timestamp, 2).toString() + parseInt(randomness, 2).toString();
-    },
-    sortByTime(list,timeTag) {
-      return timeTag ? list.sort((a, b) => b[timeTag] - a[timeTag]) : list.sort();
-    },
-    showArrVal(arr){
-      return arr.join(',')
-    },
+        },
+        //获取UUID
+        getUUID() {
+          let randomness = Math.round(Math.random() * 1e16) % Math.pow(2, 23);
+          randomness = randomness.toString(2).length > 23
+            ? (randomness >>> (randomness.toString(2).length - 23)).toString(2)
+            : (randomness << (23 - randomness.toString(2).length)).toString(2);
+          let timestamp = (new Date().getTime()).toString(2);
+          return parseInt(timestamp, 2).toString() + parseInt(randomness, 2).toString();
+        },
+        sortByTime(list,timeTag) {
+          return timeTag ? list.sort((a, b) => b[timeTag] - a[timeTag]) : list.sort();
+        },
 
-    idCardParse:()=>{
-      // suborder.guests[j]['cardStar'] = suborder.guests[j].idcard.replace(/^(.{3})(?:\d+)(.{4})$/, "$1*******$2")
-
-    },
-    isNotEmpty:(val)=>{
-          if(val!==''){
-              return true
-          }
+        idCardParse:()=>{
+          // suborder.guests[j]['cardStar'] = suborder.guests[j].idcard.replace(/^(.{3})(?:\d+)(.{4})$/, "$1*******$2")
+        },
+        //标题日期筛选
+        titleDateFilter(index,arr){
+            if(arr&&arr.length > 0){
+                let list=arrTool.bubbleSort(arr);
+                if(index&&list[index].createdTime){
+                    if(this.datetimeparse(list[index].createdTime) === this.datetimeparse(list[index - 1].createdTime)){
+                        return null
+                    }else {
+                        return  this.datetimeparse(list[index].createdTime)
+                    }
+                }
+            }
+        }
     }
-  }
 })

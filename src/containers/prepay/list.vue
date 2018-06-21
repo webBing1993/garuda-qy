@@ -15,7 +15,6 @@
 
     </header>
 
-    <!--<switchs title="aa"></switchs>-->
     <div class="list-wrapper">
         <div class="orderTitle">
           <span @click="syncTime">同步</span>
@@ -27,17 +26,7 @@
         </div>
       <div v-show="!currentTab" :class="{batch}">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0) && tobeConfirmedPageIndex > 0" class="no-data">暂无数据</p>
-        <!--<checker type="checkbox" v-model="batchlist"-->
-                 <!--default-item-class="checker-item" selected-item-class="selected">-->
-          <!--<checker-item v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">-->
-            <!--<Group>-->
-              <!--<Cell :title="getCellTitle(item)"></Cell>-->
-              <!--<Cell :title="getTobeConfirmedCellBody(item)" link @onClick="orderClick(item.order_id)"/>-->
-              <!---->
-              <!--<Cell v-if="item.remark" :title="getCellFooter(item)"/>-->
-            <!--</Group>-->
-          <!--</checker-item>-->
-        <!--</checker>-->
+
         <div class="orderCell" v-for="(item,index) in renderList" :key="index">
           <div class="orderCellTitle">
             <div>
@@ -63,7 +52,7 @@
               <p class="space10"></p>
               <!--<p>-->
                 <!--<span class="orderCellKey">预付款：</span>-->
-                <!--<span>¥{{item.payinfo.pms_pay*1000}}</span>-->
+                <!--<span>¥{{item.payinfo.pms_pay／100}}</span>-->
               <!--</p>-->
               <p class="space10"></p>
               <p>
@@ -124,7 +113,7 @@
               <p class="space10"></p>
               <!--<p>-->
                 <!--<span class="orderCellKey">预付款：</span>-->
-                <!--<span>¥{{item.payinfo.pms_pay*1000}}</span>-->
+                <!--<span>¥{{item.payinfo.pms_pay／100}}</span>-->
               <!--</p>-->
               <p class="space10"></p>
               <p>
@@ -203,7 +192,7 @@
         <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)">{{item.name}}</li>
       </ul>
       <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
-        <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
+        <span>免押</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
       </div>
     </Dialog>
     <!--<div id="qrcode" ref="qrcode"></div>-->
@@ -335,44 +324,6 @@
                   : ''
           },
 
-          getCellTitle (item) {
-              // let paystatus = item.payinfo.pay_mode;
-              let paystatusdom = ``
-              // if (paystatus) {
-              // paystatusdom = paystatus === 1
-              //   ? `<span class="cell-right other">现付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-              //   : paystatus === 2
-              //     ? `<span class="cell-right primary">预付 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-              //     : `<span class="cell-right warn" style="display: flex;flex-direction: column;text-align: right">后付/挂账/公账等 <abbr style="color: #4A4A4A">${this.confirmMode(item)}</abbr></span>`
-              // }
-              paystatusdom = `<span class="cell-right other" @click="confirmOrderStatus=true,checkIndex=0,checkItem=item">${item.precheckin_status == 1 ? '未确认' : item.pay_mode == 1 ? '房费现付' : '不需房费现付'}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>`
-
-
-              return `<p><span class="cell-key">订单号：</span><span class="cell-value">${item.order_pmsid}</span>${paystatusdom || ''}</p>`
-          },
-
-          getTobeConfirmedCellBody (item) {
-              let roomtypewords = ''
-              item.rooms_plan.forEach (i => roomtypewords += (i.room_type + 'x' + i.room_count))
-              let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
-
-              return `<div class="cell-body">` +
-                  `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
-                  `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-                  `</div>`
-          },
-
-          getCellBody (item) {
-              let roomtypewords = ''
-              item.rooms_plan.forEach (i => roomtypewords += (i.room_type + 'x' + i.room_count))
-              let paiddom = item.payinfo.staff_pay !== null ? `<span class="cell-right"><span class="cell-key">已付：</span>${'¥' + (item.payinfo.staff_pay / 100 || 0)}</span>` : ``
-
-              return `<div class="cell-body">` +
-                  `<p><span class="cell-key">预订人：</span><span class="cell-value">${item.owner + ' ' + item.owner_tel}</span></p>` +
-                  `<p><span class="cell-key">房型：</span><span class="cell-value">${roomtypewords}</span></p>` +
-                  `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code ? item.share_code : '暂无分享码'}</span></p>` +
-                  `</div>`
-          },
 
           getCellFooter (item) {
               return `<p><span class="cell-key">备注：</span><span class="cell-value">${item.remark}</span></p>`

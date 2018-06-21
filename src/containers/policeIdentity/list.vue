@@ -177,7 +177,6 @@
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
     import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Icon} from 'vux'
-    // import strTool from '../../tool/strTool.js'
     module.exports = {
         name: 'List',
         components: {

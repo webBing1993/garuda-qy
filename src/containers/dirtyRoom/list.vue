@@ -17,7 +17,6 @@
       <div v-if="currentTab===0">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0)" class="no-data">暂无数据</p>
         <div  v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
-          <div>
             <div class="content">
               <div class="title">
                 <div>
@@ -25,7 +24,7 @@
                   <span>({{item.room_type_name}})</span>
                 </div>
                 <div>
-                  {{item.date}}
+                  {{titleDateFilter(index,tobeconfirmed)}}
                 </div>
               </div>
               <div class="space"></div>
@@ -42,7 +41,6 @@
               <div class="footer" @click="handle(item.sub_id)">通知打扫</div>
             </div>
           </div>
-        </div>
       </div>
 
       <!--已处理-->
