@@ -53,7 +53,7 @@
               :badge="identityNum"
               @onClick="goto('/identity/0')"></Cell>
         <Cell v-if="policeIdentityNum > 0" icon="./static/icon/ic_police.png" title="公安验证待处理" link
-              :badge="policeIdentityNum"
+              :badge="policeIdentityNum+noCardCheckNum"
               @onClick="goto('policeIdentity/handle/0')"></Cell>
         <Cell v-if="invoiceNum > 0" icon="./static/icon/ic_invoice.png" title="开票申请待处理" link :badge="invoiceNum"
               @onClick="goto('invoice/0')"></Cell>
@@ -70,8 +70,8 @@
               @onClick="goto('suspicious/suspiciousList/0')"></Cell>
         <Cell v-if="dirtyroomNum > 0" icon="./static/icon/clean.png" title="有脏房需要打扫" link :badge="dirtyroomNum"
               @onClick="goto('dirtyroom/0')"></Cell>
-        <Cell v-if="noCardCheckNum > 0" icon="./static/icon/ic_police.png" title="无证核验待处理" link :badge="noCardCheckNum"
-              @onClick="goto('policeIdentity/handle/0')"></Cell>
+        <!--<Cell v-if="noCardCheckNum > 0" icon="./static/icon/ic_police.png" title="无证核验待处理" link :badge="noCardCheckNum"-->
+              <!--@onClick="goto('policeIdentity/handle/0')"></Cell>-->
         <!--<Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"-->
               <!--@onClick="goto('recharge/0')"></Cell>-->
       </Group>
