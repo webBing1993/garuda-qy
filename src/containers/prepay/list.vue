@@ -17,7 +17,7 @@
 
     <div class="list-wrapper">
         <div class="orderTitle">
-          <span @click="syncTime">同步</span>s
+          <span @click="syncTime">同步</span>
           <span>
             <x-input  placeholder="输入手机号或姓名拼音" v-model="searchOrder">
             <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>

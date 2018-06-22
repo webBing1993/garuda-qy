@@ -202,7 +202,6 @@
       },
       watch: {
           roomNo(val){
-
               console.log('zsj:',this.roomNo)
           },
           renderOrderList(val){
@@ -627,7 +626,6 @@
             this.detail = {};
             this.getDetail();
             this.isResetCheckedOrder();
-            if (this.roomNumberList.length === 0) this.getRoomNumberList();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
         },
         refreshDetail(){
@@ -640,7 +638,8 @@
 
     },
     mounted(){
-        this.init()
+        this.init(),
+        this.getRoomNumberList();
     },
   }
 </script>

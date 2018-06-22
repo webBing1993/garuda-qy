@@ -304,7 +304,6 @@
                 'getNationality',//民族列表
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
-                'getRoomNumberList',
                 'getShowPoliceConfigs',
                 'showtoast'
 
@@ -672,7 +671,6 @@
             this.todayStart=this.timeFetch().todayStart;
             this.todayEnd=this.timeFetch().todayEnd;
             this.initList();
-            this.getRoomNumberList();
             this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
 
