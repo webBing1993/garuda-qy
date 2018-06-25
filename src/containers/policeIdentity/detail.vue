@@ -169,7 +169,7 @@
         guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
           //值房通状态数据
           checkIndex:0,
-          statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
+          statusList:[{name:'房费现付',value:1},{name:'不需房费现付',value:2}],
           confirmOrderStatus:false,
           orderStatus:0,
           // orderOpen:true,
