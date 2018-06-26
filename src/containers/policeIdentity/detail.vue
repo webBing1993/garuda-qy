@@ -280,6 +280,7 @@
       roomNumberList(){
           let flag=true;
           let letters='1234567890';
+          //是否纯数字
           if(this.roomNoList&&this.roomNoList.length>0){
               let roomNo=this.roomNoList[0];
               let c;
@@ -293,7 +294,8 @@
               };
           };
           if(flag){
-              return this.arrTool.bubbleSort(this.roomNoList)
+              console.log('zsj:',this.arrTool.bubbleSort(this.roomNoList,2))
+              return this.arrTool.bubbleSort(this.roomNoList,2)
           }else {
               return this.roomNoList;
           }
