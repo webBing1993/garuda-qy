@@ -294,8 +294,8 @@
               };
           };
           if(flag){
-              console.log('zsj:',this.arrTool.bubbleSort(this.roomNoList,2))
-              return this.arrTool.bubbleSort(this.roomNoList,2)
+              console.log('zsj:',this.arrTool.bubbleSort(this.roomNoList,1))
+              return this.arrTool.bubbleSort(this.roomNoList,1)
           }else {
               return this.roomNoList;
           }
