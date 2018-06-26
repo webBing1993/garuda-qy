@@ -136,7 +136,7 @@
         <ul v-for="(item,index) in statusList">
           <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)" >{{item.name}}</li>
         </ul>
-        <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
+        <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="freeDepositCheck">
           <span>免押</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
         </div>
       </Dialog>
@@ -202,12 +202,12 @@
       },
       watch: {
           roomNo(val){
-              console.log('zsj:',this.roomNo)
+              // console.log('zsj:',this.roomNo)
           },
           renderOrderList(val){
               if(val&&val.length!==0){
                   val.forEach(item=>{
-                      console.log(item.orderOpen)
+                      // console.log(item.orderOpen)
                       if(typeof item.orderOpen=='undefined'){
                           this.$set(item,'orderOpen',true);;
                       }
@@ -215,7 +215,7 @@
               }
           },
           checkedOrder(val){
-              console.log('此时的checkedOrder：',this.checkedOrder)
+              // console.log('此时的checkedOrder：',this.checkedOrder)
           },
           buttonGroupShow(val){
               if(val){
@@ -280,22 +280,23 @@
       roomNumberList(){
           let flag=true;
           let letters='1234567890';
-          let roomNo=this.roomNoList[0];
-          let c;
-          for (let i=0;i<letters.length;i++){
-              c = letters.charAt( i );
-              if(roomNo.indexOf(c)==-1){
-                  flag=false;//有非数字
-              }else {
-                  flag=true;//纯数字
-              }
+          if(this.roomNoList&&this.roomNoList.length>0){
+              let roomNo=this.roomNoList[0];
+              let c;
+              for (let i=0;i<letters.length;i++){
+                  c = letters.charAt( i );
+                  if(roomNo.indexOf(c)==-1){
+                      flag=false;//有非数字
+                  }else {
+                      flag=true;//纯数字
+                  }
+              };
           };
           if(flag){
               return this.arrTool.bubbleSort(this.roomNoList)
           }else {
               return this.roomNoList;
           }
-
       },
       searchResultShow(){
           return this.resultList.length > 0&&this.showGuestType&&this.detail.guestType!=='STAFF'&&this.flagHandle
@@ -385,12 +386,12 @@
                   this.SEARCHORDERLIST(body.data);
                   if(this.checkedOrder.length!==0){
                       this.list= this.checkedOrder;
-                      console.log('有checkedOrder！！！！')
+                      // console.log('有checkedOrder！！！！')
                   }else{
                       this.list= this.orderList;
-                      console.log('没有checkedOrder')
+                      // console.log('没有checkedOrder')
                   }
-                  console.log('zsj####this.list:',this.list)
+                  // console.log('zsj####this.list:',this.list)
               })
           })
         },
@@ -418,10 +419,10 @@
         },
       initOrderList(){
           if(this.inputRoomNumber){
-              console.log('手动输入了房间')
+              // console.log('手动输入了房间')
               this.searchOrderByRoomNum();
           }else {
-              console.log('没有输入房间')
+              // console.log('没有输入房间')
               this.searchRztOrderList();
           };
           //如果是查订单呢？？？？？？
@@ -475,7 +476,7 @@
         },
         //入住
         CheckIn(item){
-          console.log(item)
+          // console.log(item)
           this.suborderCheckIn({
               data:{
                   room_no:item.rooms[0].room_no,
@@ -519,13 +520,13 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-              console.log(7777)
+              // console.log(7777)
               if(this.AppParams.msg){
                   this.replaceto('/policeIdentity/handle/0')
               }else {
                   this.goto(-1);
               }
-            console.log('已经拒绝')
+            // console.log('已经拒绝')
           }
         })
       },
