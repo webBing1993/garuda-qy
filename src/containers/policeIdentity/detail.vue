@@ -39,7 +39,7 @@
           <div v-if="item.orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
-              <span class="roomStatus" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
+              <span class="roomStatus" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需现付房费'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
             </p>
             <div class="line"></div>
             <p class="orderItem">
@@ -169,7 +169,7 @@
         guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
           //值房通状态数据
           checkIndex:0,
-          statusList:[{name:'房费现付',value:1},{name:'不需房费现付',value:2}],
+          statusList:[{name:'现付房费',value:1},{name:'不需现付房费',value:2}],
           confirmOrderStatus:false,
           orderStatus:0,
           // orderOpen:true,
