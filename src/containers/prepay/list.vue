@@ -298,6 +298,10 @@
                       this.$set(item,'ownerPinYing','');
                   }
                   item.ownerPinYing=this.pinYing.pinyinConvert(item.owner);
+                  if(typeof item.owerFirstPY =='undefined') {
+                      this.$set (item,'owerFirstPY', []);
+                  }
+                  item.owerFirstPY=this.pinYing.makeFirstPy(item.owner);
               })
               return list
           },
@@ -531,7 +535,9 @@
 
     watch: {
         searchOrder(val,old) {
-            console.log(val)
+            let callBack=i =>{
+                return i.indexOf(val.toUpperCase())> -1||i.indexOf(val)> -1
+            };
             if (val=='') {
                 this.resultList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
             }
@@ -544,7 +550,7 @@
                 filterList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
                 this.resultList = filterList.filter(item=> {
                     console.log(item.ownerPinYing.indexOf(val) )
-                   return item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1||item.ownerPinYing.indexOf(val) > -1;
+                   return item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1||item.ownerPinYing.indexOf(val) > -1||item.owerFirstPY.some(callBack);
 
                 })
 
