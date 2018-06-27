@@ -60,7 +60,7 @@ router.afterEach(function (to,from) {
     console.log('成功浏览到to: ' ,to.path);
     console.log('成功浏览到from: ' ,from.path);
 })
-// Vue.component('MyList', require('./components/Forms/myList.vue.vue'));
+
 
 /* eslint-disable no-new */
 new Vue({

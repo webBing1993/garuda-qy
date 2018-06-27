@@ -39,7 +39,7 @@
           <div v-if="item.orderOpen">
             <p class="orderItem">
               <span class="titleInfo">订单号：</span><span>{{item.order_no}}</span>
-              <span class="roomStatus" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
+              <span class="roomStatus" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.pay_mode==1?'房费现付':'不需现付房费'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i></span>
             </p>
             <div class="line"></div>
             <p class="orderItem">
@@ -137,7 +137,7 @@
           <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)" >{{item.name}}</li>
         </ul>
         <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
-          <span>不需支付押金</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
+          <span>免押</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
         </div>
       </Dialog>
     </article>
@@ -169,7 +169,7 @@
         guestTypelist:[{key: 'LODGER', value: '住客'}, {key: 'VISITOR', value: '访客'},{key: 'STAFF', value: '酒店工作人员'}],
           //值房通状态数据
           checkIndex:0,
-          statusList:[{name:'房费现付',value:1},{name:'不需现付房费',value:2}],
+          statusList:[{name:'现付房费',value:1},{name:'不需现付房费',value:2}],
           confirmOrderStatus:false,
           orderStatus:0,
           // orderOpen:true,
@@ -202,13 +202,12 @@
       },
       watch: {
           roomNo(val){
-
-              console.log('zsj:',this.roomNo)
+              // console.log('zsj:',this.roomNo)
           },
           renderOrderList(val){
               if(val&&val.length!==0){
                   val.forEach(item=>{
-                      console.log(item.orderOpen)
+                      // console.log(item.orderOpen)
                       if(typeof item.orderOpen=='undefined'){
                           this.$set(item,'orderOpen',true);;
                       }
@@ -216,7 +215,7 @@
               }
           },
           checkedOrder(val){
-              console.log('此时的checkedOrder：',this.checkedOrder)
+              // console.log('此时的checkedOrder：',this.checkedOrder)
           },
           buttonGroupShow(val){
               if(val){
@@ -270,7 +269,7 @@
       ...mapState([
         'hotel',
         'route',
-        'roomNumberList',
+        'roomNoList',
         'orderList',
         'checkedOrder',
         'currentLvyeRecordId',
@@ -278,6 +277,29 @@
         'isFreeDeposit',
         'AppParams'
     ]),
+      roomNumberList(){
+          let flag=true;
+          let letters='1234567890';
+          //是否纯数字
+          if(this.roomNoList&&this.roomNoList.length>0){
+              let roomNo=this.roomNoList[0];
+              let c;
+              for (let i=0;i<letters.length;i++){
+                  c = letters.charAt( i );
+                  if(roomNo.indexOf(c)==-1){
+                      flag=false;//有非数字
+                  }else {
+                      flag=true;//纯数字
+                  }
+              };
+          };
+          if(flag){
+              console.log('zsj:',this.arrTool.bubbleSort(this.roomNoList,1))
+              return this.arrTool.bubbleSort(this.roomNoList,1)
+          }else {
+              return this.roomNoList;
+          }
+      },
       searchResultShow(){
           return this.resultList.length > 0&&this.showGuestType&&this.detail.guestType!=='STAFF'&&this.flagHandle
       },
@@ -285,7 +307,7 @@
           return this.detail.chekcinRoomNo
       },
       freeDepositCheck(){
-          return this.isFreeDeposit!==null&&this.isFreeDeposit=='true'?true:false
+          return this.isFreeDeposit&&this.isFreeDeposit=='true'?true:false
       },
       renderOrderList(){
           return this.list;
@@ -366,12 +388,12 @@
                   this.SEARCHORDERLIST(body.data);
                   if(this.checkedOrder.length!==0){
                       this.list= this.checkedOrder;
-                      console.log('有checkedOrder！！！！')
+                      // console.log('有checkedOrder！！！！')
                   }else{
                       this.list= this.orderList;
-                      console.log('没有checkedOrder')
+                      // console.log('没有checkedOrder')
                   }
-                  console.log('zsj####this.list:',this.list)
+                  // console.log('zsj####this.list:',this.list)
               })
           })
         },
@@ -399,10 +421,10 @@
         },
       initOrderList(){
           if(this.inputRoomNumber){
-              console.log('手动输入了房间')
+              // console.log('手动输入了房间')
               this.searchOrderByRoomNum();
           }else {
-              console.log('没有输入房间')
+              // console.log('没有输入房间')
               this.searchRztOrderList();
           };
           //如果是查订单呢？？？？？？
@@ -456,7 +478,7 @@
         },
         //入住
         CheckIn(item){
-          console.log(item)
+          // console.log(item)
           this.suborderCheckIn({
               data:{
                   room_no:item.rooms[0].room_no,
@@ -500,13 +522,13 @@
           status:'REFUSED',
           identity_id: this.detail.identityId,
           onsuccess: body => {
-              console.log(7777)
+              // console.log(7777)
               if(this.AppParams.msg){
                   this.replaceto('/policeIdentity/handle/0')
               }else {
                   this.goto(-1);
               }
-            console.log('已经拒绝')
+            // console.log('已经拒绝')
           }
         })
       },
@@ -607,7 +629,6 @@
             this.detail = {};
             this.getDetail();
             this.isResetCheckedOrder();
-            if (this.roomNumberList.length === 0) this.getRoomNumberList();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
         },
         refreshDetail(){
@@ -620,8 +641,9 @@
 
     },
     mounted(){
-        this.init()
-    }
+        this.init(),
+        this.getRoomNumberList();
+    },
   }
 </script>
 

@@ -92,13 +92,15 @@
         </scroller>
       </div>
 
-    <!--///////////////以下是弹窗部分-->
+
     <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
         <x-button class="blue-btn" @onClick="showwithoutLicenseDialog()" value="无证核验"/>
       </div>
     </footer>
-
+    <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
+      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
+    </popup>
     <!--<footer v-if="currentTab">-->
       <!--<div class="listFilter">-->
     <!--<span class="filter" @click="isCalendarShow = true">-->
@@ -108,25 +110,23 @@
       <!--</div>-->
     <!--</footer>-->
 
-    <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
-      <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
-    </popup>
-    <Dialog v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel"
-            @onConfirm="setMultiConfirm">
-      <ul class="dialog-info">
-        <li class="info-col"><span class="dialog-key">姓名：</span><span
-          class="dialog-value">{{selectedName.join()}}</span></li>
-        <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住日期：</span><span
-          class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><span class="dialog-key">离店日期：</span><span
-          class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
-      </ul>
-    </Dialog>
+    <!--<Dialog v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel"-->
+            <!--@onConfirm="setMultiConfirm">-->
+      <!--<ul class="dialog-info">-->
+        <!--<li class="info-col"><span class="dialog-key">姓名：</span><span-->
+          <!--class="dialog-value">{{selectedName.join()}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">入住日期：</span><span-->
+          <!--class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">离店日期：</span><span-->
+          <!--class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>-->
+      <!--</ul>-->
+    <!--</Dialog>-->
+
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定">
+      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="!validateNoIdCard">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <group>
@@ -137,20 +137,18 @@
             <x-input title="身份证：" placeholder="核验人身份证号"
                      :show-clear="true"
                      v-model="idCard"
-                     placeholder-align="right"></x-input>
+                     placeholder-align="right" :max=18 ></x-input>
             <x-input title="地址：" placeholder="核验人地址"
                      :show-clear="true"
                      type="text"
                      v-model="guestAddress"
-                     placeholder-align="right"></x-input>
-            <div class="onspace"></div>
+                     placeholder-align="right" ></x-input>
             <div class="popup">
               <popup-picker title="民族："
                             :data="NationList"
                             v-model="defaultNation"
                             @on-change="nationOnChange"
                             :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
-              <div class="onspace"></div>
               <div v-if="getedEquipmentList.length>1">
                 <popup-picker title="设备："
                               :data="EquipmentList"
@@ -158,34 +156,31 @@
                               @on-change="EquipmentOnChange"
                               :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
               </div>
-            </div>
-            <!--<div class="onspace"></div>-->
-            <div class="Equipment" v-if="getedEquipmentList.length==1">
-              <p>设备：</p>
-              <p>{{sinerEquipmentName}}</p>
+              <cell  v-if="getedEquipmentList.length==1" title="设备：" :value="sinerEquipmentName">
+              </cell>
             </div>
           </group>
-
         </div>
       </Dialog>
     </div>
-
-    <div class="noCheckAlert">
-      <Dialog v-model="showAlert" title="提示" @onConfirm="showAlert=false" confirm confirmVal="确定">
-        <div>金额不足暂无法使用，请联系旅业公司！</div>
-      </Dialog>
-    </div>
-    <!--////////////////////弹窗部分-->
+    <Dialog v-model="showAlert" title="" @onConfirm="showAlert=false" confirm confirmVal="确定">
+      <icon type="warn"></icon>
+      <div style="margin:1rem 0;text-align: left">金额不足,暂无法使用，请联系旅业公司！</div>
+    </Dialog>
+    <Dialog v-model="showIdcardAlert" title="" @onConfirm="showIdcardAlert=false" confirm confirmVal="确定">
+      <icon type="warn"></icon>
+      <div style="margin:2rem 0">身份证位数少于18位！</div>
+    </Dialog>
   </article>
 </template>
 
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-    import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Alert} from 'vux'
+    import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Icon} from 'vux'
     module.exports = {
         name: 'List',
         components: {
-            XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller,Alert
+             Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller,Icon
         },
         data(){
             return {
@@ -237,7 +232,8 @@
                 days: 1,
                 inTimeFilter: Date.parse(new Date()),
                 outTimeFilter: '',
-                searchName:""
+                searchName:"",
+                showIdcardAlert:false
             }
         },
         computed: {
@@ -248,6 +244,9 @@
                 'checkedOrder',
                 'surplusTime'
             ]),
+            validateNoIdCard(){
+                return (this.strTool.isNotBlank(this.guestName)&&this.strTool.isNotBlank(this.idCard)&&this.strTool.isNotBlank(this.guestAddress)&&this.strTool.isNotBlank(this.defaultNation)&&this.arrTool.isEmptyArr(this.defaultEquipment))
+            },
             renderList() {
                 return NationList;
             },
@@ -305,7 +304,6 @@
                 'getNationality',//民族列表
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
-                'getRoomNumberList',
                 'getShowPoliceConfigs',
                 'showtoast'
 
@@ -330,10 +328,16 @@
                     }
                 })
             },
+            resetCard(){
+                this.guestName='',
+                this.idCard='',
+                this.guestAddress=''
+            },
             showwithoutLicenseDialog(){
                 if(this.surplusTime==0){
                     this.showAlert=true;
                 }else {
+                    this.resetCard();
                     this.Nationality();
                     this.gethotelEquipment();
                     this.without_license = true
@@ -417,22 +421,27 @@
 
       //      确认核验
             makeSureVerify(){
-                if(this.guestName!=''&& this.idCard!=''&& this.guestAddress!=''){
-                    this.withoutIdCard({
-                        guest_name: this.guestName,
-                        id_card: this.idCard,
-                        nation_id: this.NationId,
-                        address: this.guestAddress,
-                        device_id: this.devaiceId,
-                        onsuccess: (body) => {
-                            this.without_license = false
-                        }
-                    })
+                if(this.validateNoIdCard){
+                    let len=this.idCard.split('').length;
+                    if(len<18){
+                        this.without_license=true;
+                        this.showIdcardAlert=true;
+                    } else if(len==18){
+                        this.withoutIdCard({
+                            guest_name: this.guestName,
+                            id_card: this.idCard,
+                            nation_id: this.NationId,
+                            address: this.guestAddress,
+                            device_id: this.devaiceId,
+                            onsuccess: (body) => {
+                                this.without_license = false
+                            }
+                        })
+                    }
+
                 }else {
                     return;
                 }
-
-
             },
 
             //标题日期筛选
@@ -662,7 +671,6 @@
             this.todayStart=this.timeFetch().todayStart;
             this.todayEnd=this.timeFetch().todayEnd;
             this.initList();
-            this.getRoomNumberList();
             this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
 
@@ -747,6 +755,11 @@
     float: right;
     border-radius: 3px;
   }
+  .weui-icon-warn{
+    margin-top: 1rem;
+    font-size: 4rem;
+  }
+
   /*.icon-gengduo{*/
     /*color: #3F6CA5;*/
     /*font-size: 18px;*/
