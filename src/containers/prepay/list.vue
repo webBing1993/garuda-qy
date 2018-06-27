@@ -191,7 +191,7 @@
       <ul v-for="(item,index) in statusList">
         <li class="orderStatusBtn" :class="{checkStatus:index+1==checkIndex}" @click="(checkIndex=index+1,payMode=item.value)">{{item.name}}</li>
       </ul>
-      <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="freeDepositCheck">
+      <div style="text-align: left;color: #000000;margin-bottom: 2rem" v-if="!freeDepositCheck">
         <span>免押</span><input type="checkbox" style="margin-left: 1rem;width: 1rem;height:1rem;" v-model="freeDeposit">
       </div>
     </Dialog>
