@@ -126,7 +126,7 @@
 
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="!validateNoIdCard">
+      <Dialog :maskHide=false v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="!validateNoIdCard">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <group>
@@ -163,13 +163,13 @@
         </div>
       </Dialog>
     </div>
-    <Dialog v-model="showAlert" title="" @onConfirm="showAlert=false" confirm confirmVal="确定">
+    <Dialog  v-model="showAlert" title="" @onConfirm="showAlert=false" :maskHide=false confirm confirmVal="确定">
       <icon type="warn"></icon>
       <div style="margin:1rem 0;text-align: left">金额不足,暂无法使用，请联系旅业公司！</div>
     </Dialog>
-    <Dialog v-model="showIdcardAlert" title="" @onConfirm="showIdcardAlert=false" confirm confirmVal="确定">
+    <Dialog  v-model="showIdcardAlert" title="" @onConfirm="showIdcardAlert=false;without_license=true;tipMsg=''" :maskHide=false confirm confirmVal="确定">
       <icon type="warn"></icon>
-      <div style="margin:2rem 0">身份证位数少于18位！</div>
+      <div style="margin:2rem 0">{{tipMsg?tipMsg:'证件号不足18位!'}}</div>
     </Dialog>
   </article>
 </template>
@@ -233,7 +233,8 @@
                 inTimeFilter: Date.parse(new Date()),
                 outTimeFilter: '',
                 searchName:"",
-                showIdcardAlert:false
+                showIdcardAlert:false,
+                tipMsg:''
             }
         },
         computed: {
@@ -424,7 +425,6 @@
                 if(this.validateNoIdCard){
                     let len=this.idCard.split('').length;
                     if(len<18){
-                        this.without_license=true;
                         this.showIdcardAlert=true;
                     } else if(len==18){
                         this.withoutIdCard({
@@ -435,6 +435,14 @@
                             device_id: this.devaiceId,
                             onsuccess: (body) => {
                                 this.without_license = false
+                            },
+                            onfail:(body) =>{
+                                if(body.errcode!=='0'){
+                                    this.tipMsg=body.errmsg;
+                                    this.showIdcardAlert=true;
+                                }else {
+                                    this.without_license = false
+                                }
                             }
                         })
                     }
