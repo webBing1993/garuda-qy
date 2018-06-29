@@ -298,8 +298,10 @@
       },
       websocketonopen(e){ //建立通道
         // let redata = e;
+        console.log('============websocket建立链接==============')
       },
       websocketonmessage(e){ //数据接收
+        console.log('============websocket数据接收成功==============')
         let redata = JSON.parse(e.data);
         let data = JSON.parse(redata)
         if (data.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = data.total;
@@ -316,6 +318,7 @@
 
       },
       websocketsend(agentData){//数据发送
+        console.log('============websocket数据发送成功==============')
         this.websock.send(agentData);
       },
       websocketclose(e){  //关闭通道
