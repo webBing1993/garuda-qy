@@ -147,7 +147,7 @@
             if (arr && arr.length > 0) {
                 for (var i = 0; i < arr.length - 1; i++) {
                     for (var j = 0; j < arr.length - i - 1; j++) {
-                        if (arr[j].createdTime > arr[j + 1].createdTime) {//从小到大排序
+                        if (arr[j].createdTime < arr[j + 1].createdTime) {//从大到小排序
                             var temp = arr[j];
                             arr[j] = arr[j + 1];
                             arr[j + 1] = temp;

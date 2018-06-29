@@ -34,7 +34,7 @@
               <span>{{item.order_pmsid}}</span>
             </div>
             <div v-if="item.prepay_code==null">
-              <span class="cell-right other" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.payinfo.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
+              <span class="cell-right other" @click="showStatusDialog(item)">{{item.precheckin_status==1?'未确认':item.payinfo.pay_mode==1?'现付房费':'不需现付房费'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
             </div>
           </div>
           <div class="space"></div>
@@ -86,7 +86,7 @@
               <span>{{item.order_pmsid}}</span>
             </div>
             <div v-if="item.prepay_code==null">
-              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.payinfo.pay_mode==1?'房费现付':'不需房费现付'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
+              <span class="cell-right other" @click="(confirmOrderStatus=true,checkIndex=0,checkItem=item)">{{item.precheckin_status==1?'未确认':item.payinfo.pay_mode==1?'现付房费':'不需现付房费'}}<i v-if="item.precheckin_status==6" class="iconfont icon-huodongbiaoqian"></i> </span>
               <!--<span v-if="item.payinfo.pay_mode&&item.payinfo.pay_mode!=1&&item.payinfo.pay_mode!=2">后付/挂账/公账等</span>-->
             </div>
             <!--<div v-if="item.prepay_code&&item.prepay_code!=null">-->
@@ -242,7 +242,7 @@
               i: false,
               confirmOrderStatus: false,
               checkIndex: 0,
-              statusList: [{name: '房费现付', value: 1}, {name: '不需房费现付', value: 2}],
+              statusList: [{name: '现付房费', value: 1}, {name: '不需现付房费', value: 2}],
               payMode: 1,
               freeDeposit: false,
               checkItem: {},
@@ -263,7 +263,7 @@
               'isFreeDeposit'
           ]),
           freeDepositCheck () {
-              return this.isFreeDeposit !== null && this.isFreeDeposit == 'true' ? true : false
+              return this.isFreeDeposit && this.isFreeDeposit == 'true' ? true : false
           },
           currentTab () {
               return parseInt (this.route.params.tab)
@@ -298,6 +298,10 @@
                       this.$set(item,'ownerPinYing','');
                   }
                   item.ownerPinYing=this.pinYing.pinyinConvert(item.owner);
+                  if(typeof item.owerFirstPY =='undefined') {
+                      this.$set (item,'owerFirstPY', []);
+                  }
+                  item.owerFirstPY=this.pinYing.makeFirstPy(item.owner);
               })
               return list
           },
@@ -531,7 +535,9 @@
 
     watch: {
         searchOrder(val,old) {
-            console.log(val)
+            let callBack=i =>{
+                return i.indexOf(val.toUpperCase())> -1||i.indexOf(val)> -1
+            };
             if (val=='') {
                 this.resultList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
             }
@@ -544,7 +550,7 @@
                 filterList =(this.currentTab==0?this.tobeconfirmed:this.confirmed);
                 this.resultList = filterList.filter(item=> {
                     console.log(item.ownerPinYing.indexOf(val) )
-                   return item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1||item.ownerPinYing.indexOf(val) > -1;
+                   return item.owner_tel.toString().indexOf(val) > -1||item.owner.indexOf(val) > -1||item.ownerPinYing.indexOf(val) > -1||item.owerFirstPY.some(callBack);
 
                 })
 

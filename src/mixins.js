@@ -61,39 +61,49 @@ Vue.mixin({
 
           return newtimestamp ? output : ''
       },
-      //身份证处理
-      idnumber: id => {
-          return id.replace (id.slice (3, 14), '***********')
-      },
-
-      getRoomType (item) {
-          let temp = ``;
-          item.rooms_plan ? item.rooms_plan.forEach (i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`) : null;
-          return temp;
-      },
-      getShareCode (item) {
-          let temp = ``;
-          item ? temp += `<div style="color: #32ABE5">${item}</div>` : '暂无分享码';
-          return temp;
-      },
-      //发票类型
-      invoiceType (type) {
-          let typeStr = '';
-          if (type === 'PERSONAL') {
-              typeStr = '个人发票'
-          } else if (type === 'GENERAL') {
-              typeStr = '增值税普通发票'
-          } else if (type === 'VAT') {
-              typeStr = '增值税专用发票'
-          }
-          return typeStr
-      },
-      roomInfoTitleIndex (detail) {
-          return detail.suborders.findIndex (i => i.guests && i.guests.length > 0)
-      },
-      cashHandling (val, prefix) {
-          return typeof val === 'number' && !isNaN (val)
-              ? prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100) : ''
+    idnumber: id => {
+      return id.replace(id.slice(3, 14), '***********')
+    },
+    getGuestItem(item){
+      let dom = ``;
+      if (item.guests) {
+        item.guests.length > 0
+          ? item.guests.forEach(i => {
+          dom += `<div style="display: flex;color: #4a4a4a;justify-content: space-between;line-height: 2;"><span>${i.name} ${this.idnumber(i.idcard)}</span></div>`
+        })
+          : dom += `<div>无入住人</div>`
+      } else {
+        dom += `<div>无入住人</div>`
+      }
+      return dom
+    },
+    getRoomType(item){
+      let temp = ``;
+      item.rooms_plan ? item.rooms_plan.forEach(i => temp += `<div>${i.room_type + 'x' + i.room_count}</div>`) : null;
+      return temp;
+    },
+    getShareCode(item){
+      let temp = ``;
+      item ? temp += `<div style="color: #32ABE5">${item}</div>` : '暂无分享码';
+      return temp;
+    },
+    invoiceType(type){
+      let typeStr = '';
+      if (type === 'PERSONAL') {
+        typeStr = '个人发票'
+      } else if (type === 'GENERAL') {
+        typeStr = '增值税普通发票'
+      } else if (type === 'VAT') {
+        typeStr = '增值税专用发票'
+      }
+      return typeStr
+    },
+    roomInfoTitleIndex(detail){
+      return detail.suborders.findIndex(i => i.guests && i.guests.length > 0)
+    },
+    cashHandling(val, prefix){
+      return typeof val === 'number' && !isNaN(val)
+        ? prefix ? prefix + '¥' + (val / 100) : '¥' + (val / 100) : ''
 
       },
       getBreakFast (breakfastStatus) {
