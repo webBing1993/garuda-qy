@@ -290,7 +290,6 @@
         //ws地址
         // const wsuri = process.env.WS_API + "/websocket/threadsocket";
         let mymessage = this.AppParams.session+this.AppParams.hotel_id;
-        // const wsuri = "ws://123.206.99.219:8100/wqtws?wsCode=" + mymessage;
         const wsuri = "ws://qa.fortrun.cn:8100/wqtws?wsCode=" + mymessage;
         this.websock = new WebSocket(wsuri);
         this.websock.onopen = this.websocketonopen;
