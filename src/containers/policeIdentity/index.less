@@ -4,6 +4,50 @@ article {
   box-sizing: border-box;
   user-select: none;
   touch-callout:none;
+    //padding-top: 3.5rem;
+    .searchTitle{
+        height: 3rem;
+        background: #FFFFFF;
+        line-height: 3rem;
+        //position: fixed;
+        //top: 3.5rem;
+        //z-index: 4444;
+        margin-top: 3.5rem;
+        text-align:center ;
+        span:nth-child(2){
+            display: inline-block;
+            width: 20%;
+            height: 2rem;
+            text-align: center;
+            background: #2c5fc3;
+            color: #FFFFFF;
+            border-radius: 5px;
+            line-height:  2rem;
+            margin-left: 1rem;
+        }
+        span:first-child{
+            border-radius:5px ;
+            //margin-top:0.5rem;
+            margin-left: 1rem;
+            display: inline-block;
+            //float: left;
+            width: 69%;
+            height: 2rem;
+            line-height: 2rem;;
+            border: 1px solid  #e9e9e9;;
+            .weui-cell{
+                height: 100%;
+                padding-top: 0;
+                padding-bottom: 0;
+                .weui-cell__bd{
+                    width: 100%;
+                }
+            }
+            .icon-sousuo{
+                color: #959595;
+            }
+        }
+    }
     .orderStatusBtn{
         list-style: none;
         color: #2c5fc3;;
@@ -43,16 +87,26 @@ article {
     .cell-body{
       background: #FFFFFF;
       padding: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    &:last-child{
+        .cell-body{
+            margin-bottom: 2rem;
+        }
     }
   }
     .handledListGroup {
         .cell-body {
             background: #FFFFFF;
             padding: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             .cell-value{
                 color: #000000;
+            }
+        }
+        &:last-child{
+            .cell-body{
+                margin-bottom: 2rem;
             }
         }
     }
@@ -71,9 +125,11 @@ article {
 }
 .arrowRight{
     display: inline-block;
-    width: 2.5rem;
+    width: 3.5rem;
     height: 3rem;
     margin-top: -1.5rem;
+    text-align: right;
+    margin-right: 0.5rem;
 }
 .batch {
   .checker-item {
@@ -430,9 +486,10 @@ footer {
       }
     }
     .orderButton {
-      top: 5.2rem;
+      //top: 5.2rem;
       right: 0;
-      position: absolute;
+      //position: absolute;
+        float: right;
       display: inline-block;
       border-radius: 5px;
       text-align: center;
@@ -530,11 +587,6 @@ footer {
     margin-bottom: 1rem;
   background-color: #FFFFFF;
   border-radius: 10px;
-  .onspace {
-    border: 1px solid #E6E6E6;
-    border-top: none;
-    margin-left: 15px;
-  }
   .weui-cell {
     text-align: left;
     font-size: 15px;
@@ -550,21 +602,6 @@ footer {
     .popup{
         .weui-cell
     }
-  .Equipment {
-    display: flex;
-    flex-direction: row;
-    text-align: left;
-    margin-left: 23px;
-    height: 40px;
-    line-height: 40px;
-    p {
-      width: 50%;
-    }
-    :last-child {
-      text-align: right;
-      margin-right: 5px;
-    }
-  }
   .footer {
     //margin-top: 20px;
     height: 50px;
@@ -590,6 +627,5 @@ footer {
       color: #8A8A8A;
     }
   }
-
 }
 

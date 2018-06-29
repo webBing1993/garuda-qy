@@ -178,8 +178,12 @@ module.exports = {
   getRoomNumberList(ctx, param) {
     ctx.dispatch('resource', {
       url: '/room/numberList',
-        method: 'GET',
-      onSuccess: body => ctx.commit('ROOMNUMBERLIST', body.data)
+      method: 'GET',
+      onSuccess: body => {
+          if(body.data&&body.data.length!==0){
+              ctx.commit('ROOMNUMBERLIST', body.data)
+          }
+      }
     })
   },
     getShowPoliceConfigs(ctx, param){

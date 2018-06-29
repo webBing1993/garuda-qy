@@ -41,7 +41,7 @@ module.exports = {
   hotel: {
      hotel_id:'c336ea2b2b5911e780ad5cb9018d9b5c'
   },
-  roomNumberList: [],
+  roomNoList: [],
   yunbaInstance: new Yunba({
     appkey: '581202f86cf991dc38fd2078',
     server: 'https://sock.yunba.io',

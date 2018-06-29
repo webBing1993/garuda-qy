@@ -11,8 +11,16 @@
         </tab-item>
       </tab>
     </header>
+    <div class="searchTitle">
+      <span>
+          <x-input  placeholder="请输入姓名模糊查询" v-model="searchName"  @on-click-clear-icon="clearInput" @on-enter="searchItem">
+          <i slot="label" style="padding-right:10px;display:block;" class="iconfont icon-sousuo" width="24" height="24"></i>
+          </x-input>
+      </span>
+      <span @click="searchItem">查询</span>
+    </div>
       <!--待处理列表-->
-      <div v-show="!currentTab" style="padding-top: 2.8rem">
+      <div v-show="!currentTab ">
         <scroller :pullup-config="Interface.scrollerUp"
                   @on-pullup-loading="loadingList0"
                   lock-x
@@ -20,7 +28,7 @@
                   height="-40"
                   v-model="tobeHandledScroller"
                   :scrollbarY=true bounce ref="scrollerBottom0">
-          <div class="list-wrapper">
+          <div class="list-wrapper" >
             <p v-show="(!tobeHandled||tobeHandled.length === 0) && tobeHandledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="todoListGroup" v-for="(item,index) in renderTodoHandelList">
               <div class="titleDate">{{titleFilter(index)}}</div>
@@ -30,10 +38,10 @@
                 </p>
                 <p><span class="cell-key">身份证：</span><span class="cell-value"
                                                            :class="{redTip:item.identityStatus=='AUTO_REFUSED'||item.identityStatus=='FAILED'}">{{idnumber(item.idCard)}}</span>
-                  <span class="cell-right arrowRight">
+                  <span class="cell-right arrowRight" @click="orderClick(item.lvyeReportRecordId)">
                   {{datetimeparse(item.createdTime, 'hhmm')}}
                   <!--<img src="../../../static/icon/arow.png" alt="" class="cellImg">-->
-                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" @click="orderClick(item.lvyeReportRecordId)"></a>
+                  <a href="javascript:void 0"class="cellImg iconfont icon-gengduo" ></a>
                   </span>
                 </p>
                 <p v-if="item.scene==='UNDOCUMENTED_CHECK'">
@@ -51,7 +59,7 @@
         </scroller>
       </div >
       <!--已处理列表-->
-      <div v-show="currentTab" style="padding-top: 2.8rem">
+      <div v-show="currentTab" >
         <scroller :pullup-config="Interface.scrollerUp"
                   @on-pullup-loading="loadingList1"
                   lock-x
@@ -59,7 +67,7 @@
                   height="-40"
                   v-model="handledScroller"
                   scrollbarY bounce ref="scrollerBottom1" >
-          <div class="list-wrapper">
+          <div class="list-wrapper" >
             <p v-show="(!handled||handled.length === 0) && handledPageIndex > 0" class="no-data">暂无数据</p>
             <div class="handledListGroup" v-for="(item,index) in renderHandelList">
               <div class="titleDate">{{titleHandledFilter(index)}}</div>
@@ -84,83 +92,41 @@
         </scroller>
       </div>
 
-    <!--///////////////以下是弹窗部分-->
+
     <footer v-if="route.params.tab == 0 &&tobeHandledConfig.enable_identity_check_undocumented==='true'">
       <div class="button-group">
         <x-button class="blue-btn" @onClick="showwithoutLicenseDialog()" value="无证核验"/>
       </div>
     </footer>
-
-    <footer v-if="currentTab">
-      <div class="listFilter">
-    <span class="filter" @click="isCalendarShow = true">
-    <abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>
-    <abbr v-else>筛选</abbr>
-    </span>
-      </div>
-    </footer>
-
     <popup v-model="isCalendarShow" maskShow bottom animationTopBottom>
       <calendar v-model="periodFilter" @onReset="resetFilter" @onCancel="isCalendarShow = false"></calendar>
     </popup>
-
-    <!--<Dialog v-show="select" v-model="showDialog">-->
-      <!--<div class="dialog-report-info">-->
-        <!--<div class="report-info ">-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">入住人:</label>-->
-            <!--<span class="item-right">{{selectedName.join()}}</span>-->
-          <!--</div>-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">房间号码:</label>-->
-            <!--<input class="item-right room-number" v-model="roomNumber"/>-->
-          <!--</div>-->
-          <!--<div class="search">-->
-            <!--<label>搜索结果</label>-->
-            <!--<ul class="search-result" v-if="resultList.length > 0">-->
-              <!--<li v-for=" result in resultList" @click="resultPick(result)">{{result}}</li>-->
-            <!--</ul>-->
-          <!--</div>-->
-          <!--<p class="error-room-number" v-if="isErrorNumber && roomNumberList.length>0">酒店无该房间，请重新输入</p>-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">入住几晚:</label>-->
-            <!--<div class="item-right days-item">-->
-              <!--<span class="days-reduce" @click="daysReduce">-</span>-->
-              <!--<input class="days" v-model="days"/>-->
-              <!--<span class="days-add" @click="daysAdd()">+</span>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">入住时间:</label>-->
-            <!--<span class="item-right">{{datetimeparse(inTimeFilter)}}</span>-->
-          <!--</div>-->
-
-          <!--<div class="info-item">-->
-            <!--<label class="item-left">离店时间:</label>-->
-            <!--<span class="item-right">{{datetimeparse(outTimeFilter)}}</span>-->
-          <!--</div>-->
-          <!--<x-button value="上传旅业系统" @onClick="isInfoDialogShow"-->
-                    <!--:disabled="isDisabled"></x-button>-->
-        <!--</div>-->
+    <!--<footer v-if="currentTab">-->
+      <!--<div class="listFilter">-->
+    <!--<span class="filter" @click="isCalendarShow = true">-->
+    <!--<abbr v-if="periodFilter[0]">{{datetimeparse(periodFilter[0])}} - {{datetimeparse(periodFilter[1])}}</abbr>-->
+    <!--<abbr v-else>筛选</abbr>-->
+    <!--</span>-->
       <!--</div>-->
+    <!--</footer>-->
+
+    <!--<Dialog v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel"-->
+            <!--@onConfirm="setMultiConfirm">-->
+      <!--<ul class="dialog-info">-->
+        <!--<li class="info-col"><span class="dialog-key">姓名：</span><span-->
+          <!--class="dialog-value">{{selectedName.join()}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">入住日期：</span><span-->
+          <!--class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>-->
+        <!--<li class="info-col"><span class="dialog-key">离店日期：</span><span-->
+          <!--class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>-->
+      <!--</ul>-->
     <!--</Dialog>-->
 
-    <Dialog v-show="!select" v-model="showInfoDialog" confirm cancel @onCancel="infoDialogCancel"
-            @onConfirm="setMultiConfirm">
-      <ul class="dialog-info">
-        <li class="info-col"><span class="dialog-key">姓名：</span><span
-          class="dialog-value">{{selectedName.join()}}</span></li>
-        <li class="info-col"><span class="dialog-key">房间：</span><span class="dialog-value">{{roomNumber}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住天数：</span><span class="dialog-value">{{days}}</span></li>
-        <li class="info-col"><span class="dialog-key">入住日期：</span><span
-          class="dialog-value">{{datetimeparse(inTimeFilter)}}</span></li>
-        <li class="info-col"><span class="dialog-key">离店日期：</span><span
-          class="dialog-value">{{datetimeparse(outTimeFilter)}}</span></li>
-      </ul>
-    </Dialog>
     <!--无证核验弹窗-->
     <div class="nocheckDialogs">
-      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定">
+      <Dialog v-model="without_license" @onConfirm="makeSureVerify" confirm cancel cancelVal="取消" confirmVal="确定" :isDisabled="!validateNoIdCard">
         <div class="withoutLicenseCon">
           <div class="title">无证核验</div>
           <group>
@@ -171,20 +137,18 @@
             <x-input title="身份证：" placeholder="核验人身份证号"
                      :show-clear="true"
                      v-model="idCard"
-                     placeholder-align="right"></x-input>
+                     placeholder-align="right" :max=18 ></x-input>
             <x-input title="地址：" placeholder="核验人地址"
                      :show-clear="true"
                      type="text"
                      v-model="guestAddress"
-                     placeholder-align="right"></x-input>
-            <div class="onspace"></div>
+                     placeholder-align="right" ></x-input>
             <div class="popup">
               <popup-picker title="民族："
                             :data="NationList"
                             v-model="defaultNation"
                             @on-change="nationOnChange"
                             :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
-              <div class="onspace"></div>
               <div v-if="getedEquipmentList.length>1">
                 <popup-picker title="设备："
                               :data="EquipmentList"
@@ -192,34 +156,31 @@
                               @on-change="EquipmentOnChange"
                               :popup-style="{'z-index':'5002','max-height':'235px'}"></popup-picker>
               </div>
-            </div>
-            <!--<div class="onspace"></div>-->
-            <div class="Equipment" v-if="getedEquipmentList.length==1">
-              <p>设备：</p>
-              <p>{{sinerEquipmentName}}</p>
+              <cell  v-if="getedEquipmentList.length==1" title="设备：" :value="sinerEquipmentName">
+              </cell>
             </div>
           </group>
-
         </div>
       </Dialog>
     </div>
-
-    <div class="noCheckAlert">
-      <Dialog v-model="showAlert" title="提示" @onConfirm="showAlert=false" confirm confirmVal="确定">
-        <div>金额不足暂无法使用，请及时充值！</div>
-      </Dialog>
-    </div>
-    <!--////////////////////弹窗部分-->
+    <Dialog v-model="showAlert" title="" @onConfirm="showAlert=false" confirm confirmVal="确定">
+      <icon type="warn"></icon>
+      <div style="margin:1rem 0;text-align: left">金额不足,暂无法使用，请联系旅业公司！</div>
+    </Dialog>
+    <Dialog v-model="showIdcardAlert" title="" @onConfirm="showIdcardAlert=false" confirm confirmVal="确定">
+      <icon type="warn"></icon>
+      <div style="margin:2rem 0">身份证位数少于18位！</div>
+    </Dialog>
   </article>
 </template>
 
 <script>
     import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-    import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Alert} from 'vux'
+    import {Tab, TabItem, XDialog, Group, XInput, PopupPicker, Picker, Popup,Scroller,Icon} from 'vux'
     module.exports = {
         name: 'List',
         components: {
-            XDialog, Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller,Alert
+             Group, XInput, PopupPicker, Picker, Popup, Tab, TabItem,Scroller,Icon
         },
         data(){
             return {
@@ -271,6 +232,8 @@
                 days: 1,
                 inTimeFilter: Date.parse(new Date()),
                 outTimeFilter: '',
+                searchName:"",
+                showIdcardAlert:false
             }
         },
         computed: {
@@ -281,6 +244,9 @@
                 'checkedOrder',
                 'surplusTime'
             ]),
+            validateNoIdCard(){
+                return (this.strTool.isNotBlank(this.guestName)&&this.strTool.isNotBlank(this.idCard)&&this.strTool.isNotBlank(this.guestAddress)&&this.strTool.isNotBlank(this.defaultNation)&&this.arrTool.isEmptyArr(this.defaultEquipment))
+            },
             renderList() {
                 return NationList;
             },
@@ -288,7 +254,6 @@
                 return parseInt(this.route.params.tab)//返回0，1
             },
             tabMenu() {
-                this.initList();
                 let menu = [];
                 menu[0] = `待处理(${this.tobeHandledTotal})`;
                 if(this.showHandledList){
@@ -339,7 +304,6 @@
                 'getNationality',//民族列表
                 'hotelEquipment',//设备列表
                 'withoutIdCard',//设备列表
-                'getRoomNumberList',
                 'getShowPoliceConfigs',
                 'showtoast'
 
@@ -348,6 +312,9 @@
             ...mapMutations([
                 'CHECKORDERITEM'
             ]),
+            clearInput(){
+                console.log(2324)
+            },
             reporetLvyes(item){
                 this.reportLvYe({
                     lvyeReportRecordIds: item.lvyeReportRecordId.split(' '),//旅业上报记录Id
@@ -361,10 +328,16 @@
                     }
                 })
             },
+            resetCard(){
+                this.guestName='',
+                this.idCard='',
+                this.guestAddress=''
+            },
             showwithoutLicenseDialog(){
                 if(this.surplusTime==0){
                     this.showAlert=true;
                 }else {
+                    this.resetCard();
                     this.Nationality();
                     this.gethotelEquipment();
                     this.without_license = true
@@ -448,22 +421,27 @@
 
       //      确认核验
             makeSureVerify(){
-                if(this.guestName!=''&& this.idCard!=''&& this.guestAddress!=''){
-                    this.withoutIdCard({
-                        guest_name: this.guestName,
-                        id_card: this.idCard,
-                        nation_id: this.NationId,
-                        address: this.guestAddress,
-                        device_id: this.devaiceId,
-                        onsuccess: (body) => {
-                            this.without_license = false
-                        }
-                    })
+                if(this.validateNoIdCard){
+                    let len=this.idCard.split('').length;
+                    if(len<18){
+                        this.without_license=true;
+                        this.showIdcardAlert=true;
+                    } else if(len==18){
+                        this.withoutIdCard({
+                            guest_name: this.guestName,
+                            id_card: this.idCard,
+                            nation_id: this.NationId,
+                            address: this.guestAddress,
+                            device_id: this.devaiceId,
+                            onsuccess: (body) => {
+                                this.without_license = false
+                            }
+                        })
+                    }
+
                 }else {
                     return;
                 }
-
-
             },
 
             //标题日期筛选
@@ -551,18 +529,15 @@
                 })
               }
             },
-            getList(callback, reportInStatus,timeStart,timeEnd,page) {
+            getList(callback, reportInStatus,timeStart,timeEnd,searchName,page) {
                 this.newIdentityList ({
                     data: {
-                        // createTimeStart: this.periodFilter ? this.periodFilter[0] : '',
-                        // createTimeStart:1519833600000,
-                        // createTimeEnd: this.periodFilter[1] ? this.periodFilter[0] == this.periodFilter[1] ? this.periodFilter[1] + 86400000 : this.periodFilter[1]:'',
-                        // createTimeEnd:1521648000000,
                         createTimeStart:timeStart,
                         createTimeEnd:timeEnd,
                         // identityStatuses: identStatus,
                         reportInStatuses: reportInStatus,//需要的入住上报旅业状态
-                        desc: true
+                        desc: true,
+                        name:searchName
                     },
                     limit:15,
                     offset:page,
@@ -591,7 +566,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.tobeHandledScroller.pullupStatus = 'disabled';
                             };
-                        }), ["NONE","PENDING","FAILED"],'','',this.offset0);
+                        }), ["NONE","PENDING","FAILED"],'','',this.searchName,this.offset0);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom0.reset();
@@ -602,6 +577,7 @@
             },
             //已处理下拉刷新加载
             loadingList1(){
+                let searchName='';
                 if (this.onFetching1) {
                     console.log('不能再请求0了')
                     // do nothing
@@ -617,7 +593,7 @@
                             if(body.data.content=null||body.data.content.length==0) {
                                 this.handledScroller.pullupStatus = 'disabled';
                             };
-                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.offset1);
+                        }),["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,this.searchName,this.offset1);
                         //$nextTick是为了数据改变了等待dom渲染后使用
                         this.$nextTick(() => {
                             this.$refs.scrollerBottom1.reset();
@@ -632,9 +608,15 @@
                 this.replaceto(newpath)
                 this.initList();
             },
-            //初始化列表
-            initList(){
-                //待处理列表
+            searchItem(){
+                if(this.currentTab==0){
+                    this.initTobeHandled(this.searchName);
+                }else {
+                    this.initHandled(this.searchName);
+                }
+            },
+            //待处理列表
+            initTobeHandled(searchName){
                 this.getList(((body,headers) => {
                     this.tobeHandledTotal=headers.get('x-total-count');
                     this.tobeHandled = [...body.data.content];
@@ -646,8 +628,10 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom0.reset({top:0});
                     });
-                }), ["NONE","PENDING","FAILED"],'','',0);
-                //已处理列表
+                }), ["NONE","PENDING","FAILED"],'','',searchName,0);
+            },
+            //已处理列表
+            initHandled(searchName){
                 this.getList(((body,headers) => {
                     this.handledTotal=headers.get('x-total-count');
                     this.handled = [...body.data.content];
@@ -658,7 +642,13 @@
                     this.$nextTick(() => {
                         this.$refs.scrollerBottom1.reset({top:0});
                     });
-                }), ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,0);
+                }), ["SUCCESS","UNREPORTED"],this.todayStart,this.todayEnd,searchName,0);
+            },
+            //初始化列表
+            initList(){
+                let str='';
+                this.initTobeHandled(str);
+                this.initHandled(str);
             },
             resetList(){
                 this.handled = [];
@@ -681,7 +671,6 @@
             this.todayStart=this.timeFetch().todayStart;
             this.todayEnd=this.timeFetch().todayEnd;
             this.initList();
-            this.getRoomNumberList();
             this.getConfig();
             this.days === 1 && (this.outTimeFilter = new Date().setTime(new Date().getTime() + 24 * 60 * 60 * 1000));
 
@@ -733,22 +722,23 @@
   article{
     /*margin-bottom: 4rem;*/
     height: 100%;
+    .list-wrapper{
+      position: relative;
+      padding-top: 0;
+      margin-bottom: 2rem;
+      /*padding-bottom: 2rem;*/
+    }
+    /*.xs-container{*/
+      /*margin-bottom: 2rem;*/
+    /*}*/
   }
   .policeWrap{
     padding-bottom: 0;
   }
-  .list-wrapper{
-    position: relative;
-    padding-top: 0;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-  }
-  .xs-container{
-    /*padding-top: 2rem;*/
-  }
+
+
   .icon-gengduo{
     display: inline-block;
-
     color: #4A4A4A;
     &:before{
       width: 2rem;
@@ -765,6 +755,11 @@
     float: right;
     border-radius: 3px;
   }
+  .weui-icon-warn{
+    margin-top: 1rem;
+    font-size: 4rem;
+  }
+
   /*.icon-gengduo{*/
     /*color: #3F6CA5;*/
     /*font-size: 18px;*/

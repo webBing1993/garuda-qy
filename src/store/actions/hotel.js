@@ -32,7 +32,7 @@ module.exports = {
     },
     get_is_free_deposit_config(ctx,param){
         ctx.dispatch('resource',{
-            url:'/hotel/config/is_free_deposit',
+            url:'/hotel/config/cash_pledge_config',
             onSuccess: body => {
                 ctx.commit('ISFREEDEPOSIT', body.data)
                // param.onsuccess ? param.onsuccess(body) : null

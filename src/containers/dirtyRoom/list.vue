@@ -17,7 +17,6 @@
       <div v-if="currentTab===0">
         <p v-show="(!tobeconfirmed||tobeconfirmed.length === 0)" class="no-data">暂无数据</p>
         <div  v-for="(item,index) in tobeconfirmed" :key="index" :value="item.order_id">
-          <div>
             <div class="content">
               <div class="title">
                 <div>
@@ -25,7 +24,7 @@
                   <span>({{item.room_type_name}})</span>
                 </div>
                 <div>
-                  {{item.date}}
+                  {{datetimeparse(item.createdTime,'YYYYMMDD hhmm')}}
                 </div>
               </div>
               <div class="space"></div>
@@ -42,7 +41,6 @@
               <div class="footer" @click="handle(item.sub_id)">通知打扫</div>
             </div>
           </div>
-        </div>
       </div>
 
       <!--已处理-->
@@ -56,7 +54,7 @@
                 <span>({{item.room_type_name}})</span>
               </div>
               <div>
-                {{item.date}}
+                {{datetimeparse(item.createdTime,'YYYYMMDD hhmm')}}
               </div>
             </div>
             <div class="space"></div>
@@ -129,51 +127,67 @@
         return menu;
       }
     },
-
-    methods: {
+    methods:{
       ...mapActions([
         'goto',
         'replaceto',
         'getDirtyRoomList',
         'handleDirtyRoom',
       ]),
-
-      initList(){
+        //标题日期筛选
+        titleFilter(index,arr){
+            if (arr.length > 0) {
+                return index
+                    ? this.datetimeparse(arr[index].createdTime) === this.datetimeparse(arr[index - 1].createdTime)
+                        ? null : this.datetimeparse(arr[index].createdTime)
+                    : this.datetimeparse(arr[index].createdTime)
+            }
+        },
+        listHandle(arr) {
+            if (arr && arr.length > 0) {
+                for (var i = 0; i < arr.length - 1; i++) {
+                    for (var j = 0; j < arr.length - i - 1; j++) {
+                        if (arr[j].createdTime < arr[j + 1].createdTime) {//从大到小排序
+                            var temp = arr[j];
+                            arr[j] = arr[j + 1];
+                            arr[j + 1] = temp;
+                        }
+                    }
+                }
+            };
+            console.log(arr)
+            return arr;
+        },
+        initList(){
         let hotel_id = this.hotel.hotel_id
         this.tobeConfirmedPageIndex = 0
         this.confirmedPageIndex = 0
         this.getDirtyRoomList({
           hotel_id:hotel_id,
           is_deal_with:'0',
-          onsuccess: body => (this.tobeconfirmed = [...body.data], this.tobeConfirmedPageIndex++)
+          onsuccess: body => (this.tobeconfirmed = this.listHandle(body.data), this.tobeConfirmedPageIndex++)
         })
         this.getDirtyRoomList({
           hotel_id:hotel_id,
           is_deal_with:'1',
-          onsuccess: body => (this.confirmed = [...body.data], this.confirmedPageIndex++)
+          onsuccess: body => (this.confirmed =this.listHandle(body.data), this.confirmedPageIndex++)
         })
 
       },
-      handle(obj){
-        let hotel_id = this.hotel.hotel_id
-        console.log(obj)
-        this.handleDirtyRoom({
-          hotel_id:hotel_id,
-          sub_id:obj,
-          is_deal_with:'1',
-          onsuccess:(res)=> {
-              console.log('修改成功')
-            this.initList()
-          }
-        })
-      },
+        handle(obj){
+            let hotel_id = this.hotel.hotel_id;
+            this.handleDirtyRoom({
+                hotel_id:hotel_id,
+                sub_id:obj,
+                is_deal_with:'1',
+                onsuccess:(res)=> {
+                    console.log('修改成功')
+                    this.initList()
+                }
+            })
+        },
 
     },
-
-    watch: {
-
-    },
-
     mounted(){
       this.initList()
     }
