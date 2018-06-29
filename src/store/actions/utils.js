@@ -74,8 +74,7 @@ module.exports = {
           //   ctx.dispatch('showtoast','')
           param.onSuccess ? param.onSuccess(response.body, response.headers) : null
         } else {
-          ctx.dispatch('showtoast', response.body.errmsg);
-          param.onFail ? param.onFail(response.body) : null
+          param.onFail ? param.onFail(response.body) : ctx.dispatch('showtoast', response.body.errmsg);
         }
       }
     ).catch(
