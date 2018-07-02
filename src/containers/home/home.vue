@@ -177,12 +177,12 @@
         ...mapActions ([
             'goto',
             'hoteltodolist',
-            'yunbaConnect',
-            'yunbaSubscribe',
-            'yunbaUnsubscribe',
-            'yunbaPublish',
+            // 'yunbaConnect',
+            // 'yunbaSubscribe',
+            // 'yunbaUnsubscribe',
+            // 'yunbaPublish',
             'setPublishCallback',
-            'yunbaDisconnect',
+            // 'yunbaDisconnect',
             'getAppConfig',
             'getHotelConfig'
         ]),
@@ -244,17 +244,17 @@
              }
           });
       },
-      subscribe() {
-        this.yunbaSubscribe({
-          info: {
-            'topic': `hotels/${this.hotel.hotel_id}/todo`
-          },
-          subscribeCallback: () => {
-            console.log('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
-            // this.publishCallback();
-          }
-        })
-      },
+      // subscribe() {
+      //   this.yunbaSubscribe({
+      //     info: {
+      //       'topic': `hotels/${this.hotel.hotel_id}/todo`
+      //     },
+      //     subscribeCallback: () => {
+      //       console.log('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
+      //       // this.publishCallback();
+      //     }
+      //   })
+      // },
       // publishCallback() {
       //   this.setPublishCallback({
       //     onSuccess: (body) => {
@@ -281,9 +281,9 @@
       init () {
           this.getTodoList ();
           this.gethotelConfigs()
-          if (!this.yunbaConnected) {
-              this.yunbaConnect ();
-          }
+          // if (!this.yunbaConnected) {
+          //     this.yunbaConnect ();
+          // }
       },
       //初始化weosocket
       initWebSocket(){
@@ -331,20 +331,20 @@
       this.initWebSocket();
     },
     watch: {
-      yunbaConnected(val) {
-        val && this.subscribe()
-      }
+      // yunbaConnected(val) {
+      //   val && this.subscribe()
+      // }
     },
-    beforeDestroy() {
-      if (this.yunbaConnected) {
-        this.yunbaDisconnect({
-          disconnectCallback: () => {
-            console.log('unsubscribe');
-            this.$store.commit('ISYUNBACONNECTED', false);
-          }
-        })
-      }
-    }
+    // beforeDestroy() {
+    //   if (this.yunbaConnected) {
+    //     this.yunbaDisconnect({
+    //       disconnectCallback: () => {
+    //         console.log('unsubscribe');
+    //         this.$store.commit('ISYUNBACONNECTED', false);
+    //       }
+    //     })
+    //   }
+    // }
   }
 </script>
 
