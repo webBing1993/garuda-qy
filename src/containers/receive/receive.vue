@@ -29,7 +29,23 @@
         <!--</Group>-->
         <div class="spaceTop"></div>
         <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
-          <Cell :title="liveInCellTitle(item)"link @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"/>
+
+          <!--<Cell :title="liveInCellTitle(item)"link @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"/>-->
+
+          <div class="cell-title-content">
+            <div class="cell-value">
+              <span>{{item.room_number}}</span>
+              <span>{{item.room_type_name}}</span>
+              <span>{{getBreakFast(item.breakfast)}}</span>
+              <span v-html="_liveInCellTitleGetuni(item)"></span>
+              <!--{{getUnionTag(item.union_tag, item.room_number)? '(联' + getUnionTag(item.union_tag, item.room_number) + ')' : ''}}-->
+              <!--{{tag ? '(联' + tag + ')' : ''}}-->
+            </div>
+            <div class="cell-title-right">
+              <div class="cell-right gray">{{datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}}</div>
+              <div class="array-right" @click="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"></div>
+            </div>
+          </div>
           <div class="space"></div>
           <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
             <p>入住人:</p>
@@ -326,6 +342,7 @@
         hotel_config_can_REfend: '',
         refundPathway: '',
         showRefundBtn: [],
+        liveInListAll:'',
         numCheck: function (value) {
           return {
 //            valid: value.toFixed(1),
@@ -373,7 +390,7 @@
       tabMenu() {
         let menu = [];
         menu[0] = `预登记(${this.preCheckInList.length})`;
-        menu[1] = `在住(${this.liveInList.length})`;
+        menu[1] = `在住(${this.liveInListAll})`;
         menu[2] = `退房申请(${this.checkOutApplicationList.length})`;
         menu[3] = `已离店(${this.checkOutTotal})`;
         return menu;
@@ -603,7 +620,11 @@
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `<p><span class="cell-value">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
       },
-
+//      获取联房信息
+      _liveInCellTitleGetuni(item){
+        let tag = this.getUnionTag(item.union_tag, item.room_number);
+        return `${tag ? '(联' + tag + ')' : ''}`
+      },
       liveInGuestItem(item) {
         let dom = ``;
         if (item.guests) {
@@ -748,7 +769,7 @@
           },
           offset: this.offset || 0,
           onsuccess: (body, headers) => {
-            this.liveInList.length = headers.get('x-total-count');
+            this.liveInListAll = headers.get('x-total-count');
             if (isPullup) {
               this.liveInList = [...this.liveInList, ...body.data.content];
             } else if (!isPullup) {

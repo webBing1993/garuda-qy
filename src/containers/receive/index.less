@@ -327,4 +327,37 @@
   }
 }
 
-
+.cell-title-content {
+  font-size: 17px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-left: 1em;
+  margin-right: 20px;
+  min-height: 30px;
+  line-height: 30px;
+  .cell-value-l {
+    float: left;
+  }
+  .cell-title-right {
+    margin-left: 0!important;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    .cell-right {
+    ;
+    }
+    .array-right {
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid #aeaeae;
+      border-right: 2px solid #aeaeae;
+      transform: rotate(45deg);
+    }
+  }
+}
