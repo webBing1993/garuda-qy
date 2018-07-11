@@ -33,11 +33,11 @@
 
            <div class="cell-title-content">
              <div class="cell-value">
-               {{item.room_number}}
-               {{item.room_type_name}}
-               {{getBreakFast(item.breakfast)}}
+               <span>{{item.room_number}}</span>
+               <span>{{item.room_type_name}}</span>
+               <span> {{getBreakFast(item.breakfast)}}</span>
                <span v-html="_liveInCellTitleGetuni(item)"></span>
-               {{getUnionTag(item.union_tag, item.room_number)? '(联' + getUnionTag(item.union_tag, item.room_number) + ')' : ''}}
+               <!--{{getUnionTag(item.union_tag, item.room_number)? '(联' + getUnionTag(item.union_tag, item.room_number) + ')' : ''}}-->
                <!--{{tag ? '(联' + tag + ')' : ''}}-->
              </div>
              <div class="cell-title-right">
