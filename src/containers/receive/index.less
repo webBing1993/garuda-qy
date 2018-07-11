@@ -16,11 +16,12 @@
 }
 
 .receiveDialog .UIdialog {
-    text-align: left;
-    border-bottom: none;
+  text-align: left;
+  border-bottom: none;
 }
-.receiveDialog .UIdialog_bd{
-    padding-bottom: 0;
+
+.receiveDialog .UIdialog_bd {
+  padding-bottom: 0;
 }
 
 .invoiceBtn {
@@ -88,9 +89,10 @@
     font-size: 17px;
     padding: 5px 1em;
   }
+
   div:last-of-type {
     margin-left: 1em;
-    margin-right: 20px;
+    //margin-right: 20px;
   }
   .space {
     border: 1px solid #E6E6E6;
@@ -131,6 +133,7 @@
   }
 
 }
+
 .weui-cell_access .weui-cell__ft:after {
   content: " ";
   display: inline-block;
@@ -327,4 +330,37 @@
   }
 }
 
+.cell-title-content {
+  font-size: 17px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-left: 1em;
+  margin-right: 20px;
+  min-height: 30px;
+  line-height: 30px;
+  .cell-value-l {
+    float: left;
+  }
+  .cell-title-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    .cell-right {
+      ;
+    }
+    .array-right {
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid #aeaeae;
+      border-right: 2px solid #aeaeae;
+      transform: rotate(45deg);
+    }
+  }
+}
 
