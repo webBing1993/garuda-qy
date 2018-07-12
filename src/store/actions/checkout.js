@@ -29,7 +29,7 @@ module.exports = {
   },
   getLiveINlist(ctx, param){
     ctx.dispatch('resource', {
-      url:'/suborder/search?limit=5&offset='+param.offset,
+      url:'/suborder/search?limit=1000&offset='+param.offset,
       method:'POST',
       body: param.data,
       onSuccess: (body,headers) => {
@@ -40,7 +40,7 @@ module.exports = {
   //已离店
   getOutlist(ctx, param){
     ctx.dispatch('resource', {
-      url:'/suborder/search?limit=5&offset='+param.offset,
+      url:'/suborder/search?limit=1000&offset='+param.offset,
       method:'POST',
       body: param.data,
       onSuccess: (body,headers) => {
