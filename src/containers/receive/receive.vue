@@ -10,96 +10,99 @@
         </TabItem>
       </Tab>
     </header>
-    <scroller :pullup-config="Interface.scrollerUp" @on-pullup-loading="refresh" lock-x use-pullup height="-40"
-              v-model="scrollerStatus" scrollbarY bounce ref="scrollerBottom">
-      <div class="list-wrapper">
         <!--<p class="synchronize">-->
         <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
         <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
         <!--</p>-->
         <div v-show="(!renderList||renderList.length === 0) && renderPageIndex>0" class="no-data">暂无数据</div>
-        <Group v-if="tempPage == '预登记'" v-for="(item,index) in renderList" :key="index">
+
+        <!--预登记-->
+       <div class="list-wrapper" v-if="tempPage == '预登记'">
+        <Group  v-for="(item,index) in renderList" :key="index">
           <Cell :title="preCheckInCellTitle(item)"/>
           <Cell :title="preCheckInCellBody(item)" link
                 @onClick="goto('/receive/precheckin-detail/' + item.order_id)"/>
         </Group>
-        <!--<Group v-if="tempPage == '在住'" v-for="(item,index) in renderList" :key="index">-->
-        <!--<Cell :title="liveInCellTitle(item)" @onClick="goto('/receive/livein-detail/'+item.order_id)"/>-->
-        <!--<Cell :title="liveInGuestItem(item)" @onClick="confirmDelete()"/>-->
-        <!--</Group>-->
-        <div class="spaceTop"></div>
-        <div v-if="tempPage == '在住'" class="rowCont" v-for="(item,index) in renderList" :key="index">
-          <!--<Cell :title="liveInCellTitle(item)"link @onClick="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"/>-->
-
-           <div class="cell-title-content">
-             <div class="cell-value">
-               <span>{{item.room_number}}</span>
-               <span>{{item.room_type_name}}</span>
-               <span> {{getBreakFast(item.breakfast)}}</span>
-               <span v-html="_liveInCellTitleGetuni(item)"></span>
-               <!--{{getUnionTag(item.union_tag, item.room_number)? '(联' + getUnionTag(item.union_tag, item.room_number) + ')' : ''}}-->
-               <!--{{tag ? '(联' + tag + ')' : ''}}-->
-             </div>
-             <div class="cell-title-right">
-               <div class="cell-right gray">{{datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}}</div>
-               <div class="array-right" @click="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"></div>
-             </div>
-           </div>
-          <div class="space"></div>
-          <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
-            <p>入住人:</p>
-            <div class="liveInPeop">
-              <span>{{i.name}}</span>
-              <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
-              <span v-if="i.checkin_status && i.checkin_status === 'PMS'">(pms转入住)</span>
-              <span class="LvReportFaile"
-                    v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业上传失败)</span>
-              <span class="LvReport"
-                    v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS'">(旅业已上报)</span>
-              <span class="LvReportIng"
-                    v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING'">(旅业正在上传)</span>
-              <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
-                   src="../../../static/icon/delete.png" alt="">
+       </div>
+         <!--在住-->
+       <div class="list-wrapper" v-if="tempPage == '在住'">
+        <!--<scroller  :pullup-config="Interface.scrollerUp" @on-pullup-loading="refreshLiveIn" lock-x use-pullup height="-40"-->
+                  <!--v-model="scrollerStatusLiveIn" scrollbarY bounce ref="scrollerBottom1">-->
+          <div style="margin-bottom: 4rem">
+              <div class="rowCont" v-for="(item,index) in renderList" :key="index">
+               <div class="cell-title-content">
+                 <div class="cell-value">
+                   <span>{{item.room_number}}</span>
+                   <span>{{item.room_type_name}}</span>
+                   <span> {{getBreakFast(item.breakfast)}}</span>
+                   <span v-html="_liveInCellTitleGetuni(item)"></span>
+                 </div>
+                 <div class="cell-title-right">
+                   <div class="cell-right gray">{{datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}}</div>
+                   <div class="array-right" @click="goto('/receive/livein-detail/'+item.order_id+'/'+item.room_number)"></div>
+                 </div>
+               </div>
+              <div class="space"></div>
+              <div class="rowItem" v-for="(i,k) in item.guests" :key="k">
+                <p>入住人:</p>
+                <div class="liveInPeop">
+                  <span>{{i.name}}</span>
+                  <span v-if="i.checkin_status && i.checkin_status === 'R'">(尚未入住)</span>
+                  <span v-if="i.checkin_status && i.checkin_status === 'PMS'">(pms转入住)</span>
+                  <span class="LvReportFaile"
+                        v-if="i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED'">(旅业上传失败)</span>
+                  <span class="LvReport"
+                        v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS'">(旅业已上报)</span>
+                  <span class="LvReportIng"
+                        v-if="i.checkin_status && i.checkin_status === 'I'&&i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING'">(旅业正在上传)</span>
+                  <img @click="confirmDelete(i)" v-if="i.checkin_status && i.checkin_status === 'R'"
+                       src="../../../static/icon/delete.png" alt="">
+                </div>
+              </div>
+              <div class="comTime">
+                <span style="color:  #8A8A8A">入离时间:</span>
+                <span
+                  style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
+              </div>
+              <div
+                v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
+                <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
+              </div>
             </div>
           </div>
-          <div class="comTime">
-            <span style="color:  #8A8A8A">入离时间:</span>
-            <span
-              style="float: right">{{datetimeparse(item.in_time, 'YYMMDD')}} - {{datetimeparse(item.out_time, 'YYMMDD')}}</span>
-          </div>
-          <!--<div>{{refundPathway}}=={{hotel_config_can_REfend}}==={{item.order.is_paid}}=={{item.order.cash_pledge}} </div>-->
-          <div
-            v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
-            <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
-          </div>
+        <!--</scroller>-->
+       </div>
+        <!--退房申请-->
+        <!--<div class="spaceTopApply"></div>-->
+        <!--<div class="list-wrapper" v-if="tempPage == '退房申请'">-->
+          <!--<Group  v-for="(item,index) in renderList" :key="index"-->
+                 <!--:title="titleFilter(index)">-->
+            <!--<Cell :title="checkoutCellTitle(item)"/>-->
+            <!--<Cell :title="getCheckoutGuestItem(item)" link-->
+                  <!--@onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+item.room_number)"/>-->
+            <!--<div class="appalyBtn"-->
+                 <!--v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">-->
+              <!--<x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>-->
+            <!--</div>-->
+          <!--</Group>-->
+        <!--</div>-->
+
+        <!--已离店-->
+        <div  class="list-wrapper" v-if="tempPage == '已离店'">
+          <!--<scroller   :pullup-config="Interface.scrollerUp" @on-pullup-loading="refreshLiveOut" lock-x use-pullup height="-40"-->
+                    <!--v-model="scrollerStatusLiveOut" scrollbarY bounce ref="scrollerBottom2">-->
+            <div style="margin-bottom: 4rem">
+                <Group  v-for="(item,index) in renderList" :key="index"
+                       :title="datetimeparse(item.out_time,'YYMMDD')">
+                  <Cell :title="checkoutCellTitle(item,index)"/>
+                  <Cell :title="getLeaveItem(item)" link
+                        @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+item.room_number)"/>
+                </Group>
+            </div>
+          <!--</scroller>-->
         </div>
 
-        <div class="spaceTopApply"></div>
-
-        <Group v-if="tempPage == '退房申请'" v-for="(item,index) in renderList" :key="index"
-               :title="titleFilter(index)">
-          <Cell :title="checkoutCellTitle(item)"/>
-          <Cell :title="getCheckoutGuestItem(item)" link
-                @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+item.room_number)"/>
-          <div class="appalyBtn"
-               v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
-            <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
-          </div>
-        </Group>
-
-
-        <Group v-if="tempPage == '已离店'" v-for="(item,index) in renderList" :key="index"
-               :title="datetimeparse(item.out_time,'YYMMDD')">
-          <Cell :title="checkoutCellTitle(item,index)"/>
-          <!--<Cell :title="getGuestItem(item)" link @onClick="goto('/receive/checkout-detail/'+item.order_id)"/>-->
-          <Cell :title="getLeaveItem(item)" link
-                @onClick="goto('/receive/checkout-detail/'+item.order_id+'/'+item.room_number)"/>
-        </Group>
-      </div>
-
-    </scroller>
-    <!--筛选按钮-->
-    <!--<footer v-if="tempPage == '已离店'">-->
+    <!--//筛选按钮-->
     <footer>
       <div class="listFilter">
         <!--<span class="filter" @click="showDialog = true">-->
@@ -111,7 +114,6 @@
 
     <!--筛选弹窗-->
     <div class="receiveDialog">
-
       <Dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -276,9 +278,7 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-   // import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
-  import {XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
-  import {VueScroller} from 'vue-scroller'
+   import {Scroller, XDialog, Group, PopupRadio, XInput, PopupPicker, Picker, Popup} from 'vux'
   export default {
     name: 'receive',
     components: {
@@ -289,16 +289,15 @@
       PopupPicker,
       Picker,
       Popup,
-      VueScroller
+      Scroller
     },
     data() {
       return {
         isShowPP: false,
-        scrollerStatus: {
-          pullupStatus: 'default',
-          pulldownStatus: 'default'
-        },
-        onFetching: false,
+        scrollerStatusLiveIn: {pullupStatus: 'default'},
+        scrollerStatusLiveOut: {pullupStatus: 'default'},
+        onFetching1: false,
+        onFetching2: false,
         flag: false,
         guestName: '',
         filterRoomVal: '',
@@ -307,7 +306,8 @@
         roomType: [],
         showDialog: false,
         isCalendarShow: false,
-        offset: 0,
+        offset1: 0,
+        offset2:0,
         preCheckInList: [],
         liveInList: [],
         checkOutApplicationList: [],
@@ -320,6 +320,7 @@
         periodFilter: [null, null],
         roomTitle: "房型",
         checkOutTotal: 0,
+          liveInTotal:0,
         confirmDeleteDialog: false,
         deleteName: '',
         guest_id: '',
@@ -341,7 +342,6 @@
         hotel_config_can_REfend: '',
         refundPathway: '',
         showRefundBtn: [],
-        liveInListAll:'',
         numCheck: function (value) {
           return {
 //            valid: value.toFixed(1),
@@ -349,31 +349,10 @@
             valid: /^[0-9]+([.]{1}[0-9]{1})?$/.test(value),
             msg: '请输入含一位小数的字符',
           }
-        },
-//        be2333: function (value) {
-//          return {
-//            valid: value === '2333',
-//            msg: 'Must be 2333'
-//          }
-//        },
+        }
       }
     },
     watch: {
-      showDialog(val) {
-        if (!val) {
-          // this.filterRoomVal = '';
-          // this.guestName = '';
-          // this.periodFilter = []
-        }
-      },
-      // tempPage(val) {
-      //   this.periodFilter = [null, null];
-      //   this.renderList.length == 0 ? this.initList() : this.refreshList();
-      // },
-      // periodFilter(val) {
-      //   val[0] && val[1] && this.refreshList();
-      //   this.isCalendarShow = false;
-      // },
       isCalendarShow(val) {
         if (val) {
           this.isShowPP = false;
@@ -389,7 +368,7 @@
       tabMenu() {
         let menu = [];
         menu[0] = `预登记(${this.preCheckInList.length})`;
-        menu[1] = `在住(${this.liveInListAll})`;
+        menu[1] = `在住(${this.liveInTotal})`;
         menu[2] = `退房申请(${this.checkOutApplicationList.length})`;
         menu[3] = `已离店(${this.checkOutTotal})`;
         return menu;
@@ -425,11 +404,10 @@
         if (this.tempPage == '预登记') {
           return this.sortByTime(this.preCheckInList, 'in_time');
         } else if (this.tempPage == '在住') {
+            // return this.liveInList
           return this.sortByTime(this.liveInList, 'in_time');
-          return sortLiveInList;
         } else if (this.tempPage == '退房申请') {
           return this.sortByTime(this.checkOutApplicationList, 'created_time');
-          return sortCheckOutApplicationList;
         } else if (this.tempPage == '已离店') {
           return this.sortByTime(this.checkOutList, 'created_time');
         }
@@ -460,7 +438,6 @@
           return this.checkoutPageIndex;
         }
       },
-
       unionTag() {
         let totalList = [...this.renderList];
         let tagList = [];
@@ -475,7 +452,6 @@
         );
         return tagList;
       },
-
     },
     methods: {
       ...mapActions([
@@ -515,7 +491,7 @@
       confirmHandle() {
         this.showDialog = false;
         this.isCalendarShow = false;
-        this.offset = 0;
+        this.offset1 = 0;
         if (this.tempPage == '预登记') {
           this.gettodaylist({
             is_cancelled: 0, //是否取消
@@ -534,27 +510,12 @@
               "filter": "IN",
               "guest_name": this.preName,
               room_no: this.live_RoomNum || "",
-//              onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
             },
-
-            offset: this.offset || 0,
+            offset: this.offset1 || 0,
             onsuccess: body => (this.liveInList = [...body.data.content], this.liveInPageIndex++)
-
-//            onsuccess: (body, headers) => {
-//              this.liveInList = headers.get('x-total-count');
-//              if (isPullup) {
-//                this.liveInList = [...this.liveInList, ...body.data.content];
-//              } else if (!isPullup) {
-//                this.liveInList = [...body.data.content];
-//                this.$nextTick(() => {
-//                  this.$refs.scrollerBottom.reset();
-//                });
-//              }
-//            }
           });
           this.preName = '';
           this.live_RoomNum = ''
-
         }
         else if (this.tempPage == '退房申请') {
           this.getcheckoutlist({
@@ -563,7 +524,6 @@
             room_no: this.live_RoomNum || "",
             onsuccess: body => (this.checkOutApplicationList = [...body.data], this.checkOutApplicationPageIndex++)
           })
-
         }
         else if (this.tempPage == '已离店') {
           this.outList(false);
@@ -589,12 +549,18 @@
             break;
           case '在住':
             this.replaceto('/receive/livein');
+              this.$nextTick(() => {
+                  this.$refs.scrollerBottom1.reset({top:0});
+              });
             break;
           case '退房申请':
             this.replaceto('/receive/checkout-application');
             break;
           case '已离店':
             this.replaceto('/receive/checkout');
+            this.$nextTick(() => {
+                this.$refs.scrollerBottom2.reset({top:0});
+            });
             break;
         }
       },
@@ -614,40 +580,35 @@
           `<p><span class="cell-key">分享码：</span><span style="color: #32ABE5" class="cell-value">${item.share_code ? item.share_code : '暂无分享码'}</span></p>` +
           `</div>`
       },
-
-      liveInCellTitle(item) {
-        let tag = this.getUnionTag(item.union_tag, item.room_number);
-        return `<p class="cell-title-content"><span class="cell-value-l">${item.room_number} ${item.room_type_name}${this.getBreakFast(item.breakfast)}${tag ? '(联' + tag + ')' : ''}</span><span class="cell-right gray">${this.datetimeparse(item.in_time, this.isToday ? 'hhmm' : 'MMddhhmm')}</span></p>`
-      },
       _liveInCellTitleGetuni(item){
         let tag = this.getUnionTag(item.union_tag, item.room_number);
         return `${tag ? '(联' + tag + ')' : ''}`
       },
-      liveInGuestItem(item) {
-        let dom = ``;
-        if (item.guests) {
-          item.guests.length > 0
-            ? item.guests.forEach(i => {
-
-            dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
-                    <p><span style="color:  #8A8A8A">入住人</span>`
-            i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
-            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
-            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
-            i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
-            dom += `<span style="float: right">${i.name}</span>`;
-            dom += `</p></div>`
-          })
-            : dom += `<div>无入住人</div>`
-        } else {
-          dom += `<div>无入住人</div>`
-        }
-        dom += `<div>
-                 <span style="color:  #8A8A8A">入离时间</span>
-                 <span style="float: right">${this.datetimeparse(item.in_time, 'YYMMDD')} - ${this.datetimeparse(item.out_time, 'YYMMDD')}</span>
-               </div>`
-        return dom
-      },
+      // liveInGuestItem(item) {
+      //   let dom = ``;
+      //   if (item.guests) {
+      //     item.guests.length > 0
+      //       ? item.guests.forEach(i => {
+      //
+      //       dom += `<div style="color: #4a4a4a;justify-content: space-between;line-height: 2;">
+      //               <p><span style="color:  #8A8A8A">入住人</span>`
+      //       i.checkin_status && i.checkin_status === 'R' ? dom += ` <span style="float:right;margin-left:5px;">(尚未入住)</span>` : null
+      //       i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'FAILED' ? dom += ` <span style="float:right;margin-left:5px;color:#FFB01F;">(旅业上传失败)</span>` : null
+      //       i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'SUCCESS' ? dom += ` <span style="float:right;margin-left:5px;color:#86E85E;">(旅业已上报)</span>` : null
+      //       i.checkin_status && i.checkin_status === 'I' && i.lvye_report_in_status && i.lvye_report_in_status === 'PENDING ' ? dom += ` <span style="float:right;margin-left:5px;">(旅业正在上传)</span>` : null
+      //       dom += `<span style="float: right">${i.name}</span>`;
+      //       dom += `</p></div>`
+      //     })
+      //       : dom += `<div>无入住人</div>`
+      //   } else {
+      //     dom += `<div>无入住人</div>`
+      //   }
+      //   dom += `<div>
+      //            <span style="color:  #8A8A8A">入离时间</span>
+      //            <span style="float: right">${this.datetimeparse(item.in_time, 'YYMMDD')} - ${this.datetimeparse(item.out_time, 'YYMMDD')}</span>
+      //          </div>`
+      //   return dom
+      // },
 
       checkoutCellTitle(item) {
         let tag = this.getUnionTag(item.union_tag, item.room_number);
@@ -711,38 +672,10 @@
         return
       },
 
-
-//      getList(callback) {
-//        if (this.tempPage == '预登记') {
-//          this.gettodaylist({
-//            is_cancelled: 0,
-//            is_sequence: 0,
-//            onsuccess: callback
-//          })
-//        }
-//        else if (this.tempPage == '在住') {
-////          this.getTodaySuborder({
-////            onsuccess: callback
-////          })
-//            this.liveInList()
-//        }
-//
-//        else if (this.tempPage == '退房申请') {
-//          this.getcheckoutlist({
-//            status: 'PENDING',
-//            start_time: this.periodFilter[0],
-//            end_time: this.periodFilter[1],
-//            onsuccess: callback
-//          });
-//        } else if (this.tempPage == '已离店') {
-//          this.outList(false);
-//        }
-//      },
-
       initList() {
         if (this.renderPageIndex === 0 || this.renderList.length == 0) {
           this.prePayList();
-          this.LiveInList();
+          this.getLiveInList();
           this.ChechOutAppl();
           this.outList();
         }
@@ -755,30 +688,6 @@
           is_sequence: 0,
           onsuccess: body => (this.preCheckInList = [...body.data], this.preCheckInPageIndex++)
         });
-      },
-
-//      获取在住列表
-      LiveInList(isPullup){
-        this.getLiveINlist({
-          data: {
-            "filter": "IN",
-            "guest_name": this.preName,
-            room_no: this.live_RoomNum || ""
-          },
-          offset: this.offset || 0,
-          onsuccess: (body, headers) => {
-            this.liveInListAll = headers.get('x-total-count');
-            console.log('---->',this.liveInListAll)
-            if (isPullup) {
-              this.liveInList = [...this.liveInList, ...body.data.content];
-            } else if (!isPullup) {
-              this.liveInList = [...body.data.content];
-              this.$nextTick(() => {
-                this.$refs.scrollerBottom.reset();
-              });
-            }
-          }
-        })
       },
 
 //      获取退房申请列表
@@ -799,115 +708,125 @@
         console.log('退房申请列表是', this.checkOutApplicationList)
       },
 
-//    已离店列表
-      outList(isPullup) {
-        let roomTypeValue = '';
-        roomTypeValue = this.roomType[0];
-        this.getOutlist({
-          data: {
-            "filter": "OUT",
-            "room_no": this.filterRoomVal || "",//房间号
-            "pms_room_type_id": roomTypeValue || "",//PMS房型的ID
-            "guest_name": this.guestName || "",//入住人名称
-            "out_start_time": this.periodFilter[0] || "",//入住时间
-            "out_end_time": this.periodFilter[1] ? this.periodFilter[1] + 86400000 : "",//离店时间
-            "order_by": "out_time",//通过哪种时间排序 in_time, out_time
-            "desc": true,
-          },
-          offset: this.offset || 0,
-          onsuccess: (body, headers) => {
-            this.checkOutTotal = headers.get('x-total-count');
-            if (isPullup) {
-              this.checkOutList = [...this.checkOutList, ...body.data.content];
-            } else if (!isPullup) {
-              this.checkOutList = [...body.data.content];
-              this.$nextTick(() => {
-                this.$refs.scrollerBottom.reset();
-              });
+       //获取在住列表
+        getLiveInList(isPullup){
+          let _this=this;
+            this.getLiveINlist({
+                data: {
+                    "filter": "IN",
+                    "guest_name": this.preName,
+                    room_no: this.live_RoomNum || ""
+                },
+                offset: this.offset2 || 0,
+                onsuccess: (body, headers) => {
+                    this.liveInTotal = headers.get('x-total-count');
+                    if (isPullup) {
+                        if(!body.data.content||body.data.content.length==0) {
+                            _this.scrollerStatusLiveIn.pullupStatus = 'disabled';
+                        }else {
+                            _this.liveInList = [..._this.liveInList, ...body.data.content];
+                            _this.scrollerStatusLiveIn.pullupStatus = 'default';
+                            //$nextTick是为了数据改变了等待dom渲染后使用
+                            _this.$nextTick(() => {
+                                _this.$refs.scrollerBottom2.reset();
+                            });
+                        }
+                        _this.onFetching1 = false;
+                    } else if (!isPullup) {
+                        _this.liveInList = [...body.data.content];
+                        _this.scrollerStatusLiveIn.pullupStatus = 'enabled';
+                    };
+                }
+            })
+        },
+        //已离店列表
+        outList(isPullup) {
+            let _this=this;
+          let roomTypeValue = '';
+          roomTypeValue = this.roomType[0];
+          this.getOutlist({
+            data: {
+              "filter": "OUT",
+              "room_no": this.filterRoomVal || "",//房间号
+              "pms_room_type_id": roomTypeValue || "",//PMS房型的ID
+              "guest_name": this.guestName || "",//入住人名称
+              "out_start_time": this.periodFilter[0] || "",//入住时间
+              "out_end_time": this.periodFilter[1] ? this.periodFilter[1] + 86400000 : "",//离店时间
+              "order_by": "out_time",//通过哪种时间排序 in_time, out_time
+              "desc": true,
+            },
+            offset: this.offset1 || 0,
+            onsuccess: (body, headers) => {
+              this.checkOutTotal = headers.get('x-total-count');
+              if (isPullup) {
+                  if(body.data.content=null||body.data.content.length==0) {
+                      _this.scrollerStatusLiveOut.pullupStatus = 'disabled';
+                  }else {
+                      console.log('11,:',_this.checkOutList)
+                      _this.checkOutList = [..._this.checkOutList,...body.data.content];
+                      console.log('333:',_this.checkOutList)
+                      _this.scrollerStatusLiveOut.pullupStatus = 'default';
+                      //$nextTick是为了数据改变了等待dom渲染后使用
+                      _this.$nextTick(() => {
+                          _this.$refs.scrollerBottom1.reset();
+                      });
+                  }
+                  _this.onFetching2 = false;
+              } else if (!isPullup) {
+                  _this.checkOutList = [...body.data.content];
+                  _this.scrollerStatusLiveOut.pullupStatus = 'enabled';
+              };
+                console.log('_this.checkOutList:',_this.checkOutList)
             }
-            console.log('list:', this.renderList)
-          }
-        });
-      },
+          });
+        },
 
-
-      //下拉刷新列表，按需加载
-      refresh(){
-        let off = this.checkOutTotal - this.offset;
-        if (this.onFetching || off < 5) {
+      //下拉刷新离店列表，按需加载
+      refreshLiveOut(){
+        let off1 = this.checkOutTotal - this.offset1;
+        if (this.onFetching1 || off1 < 5) {
           console.log('不能再请求了')
           return;
         } else {
-          this.onFetching = true;
+          this.onFetching1 = true;
           setTimeout(() => {
             if (this.tempPage == '已离店' ) {
-              this.offset = this.offset + 5;
+              this.offset1 = this.offset1 + 5;
               this.outList(true);
-            } else if(this.tempPage == '在住'){
-              this.offset = this.offset + 5;
-              this.LiveInList(true);
             }else {
               return;
-            }
-            ;
-            console.log('第' + this.offset + '起');
-            this.scrollerStatus.pullupStatus = 'default';
-            //$nextTick是为了数据改变了等待dom渲染后使用
-            this.$nextTick(() => {
-              this.$refs.scrollerBottom.reset();
-            });
-            this.onFetching = false
+            };
+            console.log('第' + this.offset1 + '起');
           }, 500);
         }
       },
-
-      infinite(done) {
-        console.log(this.noData)
-        if (this.noData) {
-          setTimeout(() => {
-            this.$refs.myscroller.finishInfinite(2);
-          })
-          return;
-        }
-        let self = this;
-        let start = this.moveList.length;
-
-        setTimeout(() => {
-          for (let i = start + 1; i < start + 10; i++) {
-            self.moveList.push(i)
-          }
-          if (start > 30) {
-            self.noData = "没有更多数据"
-          }
-          self.$refs.myscroller.resize();
-          done()
-        }, 1500)
-      },
-//
-      loadMore() {
-        setTimeout(() => {
-
-          let start = this.bottom + 1
-
-          for (let i = start; i < start + 10; i++) {
-            this.items.push(i + ' - keep walking, be 2 with you.')
-          }
-
-          this.bottom = this.bottom + 10;
-
-          setTimeout(() => {
-            $scroller.get('myScroller').resize()
-          })
-        }, 1500)
-      },
+        //下拉刷新在住列表，按需加载
+        refreshLiveIn(){
+            let off2= this.liveInTotal - this.offset2;
+            if (this.onFetching2 ||off2 < 5) {
+                console.log('不能再请求了')
+                return;
+            } else {
+                this.onFetching2 = true;
+                setTimeout(() => {
+                    if(this.tempPage == '在住'){
+                        this.offset2 = this.offset2 + 5;
+                        this.getLiveInList(true);
+                    }else {
+                        return;
+                    };
+                    console.log('第' + this.offset2+ '起');
+                }, 500);
+            }
+        },
 
       refreshList(){
-        this.offset=0;
+        this.offset1=0;
         if (this.tempPage == '预登记') {
           this.prePayList();
           return false;
         } else if (this.tempPage == '在住') {
-          this.LiveInList();
+          this.getLiveInList();
           return false;
         } else if (this.tempPage == '退房申请') {
           this.ChechOutAppl()
@@ -917,19 +836,6 @@
           return false;
         }
       },
-
-      resetList() {
-        if (this.tempPage == '预登记') {
-          this.preCheckInList = [];
-        } else if (this.tempPage == '在住') {
-          this.liveInList = [];
-        } else if (this.tempPage == '退房申请') {
-          this.checkOutApplicationList = [];
-        } else if (this.tempPage == '已离店') {
-          this.checkOutList = [];
-        }
-      },
-
       searchRoomType() {
         this.roomList1 = [{name: '全部房型', value: ''}];
         this.roomList = [];
@@ -1008,19 +914,34 @@
         this.showDialog = true
       }
 
-
     },
     mounted() {
       this.initList();
-
     },
 
   }
 </script>
-<style lang="less">
-
+<style lang="less" scoped>
   @import "./index.less";
-
+  article{
+    height: 100%;
+    .list-wrapper{
+      position: relative;
+      margin-top: 3.5rem;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-bottom: 2rem;
+    }
+  }
+  .rowCont{
+    font-size: 14px;
+    .cell-value{
+      font-size: 14px;
+    }
+    .cell-title-right{
+      font-size: 14px;
+    }
+  }
 </style>
 
 

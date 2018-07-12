@@ -720,17 +720,12 @@
 <style lang="less" scoped>
   @import "index.less";
   article{
-    /*margin-bottom: 4rem;*/
     height: 100%;
     .list-wrapper{
       position: relative;
       padding-top: 0;
       margin-bottom: 2rem;
-      /*padding-bottom: 2rem;*/
     }
-    /*.xs-container{*/
-      /*margin-bottom: 2rem;*/
-    /*}*/
   }
   .policeWrap{
     padding-bottom: 0;
