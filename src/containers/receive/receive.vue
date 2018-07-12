@@ -10,10 +10,6 @@
         </TabItem>
       </Tab>
     </header>
-    <div style="margin-top: 3rem">
-    <scroller :pullup-config="Interface.scrollerUp" @on-pullup-loading="refresh" lock-x use-pullup height="-40"
-              v-model="scrollerStatus" scrollbarY bounce ref="scrollerBottom">
-      <div class="list-wrapper">
         <!--<p class="synchronize">-->
         <!--<x-button mini value="同步" @onClick="syncTime"></x-button>-->
         <!--上次同步PMS时间: {{hotel.order_update_time ? datetimeparse(hotel.order_update_time, 'MMDDhhmm') : ''}}-->
