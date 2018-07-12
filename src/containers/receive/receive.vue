@@ -10,6 +10,7 @@
         </TabItem>
       </Tab>
     </header>
+    <div style="margin-top: 3rem">
     <scroller :pullup-config="Interface.scrollerUp" @on-pullup-loading="refresh" lock-x use-pullup height="-40"
               v-model="scrollerStatus" scrollbarY bounce ref="scrollerBottom">
       <div class="list-wrapper">
@@ -99,6 +100,7 @@
       </div>
 
     </scroller>
+    </div>
     <!--筛选按钮-->
     <!--<footer v-if="tempPage == '已离店'">-->
     <footer>
@@ -598,6 +600,7 @@
             this.replaceto('/receive/checkout');
             break;
         }
+
       },
 
       preCheckInCellTitle(item) {
@@ -916,7 +919,8 @@
         } else if (this.tempPage == '已离店') {
           this.outList();
           return false;
-        }
+        };
+          this.$refs.scrollerBottom.reset({top:0})
       },
 
       resetList() {
@@ -1018,10 +1022,15 @@
 
   }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 
   @import "./index.less";
-
+  .list-wrapper{
+    position: relative;
+    padding-top: 0;
+    margin-bottom: 2rem;
+    /*padding-bottom: 2rem;*/
+  }
 </style>
 
 
