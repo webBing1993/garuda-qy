@@ -40,16 +40,6 @@ module.exports = {
             }
         })
     },
-    getLiveINlist (ctx, param) {
-        ctx.dispatch ('resource', {
-            url: '/suborder/search?limit=5&offset=' + param.offset,
-            method: 'POST',
-            body: param.data,
-            onSuccess: (body, headers) => {
-                param.onsuccess ? param.onsuccess (body, headers) : null
-            }
-        })
-    },
     //充值使用次数
     getRechargeUsedNum(ctx,param){
         ctx.dispatch ('resource', {
