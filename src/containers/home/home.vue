@@ -277,7 +277,7 @@
             this.getTodoList ();
             this.gethotelConfigs()
             if (!this.yunbaConnected) {
-                this.yunbaConnect ();
+                // this.yunbaConnect ();
             }
         },
     },
@@ -286,7 +286,7 @@
     },
     watch: {
       yunbaConnected(val) {
-        val && this.subscribe()
+        // val && this.subscribe()
       }
     },
     beforeDestroy() {
