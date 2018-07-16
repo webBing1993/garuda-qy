@@ -73,19 +73,19 @@
         <!--</scroller>-->
        </div>
         <!--退房申请-->
-        <!--<div class="spaceTopApply"></div>-->
-        <!--<div class="list-wrapper" v-if="tempPage == '退房申请'">-->
-          <!--<Group  v-for="(item,index) in renderList" :key="index"-->
-                 <!--:title="titleFilter(index)">-->
-            <!--<Cell :title="checkoutCellTitle(item)"/>-->
-            <!--<Cell :title="getCheckoutGuestItem(item)" link-->
-                  <!--@onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+item.room_number)"/>-->
-            <!--<div class="appalyBtn"-->
-                 <!--v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">-->
-              <!--<x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>-->
-            <!--</div>-->
-          <!--</Group>-->
-        <!--</div>-->
+        <div class="spaceTopApply"></div>
+        <div class="list-wrapper" v-if="tempPage == '退房申请'">
+          <Group  v-for="(item,index) in renderList" :key="index"
+                 :title="titleFilter(index)">
+            <Cell :title="checkoutCellTitle(item)"/>
+            <Cell :title="getCheckoutGuestItem(item)" link
+                  @onClick="goto('/receive/checkout-application-detail/'+item.order_id+'/'+item.room_number)"/>
+            <div class="appalyBtn"
+                 v-if="(refundPathway=='MANUAL'&& hotel_config_can_REfend!='false' && item.order.is_paid &&!item.order.has_refund_apply)||(refundPathway=='MANUAL'&& hotel_config_can_REfend=='false' && item.order.cash_pledge && item.order.cash_pledge!=0 && item.order.is_paid &&!item.order.has_refund_apply)">
+              <x-button value="退款" @onClick="showTK(item)" v-if="tkBtnHide">退款</x-button>
+            </div>
+          </Group>
+        </div>
 
         <!--已离店-->
         <div  class="list-wrapper" v-if="tempPage == '已离店'">
@@ -114,6 +114,7 @@
 
     <!--筛选弹窗-->
     <div class="receiveDialog">
+
       <Dialog v-if="tempPage == '预登记'" v-model="showDialog"
                 :hide-on-blur=false
                 mask-z-index="1">
@@ -406,8 +407,10 @@
         } else if (this.tempPage == '在住') {
             // return this.liveInList
           return this.sortByTime(this.liveInList, 'in_time');
+          return sortLiveInList;
         } else if (this.tempPage == '退房申请') {
           return this.sortByTime(this.checkOutApplicationList, 'created_time');
+          return sortCheckOutApplicationList;
         } else if (this.tempPage == '已离店') {
           return this.sortByTime(this.checkOutList, 'created_time');
         }

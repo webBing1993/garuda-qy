@@ -1,6 +1,6 @@
 <template>
   <div class="js_dialog" :class="{hide:!value}">
-    <div class="UImask" @click="$emit('input',false)"></div>
+    <div class="UImask" @click="maskHandle"></div>
     <div class="UIdialog">
       <div class="UIdialog_hd"><strong class="UIdialogTitle">{{title}}</strong></div>
       <div class="UIdialog_bd">
@@ -44,9 +44,19 @@
       isDisabled: {
         type: Boolean,
         default: false
+      },
+      maskHide:{
+        type: Boolean,
+        default:true
       }
     },
     methods: {
+      maskHandle(){
+          if(this.maskHide){
+              console.log(2222)
+              this.$emit('input',false)
+          }
+      },
       onConfirm(){
           if(!this.isDisabled){
               this.$emit('onConfirm')
