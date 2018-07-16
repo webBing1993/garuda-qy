@@ -74,6 +74,8 @@
               <!--@onClick="goto('policeIdentity/handle/0')"></Cell>-->
         <!--<Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"-->
               <!--@onClick="goto('recharge/0')"></Cell>-->
+        <!--https://qa.fortrun.cn/aries-corp/route/local?corpid=wxab71a595d1896860-->
+
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
@@ -105,6 +107,7 @@
         absentPersonNum: 0,
         chargeNum:0,
         noCardCheckNum:0,
+        websock:null,
         imgList: [
           {
             openItem: './static/icon/ic_police.png',
@@ -154,6 +157,7 @@
         'hotel',
         'yunbaInstance',
         'yunbaConnected',
+        'AppParams'
       ]),
       isHaveTodoList() {
         return this.prepayTodoNum > 0 ||
@@ -173,12 +177,12 @@
         ...mapActions ([
             'goto',
             'hoteltodolist',
-            'yunbaConnect',
-            'yunbaSubscribe',
-            'yunbaUnsubscribe',
-            'yunbaPublish',
+            // 'yunbaConnect',
+            // 'yunbaSubscribe',
+            // 'yunbaUnsubscribe',
+            // 'yunbaPublish',
             'setPublishCallback',
-            'yunbaDisconnect',
+            // 'yunbaDisconnect',
             'getAppConfig',
             'getHotelConfig'
         ]),
@@ -240,65 +244,107 @@
              }
           });
       },
-      subscribe() {
-        this.yunbaSubscribe({
-          info: {
-            'topic': `hotels/${this.hotel.hotel_id}/todo`
-          },
-          subscribeCallback: () => {
-            console.log('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
-            this.publishCallback();
-          }
-        })
+      // subscribe() {
+      //   this.yunbaSubscribe({
+      //     info: {
+      //       'topic': `hotels/${this.hotel.hotel_id}/todo`
+      //     },
+      //     subscribeCallback: () => {
+      //       console.log('subscribe', `hotels/${this.hotel.hotel_id}/todo`);
+      //       // this.publishCallback();
+      //     }
+      //   })
+      // },
+      // publishCallback() {
+      //   this.setPublishCallback({
+      //     onSuccess: (body) => {
+      //       console.log(body)
+      //       console.log('---------收到云吧消息', JSON.parse(body.msg));
+      //       let data = JSON.parse(body.msg);
+      //       this.setPlay();
+      //       if (data.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = data.total;
+      //       if (data.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = data.total;
+      //       if (data.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag))this.policeIdentityNum = data.total;
+      //       if (data.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = data.total;
+      //       if (data.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = data.total;
+      //       if (data.type == 'EXCEPITON'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = data.total;
+      //       if (data.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = data.total;
+      //       if (data.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum = data.total;
+      //       if (data.type == 'DIRTY_ROOM'&&(this.appConfig?this.appConfig.dirty_room_view:this.flag)) this.dirtyroomNum = data.total;
+      //       if (data.type == 'RECHARGE'&&(this.appConfig?this.appConfig.recharge_view:this.flag)) this.chargeNum = data.total;
+      //       if (i.type == 'NOCARDCHECK' &&(this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.noCardCheckNum = data.total;
+      //
+      //     }
+      //   })
+      // },
+//    云吧链接config
+      init () {
+          this.getTodoList ();
+          this.gethotelConfigs()
+          // if (!this.yunbaConnected) {
+          //     this.yunbaConnect ();
+          // }
       },
-      publishCallback() {
-        this.setPublishCallback({
-          onSuccess: (body) => {
-            console.log('---------收到云吧消息', JSON.parse(body.msg));
-            let data = JSON.parse(body.msg);
-            this.setPlay();
-            if (data.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = data.total;
-            if (data.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = data.total;
-            if (data.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag))this.policeIdentityNum = data.total;
-            if (data.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = data.total;
-            if (data.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = data.total;
-            if (data.type == 'EXCEPITON'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = data.total;
-            if (data.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = data.total;
-            if (data.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum = data.total;
-            if (data.type == 'DIRTY_ROOM'&&(this.appConfig?this.appConfig.dirty_room_view:this.flag)) this.dirtyroomNum = data.total;
-            if (data.type == 'RECHARGE'&&(this.appConfig?this.appConfig.recharge_view:this.flag)) this.chargeNum = data.total;
-            if (i.type == 'NOCARDCHECK' &&(this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.noCardCheckNum = data.total;
+      //初始化weosocket
+      initWebSocket(){
+        //ws地址
+        // const wsuri = process.env.WS_API + "/websocket/threadsocket";
+        let mymessage = this.AppParams.session+this.AppParams.hotel_id;
+        const wsuri = "ws://qa.fortrun.cn:8100/wqtws?wsCode=" + mymessage;
+        this.websock = new WebSocket(wsuri);
+        this.websock.onopen = this.websocketonopen;
+        this.websock.onmessage = this.websocketonmessage;
+        this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(e){ //建立通道
+        // let redata = e;
+        console.log('============websocket建立链接==============')
+      },
+      websocketonmessage(e){ //数据接收
+        console.log('============websocket数据接收成功==============')
+        let redata = JSON.parse(e.data);
+        let data = JSON.parse(redata)
+        if (data.type == 'PREPAY'&&(this.appConfig?this.appConfig.order_view:this.flag)) this.prepayTodoNum = data.total;
+        if (data.type == 'IDENTITY'&&(this.appConfig?this.appConfig.check_in_identity_check_view:this.flag)) this.identityNum = data.total;
+        if (data.type == 'LVYE'&&(this.appConfig?this.appConfig.identity_check_view:this.flag))this.policeIdentityNum = data.total;
+        if (data.type == 'INVOICE'&&(this.appConfig?this.appConfig.invoice_view:this.flag)) this.invoiceNum = data.total;
+        if (data.type == 'CHECKOUT'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.checkoutApplicationNum = data.total;
+        if (data.type == 'EXCEPITON'&&(this.appConfig?this.appConfig.exception_view:this.flag)) this.abnormalNoticeNum = data.total;
+        if (data.type == 'NOCHECKIN'&&(this.appConfig?this.appConfig.room_status_view:this.flag)) this.absentPersonNum = data.total;
+        if (data.type == 'SUS_PERSON'&&(this.appConfig?this.appConfig.suspicious_person_view:this.flag)) this.suspiciousNum = data.total;
+        if (data.type == 'DIRTY_ROOM'&&(this.appConfig?this.appConfig.dirty_room_view:this.flag)) this.dirtyroomNum = data.total;
+        if (data.type == 'RECHARGE'&&(this.appConfig?this.appConfig.recharge_view:this.flag)) this.chargeNum = data.total;
+        if (data.type == 'NOCARDCHECK' &&(this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.noCardCheckNum = data.total;
 
-          }
-        })
       },
-//      云吧链接config
-        init () {
-            this.getTodoList ();
-            this.gethotelConfigs()
-            if (!this.yunbaConnected) {
-                // this.yunbaConnect ();
-            }
-        },
+      websocketsend(agentData){//数据发送
+        console.log('============websocket数据发送成功==============')
+        this.websock.send(agentData);
+      },
+      websocketclose(e){  //关闭通道
+        console.log("关闭通道connection closed (" + e.code + ")");
+      }
+
     },
     mounted(){
       this.init();
+      this.initWebSocket();
     },
     watch: {
-      yunbaConnected(val) {
-        // val && this.subscribe()
-      }
+      // yunbaConnected(val) {
+      //   val && this.subscribe()
+      // }
     },
-    beforeDestroy() {
-      if (this.yunbaConnected) {
-        this.yunbaDisconnect({
-          disconnectCallback: () => {
-            console.log('unsubscribe');
-            this.$store.commit('ISYUNBACONNECTED', false);
-          }
-        })
-      }
-    }
+    // beforeDestroy() {
+    //   if (this.yunbaConnected) {
+    //     this.yunbaDisconnect({
+    //       disconnectCallback: () => {
+    //         console.log('unsubscribe');
+    //         this.$store.commit('ISYUNBACONNECTED', false);
+    //       }
+    //     })
+    //   }
+    // }
   }
 </script>
 
