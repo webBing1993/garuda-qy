@@ -256,7 +256,7 @@ module.exports = {
       url: '/hotel/device',
       method: 'POST',
       body: {
-        deviceTypes:["31","21"]
+        deviceTypes:["31","21","23"]
       },
       onSuccess: body => {
         param.onsuccess ? param.onsuccess(body) : null
