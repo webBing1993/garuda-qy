@@ -202,7 +202,7 @@
                         if (i.type == 'CHECKOUT' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.checkoutApplicationNum = i.total;
                         if (i.type == 'EXCEPTION' && (this.appConfig ? this.appConfig.exception_view : this.flag)) this.abnormalNoticeNum = i.total;
                         if (i.type == 'NOCHECKIN' && (this.appConfig ? this.appConfig.room_status_view : this.flag)) this.absentPersonNum = i.total;
-                        if (i.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.recharge_view : this.flag)) this.chargeNum = i.total;
+                        if (i.type == 'SUS_PERSON' && (this.appConfig ? this.appConfig.suspicious_person_view : this.flag)) this.suspiciousNum = i.total;
                         if (i.type == 'NOCARDCHECK' &&(this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.noCardCheckNum = i.total;
                         if (i.type == 'DIRTY_ROOM' && (this.appConfig ? this.appConfig.dirty_room_view : this.flag)) this.dirtyroomNum = i.total;
                         if (i.type == 'NOCARDCHECK' &&(this.appConfig ? this.appConfig.identity_check_view : this.flag)) this.noCardCheckNum = i.total;
