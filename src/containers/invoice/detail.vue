@@ -158,7 +158,8 @@ module.exports = {
       'yunbaPublish',
       'yunbaSubscribeCallback',
       'showloading',
-      'stoploading'
+      'stoploading',
+        ''
     ]),
     submit() {
 
@@ -202,7 +203,8 @@ module.exports = {
       this.messageId = this.messageId + 1;
       if(this.messageId > 65536) this.messageId = 1;
 
-      this.publish(msg);
+      // this.publish(msg);
+        this.publishInvoice(msg)
     },
     dialogConfirm() {
       this.showDialog = false;
@@ -210,6 +212,9 @@ module.exports = {
       (!this.publisher || !this.ordersSubscribed) && this.goto(0)
 
     },
+      publishInvoice(msg){
+
+      },
       // 订阅
     subscribe(topic) {
       this.yunbaSubscribe({
@@ -262,10 +267,10 @@ module.exports = {
             this.data = body.data;
             if (body.data.id) {
               this.sender = `invoices/${body.data.id}`;
-
-              timeOutSubscribe(() => {
-                this.subscribe(this.sender);
-              }, 1000, this)
+              //
+              // timeOutSubscribe(() => {
+              //   this.subscribe(this.sender);
+              // }, 1000, this)
             }
             if (body.data.device_id) {
               this.publisher = `devices/${body.data.device_id}`;
@@ -331,29 +336,29 @@ module.exports = {
 
       this.getDetail();
 
-      if (!this.yunbaConnected) {
-        this.yunbaConnect();
-      } else {
-        this.subscribeCB()
-      }
+      // if (!this.yunbaConnected) {
+      //   this.yunbaConnect();
+      // } else {
+      //   this.subscribeCB()
+      // }
     }
   },
   mounted() {
     this.init();
   },
-  beforeDestroy() {
-    if (this.ordersSubscribed) {
-      this.yunbaUnsubscribe({
-        info: {
-          'topic': this.sender
-        },
-        unSubscribeCallback: () => {
-          this.ordersSubscribed = false;
-          console.log('unsubscribe', this.sender);
-        }
-      })
-    }
-  }
+  // beforeDestroy() {
+  //   if (this.ordersSubscribed) {
+  //     this.yunbaUnsubscribe({
+  //       info: {
+  //         'topic': this.sender
+  //       },
+  //       unSubscribeCallback: () => {
+  //         this.ordersSubscribed = false;
+  //         console.log('unsubscribe', this.sender);
+  //       }
+  //     })
+  //   }
+  // }
 }
 
 </script>
