@@ -107,7 +107,8 @@ module.exports = {
       publisher: '',
       dialogMsg: '',
       ordersSubscribed: false,
-      btnTitle: '请稍候...'
+      btnTitle: '请稍候...',
+        deviceId:''
     }
   },
   computed: {
@@ -159,7 +160,8 @@ module.exports = {
       'yunbaSubscribeCallback',
       'showloading',
       'stoploading',
-        ''
+        'publishInvoive',
+
     ]),
     submit() {
 
@@ -204,7 +206,12 @@ module.exports = {
       if(this.messageId > 65536) this.messageId = 1;
 
       // this.publish(msg);
-        this.publishInvoice(msg)
+        let msg2={
+            "device_id":this.deviceId,
+            "cmd":"5101",
+            "data":data
+        }
+        this.submitInvoice(msg2);
     },
     dialogConfirm() {
       this.showDialog = false;
@@ -212,7 +219,21 @@ module.exports = {
       (!this.publisher || !this.ordersSubscribed) && this.goto(0)
 
     },
-      publishInvoice(msg){
+      submitInvoice(msg){
+        this.showloading();
+        this.publishInvoice({
+            data:msg,
+            onsuccess:()=>{
+                this.stoploading();
+                this.ordersSubscribed = true;
+                this.publishing = false;
+                this.dialogMsg='已经发布成功',
+                this.showDialog();
+            },
+            onfail:()=>{
+
+          }
+        })
 
       },
       // 订阅
@@ -274,6 +295,7 @@ module.exports = {
             }
             if (body.data.device_id) {
               this.publisher = `devices/${body.data.device_id}`;
+              this.deviceId=body.data.device_idl;
             } else {
               this.showtoast('微前台插件未注册!')
             }
