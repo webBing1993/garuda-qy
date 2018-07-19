@@ -107,7 +107,8 @@ module.exports = {
       publisher: '',
       dialogMsg: '',
       ordersSubscribed: false,
-      btnTitle: '请稍候...'
+      btnTitle: '请稍候...',
+        deviceId:''
     }
   },
   computed: {
@@ -156,9 +157,11 @@ module.exports = {
       'yunbaSubscribe',
       'yunbaUnsubscribe',
       'yunbaPublish',
-      'setPublishCallback',
+      'yunbaSubscribeCallback',
       'showloading',
-      'stoploading'
+      'stoploading',
+        'publishInvoive',
+
     ]),
     submit() {
 
@@ -202,7 +205,13 @@ module.exports = {
       this.messageId = this.messageId + 1;
       if(this.messageId > 65536) this.messageId = 1;
 
-      this.publish(msg);
+      // this.publish(msg);
+        let msg2={
+            "device_id":this.deviceId,
+            "cmd":"5101",
+            "data":data
+        }
+        this.submitInvoice(msg2);
     },
     dialogConfirm() {
       this.showDialog = false;
@@ -210,6 +219,24 @@ module.exports = {
       (!this.publisher || !this.ordersSubscribed) && this.goto(0)
 
     },
+      submitInvoice(msg){
+        this.showloading();
+        this.publishInvoice({
+            data:msg,
+            onsuccess:()=>{
+                this.stoploading();
+                this.ordersSubscribed = true;
+                this.publishing = false;
+                this.dialogMsg='已经发布成功',
+                this.showDialog();
+            },
+            onfail:()=>{
+
+          }
+        })
+
+      },
+      // 订阅
     subscribe(topic) {
       this.yunbaSubscribe({
         info: {
@@ -217,35 +244,40 @@ module.exports = {
         },
         subscribeCallback: () => {
           this.ordersSubscribed = true;
-          console.log('subscribe', topic)
+          console.log('subscribe---->你已成功订阅频道', topic)
         }
       })
     },
+      //step3发布
     publish(msg) {
       this.publishing = true;
 
       timeOut = setTimeout(() => {
-        if (this.publishing) {
-          this.publishing = false;
-          this.stoploading();
-          this.dialogMsg = '未启动闪开发票代理服务';
-          this.showDialog = true;
-        }
-      }, 10000)
+          if (this.publishing) {
+            this.publishing = false;
+            this.stoploading();
+            this.dialogMsg = '未启动闪开发票代理服务';
+            this.showDialog = true;
+          }
+        }, 10000)
 
       this.showloading();
       this.yunbaPublish({
         info: {
           'topic': this.publisher,
-          // 'topic': 'devices/zhouzj01',
           'msg': JSON.stringify(msg),
           'opts': {
               'qos': 1,
-              'time_to_live': 5,
+              'time_to_live': 36000,
               'messageId': this.messageId
             }
         },
-        publishCallback: () => console.log('publish', msg)
+        publishCallback: () => {
+            console.log('publish,消息发布成功')
+        },
+        publishFailedCallback:(msg)=>{
+            console.log('msg------->:',msg)
+        }
       })
     },
     getDetail() {
@@ -256,13 +288,14 @@ module.exports = {
             this.data = body.data;
             if (body.data.id) {
               this.sender = `invoices/${body.data.id}`;
-
-              timeOutSubscribe(() => {
-                this.subscribe(this.sender);
-              }, 1000, this)
+              //
+              // timeOutSubscribe(() => {
+              //   this.subscribe(this.sender);
+              // }, 1000, this)
             }
             if (body.data.device_id) {
               this.publisher = `devices/${body.data.device_id}`;
+              this.deviceId=body.data.device_idl;
             } else {
               this.showtoast('微前台插件未注册!')
             }
@@ -276,10 +309,9 @@ module.exports = {
         }
       })
     },
-    publishCallback() {
-      this.setPublishCallback({
+    subscribeCB() {
+      this.yunbaSubscribeCallback({
         onSuccess: (body) => {
-
           console.log('---------  收到云吧消息')
           console.log(body)
 
@@ -326,29 +358,29 @@ module.exports = {
 
       this.getDetail();
 
-      if (!this.yunbaConnected) {
-        this.yunbaConnect();
-      } else {
-        this.publishCallback()
-      }
+      // if (!this.yunbaConnected) {
+      //   this.yunbaConnect();
+      // } else {
+      //   this.subscribeCB()
+      // }
     }
   },
   mounted() {
     this.init();
   },
-  beforeDestroy() {
-    if (this.ordersSubscribed) {
-      this.yunbaUnsubscribe({
-        info: {
-          'topic': this.sender
-        },
-        unSubscribeCallback: () => {
-          this.ordersSubscribed = false;
-          console.log('unsubscribe', this.sender);
-        }
-      })
-    }
-  }
+  // beforeDestroy() {
+  //   if (this.ordersSubscribed) {
+  //     this.yunbaUnsubscribe({
+  //       info: {
+  //         'topic': this.sender
+  //       },
+  //       unSubscribeCallback: () => {
+  //         this.ordersSubscribed = false;
+  //         console.log('unsubscribe', this.sender);
+  //       }
+  //     })
+  //   }
+  // }
 }
 
 </script>

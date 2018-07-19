@@ -99,7 +99,7 @@
         'yunbaSubscribe',
         'yunbaUnsubscribe',
         'yunbaPublish',
-        'setPublishCallback',
+        'yunbaSubscribeCallback',
         'wxPayConfirm'
       ]),
       dialogBtnClick() {
@@ -215,7 +215,7 @@
         if (isNaN(val)) this.roomFee = oldVal
       },
       yunbaConnected(val) {
-        val && this.setPublishCallback({
+        val && this.yunbaSubscribeCallback({
           onSuccess: (data) => {
 //            this.resetData();
             let messageCbInfo = JSON.parse(data.msg);
