@@ -177,7 +177,7 @@
             'yunbaSubscribe',
             'yunbaUnsubscribe',
             'yunbaPublish',
-            'setPublishCallback',
+            'yunbaSubscribeCallback',
             'yunbaDisconnect',
             'getAppConfig',
             'getHotelConfig'
@@ -252,7 +252,7 @@
         })
       },
       publishCallback() {
-        this.setPublishCallback({
+        this.yunbaSubscribeCallback({
           onSuccess: (body) => {
             console.log('---------收到云吧消息', JSON.parse(body.msg));
             let data = JSON.parse(body.msg);

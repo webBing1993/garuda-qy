@@ -40,10 +40,14 @@ module.exports = {
   },
   yunbaPublish(ctx, param) {
     ctx.state.yunbaInstance.publish2(param.info, function (success, msg) {
-      if (success) param.publishCallback ? param.publishCallback() : null
+      if (success) {
+          param.publishCallback ? param.publishCallback() : null
+      }else {!success}{
+          param.publishFailedCallback ? param.publishFailedCallback(msg):null
+        }
     })
   },
-  setPublishCallback(ctx, param) {
+    yunbaSubscribeCallback(ctx, param) {
     ctx.state.yunbaInstance.set_message_cb(function (data) {
       param.onSuccess ? param.onSuccess(data) : null
     })

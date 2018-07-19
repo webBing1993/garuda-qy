@@ -156,7 +156,7 @@ module.exports = {
       'yunbaSubscribe',
       'yunbaUnsubscribe',
       'yunbaPublish',
-      'setPublishCallback',
+      'yunbaSubscribeCallback',
       'showloading',
       'stoploading'
     ]),
@@ -210,6 +210,7 @@ module.exports = {
       (!this.publisher || !this.ordersSubscribed) && this.goto(0)
 
     },
+      // 订阅
     subscribe(topic) {
       this.yunbaSubscribe({
         info: {
@@ -217,35 +218,40 @@ module.exports = {
         },
         subscribeCallback: () => {
           this.ordersSubscribed = true;
-          console.log('subscribe', topic)
+          console.log('subscribe---->你已成功订阅频道', topic)
         }
       })
     },
+      //step3发布
     publish(msg) {
       this.publishing = true;
 
       timeOut = setTimeout(() => {
-        if (this.publishing) {
-          this.publishing = false;
-          this.stoploading();
-          this.dialogMsg = '未启动闪开发票代理服务';
-          this.showDialog = true;
-        }
-      }, 10000)
+          if (this.publishing) {
+            this.publishing = false;
+            this.stoploading();
+            this.dialogMsg = '未启动闪开发票代理服务';
+            this.showDialog = true;
+          }
+        }, 10000)
 
       this.showloading();
       this.yunbaPublish({
         info: {
           'topic': this.publisher,
-          // 'topic': 'devices/zhouzj01',
           'msg': JSON.stringify(msg),
           'opts': {
               'qos': 1,
-              'time_to_live': 5,
+              'time_to_live': 36000,
               'messageId': this.messageId
             }
         },
-        publishCallback: () => console.log('publish', msg)
+        publishCallback: () => {
+            console.log('publish,消息发布成功')
+        },
+        publishFailedCallback:(msg)=>{
+            console.log('msg------->:',msg)
+        }
       })
     },
     getDetail() {
@@ -276,10 +282,9 @@ module.exports = {
         }
       })
     },
-    publishCallback() {
-      this.setPublishCallback({
+    subscribeCB() {
+      this.yunbaSubscribeCallback({
         onSuccess: (body) => {
-
           console.log('---------  收到云吧消息')
           console.log(body)
 
@@ -329,7 +334,7 @@ module.exports = {
       if (!this.yunbaConnected) {
         this.yunbaConnect();
       } else {
-        this.publishCallback()
+        this.subscribeCB()
       }
     }
   },
