@@ -65,7 +65,7 @@
     <Dialog v-model="showDialog" confirmVal="确定" @onConfirm="dialogConfirm" confirm>
       <div>
         <div class="warning-box">
-          <div class="warning"></div>
+          <icon type="success" is-msg></icon>
         </div>
         <p class="dialog-msg">{{dialogMsg}}</p>
       </div>
@@ -75,7 +75,7 @@
 
 <script>
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
-
+import {Icon} from 'vux'
 // let timeOut = null;
 //
 // let subscribeCount = 0;
@@ -111,6 +111,7 @@ module.exports = {
         deviceId:''
     }
   },
+  components:{Icon},
   computed: {
     ...mapState([
       'yunbaInstance',
@@ -234,7 +235,7 @@ module.exports = {
             onsuccess:()=>{
                 this.stoploading();
                 this.publishing = true;
-                this.dialogMsg='已经发布成功',
+                this.dialogMsg='发票信息发送成功',
                 this.showDialog=true;
             },
             onfail:()=>{
