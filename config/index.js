@@ -28,7 +28,50 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/q/master/': {
+      '/p/v2.6.4/': {
+        target: 'https://wqt.fortrun.cn/',
+        changeOrigin: true,
+        pathRewrite: {
+          // '^/gemini': ''
+        }
+      }
+      // '/q/master/gemini': {
+      //   target: 'https://qa.fortrun.cn/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // '^/gemini': ''
+      //   }
+      // },
+      // '/s/master/gemini': {
+      //   target: 'https://stg.fortrun.cn/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // '^/gemini': ''
+      //   }
+      // },
+      // '/p/master/gemini': {
+      //   target: 'https://gem.fortrun.cn/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // '^/gemini': ''
+      //   }
+      // }
+    },
+    // CSS Sourcemaps off by default because relative paths are "buggy"
+    // with this option, according to the CSS-Loader README
+    // (https://github.com/webpack/css-loader#sourcemaps)
+    // In our experience, they generally work as expected,
+    // just be aware of this issue when enabling this option.
+    cssSourceMap: false
+  },
+  intg: {
+    env: require('./dev.env'),
+    port: 7777,
+    autoOpenBrowser: true,
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/',
+    proxyTable: {
+      '/i/master/': {
         target: 'https://wqt.fortrun.cn/',
         changeOrigin: true,
         pathRewrite: {

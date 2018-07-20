@@ -74,6 +74,8 @@
               <!--@onClick="goto('policeIdentity/handle/0')"></Cell>-->
         <!--<Cell v-if="chargeNum > 0" icon="./static/icon/charge.png" title=" 金额不足，暂时没法使用，请及时充值" link :badge="chargeNum"-->
               <!--@onClick="goto('recharge/0')"></Cell>-->
+        <!--https://qa.fortrun.cn/aries-corp/route/local?corpid=wxab71a595d1896860-->
+
       </Group>
       <div v-else class="none-list-container">
         <img :src="'./static/icon/no_todo_list.png'">
@@ -105,6 +107,7 @@
         absentPersonNum: 0,
         chargeNum:0,
         noCardCheckNum:0,
+        websock:null,
         imgList: [
           {
             openItem: './static/icon/ic_police.png',
