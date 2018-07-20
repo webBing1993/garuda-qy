@@ -76,24 +76,24 @@
 <script>
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
-let timeOut = null;
-
-let subscribeCount = 0;
-let timeOutSubscribe = (cb, time, that) => {
-  console.log('------ ordersSubscribed... ----------')
-
-  if (that.yunbaConnected && !that.ordersSubscribed) {
-    cb();
-  } else if (subscribeCount >= 5) {
-    that.dialogMsg = '网络连接异常，请重试';
-    that.showDialog = true;
-  } else {
-    subscribeCount++;
-    setTimeout(() => {
-      timeOutSubscribe(cb, time, that);
-    }, time);
-  }
-}
+// let timeOut = null;
+//
+// let subscribeCount = 0;
+// let timeOutSubscribe = (cb, time, that) => {
+//   console.log('------ ordersSubscribed... ----------')
+//
+//   if (that.yunbaConnected && !that.ordersSubscribed) {
+//     cb();
+//   } else if (subscribeCount >= 5) {
+//     that.dialogMsg = '网络连接异常，请重试';
+//     that.showDialog = true;
+//   } else {
+//     subscribeCount++;
+//     setTimeout(() => {
+//       timeOutSubscribe(cb, time, that);
+//     }, time);
+//   }
+// }
 
 module.exports = {
   name: 'InvoiceDetail',
@@ -107,7 +107,7 @@ module.exports = {
       publisher: '',
       dialogMsg: '',
       ordersSubscribed: false,
-      btnTitle: '请稍候...',
+      btnTitle: '填充发票信息',
         deviceId:''
     }
   },
@@ -118,16 +118,23 @@ module.exports = {
       'AppParams'
     ]),
     btnDisabled() {
-      return !(!this.publishing && this.publisher && this.ordersSubscribed)
+        // console.log(this.publishing,this.publisher)
+        if(this.publisher){
+            return false
+        }else {
+            return true
+        }
+
     }
   },
   watch: {
     yunbaConnected(val) {
       val && this.publishCallback()
     },
-    btnDisabled(v) {
-      !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍候...'
-    }
+    // btnDisabled(v) {
+    //     console.log('v:',v)
+    //   !v ? this.btnTitle = '填充发票信息' : this.btnTitle = '请稍候...'
+    // }
   },
   filters: {
     filterInvoiceType(v) {
@@ -160,7 +167,7 @@ module.exports = {
       'yunbaSubscribeCallback',
       'showloading',
       'stoploading',
-        'publishInvoive',
+        'publishInvoice',
 
     ]),
     submit() {
@@ -209,26 +216,26 @@ module.exports = {
         let msg2={
             "device_id":this.deviceId,
             "cmd":"5101",
-            "data":data
+            "data":JSON.stringify(data)
         }
         this.submitInvoice(msg2);
     },
     dialogConfirm() {
       this.showDialog = false;
 
-      (!this.publisher || !this.ordersSubscribed) && this.goto(0)
+      (!this.publisher) && this.goto(0)
 
     },
       submitInvoice(msg){
+        // console.log(msg)
         this.showloading();
         this.publishInvoice({
             data:msg,
             onsuccess:()=>{
                 this.stoploading();
-                this.ordersSubscribed = true;
-                this.publishing = false;
+                this.publishing = true;
                 this.dialogMsg='已经发布成功',
-                this.showDialog();
+                this.showDialog=true;
             },
             onfail:()=>{
 
@@ -237,49 +244,49 @@ module.exports = {
 
       },
       // 订阅
-    subscribe(topic) {
-      this.yunbaSubscribe({
-        info: {
-          'topic': topic
-        },
-        subscribeCallback: () => {
-          this.ordersSubscribed = true;
-          console.log('subscribe---->你已成功订阅频道', topic)
-        }
-      })
-    },
+    // subscribe(topic) {
+    //   this.yunbaSubscribe({
+    //     info: {
+    //       'topic': topic
+    //     },
+    //     subscribeCallback: () => {
+    //       // this.ordersSubscribed = true;
+    //       console.log('subscribe---->你已成功订阅频道', topic)
+    //     }
+    //   })
+    // },
       //step3发布
-    publish(msg) {
-      this.publishing = true;
-
-      timeOut = setTimeout(() => {
-          if (this.publishing) {
-            this.publishing = false;
-            this.stoploading();
-            this.dialogMsg = '未启动闪开发票代理服务';
-            this.showDialog = true;
-          }
-        }, 10000)
-
-      this.showloading();
-      this.yunbaPublish({
-        info: {
-          'topic': this.publisher,
-          'msg': JSON.stringify(msg),
-          'opts': {
-              'qos': 1,
-              'time_to_live': 36000,
-              'messageId': this.messageId
-            }
-        },
-        publishCallback: () => {
-            console.log('publish,消息发布成功')
-        },
-        publishFailedCallback:(msg)=>{
-            console.log('msg------->:',msg)
-        }
-      })
-    },
+    // publish(msg) {
+    //   this.publishing = true;
+    //
+    //   timeOut = setTimeout(() => {
+    //       if (this.publishing) {
+    //         this.publishing = false;
+    //         this.stoploading();
+    //         this.dialogMsg = '未启动闪开发票代理服务';
+    //         this.showDialog = true;
+    //       }
+    //     }, 10000)
+    //
+    //   this.showloading();
+    //   this.yunbaPublish({
+    //     info: {
+    //       'topic': this.publisher,
+    //       'msg': JSON.stringify(msg),
+    //       'opts': {
+    //           'qos': 1,
+    //           'time_to_live': 36000,
+    //           'messageId': this.messageId
+    //         }
+    //     },
+    //     publishCallback: () => {
+    //         console.log('publish,消息发布成功')
+    //     },
+    //     publishFailedCallback:(msg)=>{
+    //         console.log('msg------->:',msg)
+    //     }
+    //   })
+    // },
     getDetail() {
       this.getInvoiceDetail({
         id: this.$route.params.id,
@@ -295,7 +302,7 @@ module.exports = {
             }
             if (body.data.device_id) {
               this.publisher = `devices/${body.data.device_id}`;
-              this.deviceId=body.data.device_idl;
+              this.deviceId=body.data.device_id;
             } else {
               this.showtoast('微前台插件未注册!')
             }
@@ -309,52 +316,52 @@ module.exports = {
         }
       })
     },
-    subscribeCB() {
-      this.yunbaSubscribeCallback({
-        onSuccess: (body) => {
-          console.log('---------  收到云吧消息')
-          console.log(body)
-
-          this.publishing = false;
-          this.stoploading();
-          clearTimeout(timeOut);
-
-          let msg = JSON.parse(body.msg);
-          let data = msg.data;
-
-          if (msg.cmd !== '5002' || !data || !data.status)  return;
-
-          switch (data.status) {
-            case 'SUCCESS':
-              this.goto(`/invoice/detail/${this.$route.params.id}/result`);
-              return;
-            case 'NOT_TOP':
-              this.dialogMsg = '请先打开开票软件的开票页面';
-              break;
-            case 'FAILED':
-              this.dialogMsg = '发票填充失败';
-              break;
-            case 'REPEATED':
-              this.dialogMsg = '同一个税务发票界面重复请求操作';
-              break;
-            case 'BUSY':
-              this.dialogMsg = '插件正在工作';
-              break;
-            case 'DATAERROR':
-              this.dialogMsg = '发票填充失败';
-              break;
-            case 'SYSERROR':
-              this.dialogMsg = '发票填充失败';
-              break;
-            default:
-              this.dialogMsg = '发票填充失败';
-          }
-          this.showDialog = true;
-        }
-      })
-    },
+    // subscribeCB() {
+    //   this.yunbaSubscribeCallback({
+    //     onSuccess: (body) => {
+    //       console.log('---------  收到云吧消息')
+    //       console.log(body)
+    //
+    //       this.publishing = false;
+    //       this.stoploading();
+    //       clearTimeout(timeOut);
+    //
+    //       let msg = JSON.parse(body.msg);
+    //       let data = msg.data;
+    //
+    //       if (msg.cmd !== '5002' || !data || !data.status)  return;
+    //
+    //       switch (data.status) {
+    //         case 'SUCCESS':
+    //           this.goto(`/invoice/detail/${this.$route.params.id}/result`);
+    //           return;
+    //         case 'NOT_TOP':
+    //           this.dialogMsg = '请先打开开票软件的开票页面';
+    //           break;
+    //         case 'FAILED':
+    //           this.dialogMsg = '发票填充失败';
+    //           break;
+    //         case 'REPEATED':
+    //           this.dialogMsg = '同一个税务发票界面重复请求操作';
+    //           break;
+    //         case 'BUSY':
+    //           this.dialogMsg = '插件正在工作';
+    //           break;
+    //         case 'DATAERROR':
+    //           this.dialogMsg = '发票填充失败';
+    //           break;
+    //         case 'SYSERROR':
+    //           this.dialogMsg = '发票填充失败';
+    //           break;
+    //         default:
+    //           this.dialogMsg = '发票填充失败';
+    //       }
+    //       this.showDialog = true;
+    //     }
+    //   })
+    // },
     init() {
-      subscribeCount = 0;
+      // subscribeCount = 0;
 
       this.getDetail();
 

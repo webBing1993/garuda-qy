@@ -68,10 +68,10 @@ module.exports = {
       }
     })
   },
-    publishInvoive(ctx, param){
+    publishInvoice(ctx, param){
         ctx.dispatch('resource', {
             method:'POST',
-            url:'iot/msg',
+            url:'/iot/msg',
             body:param.data,
             onSuccess:body=>{
                 param.onsuccess ? param.onsuccess(body) : null
