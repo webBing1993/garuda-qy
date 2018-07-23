@@ -565,6 +565,7 @@
                     // do nothing
                     return;
                 } else {
+                    this.onFetching0 = true;
                     setTimeout(() => {
                         this.offset0=this.offset0+15;
                         this.getList(((body,headers) => {

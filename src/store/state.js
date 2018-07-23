@@ -18,7 +18,7 @@ module.exports = {
     },
     scrollerUp: {
       content: '获取更多数据...',
-      // pullUpHeight: 60,
+      pullUpHeight: 60,
       height: 40,
       autoRefresh: true,
       downContent: '释放刷新',
