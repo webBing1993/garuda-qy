@@ -251,8 +251,13 @@
           }
       },
       filters: {
-          filterStayDay (val) {
-              return Math.ceil ((val.out_time - val.in_time) / 3600000 / 24) + '晚'
+          filterStayDay(val){
+              let _value=Math.floor((val.out_time-val.in_time)/3600000/24);
+              if (_value<1){
+                  return '1晚'
+              }else{
+                  return  _value+'晚'
+              }
           }
       },
       computed: {
