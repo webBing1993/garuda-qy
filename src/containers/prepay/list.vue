@@ -201,13 +201,13 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import { PopupRadio, PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
+  import { PopupPicker, Picker, Popup,XInput,Tab, TabItem} from 'vux'
 
 
   export default {
       name: "prepay",
       components: {
-          PopupRadio,
+          // PopupRadio,
           PopupPicker,
           Picker,
           Popup,

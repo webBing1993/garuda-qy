@@ -78,14 +78,13 @@
 
 <script>
   import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
-  import {XDialog, PopupRadio, PopupPicker, Picker, Popup} from 'vux'
+  import {XDialog, PopupPicker, Picker, Popup} from 'vux'
 
   export default{
     name: "prepay",
 
     components: {
       XDialog,
-      PopupRadio,
       PopupPicker,
       Picker,
       Popup
