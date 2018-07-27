@@ -54,6 +54,7 @@ Vue.component('Search', require('./components/Functional/search'));
 Vue.component('Progress', require('./components/Layers/progress.vue'));
 Vue.component('XradioList', require('./components/Forms/x-radioList.vue'));
 Vue.component('Switchs', require('./components/Forms/switch.vue'));
+// Vue.component('SelectPopup', require('./components/Functional/selectPopup.vue'));
 
 
 router.afterEach(function (to,from) {
