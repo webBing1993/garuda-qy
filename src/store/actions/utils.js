@@ -101,6 +101,7 @@ module.exports = {
   },
   settitle: (x, t) => {
     document.title = t;
+
     if (/ip(hone|od|ad)/i.test(navigator.userAgent)) {
       var i = document.createElement('iframe');
       // i.src = '/favicon.ico';
