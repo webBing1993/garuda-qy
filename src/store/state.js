@@ -17,7 +17,7 @@ module.exports = {
       clsPrefix: 'xs-plugin-pulldown-'
     },
     scrollerUp: {
-      content: '获取更多数据...',
+      content: '',
       pullUpHeight: 60,
       height: 40,
       autoRefresh: true,
