@@ -142,7 +142,7 @@
             },
             getWhiteLists(){
                 this.getWhiteList({
-                    limit:20,
+                    limit:100000,
                     offset:0,
                     data:{
                         createTimeStart:'',
