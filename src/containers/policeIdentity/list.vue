@@ -396,11 +396,11 @@
                 onsuccess: body => {
                   temp = body.data;
 //                  console.log('设备列表是',temp)
-                  if (temp && temp != null) {
+                  if (temp && temp.length != 0) {
                     this.getedEquipmentList = body.data;
                     this.sinerEquipmentName = body.data[0].name;
-                    this.defaultEquipment.push(body.data[0].name)
-                    this.devaiceId = body.data[0].id
+                    this.defaultEquipment.push(body.data[0].name);
+                    this.devaiceId = body.data[0].id;
                     for (var i = 0; i < temp.length; i++) {
                       temp2.push(temp[i].name);
                     }
